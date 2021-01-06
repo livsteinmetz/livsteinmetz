@@ -4,6 +4,6 @@ import Liv from './components/Liv/Liv'
 import './styles/index.scss'
 import firebase from 'firebase/app'
 import { FIREBASE_CONFIG } from './constants'
-
+console.log('init firebase', FIREBASE_CONFIG)
 firebase.initializeApp(FIREBASE_CONFIG)
 ReactDOM.render(<Liv />, document.getElementById('root'))
