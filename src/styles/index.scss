@@ -1,16 +1,85 @@
 @import './theme.scss';
-
-* {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+body {
+	margin: 0;
+	font-family: $font-body;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom right, $red, $orange);
+section {
+	width: 100%;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: $font-header;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+h1 {
+	font-style: italic;
+	font-weight: bold;
+	font-size: 100px;
+	line-height: 64px;
+	color: $lightblue;
+}
+
+h2 {
+	font-style: normal;
+	font-weight: bold;
+	font-size: 32px;
+	line-height: 48px;
+	color: #ffffff;
+}
+
+h3 {
+	font-style: normal;
+	font-weight: 700;
+	padding: 0;
+	margin: 0;
+	font-size: 32px;
+	line-height: 1.2;
+	color: $lightblue;
+	// text-shadow: 0.5px 0.5px white;
+	// background: -webkit-linear-gradient($red, $yellow);
+	// -webkit-background-clip: text;
+	// -webkit-text-fill-color: transparent;
+}
+
+h4 {
+	font-style: normal;
+	font-weight: 700;
+	padding: 0;
+	margin: 0;
+	font-size: 24px;
+	line-height: 1.2;
+	color: $body;
+}
+
+p {
+	line-height: 1.4;
+	font-family: $font-body;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 20px;
+	color: #161617;
+}
+
+.italic {
+	font-style: italic;
 }
