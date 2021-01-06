@@ -1,6 +1,5 @@
 build
 node_modules
-environments
 *.env*
 .eslintcache
 package-lock.json
