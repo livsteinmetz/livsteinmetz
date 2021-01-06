@@ -1,0 +1,15 @@
+@import '../../styles/theme.scss';
+
+#Liv {
+  width: 100vw;
+  max-width: 800px;
+  margin: auto;
+  height: 100vh;
+  padding: 16px;
+  color: $white;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 900;
+  }
+}
