@@ -19,7 +19,7 @@
 		flex-direction: column;
 		width: 50%;
 		min-height: 100vh;
-		height: 300vh;
+		height: 100%;
 		margin: auto;
 		#left-scroll {
 			width: 100%;
@@ -45,18 +45,17 @@
 		animation: BackgroundGradient 45s ease infinite;
 		display: flex;
 		justify-content: flex-start;
-		align-items: flex-end;
+		align-items: flex-start;
 		flex-direction: column;
 		text-align: right;
 		width: 50%;
 		min-height: 100vh;
-		height: 300vh;
-		overflow-y: scroll;
+		height: 100%;
 		#right-scroll {
 			width: 100%;
 			padding: 64px;
-			// overflow-y: scroll;
-			overflow: auto;
+			overflow-y: scroll;
+			// overflow: auto;
 		}
 	}
 }

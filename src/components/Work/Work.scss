@@ -21,6 +21,7 @@
 
 	h4 {
 		color: $body;
+		transition: 1s;
 		&:hover {
 			background: -webkit-linear-gradient($red, $yellow);
 			background-size: 400% 400%;
