@@ -68,7 +68,7 @@ export default function Liv() {
           <h5>pro bono web developer</h5>
           <br></br>
           <h3>[Former Work + Clients + Collaborators]</h3>
-          <h5>Wond'ry Center for Innovation & Entrepreneurship, Allied Media Projects, Nashville Center for Nonprofit Management, Planned Parenthood, Project 615, Accenture Ops Studio, Vanderbilt University Medical Center, Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, Students Consulting for Nonprofit Organizations (SCNO), Design for America, Design as an Immersive Vanderbilt Experience (DIVE) </h5>
+          <h5>The Wond'ry Center for Innovation & Entrepreneurship, Accenture Operations Studio, Allied Media Projects, Design Justice Network, Design as an Immersive Vanderbilt Experience (DIVE), Design for America, Planned Parenthood, Vanderbilt University Medical Center, The Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, Students Consulting for Nonprofit Organizations (SCNO), Nashville Center for Nonprofit Management</h5>
           <br></br>
           <h3>[Contact]</h3>
           <a href="https://www.linkedin.com/in/livsteinmetz/" target='_blank' rel='noopener noreferrer'><h5>LinkedIn</h5></a>
