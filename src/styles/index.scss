@@ -17,9 +17,10 @@ section {
 
 a {
 	text-decoration: none;
+	color: $body;
 	&:hover {
 		* {
-			color: $red;
+			color: $lightblue;
 		}
 		cursor: pointer;
 	}
@@ -93,6 +94,12 @@ h5 {
 	@media (max-width: 600px) {
 		font-size: 18px;
 		line-height: 22px;
+	}
+	a {
+		&:hover {
+			color: $lightblue;
+			cursor: pointer;
+		}
 	}
 }
 

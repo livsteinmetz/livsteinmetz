@@ -38,7 +38,7 @@ export default function Liv() {
             </p>
             <h6>
               You can find my resume{' '}
-              <a href="/Olivia Steinmetz Resume 2021.pdf" target="_blank" rel="noopener noreferrer">
+              <a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer">
                 <span className="color">here</span>
               </a>
               .
@@ -68,12 +68,13 @@ export default function Liv() {
           <h5>pro bono web developer</h5>
           <br></br>
           <h3>[Former Work + Clients + Collaborators]</h3>
-          <h5>The Wond'ry Center for Innovation & Entrepreneurship, Accenture Operations Studio, Allied Media Projects, Design Justice Network, Design as an Immersive Vanderbilt Experience (DIVE), Design for America, Planned Parenthood, Vanderbilt University Medical Center, The Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, Students Consulting for Nonprofit Organizations (SCNO), Nashville Center for Nonprofit Management</h5>
+          <h5><a href="https://www.vanderbilt.edu/thewondry/" target='_blank' rel='noopener noreferrer'>The Wond'ry Center for Innovation & Entrepreneurship</a>, <a href="https://studios.accenture.com/" target='_blank' rel='noopener noreferrer'>Accenture Operations Studio</a>, <a href="https://alliedmedia.org/" target='_blank' rel='noopener noreferrer'>Allied Media Projects</a>, <a href="https://designjustice.org/" target='_blank' rel='noopener noreferrer'>Design Justice Network</a>, <a href="https://www.vanderbilt.edu/dive/" target='_blank' rel='noopener noreferrer'>Design as an Immersive Vanderbilt Experience (DIVE)</a>, <a href="https://designforamerica.com/" target='_blank' rel='noopener noreferrer'>Design for America</a>, Planned Parenthood, Vanderbilt University Medical Center, The Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, <a href="https://www.vanderbiltscno.com/" target='_blank' rel='noopener noreferrer'>Students Consulting for Nonprofit Organizations (SCNO)</a>, <a href="https://www.cnm.org/" target='_blank' rel='noopener noreferrer'>Nashville Center for Nonprofit Management</a></h5>
           <br></br>
           <h3>[Contact]</h3>
           <a href="https://www.linkedin.com/in/livsteinmetz/" target='_blank' rel='noopener noreferrer'><h5>LinkedIn</h5></a>
           <a href="https://github.com/livsteinmetz" target='_blank' rel='noopener noreferrer'><h5>Github</h5></a>
           <a href="mailto:olivia.r.steinmetz@gmail.com" target='_blank' rel='noopener noreferrer'><h5>Email</h5></a>
+          <a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer"><h5>Resume</h5></a>
         </div>
 
       </div>
