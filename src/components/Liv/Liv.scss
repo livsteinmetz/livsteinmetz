@@ -10,6 +10,12 @@
 	.color {
 		font-weight: 700;
 		color: $lightblue;
+		&:hover {
+			background: -webkit-linear-gradient($red, $yellow);
+			background-size: 200% 200%;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
 	}
 
 	#left-container {
@@ -56,6 +62,22 @@
 			padding: 64px;
 			overflow-y: scroll;
 			// overflow: auto;
+		}
+	}
+
+	@media (max-width: 600px) {
+		flex-direction: column-reverse;
+		position: relative;
+		#left-container,
+		#right-container {
+			width: 100%;
+			height: auto;
+			max-height: unset;
+			min-height: unset;
+			#right-scroll,
+			#left-scroll {
+				padding: 24px;
+			}
 		}
 	}
 }

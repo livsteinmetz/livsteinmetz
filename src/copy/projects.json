@@ -8,7 +8,7 @@
 	{
 		"title": "Spotify Data Visualization Web App",
 		"img": "/SpotifyApp.png",
-		"body": "Built a web-based Angular app that consumes Spotify Web API metadata to visually represent unique listening trends by user. Unique “fingerprint” image generated based upon metrics drawn from user listening trends. Additional features include hover over images to sample tracks, click to save to a playlist. Implemented JSON Web Tokens and Passport.js with OAuth 2.0 for Facebook login and registration.",
+		"body": "I worked on a team of 4 to develop a web-based Angular app that consumes Spotify Web API metadata to visually represent unique listening trends by user. A user logs into their Spotify account, and similarly to Spotify Wrapped, a unique “fingerprint” image is generated through an algorithm based upon metrics drawn from user listening trends. Some additional features include a Tinder-style UI to create playlists from recommendations generated from listening data, a comparison page to compare user fingerprints to artist fingerprints, a fingerprint sandbox to dynamically alter the appearance of the fingerprint, and a social media inspired story feature to view and share friend profiles. We did this by implementing JSON Web Tokens and Passport.js with OAuth 2.0 for Facebook/Spotify login and registration. Used MEAN Stac (Mongodb, Express, Angular, Node), Typescript, Adobe Creative Cloud, HTML, and custom SCSS.",
 		"link": ""
 	},
 	{
@@ -20,7 +20,7 @@
 	{
 		"title": "Spelling Bee Web Application",
 		"img": "/SpellingBee.png",
-		"body": "As an Associate Software Engineer in Capital One's Developer Academy (a 6-month bootcamp-style program designed to train non-CS college graduates from diverse backgrounds to be full-stack engineers) I built a web-based Anagram game using HTML, CSS, & vanilla JavaScript to replicate NYTimes mobile app. Implemented Merriam-Webster API, Scrabble-based letter randomization and probability algorithms. Added additional features including level logic and game timer. Used HTML, CSS, JavaScript, React.",
+		"body": "I built a web-based Anagram game using HTML, CSS, & vanilla JavaScript to replicate NYTimes mobile app. Implemented Merriam-Webster API, Scrabble-based letter randomization and probability algorithms. Added additional features including level logic and game timer. Used HTML, CSS, JavaScript, React.",
 		"link": "https://docs.google.com/presentation/d/1X2aMJf5UpvAwC4iPsBnSWqXLmuMOaKRe05folEIOr1Q/edit#slide=id.g82b6cf23fa_0_961"
 	},
 	{
@@ -38,19 +38,19 @@
 	{
 		"title": "Accessibility and Connected Health Product Consulting",
 		"img": "",
-		"body": "As a student consultant to a large telecommunications company affiliated with the Wond'ry Center for Innovation and Entrepreneurship, I worked with an interdisciplinary team of undergraduates, graduate students, and professors alongside industry subject matter experts on a year-long consulting project to identify and develop solutions for the company's Accessibility Team in the areas of Smart Home Technology and Connected Health. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking and UI/UX methodologies.",
+		"body": "As a consultant to a large telecommunications company affiliated with the Wond'ry Center for Innovation and Entrepreneurship, I worked with an interdisciplinary team of undergraduates, graduate students, and professors alongside industry subject matter experts on a year-long consulting project to identify and develop solutions for the company's Accessibility Team in the areas of Smart Home Technology and Connected Health. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking and UI/UX methodologies.",
 		"link": ""
 	},
 	{
-		"title": "Nashville Center for Nonprofit Management - Impact Measurement Report",
+		"title": "Nashville Center for Nonprofit Management Impact Measurement Report",
 		"img": "",
-		"body": "Designed impact measurement report that implemented growth metrics and KPIs for measuring and increasing the impact of Nashville Center for Nonprofit Management's nonprofit consulting engagements. Part of work as SCNO pro-bono consultant. Used Sketch, Data Analytics, Data Visualization, and Reporting methodologies.",
+		"body": "I worked on a team of 5 to design an impact measurement report that implemented growth metrics and KPIs for measuring and increasing the impact of Nashville Center for Nonprofit Management's nonprofit consulting engagements. This was part of my work as a pro-bono technology consultant to Nashville non-profits. Used Sketch, Data Analytics, Data Visualization, and Reporting methodologies.",
 		"link": "https://docs.google.com/presentation/d/1h-8HcAelWPChHq8vE_o1qBu0DqWl-iqlshPLIluokjc/edit#slide=id.g4ef2e91f0b_1_76"
 	},
 	{
 		"title": "Project 615 E-commerce and Web Design",
 		"img": "",
-		"body": "As a pro bono software engineer, I redesigned the website, search engine optimization, and branding campaign strategies for Project 615 products to attract target audiences and build out e-commerce presence. This was part of my work as an SCNO pro-bono consultant. Used HTML, CSS, JavaScript, Figma, UI/UX methodologies.",
+		"body": "As a pro bono software engineer, I redesigned the website, search engine optimization, and branding campaign strategies for Project 615 products to attract target audiences and build out e-commerce presence. This was part of my work as an SCNO pro-bono technology consultant. Used HTML, CSS, JavaScript, Figma, UI/UX methodologies.",
 		"link": "https://project615.com"
 	},
 	{
@@ -58,5 +58,11 @@
 		"img": "",
 		"body": "As Innovation Ambassador at the Wond'ry Center for Innovation and Entrepreneurship, I lead curation of over 50 speaker programs, workshops, and meetups yearly bringing the Vanderbilt community together in an engaging, integrated, collaborative environment. Organized events including Blockchain 101, AR/VR Meetups, Design Thinking, Music Entrepreneurship, Human Resources, Equity Distribution, Brand Creation, & Prototyping. I also identified $2 million in grant opportunities and 11 calls for papers for programming, research projects, and student-led startups during 2017 - 2018 academic year. Part of my responsibilities included designing social media and marketing initiatives, during which we saw 55% growth in active followers and gained 3,000 views per post.",
 		"link": ""
+	},
+	{
+		"title": "Project Student Banking Web Page Redesign",
+		"img": "",
+		"body": "At Capital One, I am currently collaborating with the Social Impact and Investment Team to redesign the Project Student Banking Web Page and design a new alumni hub to expand participant networking opportunities. Updates to come.",
+		"link": "https://www.capitalone.com/about/newsroom/student-banking-program/"
 	}
 ]
