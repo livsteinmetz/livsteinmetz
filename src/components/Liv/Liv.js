@@ -54,7 +54,7 @@ export default function Liv() {
             <br></br>
 
             <h5 class="color">
-              Please reach out to learn more about my current projects! I'm always happy to chat :)
+              Interested in working together? Please reach out! I'm always happy to chat :)
 			      </h5>
         </div>
       </div>

@@ -20,6 +20,7 @@ a {
 	color: $body;
 	&:hover {
 		* {
+			font-style: italic;
 			color: $lightblue;
 		}
 		cursor: pointer;
