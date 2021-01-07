@@ -38,7 +38,7 @@ export default function Liv() {
             </p>
             <h6>
               You can find my resume{' '}
-              <a href="/Olivia Steinmetz Resume.pdf" target="_blank" rel="noopener noreferrer">
+              <a href="/Olivia Steinmetz Resume 2021.pdf" target="_blank" rel="noopener noreferrer">
                 <span className="color">here</span>
               </a>
               .
