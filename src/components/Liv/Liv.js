@@ -9,9 +9,9 @@ export default function Liv() {
           <h3>I’m working towards the development & adoption of ethical & inclusive technologies for sustainable social impact & innovation.</h3>
           <br></br>
           <h5> My name is <span className="color">Olivia Steinmetz (she/her)</span>, but you can
-              call me Liv. I'm a Philadelphia-based software engineer, musician, & UX designer. I received my Bachelors degree from Vanderbilt University with majors in {' '}
+              call me Liv. I'm a Philadelphia-based software engineer, musician, & UX designer. I received my B.S. from Vanderbilt University with majors in {' '}
               <span className="color">Double Bass Performance</span> &{' '}
-              <span className="color">Engineering Science</span>. As an engineering
+              <span className="color">Engineering Design</span>. As an engineering
               & music student, I focused on the intersection of{' '}
               <span className="color">technology, design, and social justice</span>.
               I’m committed to action and change, seeking out any and every
