@@ -1,4 +1,5 @@
 import './Liv.scss'
+
 import Work from '../Work/Work'
 
 export default function Liv() {
@@ -63,7 +64,7 @@ export default function Liv() {
           <h1>Hi there!</h1>
           <h2>My name is Liv & I’m a Philadelphia-based software engineer, musician, & UX designer.</h2>
           <h3>[Current Work]</h3>
-          <h5>software engineer @ capital one</h5>
+          <h5>front end engineer @ <a href="https://barnesfoundation.org/" target='_blank' rel='noopener noreferrer'>the Barnes</a></h5>
           <h5>freelance double bassist</h5>
           <h5>pro bono web developer</h5>
           <br></br>
