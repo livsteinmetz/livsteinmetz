@@ -10,7 +10,7 @@ export default function Liv() {
           <h3>I’m working towards the development & adoption of ethical & inclusive technologies for sustainable social impact & innovation.</h3>
           <br></br>
           <h5> My name is <span className="color">Olivia Steinmetz (she/her)</span>, but you can
-              call me Liv. I'm a Philadelphia-based software engineer, musician, & UX designer. I received my B.S. from Vanderbilt University with majors in {' '}
+              call me Liv. I'm a Philadelphia-based software engineer, musician, & UI designer. I'm currently working at the<a className="color" href="https://barnesfoundation.org/" target='_blank' rel='noopener noreferrer'> Barnes Foundation</a> as a Front End Software Engineer. I received my B.S. from Vanderbilt University with majors in {' '}
               <span className="color">Double Bass Performance</span> &{' '}
               <span className="color">Engineering Design</span>. As an engineering
               & music student, I focused on the intersection of{' '}
@@ -28,7 +28,7 @@ export default function Liv() {
               .
             </h5>
             <p>
-              I have completed research projects, coursework, and hackathons on user
+           I have completed research projects, coursework, and hackathons on user
               data research & best practices, blockchain for social impact,
               data-driven storytelling, the ethics of artificial intelligence,
               sustainable urban development, & accessible design methodologies (to
