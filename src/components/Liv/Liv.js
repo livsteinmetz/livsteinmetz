@@ -62,7 +62,7 @@ export default function Liv() {
       <div id="right-container">
         <div id="right-scroll">
           <h1>Hi there!</h1>
-          <h2>My name is Liv & I’m a Philadelphia-based software engineer, musician, & UX designer.</h2>
+          <h2>My name is Liv & I’m a Philadelphia-based software engineer, musician, & UI designer.</h2>
           <h3>[Current Work]</h3>
           <h5>front end engineer @ <a href="https://barnesfoundation.org/" target='_blank' rel='noopener noreferrer'>the Barnes</a></h5>
           <h5>freelance double bassist</h5>
