@@ -1,5 +1,29 @@
 [
   {
+    "title": "Barnes Live",
+    "img": "/BarnesLive.png",
+    "body": "In response to the pandemic, we rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded their local partnerships, which supported triple the enrollment in online courses for adults, and allowed them to reach 40 percent more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. You can read more about it <a href='https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/'>here.</a>",
+    "link": ""
+  },
+  {
+    "title": "Barnes SMS Ticketing",
+    "img": "/SMS.png",
+    "body": "Borrowing designs and SMS mechanisms from our membership site, we created our SMS ticketing website, which is sent to a guest before their scheduled arrival time. We added in a Tour Upgrade Feature, to enable guests to upgrade their GA tickets to tour tickets onsite, generating more revenue for the Barnes and offering a more in depth gallery experience.",
+    "link": ""
+  },
+  {
+    "title": "Barnes Online Collection",
+    "img": "/OnlineCollection.png",
+    "body": "I update and maintain the Barnes' collection page to match existing Barnes branding designed by colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets.",
+    "link": ""
+  },
+  {
+    "title": "Barnes Membership Portal",
+    "img": "/MemberSite.png",
+    "body": "After our post-quarantine reopening, the Barnes wanted to make a membership portal at the Barnes for a more contactless experience for our members. This application offers convenient methods for a member to purchase tickets, display their membership card, and see updates from the Barnes via Firebase notifications. This application was spun up in TypeScript on the client and server, and basically all data inside the application is from our third party ticketing vendor, which we built upon as our source of truth from our ticketing system ACME. Login was done via SMS authentication with AWS Pinpoint. I completed a redesign of the site in October 2021, and we've been able to use this site as the groundwork for other features like member renewals as well, with have plans to scale further in future projects.",
+    "link": ""
+  },
+  {
     "title": "Augmented Reality Interactive Cube - Mobile and Web App",
     "img": "/ARCube.png",
     "body": "As an Emerging Technology Analyst at Accenture, I developed an Augmented Reality cube for design thinking sessions with Accenture stakeholders using Unity, C#, mobile device camera functions and image detection. I conducted end-to-end design process including user need validation and encompassed interviews, surveys, wireframing, usability testing, and documentation. Used C#, Unity, Blender, Adobe Creative Cloud, Swift, AR Kit, UI/UX Testing, Design Thinking, Data-Driven Story-telling methodologies.",
@@ -51,12 +75,6 @@
     "title": "Innovation and Entrepreneurship Workshops, Programs, and Meetups",
     "img": "",
     "body": "As Innovation Ambassador at the Wond'ry Center for Innovation and Entrepreneurship, I lead curation of over 50 speaker programs, workshops, and meetups yearly bringing the Vanderbilt community together in an engaging, integrated, collaborative environment. Organized events including Blockchain 101, AR/VR Meetups, Design Thinking, Music Entrepreneurship, Human Resources, Equity Distribution, Brand Creation, & Prototyping. I also identified $2 million in grant opportunities and 11 calls for papers for programming, research projects, and student-led startups during 2017 - 2018 academic year. Part of my responsibilities included designing social media and marketing initiatives, during which we saw 55% growth in active followers and gained 3,000 views per post.",
-    "link": ""
-  },
-  {
-    "title": "Spelling Bee Web Application",
-    "img": "/SpellingBee.png",
-    "body": "I built a web-based Anagram game using HTML, CSS, & vanilla JavaScript to replicate NYTimes mobile app. Implemented Merriam-Webster API, Scrabble-based letter randomization and probability algorithms. Added additional features including level logic and game timer. Used HTML, CSS, JavaScript, React.",
     "link": ""
   },
   {
