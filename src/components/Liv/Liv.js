@@ -37,13 +37,13 @@ export default function Liv() {
               quick learner with a diverse background & am always up for a new
               challenge.
             </p>
-            <h6>
+            {/* <h6>
               You can find my resume{' '}
               <a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer">
                 <span className="color">here</span>
               </a>
               .
-			      </h6>
+			      </h6> */}
             <br></br>
             <br></br>
 
