@@ -2,8 +2,8 @@
   {
     "title": "Barnes Live",
     "img": "/BarnesLive.png",
-    "body": "In response to the pandemic, we rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded their local partnerships, which supported triple the enrollment in online courses for adults, and allowed them to reach 40 percent more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. You can read more about it <a href='https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/'>here.</a>",
-    "link": ""
+    "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
+    "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
   },
   {
     "title": "Barnes SMS Ticketing",
@@ -14,13 +14,13 @@
   {
     "title": "Barnes Online Collection",
     "img": "/OnlineCollection.png",
-    "body": "I update and maintain the Barnes' collection page to match existing Barnes branding designed by colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets.",
-    "link": ""
+    "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
+    "link": "https://collection.barnesfoundation.org/"
   },
   {
     "title": "Barnes Membership Portal",
     "img": "/MemberSite.png",
-    "body": "After our post-quarantine reopening, the Barnes wanted to make a membership portal at the Barnes for a more contactless experience for our members. This application offers convenient methods for a member to purchase tickets, display their membership card, and see updates from the Barnes via Firebase notifications. This application was spun up in TypeScript on the client and server, and basically all data inside the application is from our third party ticketing vendor, which we built upon as our source of truth from our ticketing system ACME. Login was done via SMS authentication with AWS Pinpoint. I completed a redesign of the site in October 2021, and we've been able to use this site as the groundwork for other features like member renewals as well, with have plans to scale further in future projects.",
+    "body": "After our post-quarantine reopening, the Barnes wanted to make a membership portal for a more contactless experience for our members. This application offers convenient methods for a member to purchase tickets, display their membership card, and see updates from the Barnes via Firebase notifications. This application was spun up in TypeScript on the client and server, and data inside the application is pulled from our third party ticketing vendor ACME, which we built upon as our source of truth. Login was done via SMS authentication with AWS Pinpoint. I completed a redesign of the site in Fall 2021, and we've been able to use this site as the groundwork for other features like membership renewals, with have plans to scale further in future projects.",
     "link": ""
   },
   {
