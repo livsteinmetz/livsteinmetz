@@ -6,12 +6,6 @@
     "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
   },
   {
-    "title": "Barnes SMS Ticketing",
-    "img": "/SMS.png",
-    "body": "Borrowing designs and SMS mechanisms from our membership site, we created our SMS ticketing website, which is sent to a guest before their scheduled arrival time. We added in a Tour Upgrade Feature, to enable guests to upgrade their GA tickets to tour tickets onsite, generating more revenue for the Barnes and offering a more in depth gallery experience.",
-    "link": ""
-  },
-  {
     "title": "Barnes Online Collection",
     "img": "/OnlineCollection.png",
     "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
@@ -21,6 +15,12 @@
     "title": "Barnes Membership Portal",
     "img": "/MemberSite.png",
     "body": "After our post-quarantine reopening, the Barnes wanted to make a membership portal for a more contactless experience for our members. This application offers convenient methods for a member to purchase tickets, display their membership card, and see updates from the Barnes via Firebase notifications. This application was spun up in TypeScript on the client and server, and data inside the application is pulled from our third party ticketing vendor ACME, which we built upon as our source of truth. Login was done via SMS authentication with AWS Pinpoint. I completed a redesign of the site in Fall 2021, and we've been able to use this site as the groundwork for other features like membership renewals, with have plans to scale further in future projects.",
+    "link": ""
+  },
+  {
+    "title": "Barnes SMS Ticketing",
+    "img": "/SMS.png",
+    "body": "Borrowing designs and SMS mechanisms from our membership site, we created our SMS ticketing website, which is sent to a guest before their scheduled arrival time. We added in a Tour Upgrade Feature, to enable guests to upgrade their GA tickets to tour tickets onsite, generating more revenue for the Barnes and offering a more in depth gallery experience.",
     "link": ""
   },
   {
