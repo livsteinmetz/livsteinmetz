@@ -64,6 +64,16 @@
       overflow-y: scroll;
       // overflow: auto;
     }
+    #right {
+      color: $white;
+    }
+    a {
+      color: $white;
+      &:hover {
+        color: $lightblue;
+        text-decoration: underline;
+      }
+    }
   }
 
   @media (max-width: 600px) {

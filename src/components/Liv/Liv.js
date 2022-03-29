@@ -64,18 +64,18 @@ export default function Liv() {
           <h1>Hi there!</h1>
           <h2>My name is Liv and I’m a Philadelphia-based software engineer, musician, and UI designer.</h2>
           <h3>[Current Work]</h3>
-          <h5>front end engineer @ <a href="https://barnesfoundation.org/" target='_blank' rel='noopener noreferrer'>the Barnes</a></h5>
-          <h5>double bassist</h5>
-          <h5>pro bono web developer</h5>
+          <h5 id="right">front end engineer @ <a href="https://barnesfoundation.org/" target='_blank' rel='noopener noreferrer'>the Barnes</a></h5>
+          <h5 id="right">double bassist</h5>
+          <h5 id="right">pro bono web developer</h5>
           <br></br>
           <h3>[Former Work + Clients + Collaborators]</h3>
-          <h5><a href="https://www.vanderbilt.edu/thewondry/" target='_blank' rel='noopener noreferrer'>The Wond'ry Center for Innovation and Entrepreneurship</a>, <a href="https://studios.accenture.com/" target='_blank' rel='noopener noreferrer'>Accenture Operations Studio</a>, <a href="https://alliedmedia.org/" target='_blank' rel='noopener noreferrer'>Allied Media Projects</a>, <a href="https://designjustice.org/" target='_blank' rel='noopener noreferrer'>Design Justice Network</a>, <a href="https://www.vanderbilt.edu/dive/" target='_blank' rel='noopener noreferrer'>Design as an Immersive Vanderbilt Experience (DIVE)</a>, <a href="https://designforamerica.com/" target='_blank' rel='noopener noreferrer'>Design for America</a>, Planned Parenthood, Vanderbilt University Medical Center, The Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, <a href="https://www.vanderbiltscno.com/" target='_blank' rel='noopener noreferrer'>Students Consulting for Nonprofit Organizations (SCNO)</a>, <a href="https://www.cnm.org/" target='_blank' rel='noopener noreferrer'>Nashville Center for Nonprofit Management</a></h5>
+          <h5 id="right"><a href="https://www.vanderbilt.edu/thewondry/" target='_blank' rel='noopener noreferrer'>The Wond'ry Center for Innovation and Entrepreneurship</a>, <a href="https://studios.accenture.com/" target='_blank' rel='noopener noreferrer'>Accenture Operations Studio</a>, <a href="https://alliedmedia.org/" target='_blank' rel='noopener noreferrer'>Allied Media Projects</a>, <a href="https://designjustice.org/" target='_blank' rel='noopener noreferrer'>Design Justice Network</a>, <a href="https://www.vanderbilt.edu/dive/" target='_blank' rel='noopener noreferrer'>Design as an Immersive Vanderbilt Experience (DIVE)</a>, <a href="https://designforamerica.com/" target='_blank' rel='noopener noreferrer'>Design for America</a>, Planned Parenthood, Vanderbilt University Medical Center, The Children's Hospital of Philadelphia, Vanderbilt Programming Board (VPB) Speakers Committee, <a href="https://www.vanderbiltscno.com/" target='_blank' rel='noopener noreferrer'>Students Consulting for Nonprofit Organizations (SCNO)</a>, <a href="https://www.cnm.org/" target='_blank' rel='noopener noreferrer'>Nashville Center for Nonprofit Management</a></h5>
           <br></br>
           <h3>[Contact]</h3>
-          <a href="https://www.linkedin.com/in/livsteinmetz/" target='_blank' rel='noopener noreferrer'><h5>LinkedIn</h5></a>
-          <a href="https://github.com/livsteinmetz" target='_blank' rel='noopener noreferrer'><h5>Github</h5></a>
-          <a href="mailto:olivia.r.steinmetz@gmail.com" target='_blank' rel='noopener noreferrer'><h5>Email</h5></a>
-          <a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer"><h5>Resume</h5></a>
+          <h5 id="right"><a href="https://www.linkedin.com/in/livsteinmetz/" target='_blank' rel='noopener noreferrer'>LinkedIn</a></h5>
+          <h5 id="right"><a href="https://github.com/livsteinmetz" target='_blank' rel='noopener noreferrer'>Github</a></h5>
+          <h5 id="right"><a href="mailto:olivia.r.steinmetz@gmail.com" target='_blank' rel='noopener noreferrer'>Email</a></h5>
+          <h5 id="right"><a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer">Resume</a></h5>
         </div>
 
       </div>
