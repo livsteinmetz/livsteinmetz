@@ -30,7 +30,7 @@
     margin: auto;
     #left-scroll {
       width: 100%;
-      padding: 64px;
+      padding: 100px;
       overflow-y: scroll;
       // overflow: auto;
       #work {
@@ -60,7 +60,7 @@
     height: 100%;
     #right-scroll {
       width: 100%;
-      padding: 64px;
+      padding: 100px;
       overflow-y: scroll;
       // overflow: auto;
     }
@@ -87,7 +87,7 @@
       min-height: unset;
       #right-scroll,
       #left-scroll {
-        padding: 24px;
+        padding: 50px;
       }
     }
   }
