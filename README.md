@@ -1,1 +1,1 @@
-hi i am liv
+Hi there! My name is Liv (she/her) and I’m a Philadelphia-based software engineer, musician, & UI designer. I’m working towards the development & adoption of equitable & educational technologies for sustainable social impact and innovation.
