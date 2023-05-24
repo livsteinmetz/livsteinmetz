@@ -1,5 +1,11 @@
 [
   {
+    "title": "Barnes Visual Experience Platform (VxP)",
+    "img": "/BarnesVxP.png",
+    "body": "At the Barnes, we built a first-of-its-kind Visual Experience Platform (VxP) that is shattering the traditional screenshare model by giving instructors the ability to guide students through a deep-zoom analysis of IIIF standard collection imagery on a virtual “infinite” canvas. Students can explore the art works on their own as well when the instructor enables independent exploration of the canvas. With built-in video conferencing capability built on AWS Chime, participants can interact in real-time, fostering a collaborative, participatory learning experience. These innovative digital programs expanded the Barnes Foundation’s mission-related services by growing and diversifying audiences, and created a new pathway for earned revenue. Building on this success, we now have a unique opportunity to become the leading provider for museum education, partnering with peer institutions as a producer, presenter, and distributor of digital arts education content.",
+    "link": "https://www.aam-us.org/reopenings-reboot-barnes/"
+  },
+  {
     "title": "Barnes Live",
     "img": "/BarnesLive.png",
     "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
