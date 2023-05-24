@@ -55,13 +55,17 @@ export default function Liv() {
             informed and inspired. I’m a quick learner with a diverse background
             and am always up for a new challenge.
           </p>
-          {/* <h6>
-              You can find my resume{' '}
-              <a href="/OliviaSteinmetzResume2021.pdf" target="_blank" rel="noopener noreferrer">
-                <span className="color">here</span>
-              </a>
-              .
-			      </h6> */}
+          <h6>
+            You can find my resume{" "}
+            <a
+              href="/OliviaSteinmetzCV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="color">here</span>
+            </a>
+            .
+          </h6>
           <br></br>
           <br></br>
 
