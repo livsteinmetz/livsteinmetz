@@ -2,90 +2,105 @@
   {
     "title": "Barnes Visual Experience Platform (VxP)",
     "img": "/BarnesVxP.png",
+    "img2": "",
     "body": "At the Barnes, we built a first-of-its-kind Visual Experience Platform (VxP) that is shattering the traditional screenshare model by giving instructors the ability to guide students through a deep-zoom analysis of IIIF standard collection imagery on a virtual “infinite” canvas. Students can explore the art works on their own as well when the instructor enables independent exploration of the canvas. With built-in video conferencing capability built on AWS Chime, participants can interact in real-time, fostering a collaborative, participatory learning experience. These innovative digital programs expanded the Barnes Foundation’s mission-related services by growing and diversifying audiences, and created a new pathway for earned revenue. Building on this success, we now have a unique opportunity to become the leading provider for museum education, partnering with peer institutions as a producer, presenter, and distributor of digital arts education content.",
     "link": "https://www.aam-us.org/reopenings-reboot-barnes/"
   },
   {
     "title": "Barnes Live",
     "img": "/BarnesLive.png",
+    "img2": "",
     "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
     "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
   },
   {
     "title": "Barnes Online Collection",
     "img": "/OnlineCollection.png",
-    "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
+    "img2": "OnlineCollectionColor.png",
+    "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. You can sort and search the collection by color, light, line and space (the four plastic means used in the Barnes method of art education). I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
     "link": "https://collection.barnesfoundation.org/"
   },
   {
     "title": "Barnes Membership Portal",
     "img": "/MemberSite.png",
+    "img2": "",
     "body": "After our post-quarantine reopening, the Barnes wanted to make a membership portal for a more contactless experience for our members. This application offers convenient methods for a member to purchase tickets, display their membership card, and see updates from the Barnes via Firebase notifications. This application was spun up in TypeScript on the client and server, and data inside the application is pulled from our third party ticketing vendor ACME, which we built upon as our source of truth. Login was done via SMS authentication with AWS Pinpoint. I completed a redesign of the site in Fall 2021, and we've been able to use this site as the groundwork for other features like membership renewals, with have plans to scale further in future projects.",
     "link": ""
   },
   {
     "title": "Barnes SMS Ticketing",
     "img": "/SMS.png",
+    "img2": "",
     "body": "Borrowing designs and SMS mechanisms from our membership site, we created our SMS ticketing website, which is sent to a guest before their scheduled arrival time. We added in a Tour Upgrade Feature, to enable guests to upgrade their GA tickets to tour tickets onsite, generating more revenue for the Barnes and offering a more in depth gallery experience.",
     "link": ""
   },
   {
     "title": "Augmented Reality Interactive Cube - Mobile and Web App",
     "img": "/ARCube.png",
+    "img2": "",
     "body": "As an Emerging Technology Analyst at Accenture, I developed an Augmented Reality cube for design thinking sessions with Accenture stakeholders using Unity, C#, mobile device camera functions and image detection. I conducted end-to-end design process including user need validation and encompassed interviews, surveys, wireframing, usability testing, and documentation. Used C#, Unity, Blender, Adobe Creative Cloud, Swift, AR Kit, UI/UX Testing, Design Thinking, Data-Driven Story-telling methodologies.",
     "link": ""
   },
   {
     "title": "Spotify Data Visualization Web App",
     "img": "/SpotifyApp.png",
+    "img2": "",
     "body": "I worked on a team of 4 to develop a web-based Angular app that consumes Spotify Web API metadata to visually represent unique listening trends by user. A user logs into their Spotify account, and similarly to Spotify Wrapped, a unique “fingerprint” image is generated through an algorithm based upon metrics drawn from user listening trends. Some additional features include a Tinder-style UI to create playlists from recommendations generated from listening data, a comparison page to compare user fingerprints to artist fingerprints, a fingerprint sandbox to dynamically alter the appearance of the fingerprint, and a social media inspired story feature to view and share friend profiles. We did this by implementing JSON Web Tokens and Passport.js with OAuth 2.0 for Facebook/Spotify login and registration. Used MEAN Stac (Mongodb, Express, Angular, Node), Typescript, Adobe Creative Cloud, HTML, and custom SCSS.",
     "link": ""
   },
   {
     "title": "An Analysis of Blockchain for Social Impact Objectives",
     "img": "",
+    "img2": "",
     "body": "As an undergraduate researcher, I presented a semester long research report analyzing the value add of Blockchain implementation and corresponding social impact industry objectives. Used Microsoft Suite, Data Analytics methodologies.",
     "link": "https://docs.google.com/presentation/d/1NfYjcmzr6LwwNdaLbAIPokper-k0b8v7AeYCxTPzZWE/edit#slide=id.g35f391192_00"
   },
   {
     "title": "Forecast and Assessment of Quantum Computing Viability",
     "img": "",
+    "img2": "",
     "body": "As an undergraduate researcher, I studied the technological and societal factors surrounding Quantum Computing technology and its development and adoption using various forecasting methodologies including Delphi, trend analysis, monitoring techniques, and scenario-based assessments. Used Microsoft Suite, Data Analytics, Reporting, Assessment, and Forecasting methodologies.",
     "link": "/Forecast and Technology Assessment for Quantum Computing Technologies.pdf"
   },
   {
     "title": "Accessibility and Connected Health Product Consulting",
     "img": "",
+    "img2": "",
     "body": "As a consultant to a large telecommunications company affiliated with the Wond'ry Center for Innovation and Entrepreneurship, I worked with an interdisciplinary team of undergraduates, graduate students, and professors alongside industry subject matter experts on a year-long consulting project to identify and develop solutions for the company's Accessibility Team in the areas of Smart Home Technology and Connected Health. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking and UI/UX methodologies.",
     "link": ""
   },
   {
     "title": "Stigma Surrounding Public Transit Analysis",
     "img": "PublicTransitStigma.png",
+    "img2": "",
     "body": "In a class on Sustainable Urban Development, I conducted design and systems thinking analysis with a team to determine root causes of stigma surrounding public transit in Nashville, TN. We focused on systemic issues such as media representation, redlining, and bussing. We were named university level winners of the Map the System Global Challenge. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking methodologies.",
     "link": "https://docs.google.com/presentation/d/1X2aMJf5UpvAwC4iPsBnSWqXLmuMOaKRe05folEIOr1Q/edit#slide=id.g82b6cf23fa_0_961"
   },
   {
     "title": "Nashville Center for Nonprofit Management Impact Measurement Report",
     "img": "",
+    "img2": "",
     "body": "I worked on a team of 5 to design an impact measurement report that implemented growth metrics and KPIs for measuring and increasing the impact of Nashville Center for Nonprofit Management's nonprofit consulting engagements. This was part of my work as a pro-bono technology consultant to Nashville non-profits. Used Sketch, Data Analytics, Data Visualization, and Reporting methodologies.",
     "link": "https://docs.google.com/presentation/d/1h-8HcAelWPChHq8vE_o1qBu0DqWl-iqlshPLIluokjc/edit#slide=id.g4ef2e91f0b_1_76"
   },
   {
     "title": "Project 615 E-commerce and Web Design",
     "img": "",
+    "img2": "",
     "body": "As a pro bono software engineer, I redesigned the website, search engine optimization, and branding campaign strategies for Project 615 products to attract target audiences and build out e-commerce presence. This was part of my work as an SCNO pro-bono technology consultant. Used HTML, CSS, JavaScript, Figma, UI/UX methodologies.",
     "link": "https://project615.com"
   },
   {
     "title": "Innovation and Entrepreneurship Workshops, Programs, and Meetups",
     "img": "",
+    "img2": "",
     "body": "As Innovation Ambassador at the Wond'ry Center for Innovation and Entrepreneurship, I lead curation of over 50 speaker programs, workshops, and meetups yearly bringing the Vanderbilt community together in an engaging, integrated, collaborative environment. Organized events including Blockchain 101, AR/VR Meetups, Design Thinking, Music Entrepreneurship, Human Resources, Equity Distribution, Brand Creation, & Prototyping. I also identified $2 million in grant opportunities and 11 calls for papers for programming, research projects, and student-led startups during 2017 - 2018 academic year. Part of my responsibilities included designing social media and marketing initiatives, during which we saw 55% growth in active followers and gained 3,000 views per post.",
     "link": ""
   },
   {
     "title": "Project Student Banking Web Page Redesign",
     "img": "",
+    "img2": "",
     "body": "At Capital One, I collaborated with the Social Impact and Investment Team to redesign the Project Student Banking Web Page and design a new alumni hub to expand participant networking opportunities. Updates to come.",
     "link": "https://www.capitalone.com/about/newsroom/student-banking-program/"
   }
