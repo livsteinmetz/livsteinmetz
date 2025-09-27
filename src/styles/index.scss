@@ -16,7 +16,7 @@ body {
   *::-webkit-scrollbar-thumb {
     background-color: theme.$white;
   }
-      a {
+  a {
     &:hover {
       color: theme.$lightblue;
       cursor: pointer;
@@ -52,7 +52,7 @@ h4,
 h5,
 h6 {
   font-family: theme.$font-header;
-    a {
+  a {
     &:hover {
       color: theme.$lightblue;
       cursor: pointer;

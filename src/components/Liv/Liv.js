@@ -1,11 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import './Liv.scss';
 import Work from '../Work/Work';
 
 export default function Liv() {
   const canvasRef = useRef(null);
+  const [images, setImages] = useState([]);
+  const [currentImage, setCurrentImage] = useState(0);
 
+  // Load manifest.json with all film images and pick a random one
+  useEffect(() => {
+    fetch('/film/manifest.json')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        setImages(data);
+
+        const idx = Math.floor(Math.random() * data.length);
+        setCurrentImage(idx);
+      })
+      .catch((err) => console.error('Failed to load manifest.json:', err));
+  }, []);
+
+  // Cursor particle effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -54,12 +71,18 @@ export default function Liv() {
 
     animate();
 
-    // Clean up on unmount
     return () => {
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  const handleChangeImage = () => {
+    if (images.length === 0) return;
+    const idx = Math.floor(Math.random() * images.length);
+    setCurrentImage(idx);
+  };
+
   return (
     <div id="container">
       <div id="left-container">
@@ -109,10 +132,18 @@ export default function Liv() {
           <section id="work" aria-label="Selected work">
             <Work />
           </section>
-          <br />
         </div>
       </div>
-      <div id="right-container">
+
+      <div
+        id="right-container"
+        style={{
+          backgroundImage: images.length > 0 ? `url(/film/${images[currentImage]})` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          transition: 'background-image 1s ease-in-out',
+        }}
+      >
         <div id="right-scroll">
           <h1>Olivia Steinmetz</h1>
           <h2>[Current Work]</h2>
@@ -291,6 +322,7 @@ export default function Liv() {
             </a>
           </h5>
         </div>
+        <button onClick={handleChangeImage}>Change Background</button>
       </div>
     </div>
   );

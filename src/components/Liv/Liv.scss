@@ -1,5 +1,18 @@
 @use '../../styles/theme.scss';
 
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); // tweak for more or less dimming
+  pointer-events: none;
+  z-index: 0;
+}
+
+#container > *:not(.background-overlay) {
+  position: relative;
+  z-index: 1;
+}
+
 #container {
   display: flex;
   position: absolute;
