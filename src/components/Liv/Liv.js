@@ -65,11 +65,11 @@ export default function Liv() {
       <div id="left-container">
         <div id="left-scroll">
           <h3>
-            I&apos;m interested in how technology might carry more than utility—how it can hold
-            memory, friction, joy, and a working sense of justice.
+            I write code, manage products, play bass, and design interfaces. Some days it feels
+            coherent; most days it feels like improvisation.
           </h3>
           <br />
-          <h5>
+          <p>
             I move between engineering, product design, and fine arts and culture—sometimes all at
             once. I&apos;ve spent the past five years working at the intersection of design,
             technology, and the arts—helping cultural institutions reimagine how they meet people in
@@ -80,32 +80,10 @@ export default function Liv() {
             human-centered, yes—but culturally and ethically attuned, and joyful too!
             <br />
             <br />
-            My research focuses on human–computer interaction, AI, and digital culture. What keeps
-            me in this space is the same conviction that brought me here in the first place:
-            technology, used with care, can expand access and uncover connections. I’m passionate
-            about the responsible use of technology to enhance cultural access, foster
-            collaboration, and spark creativity—uncovering hidden links in collections, widening
-            interpretive possibilities, and shaping museum experiences that feel both engaging and
-            equitable. It all started with my background in the arts and technology, studying{' '}
-            <a
-              className="color"
-              href="https://blair.vanderbilt.edu/bass"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Double Bass Performance
-            </a>{' '}
-            and{' '}
-            <a
-              className="color"
-              href="https://engineering.vanderbilt.edu/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Engineering Design
-            </a>{' '}
-            at Vanderbilt.
-          </h5>
+            Though my roots and home base will always be in Philadelphia, remote work, friendships,
+            and study have carried me across geographies and communities. I studied Double Bass
+            Performance and Engineering Design at Vanderbilt University.
+          </p>
           <p>
             I keep circling the same questions: How do we design AI that centers human agency, not
             efficiency alone? What does digital well-being look like when attention itself is an
@@ -136,12 +114,7 @@ export default function Liv() {
       </div>
       <div id="right-container">
         <div id="right-scroll">
-          <h1>Olivia Steinmetz, here.</h1>
-          <h2>
-            I write code, manage products, play bass, and design interfaces. Some days it feels
-            coherent; most days it feels like improvisation. Roots and home base will always be in
-            Philadelphia, remote work has me all over the map.
-          </h2>
+          <h1>Olivia Steinmetz</h1>
           <h3>[Current Work]</h3>
           <h5 id="right">
             Front-End Software Engineer & Product Manager for Digital Initiatives @{' '}

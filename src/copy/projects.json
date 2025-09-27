@@ -3,9 +3,16 @@
     "title": "Barnes Visual Experience Platform (VxP)",
     "img": "/BarnesVxP.png",
     "img2": "",
-    "body": "At the Barnes, we built a first-of-its-kind Visual Experience Platform (VxP) that is shattering the traditional screenshare model by giving instructors the ability to guide students through a deep-zoom analysis of IIIF standard collection imagery on a virtual “infinite” canvas. Students can explore the art works on their own as well when the instructor enables independent exploration of the canvas. With built-in video conferencing capability built on AWS Chime, participants can interact in real-time, fostering a collaborative, participatory learning experience. These innovative digital programs expanded the Barnes Foundation’s mission-related services by growing and diversifying audiences, and created a new pathway for earned revenue. Building on this success, we now have a unique opportunity to become the leading provider for museum education, partnering with peer institutions as a producer, presenter, and distributor of digital arts education content.",
-    "link": "https://www.aam-us.org/reopenings-reboot-barnes/"
+    "body": "At the Barnes, we developed a first-of-its-kind Visual Experience Platform (VXP) specifically for teaching visual material—offering 360-degree views of galleries and synchronous and asynchronous delivery modes. Since we launched our first online class using the platform in January 2023, we have enrolled nearly 4,600 students in more than 110 online classes hosted on the VxP, with 14% of students receiving scholarships. In our post-course surveys, 76% of students reported that the class was highly or extremely impactful on how they perceive art, and 91% said the class inspired them to continue their learning. Students can explore the artworks on their own as well when the instructor enables independent exploration of the canvas. With built-in video conferencing capability built on AWS Chime, participants can interact in real-time, fostering a collaborative, participatory learning experience. Behind the scenes, the VXP is a React/GraphQL application that integrates AWS Chime video conferencing, IIIF deep-zoom tooling, and scalable AWS infrastructure. I’ve led the UI/UX design end-to-end process and component library development in Figma, ensured WCAG 2.1 accessibility compliance, and integrated analytics (GTM, Hotjar, GA) to optimize usability, perform user research, and inform our Impact and Evaluation metrics. These innovative digital programs expanded the Barnes Foundation’s mission-related services by growing and diversifying audiences, and created a new pathway for earned revenue. Building on this success, we now have a unique opportunity to become the leading provider for museum education, partnering with peer institutions as a producer, presenter, and distributor of digital arts education content. Most recently, we’re scaling the VXP to partner with peer museums and universities and host their content as well. I’ve been leading onboarding, training, and client success to support adoption and long-term partnerships. ",
+    "link": "https://www.barnesfoundation.org/visual-experience-platform"
   },
+  {
+    "title": "Calder Gardens Sites & White-Label Museum Framework",
+    "img": "/CalderGardensSite.png",
+    "img2": "",
+    "body": "As operating partner to the new Calder Gardens in Philadelphia, my team at the Barnes was tasked with taking designs from Karlsson Wilker and bringing them to life for caldergardens.org. Beyond the public-facing site, we also replicated the full Barnes digital ecosystem for Calder Garden’s audiences: a membership portal built around a new Dual Membership framework and digital wallet integration; a Donate site supporting Calder Gardens-specific contributions outside our ACME donation flow; a ticketing site implementing the new Barnes + Calder Gardens ticket model and logic; membership acquisition and renewal pages; and SMS ticketing sites adapted for the new Plus ticket type with expanded upsell paths (membership, tours, and ticket upgrades). The biggest challenge I was tasked with, was taking delivered brand guidelines in Figma that only covered the main site and extrapolating them to create a seamless, coherent Calder Gardens digital ecosystem. Together, these sites and commerce flows laid the groundwork for a white-label framework that enables us to launch museum experiences with shared infrastructure and institution-specific branding. On the engineering side, we worked in a mono-repo structured with NPM Workspaces, housing multiple Next.js applications (main site, donate, members, ticketing) and a Node/Express server deployed to AWS Lambda via API Gateway. Shared UI lives in a common workspace powered by Mantine, with theme overrides, Sass modules, a React/TypeScript component library and content is powered by headless CMS (Sanity). The architecture is multi-tenant and config-driven: brand, typography, color, and layout are injected via Mantine theme tokens; institution content and permissions live in separate CMS spaces; and ACME tenant credentials and routes are isolated per site. We set up Storybook for UI development, GitHub Actions for CI/CD, and PR workflows for visual review; added analytics (GTM + GA) and UX telemetry to inform the roadmap; and enforced WCAG 2.1 accessibility across shared components. This approach lets us stand up new digital museum ecosystems in the future quickly—reusing proven components and checkout patterns—while preserving each institution’s voice and design.",
+    "link": "https://caldergardens.org/"
+},
   {
     "title": "Barnes Live",
     "img": "/BarnesLive.png",
@@ -36,72 +43,51 @@
   },
   {
     "title": "Augmented Reality Interactive Cube - Mobile and Web App",
-    "img": "/ARCube.png",
+    "img": "",
     "img2": "",
-    "body": "As an Emerging Technology Analyst at Accenture, I developed an Augmented Reality cube for design thinking sessions with Accenture stakeholders using Unity, C#, mobile device camera functions and image detection. I conducted end-to-end design process including user need validation and encompassed interviews, surveys, wireframing, usability testing, and documentation. Used C#, Unity, Blender, Adobe Creative Cloud, Swift, AR Kit, UI/UX Testing, Design Thinking, Data-Driven Story-telling methodologies.",
-    "link": ""
-  },
-  {
-    "title": "Spotify Data Visualization Web App",
-    "img": "/SpotifyApp.png",
-    "img2": "",
-    "body": "I worked on a team of 4 to develop a web-based Angular app that consumes Spotify Web API metadata to visually represent unique listening trends by user. A user logs into their Spotify account, and similarly to Spotify Wrapped, a unique “fingerprint” image is generated through an algorithm based upon metrics drawn from user listening trends. Some additional features include a Tinder-style UI to create playlists from recommendations generated from listening data, a comparison page to compare user fingerprints to artist fingerprints, a fingerprint sandbox to dynamically alter the appearance of the fingerprint, and a social media inspired story feature to view and share friend profiles. We did this by implementing JSON Web Tokens and Passport.js with OAuth 2.0 for Facebook/Spotify login and registration. Used MEAN Stac (Mongodb, Express, Angular, Node), Typescript, Adobe Creative Cloud, HTML, and custom SCSS.",
+    "body": "As an Emerging Technology Analyst at Accenture, I developed an AR cube for design-thinking workshops using Unity, C#, ARKit, and mobile device image detection. I led the full design process—user research, wireframing, prototyping, usability testing—creating an immersive demo that showcased Accenture SaaS offerings in VR/AR-enabled sales contexts.",
     "link": ""
   },
   {
     "title": "An Analysis of Blockchain for Social Impact Objectives",
     "img": "",
     "img2": "",
-    "body": "As an undergraduate researcher, I presented a semester long research report analyzing the value add of Blockchain implementation and corresponding social impact industry objectives. Used Microsoft Suite, Data Analytics methodologies.",
+    "body": "As an undergraduate researcher, I analyzed blockchain vendors and start-ups for supply chain and social impact applications. I presented a semester-long report on the risks and opportunities of blockchain adoption in nonprofit and procurement contexts, using Microsoft Suite data analytics and market trend forecasting.",
     "link": "https://docs.google.com/presentation/d/1NfYjcmzr6LwwNdaLbAIPokper-k0b8v7AeYCxTPzZWE/edit#slide=id.g35f391192_00"
   },
   {
     "title": "Forecast and Assessment of Quantum Computing Viability",
     "img": "",
     "img2": "",
-    "body": "As an undergraduate researcher, I studied the technological and societal factors surrounding Quantum Computing technology and its development and adoption using various forecasting methodologies including Delphi, trend analysis, monitoring techniques, and scenario-based assessments. Used Microsoft Suite, Data Analytics, Reporting, Assessment, and Forecasting methodologies.",
+    "body": "As an undergraduate researcher, I conducted scenario-based assessments of quantum computing, combining Delphi forecasting, trend analysis, and monitoring techniques to evaluate the social and technological viability of the field. This work culminated in a report on adoption pathways and barriers for quantum technologies.",
     "link": "/Forecast and Technology Assessment for Quantum Computing Technologies.pdf"
   },
   {
     "title": "Accessibility and Connected Health Product Consulting",
     "img": "",
     "img2": "",
-    "body": "As a consultant to a large telecommunications company affiliated with the Wond'ry Center for Innovation and Entrepreneurship, I worked with an interdisciplinary team of undergraduates, graduate students, and professors alongside industry subject matter experts on a year-long consulting project to identify and develop solutions for the company's Accessibility Team in the areas of Smart Home Technology and Connected Health. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking and UI/UX methodologies.",
+    "body": "As a consultant via Vanderbilt’s Wond’ry Center for Innovation and Entrepreneurship, I worked with telecom industry experts to design accessibility-focused solutions in connected health and smart home technology. Using systems thinking and design-thinking methods, my interdisciplinary team produced a year-long report and prototypes to support the company’s Accessibility Team.",
     "link": ""
-  },
-  {
-    "title": "Stigma Surrounding Public Transit Analysis",
-    "img": "PublicTransitStigma.png",
-    "img2": "",
-    "body": "In a class on Sustainable Urban Development, I conducted design and systems thinking analysis with a team to determine root causes of stigma surrounding public transit in Nashville, TN. We focused on systemic issues such as media representation, redlining, and bussing. We were named university level winners of the Map the System Global Challenge. Used Microsoft Suite, Data Analytics, Systems Thinking, and Design Thinking methodologies.",
-    "link": "https://docs.google.com/presentation/d/1X2aMJf5UpvAwC4iPsBnSWqXLmuMOaKRe05folEIOr1Q/edit#slide=id.g82b6cf23fa_0_961"
   },
   {
     "title": "Nashville Center for Nonprofit Management Impact Measurement Report",
     "img": "",
     "img2": "",
-    "body": "I worked on a team of 5 to design an impact measurement report that implemented growth metrics and KPIs for measuring and increasing the impact of Nashville Center for Nonprofit Management's nonprofit consulting engagements. This was part of my work as a pro-bono technology consultant to Nashville non-profits. Used Sketch, Data Analytics, Data Visualization, and Reporting methodologies.",
+    "body": "I worked on a team of five to design an impact measurement framework for the Nashville Center for Nonprofit Management. We built growth metrics and KPIs to measure and increase the impact of their nonprofit consulting engagements. This work, part of my role as a pro-bono technology consultant, involved Sketch, data analytics, data visualization, and reporting methodologies.",
     "link": "https://docs.google.com/presentation/d/1h-8HcAelWPChHq8vE_o1qBu0DqWl-iqlshPLIluokjc/edit#slide=id.g4ef2e91f0b_1_76"
   },
   {
     "title": "Project 615 E-commerce and Web Design",
     "img": "",
     "img2": "",
-    "body": "As a pro bono software engineer, I redesigned the website, search engine optimization, and branding campaign strategies for Project 615 products to attract target audiences and build out e-commerce presence. This was part of my work as an SCNO pro-bono technology consultant. Used HTML, CSS, JavaScript, Figma, UI/UX methodologies.",
+    "body": "As a pro bono software engineer, I redesigned the Project 615 website, improved SEO, and created branding campaign strategies to reach new audiences and expand their e-commerce presence. This work, through SCNO consulting, combined HTML, CSS, JavaScript, and Figma with UI/UX best practices.",
     "link": "https://project615.com"
   },
   {
     "title": "Innovation and Entrepreneurship Workshops, Programs, and Meetups",
     "img": "",
     "img2": "",
-    "body": "As Innovation Ambassador at the Wond'ry Center for Innovation and Entrepreneurship, I lead curation of over 50 speaker programs, workshops, and meetups yearly bringing the Vanderbilt community together in an engaging, integrated, collaborative environment. Organized events including Blockchain 101, AR/VR Meetups, Design Thinking, Music Entrepreneurship, Human Resources, Equity Distribution, Brand Creation, & Prototyping. I also identified $2 million in grant opportunities and 11 calls for papers for programming, research projects, and student-led startups during 2017 - 2018 academic year. Part of my responsibilities included designing social media and marketing initiatives, during which we saw 55% growth in active followers and gained 3,000 views per post.",
+    "body": "As Innovation Ambassador at the Wond’ry Center for Innovation and Entrepreneurship, I curated over 75 speaker programs, workshops, and meetups yearly, bringing the Vanderbilt community together across disciplines. I organized events like Blockchain 101, AR/VR meetups, and prototyping sessions, while also identifying $2M in grant opportunities and 11 calls for papers. My work also included social media strategy, which led to 55% growth in active followers and an average of 3,000 views per Facebook post within three months.",
     "link": ""
-  },
-  {
-    "title": "Project Student Banking Web Page Redesign",
-    "img": "",
-    "img2": "",
-    "body": "At Capital One, I collaborated with the Social Impact and Investment Team to redesign the Project Student Banking Web Page and design a new alumni hub to expand participant networking opportunities. Updates to come.",
-    "link": "https://www.capitalone.com/about/newsroom/student-banking-program/"
   }
 ]
