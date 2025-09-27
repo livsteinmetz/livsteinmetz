@@ -79,24 +79,6 @@ export default function Liv() {
             is less extraction and transaction, more care and connection. Data-driven and
             human-centered, yes—but culturally and ethically attuned, and joyful too!
             <br />
-            {/* Now, as a Master&apos;s student in{' '}
-            <a
-              className="color"
-              href="https://www.gu.se/en/study-gothenburg/it-and-learning-masters-programme"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Information Technology and Learning
-            </a>{' '}
-            at the{' '}
-            <a
-              className="color"
-              href="https://www.gu.se/en/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              University of Gothenburg
-            </a> */}
             <br />
             My research focuses on human–computer interaction, AI, and digital culture. What keeps
             me in this space is the same conviction that brought me here in the first place:
@@ -168,19 +150,8 @@ export default function Liv() {
             </a>
             and (most recently){' '}
             <a href="https://caldergardens.org/" target="_blank" rel="noopener noreferrer">
-              the Barnes Foundation
+              Calder Gardens
             </a>
-          </h5>
-          <h5 id="right">
-            Master&apos;s Student in IT and Learning @{' '}
-            <a
-              href="https://www.gu.se/en/study-gothenburg/it-and-learning-masters-programme"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              University of Gothenburg
-            </a>
-            studying human-centered AI, digital well-being, and educational technologies.
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
           <br />

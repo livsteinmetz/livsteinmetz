@@ -5,3 +5,5 @@ node_modules
 package-lock.json
 .firebase/*.cache
 .DS_Store
+.eslintignore
+.prettierignore
