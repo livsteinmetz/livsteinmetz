@@ -115,7 +115,7 @@ export default function Liv() {
       <div id="right-container">
         <div id="right-scroll">
           <h1>Olivia Steinmetz</h1>
-          <h3>[Current Work]</h3>
+          <h2>[Current Work]</h2>
           <h5 id="right">
             Front-End Software Engineer & Product Manager for Digital Initiatives @{' '}
             <a href="https://barnesfoundation.org/" target="_blank" rel="noopener noreferrer">
@@ -129,9 +129,9 @@ export default function Liv() {
           <h5 id="right">Freelance Double Bassist</h5>
           <br />
           <div>
-            <h3>[Former Work + Clients + Collaborators]</h3>
+            <h2>[Former Work + Clients + Collaborators]</h2>
 
-            <h4>Arts + Culture</h4>
+            <h3>Arts + Culture</h3>
             <h5 id="right">
               <a href="https://www.balletwest.org/" target="_blank" rel="noopener noreferrer">
                 Ballet West
@@ -215,7 +215,7 @@ export default function Liv() {
               <br />
             </h5>
 
-            <h4>Tech + Nonprofit</h4>
+            <h3>Tech + Nonprofit</h3>
             <h5 id="right">
               Accenture Operations Studio <br />
               <a href="https://alliedmedia.org/" target="_blank" rel="noopener noreferrer">
@@ -238,20 +238,10 @@ export default function Liv() {
                 Students Consulting for Nonprofit Organizations (SCNO)
               </a>
               <br />
-              <a
-                href="https://www.vanderbilt.edu/thewondry/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wond&apos;ry Center for Innovation and Entrepreneurship
-              </a>
-              <br />
-              Project 440 <br />
             </h5>
 
-            <h4>Education + Research</h4>
+            <h3>Education + Research</h3>
             <h5 id="right">
-              Children&apos;s Hospital of Philadelphia <br />
               Children&apos;s Hospital of Philadelphia Neurovascular Imaging Lab <br />
               <a href="https://www.cnm.org/" target="_blank" rel="noopener noreferrer">
                 Nashville Center for Nonprofit Management
@@ -263,16 +253,18 @@ export default function Liv() {
               <br />
               Planned Parenthood <br />
               Vanderbilt Memory & Alzheimer’s Center <br />
-              <a href="https://www.vanderbilt.edu/" target="_blank" rel="noopener noreferrer">
-                Vanderbilt University
+              Vanderbilt Programming Board (VPB) <br />
+              <a
+                href="https://www.vanderbilt.edu/thewondry/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wond&apos;ry Center for Innovation and Entrepreneurship
               </a>
-              <br />
-              Vanderbilt University Medical Center <br />
-              Vanderbilt Programming Board (VPB) Speakers Committee <br />
             </h5>
           </div>
           <br />
-          <h3>[Contact]</h3>
+          <h2>[Contact]</h2>
 
           <h5 id="right">
             <a

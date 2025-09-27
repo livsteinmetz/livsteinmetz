@@ -16,6 +16,13 @@ body {
   *::-webkit-scrollbar-thumb {
     background-color: theme.$white;
   }
+      a {
+    &:hover {
+      color: theme.$lightblue;
+      cursor: pointer;
+      font-style: italic;
+    }
+  }
 }
 
 section {
@@ -45,6 +52,13 @@ h4,
 h5,
 h6 {
   font-family: theme.$font-header;
+    a {
+    &:hover {
+      color: theme.$lightblue;
+      cursor: pointer;
+      font-style: italic;
+    }
+  }
 }
 
 h1 {
