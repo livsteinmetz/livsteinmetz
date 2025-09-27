@@ -1,21 +1,21 @@
-@import '../../styles/theme.scss';
+@use '../../styles/theme.scss';
 
 #Work {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	flex-direction: column;
-	min-height: 100vh;
-	text-align: left;
-	width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: left;
+  width: 100%;
 
-	@media (max-width: $mobile) {
-		width: 100%;
-		padding: 0 16px;
-	}
+  @media (max-width: theme.$mobile) {
+    width: 100%;
+    padding: 0 16px;
+  }
 
-	.color {
-		font-weight: 700;
-		color: $body;
-	}
+  .color {
+    font-weight: 700;
+    color: theme.$body;
+  }
 }

@@ -1,7 +1,8 @@
-import React from "react";
-import "./Work.scss";
-import Project from "../Project/Project";
-import projects from "../../copy/projects.json";
+import React from 'react';
+
+import './Work.scss';
+import projects from '../../copy/projects.json';
+import Project from '../Project/Project';
 
 export default function Work() {
   return (

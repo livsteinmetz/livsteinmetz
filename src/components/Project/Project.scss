@@ -1,18 +1,18 @@
-@import '../../styles/theme.scss';
+@use '../../styles/theme.scss';
 
 #Project {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	flex-direction: column;
-	text-align: left;
-	padding-left: 0;
-	margin-right: auto;
-	width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  padding-left: 0;
+  margin-right: auto;
+  width: 100%;
 
-	img {
-		width: 100%;
-		margin: 16px;
-		box-shadow: $red 10px 10px;
-	}
+  img {
+    width: 100%;
+    margin: 16px;
+    box-shadow: theme.$red 10px 10px;
+  }
 }

@@ -1,4 +1,4 @@
-import "./Project.scss";
+import './Project.scss';
 
 export default function Project({ title, img, img2, link, body }) {
   return (

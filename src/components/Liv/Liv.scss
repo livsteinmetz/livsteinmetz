@@ -1,4 +1,4 @@
-@import "../../styles/theme.scss";
+@use '../../styles/theme.scss';
 
 #container {
   display: flex;
@@ -9,9 +9,10 @@
 
   .color {
     font-weight: 700;
-    color: $lightblue;
+    color: theme.$lightblue;
+
     &:hover {
-      background: -webkit-linear-gradient($red, $yellow);
+      background: -webkit-linear-gradient(theme.$red, theme.$yellow);
       background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -19,25 +20,29 @@
     }
   }
 
-  #left-container {
+  #left-container,
+  #right-container {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
     flex-direction: column;
-    width: 50%;
+    align-items: flex-start;
     min-height: 100vh;
     height: 100%;
-    margin: auto;
+    width: 50%;
+  }
+
+  #left-container {
+    justify-content: flex-start;
+
     #left-scroll {
       width: 100%;
       padding: 100px;
       overflow-y: scroll;
-      // overflow: auto;
+
       #work {
         display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
         flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-start;
         width: 100%;
         margin: auto;
       }
@@ -45,32 +50,28 @@
   }
 
   #right-container {
-    background: linear-gradient(270deg, $red, $yellow);
-    background-size: 400% 400%;
-    -webkit-animation: BackgroundGradient 45s ease infinite;
-    -moz-animation: BackgroundGradient 45s ease infinite;
-    animation: BackgroundGradient 45s ease infinite;
-    display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
+    background: linear-gradient(270deg, theme.$red, theme.$yellow);
+    background-size: 400% 400%;
+    animation: BackgroundGradient 45s ease infinite;
+
     text-align: right;
-    width: 50%;
-    min-height: 100vh;
-    height: 100%;
+
     #right-scroll {
       width: 100%;
       padding: 100px;
       overflow-y: scroll;
-      // overflow: auto;
     }
+
     #right {
-      color: $white;
+      color: theme.$white;
     }
+
     a {
-      color: $white;
+      color: theme.$white;
+
       &:hover {
-        color: $lightblue;
+        color: theme.$lightblue;
         text-decoration: underline;
       }
     }
@@ -79,42 +80,22 @@
   @media (max-width: 600px) {
     flex-direction: column-reverse;
     position: relative;
+
     #left-container,
     #right-container {
       width: 100%;
       height: auto;
       max-height: unset;
       min-height: unset;
-      #right-scroll,
-      #left-scroll {
+
+      #left-scroll,
+      #right-scroll {
         padding: 50px;
       }
     }
   }
 }
 
-@-webkit-keyframes BackgroundGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@-moz-keyframes BackgroundGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 @keyframes BackgroundGradient {
   0% {
     background-position: 0% 50%;
@@ -125,4 +106,14 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+#cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none; // So it doesn't block clicks
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; // On top of everything
 }

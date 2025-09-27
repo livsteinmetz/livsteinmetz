@@ -1,11 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Liv from './components/Liv/Liv'
+import { createRoot } from 'react-dom/client';
 
-import './styles/index.scss'
-import firebase from 'firebase/app'
-import { FIREBASE_CONFIG } from './constants'
+import Liv from './components/Liv/Liv';
 
-firebase.initializeApp(FIREBASE_CONFIG)
+import './styles/index.scss';
 
-ReactDOM.render(<Liv />, document.getElementById('root'))
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<Liv />);

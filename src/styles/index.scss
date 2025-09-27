@@ -1,20 +1,20 @@
-@import "./theme.scss";
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@use 'theme.scss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 body {
   margin: 0;
-  font-family: $font-body;
+  font-family: theme.$font-body;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scrollbar-width: thin;
-  scrollbar-color: $lightblue $white;
+  scrollbar-color: theme.$lightblue theme.$white;
   *::-webkit-scrollbar {
     width: 12px;
   }
   *::-webkit-scrollbar-track {
-    background: $lightblue;
+    background: theme.$lightblue;
   }
   *::-webkit-scrollbar-thumb {
-    background-color: $white;
+    background-color: theme.$white;
   }
 }
 
@@ -28,11 +28,11 @@ section {
 
 a {
   text-decoration: none;
-  color: $body;
+  color: theme.$body;
   &:hover {
     * {
       font-style: italic;
-      color: $lightblue;
+      color: theme.$lightblue;
     }
     cursor: pointer;
   }
@@ -44,7 +44,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: $font-header;
+  font-family: theme.$font-header;
 }
 
 h1 {
@@ -52,7 +52,7 @@ h1 {
   font-weight: bold;
   font-size: 80px;
   line-height: 80px;
-  color: $lightblue;
+  color: theme.$lightblue;
   margin: 0;
 
   @media (max-width: 600px) {
@@ -81,7 +81,7 @@ h3 {
   margin: 0;
   font-size: 32px;
   line-height: 1.2;
-  color: $lightblue;
+  color: theme.$lightblue;
 }
 
 h4 {
@@ -91,7 +91,7 @@ h4 {
   margin: 0;
   font-size: 24px;
   line-height: 1.2;
-  color: $body;
+  color: theme.$body;
 }
 
 h5 {
@@ -101,7 +101,7 @@ h5 {
   margin: 0;
   font-size: 20px;
   line-height: 24px;
-  color: $body;
+  color: theme.$body;
 
   @media (max-width: 600px) {
     font-size: 18px;
@@ -109,7 +109,7 @@ h5 {
   }
   a {
     &:hover {
-      color: $lightblue;
+      color: theme.$lightblue;
       cursor: pointer;
     }
   }
@@ -118,22 +118,22 @@ h5 {
 h6 {
   font-style: normal;
   font-weight: 600;
-  font-family: $font-body;
+  font-family: theme.$font-body;
   padding: 0;
   margin: 0;
   font-size: 16px;
   line-height: 20px;
-  color: $body;
+  color: theme.$body;
 }
 
 p {
   line-height: 1.4;
-  font-family: $font-body;
+  font-family: theme.$font-body;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
-  color: $body;
+  color: theme.$body;
 }
 
 .italic {
