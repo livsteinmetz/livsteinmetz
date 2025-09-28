@@ -1,88 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-
 import './Liv.scss';
 import Work from '../Work/Work';
 
 export default function Liv() {
-  const canvasRef = useRef(null);
-  const [images, setImages] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
-
-  // Load manifest.json with all film images and pick a random one
-  useEffect(() => {
-    fetch('/film/manifest.json')
-      .then((res) => res.json())
-      .then((data) => {
-        if (!Array.isArray(data) || data.length === 0) return;
-        setImages(data);
-
-        const idx = Math.floor(Math.random() * data.length);
-        setCurrentImage(idx);
-      })
-      .catch((err) => console.error('Failed to load manifest.json:', err));
-  }, []);
-
-  // Cursor particle effect
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = [];
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    const handleMouseMove = (e) => {
-      particles.push({
-        x: e.clientX,
-        y: e.clientY,
-        alpha: 1.0,
-        size: Math.random() * 6 + 2,
-        hue: Math.random() * 360,
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    document.addEventListener('mousemove', handleMouseMove);
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 50%, ${p.alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        p.alpha -= 0.02;
-        p.size *= 0.96;
-        if (p.alpha <= 0) {
-          particles.splice(i, 1);
-          i--;
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  const handleChangeImage = () => {
-    if (images.length === 0) return;
-    const idx = Math.floor(Math.random() * images.length);
-    setCurrentImage(idx);
-  };
-
   return (
     <div id="container">
       <div id="left-container">
@@ -108,13 +27,15 @@ export default function Liv() {
             Performance and Engineering Design at Vanderbilt University.
           </p>
           <p>
-            I keep circling the same questions: How do we design AI that centers human agency, not
-            efficiency alone? What does digital well-being look like when attention itself is an
-            economic unit? How can narrative, sound, and interface make learning feel less
-            transactional and more like discovery?
+            I keep circling a few research tracks: how to design AI that protects human agency; what
+            digital well-being looks like when attention is the currency; and how narrative, sound,
+            and interface can make learning feel like discovery rather than compliance. Recent work
+            includes applied studies, prototypes, and literature reviews on human-centered AI,
+            learning experience design, and digital culture—shared as short briefs, talks, and
+            open-source experiments.
             <br />
             <br />
-            If you have the same questions (or answers, please!), let&apos;s connect.
+            If you’re asking similar questions (or have answers!), let&apos;s connect.
           </p>
           <h6>
             My resume lives{' '}
@@ -135,43 +56,24 @@ export default function Liv() {
         </div>
       </div>
 
-      <div
-        id="right-container"
-        style={{
-          backgroundImage: images.length > 0 ? `url(/film/${images[currentImage]})` : 'none',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          transition: 'background-image 1s ease-in-out',
-        }}
-      >
+      <div id="right-container">
         <div id="right-scroll">
           <h1>Olivia Steinmetz</h1>
           <h2>[Current Work]</h2>
           <h5 id="right">
-            Front-End Software Engineer & Product Manager for Digital Initiatives @{' '}
+            Front-End Software Engineer & Product Manager for Digital Initiatives @<br />
             <a href="https://barnesfoundation.org/" target="_blank" rel="noopener noreferrer">
               the Barnes Foundation
             </a>
-            and (most recently){' '}
-            <a href="https://caldergardens.org/" target="_blank" rel="noopener noreferrer">
-              Calder Gardens
-            </a>
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
+          <h5 id="right">Researcher</h5>
           <br />
           <div>
             <h2>[Former Work + Clients + Collaborators]</h2>
 
             <h3>Arts + Culture</h3>
             <h5 id="right">
-              <a href="https://www.balletwest.org/" target="_blank" rel="noopener noreferrer">
-                Ballet West
-              </a>
-              <br />
-              <a href="https://berksopera.org/" target="_blank" rel="noopener noreferrer">
-                Berks Opera Company
-              </a>
-              <br />
               <a href="https://caldergardens.org/" target="_blank" rel="noopener noreferrer">
                 Calder Gardens
               </a>
@@ -282,7 +184,6 @@ export default function Liv() {
                 Design as an Immersive Vanderbilt Experience (DIVE)
               </a>
               <br />
-              Planned Parenthood <br />
               Vanderbilt Memory & Alzheimer’s Center <br />
               Vanderbilt Programming Board (VPB) <br />
               <a
@@ -295,6 +196,14 @@ export default function Liv() {
             </h5>
           </div>
           <br />
+          <h2>[In Progress...]</h2>
+          <h5 id="right">Applied research in HCI, HCAI, Learning & Digital Culture</h5>
+          <h5 id="right">
+            Exploring AI literacy and human agency, digital attention and well-being, equitable
+            access to culture, and the design of interfaces, narratives, and visual media that make
+            learning more intuitive, engaging, and meaningful.
+          </h5>
+
           <h2>[Contact]</h2>
 
           <h5 id="right">
@@ -322,7 +231,6 @@ export default function Liv() {
             </a>
           </h5>
         </div>
-        <button onClick={handleChangeImage}>Change Background</button>
       </div>
     </div>
   );
