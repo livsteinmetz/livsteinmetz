@@ -62,13 +62,15 @@ h6 {
 }
 
 h1 {
-  font-style: italic;
   font-weight: bold;
   font-size: 80px;
   line-height: 80px;
   color: theme.$lightblue;
   margin: 0;
-
+  &:hover {
+      color: theme.$lightblue;
+      font-style: italic;
+    }
   @media (max-width: 600px) {
     font-size: 64px;
     line-height: 64px;

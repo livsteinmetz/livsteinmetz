@@ -1,31 +1,38 @@
 [
   {
     "title": "Barnes Visual Experience Platform (VxP)",
-    "img": "/BarnesVxP.png",
-    "img2": "",
+    "img2": "/BarnesVxP.png",
+    "img": "/VXPDemo.gif",
     "body": "At the Barnes, we developed a first-of-its-kind Visual Experience Platform (VXP) specifically for teaching visual material—offering 360-degree views of galleries and synchronous and asynchronous delivery modes. Since we launched our first online class using the platform in January 2023, we have enrolled nearly 4,600 students in more than 110 online classes hosted on the VxP, with 14% of students receiving scholarships. In our post-course surveys, 76% of students reported that the class was highly or extremely impactful on how they perceive art, and 91% said the class inspired them to continue their learning. Students can explore the artworks on their own as well when the instructor enables independent exploration of the canvas. With built-in video conferencing capability built on AWS Chime, participants can interact in real-time, fostering a collaborative, participatory learning experience. Behind the scenes, the VXP is a React/GraphQL application that integrates AWS Chime video conferencing, IIIF deep-zoom tooling, and scalable AWS infrastructure. I’ve led the UI/UX design end-to-end process and component library development in Figma, ensured WCAG 2.1 accessibility compliance, and integrated analytics (GTM, Hotjar, GA) to optimize usability, perform user research, and inform our Impact and Evaluation metrics. These innovative digital programs expanded the Barnes Foundation’s mission-related services by growing and diversifying audiences, and created a new pathway for earned revenue. Building on this success, we now have a unique opportunity to become the leading provider for museum education, partnering with peer institutions as a producer, presenter, and distributor of digital arts education content. Most recently, we’re scaling the VXP to partner with peer museums and universities and host their content as well. I’ve been leading onboarding, training, and client success to support adoption and long-term partnerships. ",
     "link": "https://www.barnesfoundation.org/visual-experience-platform"
   },
   {
     "title": "Calder Gardens Sites & White-Label Museum Framework",
-    "img": "/CalderGardensSite.png",
     "img2": "",
+    "img": "/CalderGardens.gif",
     "body": "As operating partner to the new Calder Gardens in Philadelphia, my team at the Barnes was tasked with taking designs from Karlsson Wilker and bringing them to life for caldergardens.org. Beyond the public-facing site, we also replicated the full Barnes digital ecosystem for Calder Garden’s audiences: a membership portal built around a new Dual Membership framework and digital wallet integration; a Donate site supporting Calder Gardens-specific contributions outside our ACME donation flow; a ticketing site implementing the new Barnes + Calder Gardens ticket model and logic; membership acquisition and renewal pages; and SMS ticketing sites adapted for the new Plus ticket type with expanded upsell paths (membership, tours, and ticket upgrades). The biggest challenge I was tasked with, was taking delivered brand guidelines in Figma that only covered the main site and extrapolating them to create a seamless, coherent Calder Gardens digital ecosystem. Together, these sites and commerce flows laid the groundwork for a white-label framework that enables us to launch museum experiences with shared infrastructure and institution-specific branding. On the engineering side, we worked in a mono-repo structured with NPM Workspaces, housing multiple Next.js applications (main site, donate, members, ticketing) and a Node/Express server deployed to AWS Lambda via API Gateway. Shared UI lives in a common workspace powered by Mantine, with theme overrides, Sass modules, a React/TypeScript component library and content is powered by headless CMS (Sanity). The architecture is multi-tenant and config-driven: brand, typography, color, and layout are injected via Mantine theme tokens; institution content and permissions live in separate CMS spaces; and ACME tenant credentials and routes are isolated per site. We set up Storybook for UI development, GitHub Actions for CI/CD, and PR workflows for visual review; added analytics (GTM + GA) and UX telemetry to inform the roadmap; and enforced WCAG 2.1 accessibility across shared components. This approach lets us stand up new digital museum ecosystems in the future quickly—reusing proven components and checkout patterns—while preserving each institution’s voice and design.",
     "link": "https://caldergardens.org/"
   },
   {
+    "title": "Barnes Online Collection",
+    "img": "/BarnesCollectionSite.gif",
+    "img2": "",
+    "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. You can sort and search the collection by color, light, line and space (the four plastic means used in the Barnes method of art education). I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
+    "link": "https://collection.barnesfoundation.org/"
+  },
+    {
+    "title": "Deep Zoom Viewer",
+    "img2": "/PostmanZoom.gif",
+    "img": "/BedroomZoom.gif",
+    "body": "We built a custom IIIF deep-zoom viewer that tiles artworks on the fly via an AWS Lambda microservice and S3 storage, producing IIIF manifests for seamless integration into our React/GraphQL front end. We use this on our collection site and the VXP, which enables smooth, synchronized pan-and-zoom in online classes, letting instructors and students explore fine details together in real time.",
+    "link": "https://iiif.io"
+  },
+    {
     "title": "Barnes Live",
     "img": "/BarnesLive.png",
     "img2": "",
     "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
     "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
-  },
-  {
-    "title": "Barnes Online Collection",
-    "img": "/OnlineCollection.png",
-    "img2": "OnlineCollectionColor.png",
-    "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. You can sort and search the collection by color, light, line and space (the four plastic means used in the Barnes method of art education). I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
-    "link": "https://collection.barnesfoundation.org/"
   },
   {
     "title": "Barnes Membership Portal",

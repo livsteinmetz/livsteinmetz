@@ -14,5 +14,20 @@
     width: 100%;
     margin: 16px;
     box-shadow: theme.$red 10px 10px;
+
+    // enforce 20:13 crop without touching the shadow
+    aspect-ratio: 20 / 13;
+    object-fit: cover;
+    display: block;
+  }
+
+  video {
+    width: 100%;
+    margin: 16px;
+    box-shadow: theme.$red 10px 10px;
+
+    aspect-ratio: 20 / 13;
+    object-fit: cover;
+    display: block;
   }
 }

@@ -37,7 +37,7 @@ export default function Liv() {
             <br />
             If you’re asking similar questions (or have answers!), let&apos;s connect.
           </p>
-          <h6>
+          {/* <h6>
             My resume lives{' '}
             <a
               href="/OliviaSteinmetzCV2025.pdf"
@@ -48,7 +48,7 @@ export default function Liv() {
               <span className="color">here</span>
             </a>
             .
-          </h6>
+          </h6> */}
           <br />
           <section id="work" aria-label="Selected work">
             <Work />
