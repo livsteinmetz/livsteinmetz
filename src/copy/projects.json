@@ -1,5 +1,12 @@
 [
   {
+    "title": "",
+    "video": "/BedroomZoom.mp4",
+    "img": "/PostmanZoom.gif",
+    "body": "",
+    "link": "https://iiif.io"
+  },
+  {
     "title": "Barnes Visual Experience Platform (VxP)",
     "img2": "/BarnesVxP.png",
     "img": "/VXPDemo.gif",
@@ -8,12 +15,27 @@
     "link": "https://www.barnesfoundation.org/visual-experience-platform"
   },
   {
+    "title": "Deep Zoom Viewer",
+    "img": "/BedroomZoom.gif",
+    "video": "/PostmanZoom.mp4",
+    "body": "We built a custom IIIF deep-zoom viewer that tiles artworks on the fly via an AWS Lambda microservice and S3 storage, producing IIIF manifests for seamless integration into our React/GraphQL front end. We use this on our collection site and the VXP, which enables smooth, synchronized pan-and-zoom in online classes, letting instructors and students explore fine details together in real time.",
+    "link": "https://iiif.io"
+  },
+
+  {
     "title": "Calder Gardens Sites & White-Label Museum Framework",
     "img2": "",
-    "img": "/CalderGardens.org.gif",
-    "video": "/CalderGardens.mp4",
+    "img": "/CalderGardens.gif",
+    "video": "/CalderGardens.org.mp4",
     "body": "As operating partner to the new Calder Gardens in Philadelphia, my team at the Barnes was tasked with taking designs from Karlsson Wilker and bringing them to life for caldergardens.org. Beyond the public-facing site, we also replicated the full Barnes digital ecosystem for Calder Garden’s audiences: a membership portal built around a new Dual Membership framework and digital wallet integration; a Donate site supporting Calder Gardens-specific contributions outside our ACME donation flow; a ticketing site implementing the new Barnes + Calder Gardens ticket model and logic; membership acquisition and renewal pages; and SMS ticketing sites adapted for the new Plus ticket type with expanded upsell paths (membership, tours, and ticket upgrades). The biggest challenge I was tasked with, was taking delivered brand guidelines in Figma that only covered the main site and extrapolating them to create a seamless, coherent Calder Gardens digital ecosystem. Together, these sites and commerce flows laid the groundwork for a white-label framework that enables us to launch museum experiences with shared infrastructure and institution-specific branding. On the engineering side, we worked in a mono-repo structured with NPM Workspaces, housing multiple Next.js applications (main site, donate, members, ticketing) and a Node/Express server deployed to AWS Lambda via API Gateway. Shared UI lives in a common workspace powered by Mantine, with theme overrides, Sass modules, a React/TypeScript component library and content is powered by headless CMS (Sanity). The architecture is multi-tenant and config-driven: brand, typography, color, and layout are injected via Mantine theme tokens; institution content and permissions live in separate CMS spaces; and ACME tenant credentials and routes are isolated per site. We set up Storybook for UI development, GitHub Actions for CI/CD, and PR workflows for visual review; added analytics (GTM + GA) and UX telemetry to inform the roadmap; and enforced WCAG 2.1 accessibility across shared components. This approach lets us stand up new digital museum ecosystems in the future quickly—reusing proven components and checkout patterns—while preserving each institution’s voice and design.",
     "link": "https://caldergardens.org/"
+  },
+  {
+    "title": "Barnes Live",
+    "img": "/BarnesLive.png",
+    "img2": "",
+    "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
+    "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
   },
   {
     "title": "Barnes Online Collection",
@@ -22,20 +44,6 @@
     "img2": "",
     "body": "The Barnes' Collection page is an incredible resource for exploring the collection and discovering new works. You can sort and search the collection by color, light, line and space (the four plastic means used in the Barnes method of art education). I've updated and maintained the site to reflect existing Barnes branding designed by our colleagues at Area17. In addition, I'm spearheading a Barnes branding style guide, for plug and play components and assets in future projects.",
     "link": "https://collection.barnesfoundation.org/"
-  },
-    {
-    "title": "Deep Zoom Viewer",
-    "img": "/BedroomZoom.gif",
-    "video": "/PostmanZoom.mp4",
-    "body": "We built a custom IIIF deep-zoom viewer that tiles artworks on the fly via an AWS Lambda microservice and S3 storage, producing IIIF manifests for seamless integration into our React/GraphQL front end. We use this on our collection site and the VXP, which enables smooth, synchronized pan-and-zoom in online classes, letting instructors and students explore fine details together in real time.",
-    "link": "https://iiif.io"
-  },
-    {
-    "title": "Barnes Live",
-    "img": "/BarnesLive.png",
-    "img2": "",
-    "body": "In response to the pandemic, the Barnes rolled out an online education platform for adults and K-12 students in April 2020. We use AWS Interactive Video Service for the low latency live video feed and Stream for our chat. Everything here was locked into place using React and node.js, deployed via Serverless to AWS Lambda. In collaboration with our incredible Education team, we expanded local partnerships, which tripled the enrollment in online courses for adults, and allowed us to reach 40% more school-age students during the 2020-2021 school year compared to in-person courses in pre-pandemic years. We're continuing to update, maintain, and scale the platform for the 2021-2022 school year with exciting plans in the works for the future of art education.",
-    "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/"
   },
   {
     "title": "Barnes Membership Portal",
@@ -51,6 +59,7 @@
     "body": "Borrowing designs and SMS mechanisms from our membership site, we created our SMS ticketing website, which is sent to a guest before their scheduled arrival time. We added in a Tour Upgrade Feature, to enable guests to upgrade their GA tickets to tour tickets onsite, generating more revenue for the Barnes and offering a more in depth gallery experience.",
     "link": ""
   },
+
   {
     "title": "Augmented Reality Interactive Cube - Mobile and Web App",
     "img": "",
@@ -58,6 +67,7 @@
     "body": "As an Emerging Technology Analyst at Accenture, I developed an AR cube for design-thinking workshops using Unity, C#, ARKit, and mobile device image detection. I led the full design process—user research, wireframing, prototyping, usability testing—creating an immersive demo that showcased Accenture SaaS offerings in VR/AR-enabled sales contexts.",
     "link": ""
   },
+
   {
     "title": "An Analysis of Blockchain for Social Impact Objectives",
     "img": "",
@@ -65,6 +75,7 @@
     "body": "As an undergraduate researcher, I analyzed blockchain vendors and start-ups for supply chain and social impact applications. I presented a semester-long report on the risks and opportunities of blockchain adoption in nonprofit and procurement contexts, using Microsoft Suite data analytics and market trend forecasting.",
     "link": "https://docs.google.com/presentation/d/1NfYjcmzr6LwwNdaLbAIPokper-k0b8v7AeYCxTPzZWE/edit#slide=id.g35f391192_00"
   },
+
   {
     "title": "Forecast and Assessment of Quantum Computing Viability",
     "img": "",
@@ -72,6 +83,7 @@
     "body": "As an undergraduate researcher, I conducted scenario-based assessments of quantum computing, combining Delphi forecasting, trend analysis, and monitoring techniques to evaluate the social and technological viability of the field. This work culminated in a report on adoption pathways and barriers for quantum technologies.",
     "link": "/Forecast and Technology Assessment for Quantum Computing Technologies.pdf"
   },
+
   {
     "title": "Accessibility and Connected Health Product Consulting",
     "img": "",
@@ -86,6 +98,7 @@
     "body": "I worked on a team of five to design an impact measurement framework for the Nashville Center for Nonprofit Management. We built growth metrics and KPIs to measure and increase the impact of their nonprofit consulting engagements. This work, part of my role as a pro-bono technology consultant, involved Sketch, data analytics, data visualization, and reporting methodologies.",
     "link": "https://docs.google.com/presentation/d/1h-8HcAelWPChHq8vE_o1qBu0DqWl-iqlshPLIluokjc/edit#slide=id.g4ef2e91f0b_1_76"
   },
+
   {
     "title": "Project 615 E-commerce and Web Design",
     "img": "",

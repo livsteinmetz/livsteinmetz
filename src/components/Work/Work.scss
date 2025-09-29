@@ -54,6 +54,7 @@
   justify-content: center;
   margin: 24px 0 0;
 }
+
 .work-view-more {
   appearance: none;
   border: 1px solid currentColor;
@@ -63,7 +64,9 @@
   font: inherit;
   border-radius: 6px;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* ========== Lightbox (fullscreen takeover) ========== */
@@ -77,9 +80,11 @@
 }
 
 .lb-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  width: 60vw;
+  height: 60vh;
+  bottom: 40px;
+  right: 40px;
   /* click outside to close is handled by backdrop; stage is for content */
 }
 
@@ -89,39 +94,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain; /* or 'cover' if you want true takeover crop */
-  background: #000;   /* avoids white behind transparent images */
-}
-
-/* Details overlay; bottom-left by default */
-.lb-meta {
-  position: absolute;
-  left: min(5vw, 48px);
-  right: min(5vw, 48px);
-  bottom: min(5vh, 48px);
-  pointer-events: none; /* clicks pass through except inner */
-}
-
-.lb-meta-inner {
-  pointer-events: auto;
-  max-width: 720px;
-  background: color-mix(in srgb, black 40%, transparent);
-  color: white;
-  padding: 16px 18px;
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-}
-
-.lb-title {
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-  font-weight: 700;
-}
-.lb-body {
-  margin: 0 0 8px 0;
-}
-.lb-link {
-  color: white;
-  text-decoration: underline;
+  background: #000; /* avoids white behind transparent images */
 }
 
 /* Controls */
@@ -142,9 +115,20 @@
   font-size: 24px;
   line-height: 1;
 }
-.lb-close { top: 16px; right: 16px; }
-.lb-prev  { left: 16px; top: 50%; transform: translateY(-50%); }
-.lb-next  { right: 16px; top: 50%; transform: translateY(-50%); }
+.lb-close {
+  top: 16px;
+  right: 16px;
+}
+.lb-prev {
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.lb-next {
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 .lb-close:focus-visible,
 .lb-prev:focus-visible,

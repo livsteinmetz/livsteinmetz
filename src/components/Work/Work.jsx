@@ -26,12 +26,12 @@ function useElementWidth(ref) {
   return w;
 }
 
-/** Convert a container width into a column count */
+/** Convert a container width into a column count (max 2) */
 function columnsFromWidth(width) {
   if (width <= 0) return 1;
-  const target = 360; // ~tile width; tweak as needed
-  const cols = Math.max(1, Math.min(4, Math.floor(width / target)));
-  return cols;
+  const target = 360; // desired tile width
+  const raw = Math.floor(width / target);
+  return Math.max(1, Math.min(2, raw));
 }
 
 const PROJECTS_INCREMENT = 12;
@@ -66,8 +66,6 @@ export default function Work() {
 
   return (
     <div id="Work" className="work-root" aria-labelledby="workTop">
-      <h3 id="workTop">Projects & Research</h3>
-
       {/* The ref makes the grid responsive to its own container */}
       <div ref={gridRef}>
         {/* Force Masonry to recompute layout whenever column count changes */}
@@ -89,7 +87,7 @@ export default function Work() {
           ))}
         </Masonry>
       </div>
-
+      {/* 
       {visibleCount < data.length && (
         <div className="work-footer">
           <button
@@ -101,7 +99,7 @@ export default function Work() {
             View more
           </button>
         </div>
-      )}
+      )} */}
 
       {activeIndex != null && (
         <Lightbox items={data} index={activeIndex} onClose={close} onNext={next} onPrev={prev} />
@@ -111,7 +109,7 @@ export default function Work() {
 }
 
 /** ================= Lightbox ================= */
-function Lightbox({ items, index, onClose, onNext, onPrev }) {
+export function Lightbox({ items, index, onClose, onNext, onPrev }) {
   const item = items[index];
   const [videoError, setVideoError] = React.useState(false);
   const hasVideo = Boolean(item.video) && !videoError;
@@ -131,12 +129,23 @@ function Lightbox({ items, index, onClose, onNext, onPrev }) {
   return (
     <div
       className="lb-backdrop"
-      onMouseDown={onBackdrop}
-      role="dialog"
-      aria-modal="true"
-      aria-label={item.title}
+      role="button"
+      tabIndex={0}
+      aria-label="Close lightbox"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') onClose();
+      }}
     >
-      <div className="lb-stage">
+      <div
+        className="lb-stage"
+        role="dialog"
+        aria-modal="true"
+        aria-label={item.title}
+        onClick={(e) => e.stopPropagation()}
+      >
         {hasVideo ? (
           <video
             className="lb-video"
@@ -148,8 +157,11 @@ function Lightbox({ items, index, onClose, onNext, onPrev }) {
             playsInline
             preload="metadata"
             onError={() => setVideoError(true)}
-            style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }}
-          />
+          >
+            {item.captions && (
+              <track kind="captions" src={item.captions} srcLang="en" label="English" default />
+            )}
+          </video>
         ) : (
           item.img && (
             <img
@@ -161,18 +173,6 @@ function Lightbox({ items, index, onClose, onNext, onPrev }) {
           )
         )}
 
-        <div className="lb-meta">
-          <div className="lb-meta-inner">
-            <h2 className="lb-title">{item.title}</h2>
-            {item.body && <p className="lb-body">{item.body}</p>}
-            {item.link && (
-              <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
-                Open project
-              </a>
-            )}
-          </div>
-        </div>
-
         <button className="lb-close" aria-label="Close" onClick={onClose}>
           ×
         </button>
@@ -182,6 +182,16 @@ function Lightbox({ items, index, onClose, onNext, onPrev }) {
         <button className="lb-next" aria-label="Next" onClick={onNext}>
           ›
         </button>
+      </div>
+
+      <div id="content-overlay" className="top-left">
+        <h2 className="lb-title">{item.title}</h2>
+        {item.body && <p className="lb-body">{item.body}</p>}
+        {item.link && (
+          <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
+            Open project
+          </a>
+        )}
       </div>
     </div>
   );

@@ -63,17 +63,17 @@ h6 {
 
 h1 {
   font-weight: bold;
-  font-size: 80px;
-  line-height: 80px;
+  font-size: 60px;
+  line-height: 60px;
   color: theme.$lightblue;
   margin: 0;
   &:hover {
-      color: theme.$lightblue;
-      font-style: italic;
-    }
+    color: theme.$lightblue;
+    font-style: italic;
+  }
   @media (max-width: 600px) {
-    font-size: 64px;
-    line-height: 64px;
+    font-size: 40px;
+    line-height: 40px;
   }
 }
 
@@ -81,12 +81,12 @@ h2 {
   font-style: normal;
   font-weight: bold;
   font-size: 32px;
-  line-height: 38px;
+  line-height: 32px;
   color: #ffffff;
 
   @media (max-width: 600px) {
     font-size: 24px;
-    line-height: 30px;
+    line-height: 24px;
   }
 }
 

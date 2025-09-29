@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import './Liv.scss';
-import Work from '../Work/Work';
+import { IconBrandLinkedin, IconBrandGithub, IconMail, IconFileCv } from '@tabler/icons-react';
 
+import projects from '../../copy/projects.json';
+import Work, { Lightbox } from '../Work/Work';
 const MIN_LEFT_PCT = 20; // rails; adjust to taste
 const MAX_LEFT_PCT = 80;
 const MOBILE_BREAKPOINT = 768; // px — below this, the splitter is disabled
@@ -13,6 +15,13 @@ export default function Liv() {
   const [isActive, setIsActive] = useState(true); // splitter enabled?
   const containerRef = useRef(null);
   const rafRef = useRef(null);
+  // Right-panel lightbox for Projects list
+  const [projIndex, setProjIndex] = useState(null);
+  const openProject = (i) => setProjIndex(i);
+  const closeProject = () => setProjIndex(null);
+  const nextProject = () => setProjIndex((i) => (i == null ? 0 : (i + 1) % projects.length));
+  const prevProject = () =>
+    setProjIndex((i) => (i == null ? 0 : (i - 1 + projects.length) % projects.length));
 
   // Enable/disable splitter based on width
   useEffect(() => {
@@ -94,36 +103,9 @@ export default function Liv() {
     };
   }, [isDragging, pctFromClientX]);
 
-  // Keyboard accessibility on the separator
-  const onSeparatorKeyDown = (e) => {
-    if (!isActive) return;
-    const step = e.shiftKey ? 5 : 2; // Shift for larger jumps
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      setLeftPct((p) => clampPct(p - step));
-      window.dispatchEvent(new Event('resize'));
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      setLeftPct((p) => clampPct(p + step));
-      window.dispatchEvent(new Event('resize'));
-    } else if (e.key === 'Home') {
-      e.preventDefault();
-      setLeftPct(MIN_LEFT_PCT);
-      window.dispatchEvent(new Event('resize'));
-    } else if (e.key === 'End') {
-      e.preventDefault();
-      setLeftPct(MAX_LEFT_PCT);
-      window.dispatchEvent(new Event('resize'));
-    }
-  };
-
-  // Inline sizes so the masonry reflows immediately
-  const leftStyle = isActive ? { width: `${100 - leftPct}%` } : {};
-  const rightStyle = isActive ? { width: `${leftPct}%` } : {};
-
   return (
-    <div id="container" ref={containerRef} className={isActive ? 'split-active' : 'split-stacked'}>
-      <div id="right-container" style={rightStyle}>
+    <div id="container">
+      <div id="content-overlay" className="top-left">
         <div id="right-scroll">
           <h1>Olivia Steinmetz</h1>
           <h2>[Current Work]</h2>
@@ -137,9 +119,22 @@ export default function Liv() {
           <h5 id="right">Researcher</h5>
           <br />
           <div>
+            <h2>[Projects]</h2>
+            {projects.map((p, i) => (
+              <h5 key={p.title || i}>
+                <a
+                  type="button"
+                  className="project-title-btn"
+                  onClick={() => openProject(i)}
+                  aria-label={`Open ${p.title}`}
+                >
+                  {p.title}
+                </a>
+              </h5>
+            ))}
+          </div>
+          <div>
             <h2>[Former Work + Clients + Collaborators]</h2>
-
-            <h3>Arts + Culture</h3>
             <h5 id="right">
               <a href="https://caldergardens.org/" target="_blank" rel="noopener noreferrer">
                 Calder Gardens
@@ -214,10 +209,9 @@ export default function Liv() {
               </a>
               <br />
             </h5>
-
-            <h3>Tech + Nonprofit</h3>
             <h5 id="right">
-              Accenture Operations Studio <br />
+              Accenture
+              <br />
               <a href="https://alliedmedia.org/" target="_blank" rel="noopener noreferrer">
                 Allied Media Projects
               </a>
@@ -234,13 +228,13 @@ export default function Liv() {
                 Design Justice Network
               </a>
               <br />
+              KPMG
+              <br />
               <a href="https://www.vanderbiltscno.com/" target="_blank" rel="noopener noreferrer">
                 Students Consulting for Nonprofit Organizations (SCNO)
               </a>
               <br />
             </h5>
-
-            <h3>Education + Research</h3>
             <h5 id="right">
               Children&apos;s Hospital of Philadelphia Neurovascular Imaging Lab <br />
               <a href="https://www.cnm.org/" target="_blank" rel="noopener noreferrer">
@@ -263,89 +257,93 @@ export default function Liv() {
             </h5>
           </div>
           <br />
-          <h2>[In Progress...]</h2>
+          {/* <h2>[In Progress...]</h2>
           <h5 id="right">Applied research in HCI, HCAI, Learning & Digital Culture</h5>
           <h5 id="right">
             Exploring AI literacy and human agency, digital attention and well-being, equitable
             access to culture, and the design of interfaces, narratives, and visual media that make
             learning more intuitive, engaging, and meaningful.
-          </h5>
-
-          <h2>[Contact]</h2>
-          <h5 id="right">
-            <a
-              href="https://www.linkedin.com/in/livsteinmetz/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
-          </h5>
-          <h5 id="right">
-            <a href="https://github.com/livsteinmetz" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </h5>
-          <h5 id="right">
-            <a href="mailto:olivia.r.steinmetz@gmail.com" target="_blank" rel="noopener noreferrer">
-              Email
-            </a>
-          </h5>
-          <h5 id="right">
-            <a href="/OliviaSteinmetzCV2025.pdf" target="_blank" rel="noopener noreferrer">
-              Resume
-            </a>
-          </h5>
+            <p>
+              <br />
+              I&apos;ve spent the past five years working at the intersection of design, technology,
+              and the arts—helping cultural institutions reimagine how they reach audiences. Take a
+              look at some of the projects I&apos;ve worked on in the past below. The common thread
+              is a commitment to data-driven, design-forward, human-centered solutions that make
+              culture more accessible, equitable, and engaging.
+              <br /> <br />
+              Though my roots and home base will always be in Philadelphia, remote work,
+              friendships, and study have carried me across geographies and communities. I studied
+              Double Bass Performance and Engineering Design at Vanderbilt University.
+              <br /> <br />
+              Some questions I&apos;m seeking answers to: how to design AI that protects human
+              agency; what digital well-being looks like when attention is the currency; and how
+              narrative, sound, and interface can make learning feel like discovery rather than
+              transactional.
+              <br />
+              <br />
+              If you’re asking similar questions (or have answers!), let&apos;s connect.
+            </p>
+            <br />
+          </h5> */}
         </div>
       </div>
-
-      {/* Separator */}
-      <div
-        className="split-separator"
-        role="separator"
-        aria-orientation="vertical"
-        aria-label="Resize panels"
-        aria-valuemin={MIN_LEFT_PCT}
-        aria-valuemax={MAX_LEFT_PCT}
-        aria-valuenow={Math.round(leftPct)}
-        tabIndex={0}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-        onKeyDown={onSeparatorKeyDown}
-      >
-        <span className="split-grip" />
-      </div>
-      <div id="left-container" style={leftStyle}>
+      <div id="content-grid">
         <div id="left-scroll">
-          <h3>
-            I write code, manage products, play bass, and design interfaces. Some days it feels
-            coherent; most days it feels like improvisation.
-          </h3>
-          <p>
-            <br />
-            I&apos;ve spent the past five years working at the intersection of design, technology,
-            and the arts—helping cultural institutions reimagine how they reach audiences. Take a
-            look at some of the projects I&apos;ve worked on in the past below. The common thread is
-            a commitment to data-driven, design-forward, human-centered solutions that make culture
-            more accessible, equitable, and engaging.
-            <br /> <br />
-            Though my roots and home base will always be in Philadelphia, remote work, friendships,
-            and study have carried me across geographies and communities. I studied Double Bass
-            Performance and Engineering Design at Vanderbilt University.
-            <br /> <br />
-            Some questions I&apos;m seeking answers to: how to design AI that protects human agency;
-            what digital well-being looks like when attention is the currency; and how narrative,
-            sound, and interface can make learning feel like discovery rather than transactional.
-            <br />
-            <br />
-            If you’re asking similar questions (or have answers!), let&apos;s connect.
-          </p>
-          <br />
           <section id="work" aria-label="Selected work">
             <Work />
           </section>
         </div>
       </div>
+      <div id="content-overlay" className="bottom-right" aria-label="Contact links">
+        <a
+          className="contact-icon"
+          href="https://www.linkedin.com/in/livsteinmetz/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          title="LinkedIn"
+        >
+          <IconBrandLinkedin size={40} stroke={2} color="white" />
+        </a>
+        <a
+          className="contact-icon"
+          href="https://github.com/livsteinmetz"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          title="GitHub"
+        >
+          <IconBrandGithub size={40} stroke={2} color="white" />
+        </a>
+        <a
+          className="contact-icon"
+          href="mailto:olivia.r.steinmetz@gmail.com"
+          aria-label="Email"
+          title="Email"
+        >
+          <IconMail size={40} stroke={2} color="white" />
+        </a>
+        {/* <a
+          className="contact-icon"
+          href="/OliviaSteinmetzCV2025.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Resume (PDF)"
+          title="Resume"
+        >
+          <IconFileCv size={40} stroke={2} color="white" />
+        </a> */}
+      </div>
+
+      {projIndex != null && (
+        <Lightbox
+          items={projects}
+          index={projIndex}
+          onClose={closeProject}
+          onNext={nextProject}
+          onPrev={prevProject}
+        />
+      )}
     </div>
   );
 }

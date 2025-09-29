@@ -7,157 +7,44 @@
   width: 100%;
   overflow: hidden; // keep things tidy on drag
 
-.split-active {
-  // two columns + a draggable separator
-}
-
-.split-stacked {
-  // Mobile: stack and hide the separator
-  flex-direction: column;
-
-  .split-separator {
-    display: none;
-  }
-
-  #left-container,
-  #right-container {
-    width: 100% !important;
-  }
-}
-
-#left-container,
-#right-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  min-width: 0; // allows children to shrink
-  overflow: hidden; // each side scrolls within its own "scroll" child
-}
-
-#left-scroll,
-#right-scroll {
-  height: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Draggable separator */
-.split-separator {
-  flex: 0 0 10px;             // hit target
-  cursor: col-resize;
-  position: relative;
-  touch-action: none;         // allow horizontal touch drag
-  background: transparent;    // or theme if you want a line
-
-  // focus ring for keyboard users
-  &:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: -2px;
-  }
-}
-
-.split-separator .split-grip {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  transform: translateX(-50%);
-  background: color-mix(in srgb, currentColor 25%, transparent);
-}
-
-/* Optional: show a wider visual affordance on hover/drag */
-.split-separator:hover .split-grip {
-  background: color-mix(in srgb, currentColor 45%, transparent);
-}
-
-/* Keep your existing color class etc. */
-.color {
-  font-weight: 700;
-  color: theme.$lightblue;
-
-    &:hover {
-      background: -webkit-linear-gradient(theme.$red, theme.$yellow);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      cursor: pointer;
-    }
-  }
-
-  #left-container,
-  #right-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-height: 100vh;
-    height: 100%;
-    width: 50%;
-  }
-
-  #left-container {
-    justify-content: flex-start;
-
-    #left-scroll {
-      width: 100%;
-      padding: 100px;
-      overflow-y: scroll;
-
-      #work {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: flex-start;
-        width: 100%;
-        margin: auto;
-      }
-    }
-  }
-
-  #right-container {
-    justify-content: flex-start;
+  #content-overlay {
+    pointer-events: auto;
     background: linear-gradient(270deg, theme.$red, theme.$yellow);
     background-size: 400% 400%;
     animation: BackgroundGradient 45s ease infinite;
+    position: absolute;
+    overflow: auto;
+    z-index: 1000;
+    border-radius: 8px;
+    padding: 16px;
+    &.top-left {
+      top: 40px;
+      left: 40px;
 
-    text-align: right;
-
-    #right-scroll {
-      width: 100%;
-      padding: 100px;
-      overflow-y: scroll;
+      width: 33vw;
+      height: 75vh;
+      min-width: 400px;
+      max-width: 720px;
     }
-
-    #right {
-      color: theme.$white;
-    }
-
-    a {
-      color: theme.$white;
-
-      &:hover {
-        color: theme.$lightblue;
-        text-decoration: underline;
-      }
+    &.bottom-right {
+      display: flex;
+      flex-direction: column;
+      bottom: 40px;
+      right: 40px;
+      width: 80px;
+      height: fit-content;
     }
   }
 
-  @media (max-width: 600px) {
-    flex-direction: column-reverse;
-    position: relative;
-
-    #left-container,
-    #right-container {
-      width: 100%;
-      height: auto;
-      max-height: unset;
-      min-height: unset;
-
-      #left-scroll,
-      #right-scroll {
-        padding: 50px;
-      }
-    }
+  #content-grid {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+  .contact-icon {
+    display: inline-grid;
+    place-items: center;
+    margin: 8px;
   }
 }
 
@@ -171,14 +58,4 @@
   100% {
     background-position: 0% 50%;
   }
-}
-
-#cursor-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none; // So it doesn't block clicks
-  width: 100vw;
-  height: 100vh;
-  z-index: 9999; // On top of everything
 }
