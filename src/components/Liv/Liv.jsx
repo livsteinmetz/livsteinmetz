@@ -1,62 +1,129 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import './Liv.scss';
 import Work from '../Work/Work';
 
-export default function Liv() {
-  return (
-    <div id="container">
-      <div id="left-container">
-        <div id="left-scroll">
-          <h3>
-            I write code, manage products, play bass, and design interfaces. Some days it feels
-            coherent; most days it feels like improvisation.
-          </h3>
-          <br />
-          <p>
-            I move between engineering, product design, and fine arts and culture—sometimes all at
-            once. I&apos;ve spent the past five years working at the intersection of design,
-            technology, and the arts—helping cultural institutions reimagine how they meet people in
-            the digital space. My projects have ranged from mobile AR guides that let a gallery
-            unfold in new dimensions, to digital learning platforms built to feel less like software
-            and more like discovery, to fresh ways of navigating collections online. The throughline
-            is less extraction and transaction, more care and connection. Data-driven and
-            human-centered, yes—but culturally and ethically attuned, and joyful too!
-            <br />
-            <br />
-            Though my roots and home base will always be in Philadelphia, remote work, friendships,
-            and study have carried me across geographies and communities. I studied Double Bass
-            Performance and Engineering Design at Vanderbilt University.
-          </p>
-          <p>
-            I keep circling a few research tracks: how to design AI that protects human agency; what
-            digital well-being looks like when attention is the currency; and how narrative, sound,
-            and interface can make learning feel like discovery rather than compliance. Recent work
-            includes applied studies, prototypes, and literature reviews on human-centered AI,
-            learning experience design, and digital culture—shared as short briefs, talks, and
-            open-source experiments.
-            <br />
-            <br />
-            If you’re asking similar questions (or have answers!), let&apos;s connect.
-          </p>
-          {/* <h6>
-            My resume lives{' '}
-            <a
-              href="/OliviaSteinmetzCV2025.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open Olivia Steinmetz resume (PDF)"
-            >
-              <span className="color">here</span>
-            </a>
-            .
-          </h6> */}
-          <br />
-          <section id="work" aria-label="Selected work">
-            <Work />
-          </section>
-        </div>
-      </div>
+const MIN_LEFT_PCT = 20; // rails; adjust to taste
+const MAX_LEFT_PCT = 80;
+const MOBILE_BREAKPOINT = 768; // px — below this, the splitter is disabled
 
-      <div id="right-container">
+export default function Liv() {
+  const [leftPct, setLeftPct] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isActive, setIsActive] = useState(true); // splitter enabled?
+  const containerRef = useRef(null);
+  const rafRef = useRef(null);
+
+  // Enable/disable splitter based on width
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setIsActive(w >= MOBILE_BREAKPOINT);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const clampPct = (pct) => Math.min(MAX_LEFT_PCT, Math.max(MIN_LEFT_PCT, pct));
+
+  const pctFromClientX = useCallback(
+    (clientX) => {
+      const el = containerRef.current;
+      if (!el) return leftPct;
+      const rect = el.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const pct = (x / rect.width) * 100;
+      return clampPct(pct);
+    },
+    [leftPct],
+  );
+
+  const startDrag = useCallback((clientX) => {
+    setIsDragging(true);
+    setLeftPct((prev) => clampPct(prev)); // ensure valid before drag
+    // Prevent text selection while dragging
+    document.body.style.userSelect = 'none';
+  }, []);
+
+  const onMouseDown = (e) => {
+    if (!isActive) return;
+    e.preventDefault();
+    startDrag(e.clientX);
+  };
+
+  const onTouchStart = (e) => {
+    if (!isActive) return;
+    startDrag(e.touches[0].clientX);
+  };
+
+  // Drag loop (mouse + touch)
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const onMove = (clientX) => {
+      // rAF throttle so we don't spam layout
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setLeftPct(pctFromClientX(clientX));
+        // Nudge libs that listen to window resize
+        window.dispatchEvent(new Event('resize'));
+      });
+    };
+
+    const handleMouseMove = (e) => onMove(e.clientX);
+    const handleTouchMove = (e) => onMove(e.touches[0].clientX);
+
+    const endDrag = () => {
+      setIsDragging(false);
+      document.body.style.userSelect = '';
+      // final nudge
+      window.dispatchEvent(new Event('resize'));
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', endDrag);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', endDrag);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', endDrag);
+    };
+  }, [isDragging, pctFromClientX]);
+
+  // Keyboard accessibility on the separator
+  const onSeparatorKeyDown = (e) => {
+    if (!isActive) return;
+    const step = e.shiftKey ? 5 : 2; // Shift for larger jumps
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setLeftPct((p) => clampPct(p - step));
+      window.dispatchEvent(new Event('resize'));
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setLeftPct((p) => clampPct(p + step));
+      window.dispatchEvent(new Event('resize'));
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setLeftPct(MIN_LEFT_PCT);
+      window.dispatchEvent(new Event('resize'));
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setLeftPct(MAX_LEFT_PCT);
+      window.dispatchEvent(new Event('resize'));
+    }
+  };
+
+  // Inline sizes so the masonry reflows immediately
+  const leftStyle = isActive ? { width: `${100 - leftPct}%` } : {};
+  const rightStyle = isActive ? { width: `${leftPct}%` } : {};
+
+  return (
+    <div id="container" ref={containerRef} className={isActive ? 'split-active' : 'split-stacked'}>
+      <div id="right-container" style={rightStyle}>
         <div id="right-scroll">
           <h1>Olivia Steinmetz</h1>
           <h2>[Current Work]</h2>
@@ -205,7 +272,6 @@ export default function Liv() {
           </h5>
 
           <h2>[Contact]</h2>
-
           <h5 id="right">
             <a
               href="https://www.linkedin.com/in/livsteinmetz/"
@@ -230,6 +296,54 @@ export default function Liv() {
               Resume
             </a>
           </h5>
+        </div>
+      </div>
+
+      {/* Separator */}
+      <div
+        className="split-separator"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize panels"
+        aria-valuemin={MIN_LEFT_PCT}
+        aria-valuemax={MAX_LEFT_PCT}
+        aria-valuenow={Math.round(leftPct)}
+        tabIndex={0}
+        onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
+        onKeyDown={onSeparatorKeyDown}
+      >
+        <span className="split-grip" />
+      </div>
+      <div id="left-container" style={leftStyle}>
+        <div id="left-scroll">
+          <h3>
+            I write code, manage products, play bass, and design interfaces. Some days it feels
+            coherent; most days it feels like improvisation.
+          </h3>
+          <p>
+            <br />
+            I&apos;ve spent the past five years working at the intersection of design, technology,
+            and the arts—helping cultural institutions reimagine how they reach audiences. Take a
+            look at some of the projects I&apos;ve worked on in the past below. The common thread is
+            a commitment to data-driven, design-forward, human-centered solutions that make culture
+            more accessible, equitable, and engaging.
+            <br /> <br />
+            Though my roots and home base will always be in Philadelphia, remote work, friendships,
+            and study have carried me across geographies and communities. I studied Double Bass
+            Performance and Engineering Design at Vanderbilt University.
+            <br /> <br />
+            Some questions I&apos;m seeking answers to: how to design AI that protects human agency;
+            what digital well-being looks like when attention is the currency; and how narrative,
+            sound, and interface can make learning feel like discovery rather than transactional.
+            <br />
+            <br />
+            If you’re asking similar questions (or have answers!), let&apos;s connect.
+          </p>
+          <br />
+          <section id="work" aria-label="Selected work">
+            <Work />
+          </section>
         </div>
       </div>
     </div>

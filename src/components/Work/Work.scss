@@ -1,21 +1,154 @@
+/* src/components/Work/Work.scss */
 @use '../../styles/theme.scss';
 
-#Work {
+.work-root {
+  width: 100%;
+}
+
+.tile-btn {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  width: 100%;
+  cursor: pointer;
+  display: block;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Image-only tiles; pick your ratio or let images drive height */
+.tile-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tile-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+
+  /* If you want a fixed tile ratio, uncomment:
+  aspect-ratio: 3 / 2;
+  */
+}
+
+/* Optional hover swap if a secondary image exists */
+.tile-img.alt {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.tile-btn:hover .tile-img.alt {
+  opacity: 1;
+}
+
+.work-footer {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-  min-height: 100vh;
-  text-align: left;
+  margin: 24px 0 0;
+}
+.work-view-more {
+  appearance: none;
+  border: 1px solid currentColor;
+  padding: 8px 14px;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  border-radius: 6px;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ========== Lightbox (fullscreen takeover) ========== */
+.lb-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.65);
+  display: grid;
+  place-items: center;
+}
+
+.lb-stage {
+  position: relative;
   width: 100%;
+  height: 100%;
+  /* click outside to close is handled by backdrop; stage is for content */
+}
 
-  @media (max-width: theme.$mobile) {
-    width: 100%;
-    padding: 0 16px;
-  }
+.lb-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* or 'cover' if you want true takeover crop */
+  background: #000;   /* avoids white behind transparent images */
+}
 
-  .color {
-    font-weight: 700;
-    color: theme.$body;
-  }
+/* Details overlay; bottom-left by default */
+.lb-meta {
+  position: absolute;
+  left: min(5vw, 48px);
+  right: min(5vw, 48px);
+  bottom: min(5vh, 48px);
+  pointer-events: none; /* clicks pass through except inner */
+}
+
+.lb-meta-inner {
+  pointer-events: auto;
+  max-width: 720px;
+  background: color-mix(in srgb, black 40%, transparent);
+  color: white;
+  padding: 16px 18px;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+.lb-title {
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.lb-body {
+  margin: 0 0 8px 0;
+}
+.lb-link {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Controls */
+.lb-close,
+.lb-prev,
+.lb-next {
+  position: absolute;
+  appearance: none;
+  border: 0;
+  background: color-mix(in srgb, black 45%, transparent);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  line-height: 1;
+}
+.lb-close { top: 16px; right: 16px; }
+.lb-prev  { left: 16px; top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 16px; top: 50%; transform: translateY(-50%); }
+
+.lb-close:focus-visible,
+.lb-prev:focus-visible,
+.lb-next:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
 }
