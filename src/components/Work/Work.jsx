@@ -127,7 +127,7 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
   }, []);
 
   return (
-    <div
+    <section
       className="lb-backdrop"
       role="button"
       tabIndex={0}
@@ -189,6 +189,6 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

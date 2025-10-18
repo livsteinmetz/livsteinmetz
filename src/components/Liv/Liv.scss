@@ -128,6 +128,7 @@ html, body {
 #work {
   position: relative;
   padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 3rem);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
   background: black;
   color: var(--page-fg, #fff);
 }
@@ -137,13 +138,22 @@ html, body {
   margin: 0 auto;
 }
 
+#list {
+  position: absolute;
+  right: clamp(0.75rem, 3vw, 2rem);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+  text-align: right;
+  max-width: 66vw;
+}
+
 /* --------------------------------------
    Bottom-right contact overlay (fixed)
 ----------------------------------------- */
 #content-overlay.bottom-right {
   position: fixed;
-  right: clamp(0.75rem, 2vw, 1.5rem);
+  left: clamp(0.75rem, 3vw, 2rem);
   bottom: clamp(0.75rem, 2vw, 1.5rem);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
   display: flex;
   gap: 0.75rem;
   width: auto;
