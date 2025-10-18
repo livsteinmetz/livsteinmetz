@@ -25,6 +25,16 @@ html, body {
   overflow: clip;
 }
 
+.title.title--hero {
+font-size: 10rem;
+line-height: 1;
+}
+
+.title.title--compact {
+font-size: 3.5rem;
+line-height: 1;
+}
+
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -53,6 +63,7 @@ html, body {
 
   /* Smooth morph between hero/compact (respects reduced motion below) */
   transition:
+  font-size 1000ms ease,
   width 1000ms ease,
   height 1000ms ease,
   inset 1000ms ease,
@@ -69,6 +80,8 @@ html, body {
 
 /* Full-screen, overlaying the hero; keep transparent so hero shows through */
 #content-overlay.overlay.overlay--hero {
+  display: flex;
+  flex-direction: row;
   inset: 0;
   width: 100vw;
   height: 100vh;
@@ -78,7 +91,12 @@ html, body {
   box-shadow: none;
   backdrop-filter: none;
     background-color: black;
-
+#inner-right, #inner-left {
+  width: 50%;
+}
+#inner-right {
+  text-align: right;
+}
 }
 
 /* Shrinks and floats over Work */
@@ -88,10 +106,11 @@ html, body {
   right: auto;
   bottom: auto;
   width: 33vw;
-  min-width: 320px;
-  height: 75vh;
+  min-width: 450px;
+  height: auto;
+  min-height: 450px;
   max-height: calc(100dvh - 2 * clamp(0.75rem, 3vw, 2rem));
-  padding: clamp(1rem, 2.5vw, 1.5rem);
+  padding: clamp(2.5rem, 2.5vw, 2.5rem);
   color: #fff;
   background-color: black;
   background-size: 400% 400%;
@@ -179,7 +198,6 @@ html, body {
   display: inline-block;
   margin-top: 1.25rem;
   text-decoration: none;
-  font-weight: 600;
   border-bottom: 1px solid currentColor;
 }
 

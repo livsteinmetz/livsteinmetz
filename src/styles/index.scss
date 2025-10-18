@@ -17,9 +17,9 @@ body {
   *::-webkit-scrollbar-thumb {
     background-color: theme.$white;
   }
-  a {
+  a, button {
     &:hover {
-      color: theme.$primary;
+      color: theme.$secondary;
       cursor: pointer;
       font-style: italic;
     }
@@ -35,13 +35,13 @@ section {
   box-sizing: border-box;
 }
 
-a {
+a, button {
   text-decoration: none;
   color: theme.$body;
   &:hover {
     * {
       font-style: italic;
-      color: theme.$primary;
+      color: theme.$secondary;
     }
     cursor: pointer;
   }
@@ -54,9 +54,9 @@ h4,
 h5,
 h6 {
   font-family: theme.$font-header;
-  a {
+  a, button {
     &:hover {
-      color: theme.$primary;
+      color: theme.$secondary;
       cursor: pointer;
       font-style: italic;
     }
@@ -125,9 +125,9 @@ h5 {
     font-size: 18px;
     line-height: 22px;
   }
-  a {
+  a, button {
     &:hover {
-      color: theme.$primary;
+      color: theme.$secondary;
       cursor: pointer;
     }
   }

@@ -64,11 +64,13 @@ export default function Liv() {
         data-mounted={mounted} // used to kill transitions on initial paint
         aria-label="Intro, projects, and links"
       >
-        <div id="inner">
-          <h1>Olivia Steinmetz</h1>
+        <div id="inner-left">
+          <h1 className={`title ${compact ? 'title--compact' : 'title--hero'}`}>
+            Olivia Steinmetz
+          </h1>
           <h2>[Current Work]</h2>
           <h5 id="right">
-            Front-End Software Engineer &amp; Product Manager for Digital Initiatives @<br />
+            Front-End Software Engineer &amp; Product Manager for Digital Initiatives @{' '}
             <a href="https://barnesfoundation.org/" target="_blank" rel="noopener noreferrer">
               the Barnes Foundation
             </a>
@@ -76,10 +78,13 @@ export default function Liv() {
           <h5 id="right">Freelance Double Bassist</h5>
           <h5 id="right">Researcher</h5>
 
-          <a className="scroll-cue" href="#work" aria-label="Scroll to work">
-            ↓ View selected work
-          </a>
+          {!compact && (
+            <a className="scroll-cue" href="#work" aria-label="Scroll to work">
+              ↓ View selected work
+            </a>
+          )}
         </div>
+        {!compact && <div id="inner-right">hey hi hello</div>}
       </section>
 
       {/* Fixed contact overlay */}
