@@ -58,14 +58,13 @@ export default function Liv() {
         <div ref={heroEndRef} className="hero-sentinel" aria-hidden="true" />
       </section>
 
-      {/* FIXED OVERLAY — NOTE: no "top-left" class here anymore */}
       <div
         id="content-overlay"
         className={`overlay ${compact ? 'overlay--compact' : 'overlay--hero'}`}
         data-mounted={mounted} // used to kill transitions on initial paint
         aria-label="Intro, projects, and links"
       >
-        <div id="right-scroll">
+        <div id="inner">
           <h1>Olivia Steinmetz</h1>
           <h2>[Current Work]</h2>
           <h5 id="right">

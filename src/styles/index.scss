@@ -6,19 +6,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scrollbar-width: thin;
-  scrollbar-color: theme.$lightblue theme.$white;
+  scrollbar-color: theme.$primary theme.$white;
   *::-webkit-scrollbar {
     width: 12px;
   }
   *::-webkit-scrollbar-track {
-    background: theme.$lightblue;
+    background: theme.$primary;
   }
   *::-webkit-scrollbar-thumb {
     background-color: theme.$white;
   }
   a {
     &:hover {
-      color: theme.$lightblue;
+      color: theme.$primary;
       cursor: pointer;
       font-style: italic;
     }
@@ -39,7 +39,7 @@ a {
   &:hover {
     * {
       font-style: italic;
-      color: theme.$lightblue;
+      color: theme.$primary;
     }
     cursor: pointer;
   }
@@ -54,7 +54,7 @@ h6 {
   font-family: theme.$font-header;
   a {
     &:hover {
-      color: theme.$lightblue;
+      color: theme.$primary;
       cursor: pointer;
       font-style: italic;
     }
@@ -65,10 +65,10 @@ h1 {
   font-weight: bold;
   font-size: 60px;
   line-height: 60px;
-  color: theme.$lightblue;
+  color: theme.$primary;
   margin: 0;
   &:hover {
-    color: theme.$lightblue;
+    color: theme.$primary;
     font-style: italic;
   }
   @media (max-width: 600px) {
@@ -97,7 +97,7 @@ h3 {
   margin: 0;
   font-size: 32px;
   line-height: 1.2;
-  color: theme.$lightblue;
+  color: theme.$primary;
 }
 
 h4 {
@@ -125,7 +125,7 @@ h5 {
   }
   a {
     &:hover {
-      color: theme.$lightblue;
+      color: theme.$primary;
       cursor: pointer;
     }
   }

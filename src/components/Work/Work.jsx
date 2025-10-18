@@ -178,14 +178,16 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
         </button>
       </div>
 
-      <div id="content-overlay" className="top-left">
-        <h2 className="lb-title">{item.title}</h2>
-        {item.body && <p className="lb-body">{item.body}</p>}
-        {item.link && (
-          <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
-            Open project
-          </a>
-        )}
+      <div id="content-overlay" className={`overlay overlay--compact`}>
+        <div id="inner">
+          <h2 className="lb-title">{item.title}</h2>
+          {item.body && <p className="lb-body">{item.body}</p>}
+          {item.link && (
+            <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
+              Open project
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

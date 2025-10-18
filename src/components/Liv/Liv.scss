@@ -53,17 +53,15 @@ html, body {
 
   /* Smooth morph between hero/compact (respects reduced motion below) */
   transition:
-    width 1000ms ease,
-    height 1000ms ease,
-    inset 1000ms ease,
-    padding 1000ms ease,
-    background-color 1000ms ease,
-    backdrop-filter 1000ms ease,
-    box-shadow 1000ms ease;
-  /* Your animated gradient (only shown in compact mode by default) */
-  // background: linear-gradient(270deg, theme.$red, theme.$yellow);
-    background-color: black;
-color: white;
+  width 1000ms ease,
+  height 1000ms ease,
+  inset 1000ms ease,
+  padding 1000ms ease,
+  background-color 1000ms ease,
+  backdrop-filter 1000ms ease,
+  box-shadow 1000ms ease;
+  background-color: black;
+  color: white;
   background-size: 400% 400%;
   animation: BackgroundGradient 45s ease infinite;
   padding: 16px;
@@ -83,34 +81,30 @@ color: white;
 
 }
 
-/* Shrinks to your original “top-left card” and floats over Work */
+/* Shrinks and floats over Work */
 #content-overlay.overlay.overlay--compact {
   top: clamp(0.75rem, 3vw, 2rem);
   left: clamp(0.75rem, 3vw, 2rem);
   right: auto;
   bottom: auto;
-
-  width: min(960px, 42vw);
+  width: 33vw;
   min-width: 320px;
-  height: auto;
+  height: 75vh;
   max-height: calc(100dvh - 2 * clamp(0.75rem, 3vw, 2rem));
   padding: clamp(1rem, 2.5vw, 1.5rem);
   color: #fff;
-  /* keep your animated gradient visible in compact; add some glassiness */
-  // background: linear-gradient(270deg, theme.$red, theme.$yellow);
   background-color: black;
   background-size: 400% 400%;
   animation: BackgroundGradient 45s ease infinite;
-  // backdrop-filter: blur(8px);
-  // box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   overflow: hidden;
 }
 
 /* If content gets tall, allow inner scroll without growing the card */
-#content-overlay.overlay.overlay--compact #right-scroll {
-  max-height: calc(100dvh - 2 * clamp(0.75rem, 3vw, 2rem) - 2 * clamp(1rem, 2.5vw, 1.5rem));
+#content-overlay.overlay.overlay--compact #inner {
+  height: 100%;
   overflow: auto;
   overscroll-behavior: contain;
+  background-color: black;
 }
 
 /* Project title buttons and general interactive focus */
