@@ -139,13 +139,7 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
         if (e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div
-        className="lb-stage"
-        role="dialog"
-        aria-modal="true"
-        aria-label={item.title}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="lb-stage" role="dialog" aria-modal="true" aria-label={item.title}>
         {hasVideo ? (
           <video
             className="lb-video"

@@ -2,6 +2,7 @@
 
 #container {
   display: flex;
+  flex-direction: column;
   position: absolute;
   inset: 0; // top:0; right:0; bottom:0; left:0
   width: 100%;
@@ -59,3 +60,83 @@
     background-position: 0% 50%;
   }
 }
+
+/* smooth scroll for cue */
+html, body {
+  scroll-behavior: smooth;
+}
+
+/* Container general spacing (optional) */
+#container {
+  position: relative;
+}
+
+/* HERO */
+#hero {
+  position: relative;
+  min-height: 100svh; /* use small viewport units to avoid mobile URL bar jump */
+  width: 100%;
+  overflow: clip; /* keeps absolutely-positioned bg tidy */
+}
+
+/* Placeholder background (swap to background-image when ready) */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: black;
+  /* when you have an image:
+     background: url('/path/to/hero.jpg') center/cover no-repeat; */
+}
+
+/* Reuse your overlay, but anchor it to hero */
+#hero #content-overlay.top-left {
+  position: absolute;
+  top: clamp(1rem, 4vw, 4rem);
+  left: clamp(1rem, 4vw, 4rem);
+  right: clamp(1rem, 6vw, 6rem);
+  max-width: 960px; /* tweak to taste */
+  z-index: 2;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  display: inline-block;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+}
+
+/* WORK SECTION — sits below the fold */
+#work {
+  position: relative;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 3rem);
+  background: black; /* or your site bg */
+  color: var(--page-fg, #fff);
+}
+
+#work .work-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Keep your fixed bottom-right overlay as-is */
+#content-overlay.bottom-right {
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  bottom: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  gap: 0.75rem;
+  z-index: 3;
+}
+
+.contact-icon {
+  display: inline-flex;
+  opacity: 0.9;
+  transition: opacity 120ms ease, transform 120ms ease;
+  &:hover { opacity: 1; transform: translateY(-1px); }
+}
+
+/* If you previously had a grid with #content-grid/#left-scroll,
+   you can remove those styles or leave them unused.
+   The hero->work flow replaces that layout. */
