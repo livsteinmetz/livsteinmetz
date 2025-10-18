@@ -1,9 +1,28 @@
+// Liv.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import './Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
 
 import projects from '../../copy/projects.json';
 import Work, { Lightbox } from '../Work/Work';
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.matchMedia(`(max-width:${breakpoint}px)`).matches : false
+  );
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width:${breakpoint}px)`);
+    const handler = (e) => setIsMobile(e.matches);
+    mql.addEventListener?.('change', handler);
+    // Safari fallback
+    mql.addListener?.(handler);
+    return () => {
+      mql.removeEventListener?.('change', handler);
+      mql.removeListener?.(handler);
+    };
+  }, [breakpoint]);
+  return isMobile;
+}
 
 export default function Liv() {
   const containerRef = useRef(null);
@@ -15,57 +34,54 @@ export default function Liv() {
   const prevProject = () =>
     setProjIndex((i) => (i == null ? 0 : (i - 1 + projects.length) % projects.length));
 
-  // Start full-screen
   const [compact, setCompact] = useState(false);
-  // For disabling transitions on very first paint
   const [mounted, setMounted] = useState(false);
+  const isMobile = useIsMobile(768);
 
   useEffect(() => {
-    // Ensure "hero" state on first paint
+    // On mobile, kill all overlay/observer behavior
+    if (isMobile) {
+      setCompact(false);
+      setMounted(true);
+      return; // don't create IO
+    }
+
+    // Desktop behavior: enable transitions after first paint, wire IO
     setCompact(false);
     const raf = requestAnimationFrame(() => {
-      setMounted(true); // enable transitions AFTER first paint
-
+      setMounted(true);
       const node = heroEndRef.current;
       if (!node) return;
 
       const io = new IntersectionObserver(
-        ([entry]) => {
-          // When sentinel leaves viewport => compact
-          setCompact(!entry.isIntersecting);
-        },
-        {
-          root: null,
-          // small negative bottom margin prevents premature compaction on load
-          rootMargin: '0px 0px -1px 0px',
-          threshold: 0,
-        },
+        ([entry]) => setCompact(!entry.isIntersecting),
+        { root: null, rootMargin: '0px 0px -1px 0px', threshold: 0 }
       );
-
       io.observe(node);
-      // cleanup
       return () => io.disconnect();
     });
 
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [isMobile]);
 
   return (
-    <div id="container" ref={containerRef}>
+    <div id="container" ref={containerRef} data-mobile={isMobile ? 'true' : 'false'}>
       {/* HERO */}
       <section id="hero" aria-label="Hero">
         <div className="hero-bg" aria-hidden="true" />
+        {/* IO sentinel (harmless on mobile; CSS hides effects) */}
         <div ref={heroEndRef} className="hero-sentinel" aria-hidden="true" />
       </section>
 
+      {/* INTRO OVERLAY / CARD */}
       <section
         id="content-overlay"
-        className={`overlay ${compact ? 'overlay--compact' : 'overlay--hero'}`}
-        data-mounted={mounted} // used to kill transitions on initial paint
+        className={`overlay ${!isMobile && compact ? 'overlay--compact' : !isMobile ? 'overlay--hero' : 'overlay--mobile'}`}
+        data-mounted={mounted}
         aria-label="Intro, projects, and links"
       >
         <div id="inner-left">
-          <h1 className={`title ${compact ? 'title--compact' : 'title--hero'}`}>
+          <h1 className={`title ${!isMobile && compact ? 'title--compact' : 'title--hero'}`}>
             Olivia Steinmetz
           </h1>
           <h2>[Current Work]</h2>
@@ -78,17 +94,24 @@ export default function Liv() {
           <h5 id="right">Freelance Double Bassist</h5>
           <h5 id="right">Researcher</h5>
 
-          {!compact && (
+          {/* Hide scroll cue on mobile (linear flow) */}
+          {!isMobile && !compact && (
             <a className="scroll-cue" href="#work" aria-label="Scroll to work">
               ↓ View selected work
             </a>
           )}
         </div>
-        {!compact && <div id="inner-right">hey hi hello</div>}
+
+        {/* Right column only on desktop/hero */}
+        {!isMobile && !compact && <div id="inner-right">hey hi hello</div>}
       </section>
 
-      {/* Fixed contact overlay */}
-      <section id="content-overlay" className="bottom-right" aria-label="Contact links">
+      {/* CONTACT: fixed on desktop, inline on mobile */}
+      <section
+        id="content-overlay"
+        className={`bottom-right ${isMobile ? 'bottom-right--mobile' : ''}`}
+        aria-label="Contact links"
+      >
         <a
           className="contact-icon"
           href="https://www.linkedin.com/in/livsteinmetz/"
@@ -136,6 +159,7 @@ export default function Liv() {
         />
       )}
 
+      {/* PROJECTS */}
       <section
         id="list"
         className="list-section"
@@ -143,7 +167,7 @@ export default function Liv() {
       >
         <h2>[Projects]</h2>
         {projects.map((p, i) => (
-          <h5 key={p.title || i}>
+          <h5 key={p.title || i} id="right">
             <button
               type="button"
               className="project-title-btn as-link"

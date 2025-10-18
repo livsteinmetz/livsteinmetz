@@ -228,3 +228,111 @@ line-height: 1;
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+/* MOBILE: linear layout (hero → work → projects) */
+@media (max-width: 768px) {
+  /* Base */
+  #container {
+    overflow-x: hidden;
+  }
+
+  /* HERO stays full-width but we don’t do overlay tricks */
+  #hero {
+    min-height: 60svh; /* shorter hero on phones; adjust as you like */
+  }
+
+  /* Kill overlay positioning; make it a normal block */
+  #content-overlay.overlay {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 16px !important;
+    display: block !important;
+    background: black !important;
+    animation: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Make sure we don't rely on hero/compact classes on mobile */
+  #content-overlay.overlay.overlay--hero,
+  #content-overlay.overlay.overlay--compact,
+  #content-overlay.overlay.overlay--mobile {
+    position: static !important;
+  }
+
+  /* Title sizes */
+  .title.title--hero,
+  .title.title--compact {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Two-column intro becomes single column */
+  #inner-left,
+  #inner-right {
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  /* Hide scroll cue (linear flow) */
+  .scroll-cue {
+    display: none !important;
+  }
+
+  /* Contact: not fixed; sits inline under intro */
+  #content-overlay.bottom-right {
+    position: static !important;
+    left: auto !important;
+    bottom: auto !important;
+    padding: 12px 16px !important;
+    background: transparent !important;
+    gap: 0.5rem !important;
+    margin-top: 8px;
+  }
+  #content-overlay.bottom-right .contact-icon {
+    margin: 0;
+  }
+
+  /* Work spacing */
+  #work {
+    padding: 24px 16px !important;
+  }
+  #work .work-inner {
+    max-width: 100% !important;
+  }
+
+  /* Projects list: stop absolutely positioning; full width */
+  #list {
+    position: static !important;
+    right: auto !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    padding: 16px !important;
+    margin-top: 8px;
+    button, a {
+      text-align: left;
+      align-items: left;
+      align-self: left;
+    }
+  }
+
+  /* Make tappable targets comfy */
+  .project-title-btn.as-link {
+    padding: 4px 0;
+  }
+
+  /* Turn off long transitions on mobile (feels snappier) */
+  #content-overlay.overlay[data-mounted='true'] {
+    transition: none !important;
+  }
+
+  /* Don’t rely on the sentinel */
+  .hero-sentinel {
+    bottom: auto !important;
+  }
+}
