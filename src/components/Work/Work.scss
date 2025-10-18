@@ -74,7 +74,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.75);
   display: grid;
   place-items: center;
 }
@@ -94,24 +94,25 @@
   width: 100%;
   height: 100%;
   object-fit: contain; /* or 'cover' if you want true takeover crop */
-  background: #000; /* avoids white behind transparent images */
 }
 
 /* Controls */
 .lb-close,
 .lb-prev,
 .lb-next {
+  z-index: 1000;
   position: absolute;
   appearance: none;
   border: 0;
-  background: color-mix(in srgb, black 45%, transparent);
+  background: black;
   color: white;
   width: 40px;
   height: 40px;
   border-radius: 999px;
   cursor: pointer;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24px;
   line-height: 1;
 }

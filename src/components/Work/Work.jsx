@@ -166,16 +166,6 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
             />
           )
         )}
-
-        <button className="lb-close" aria-label="Close" onClick={onClose}>
-          ×
-        </button>
-        <button className="lb-prev" aria-label="Previous" onClick={onPrev}>
-          ‹
-        </button>
-        <button className="lb-next" aria-label="Next" onClick={onNext}>
-          ›
-        </button>
       </div>
 
       <div id="content-overlay" className={`overlay overlay--compact`}>
@@ -189,6 +179,15 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
           )}
         </div>
       </div>
+      <button className="lb-close" aria-label="Close" onClick={onClose}>
+        ×
+      </button>
+      <button className="lb-prev" aria-label="Previous" onClick={onPrev}>
+        ‹
+      </button>
+      <button className="lb-next" aria-label="Next" onClick={onNext}>
+        ›
+      </button>
     </section>
   );
 }

@@ -115,7 +115,7 @@ line-height: 1;
   background-color: black;
   background-size: 400% 400%;
   animation: BackgroundGradient 45s ease infinite;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 /* If content gets tall, allow inner scroll without growing the card */
