@@ -41,6 +41,7 @@ export default function Project({ title, img, img2, video, link, body, compact =
         {(img || img2 || video) && (
           <div className="project-media">
             {video ? (
+              /* eslint-disable-next-line jsx-a11y/media-has-caption */
               <video
                 className="project-video"
                 src={video}

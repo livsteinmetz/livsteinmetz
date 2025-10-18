@@ -144,16 +144,14 @@ export default function Liv() {
         <h2>[Projects]</h2>
         {projects.map((p, i) => (
           <h5 key={p.title || i}>
-            <a
-              role="button"
-              tabIndex={0}
-              className="project-title-btn"
+            <button
+              type="button"
+              className="project-title-btn as-link"
               onClick={() => openProject(i)}
-              onKeyDown={(e) => (e.key === 'Enter' ? openProject(i) : null)}
               aria-label={`Open ${p.title}`}
             >
               {p.title}
-            </a>
+            </button>
           </h5>
         ))}
         <h2>[Former Work + Clients + Collaborators]</h2>

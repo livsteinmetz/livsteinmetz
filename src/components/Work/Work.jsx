@@ -127,17 +127,13 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
   }, []);
 
   return (
-    <section
+    <button
+      type="button"
       className="lb-backdrop"
-      role="button"
-      tabIndex={0}
-      aria-label="Close lightbox"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') onClose();
-      }}
+      aria-label="Close lightbox"
     >
       <div className="lb-stage" role="dialog" aria-modal="true" aria-label={item.title}>
         {hasVideo ? (
@@ -174,7 +170,7 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
           {item.body && <p className="lb-body">{item.body}</p>}
           {item.link && (
             <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
-              Open project
+              Learn more
             </a>
           )}
         </div>
@@ -188,6 +184,6 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
       <button className="lb-next" aria-label="Next" onClick={onNext}>
         ›
       </button>
-    </section>
+    </button>
   );
 }

@@ -210,3 +210,21 @@ line-height: 1;
     animation: none !important;
   }
 }
+
+.project-title-btn.as-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+     &:hover {
+      color: theme.$secondary;
+      cursor: pointer;
+      font-style: italic;
+    }
+}
+.project-title-btn.as-link:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
