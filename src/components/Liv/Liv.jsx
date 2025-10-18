@@ -8,7 +8,9 @@ import Work, { Lightbox } from '../Work/Work';
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.matchMedia(`(max-width:${breakpoint}px)`).matches : false
+    typeof window !== 'undefined'
+      ? window.matchMedia(`(max-width:${breakpoint}px)`).matches
+      : false,
   );
   useEffect(() => {
     const mql = window.matchMedia(`(max-width:${breakpoint}px)`);
@@ -65,10 +67,11 @@ export default function Liv() {
       const node = heroEndRef.current;
       if (!node) return;
 
-      const io = new IntersectionObserver(
-        ([entry]) => setCompact(!entry.isIntersecting),
-        { root: null, rootMargin: '0px 0px -1px 0px', threshold: 0 }
-      );
+      const io = new IntersectionObserver(([entry]) => setCompact(!entry.isIntersecting), {
+        root: null,
+        rootMargin: '0px 0px -1px 0px',
+        threshold: 0,
+      });
       io.observe(node);
       return () => io.disconnect();
     });
