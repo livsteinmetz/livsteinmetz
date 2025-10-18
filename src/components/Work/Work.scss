@@ -102,32 +102,42 @@
   object-fit: contain; /* or 'cover' if you want true takeover crop */
 }
 
-/* Controls */
+/* Lightbox Controls (styled like .to-top button) */
 .lb-close,
 .lb-prev,
 .lb-next {
   z-index: 1000;
   position: absolute;
-  appearance: none;
-  border: 0;
-  background: black;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 20px;
   line-height: 1;
-  color: white !important;
-  font-style: normal !important;
-  :hover {
-    color: theme.$primary;
-    font-style: normal !important;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+  }
+
+  &:focus-visible {
+    outline: 2px dashed #fff;
+    outline-offset: 2px;
   }
 }
+
+/* Positions */
 .lb-close {
   top: 16px;
   right: 16px;
@@ -143,9 +153,11 @@
   transform: translateY(-50%);
 }
 
-.lb-close:focus-visible,
-.lb-prev:focus-visible,
-.lb-next:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .lb-close,
+  .lb-prev,
+  .lb-next {
+    transition: none;
+  }
 }

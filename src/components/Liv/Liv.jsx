@@ -1,4 +1,4 @@
-// Liv.jsx
+// Liv.jsx (additions marked)
 import React, { useEffect, useRef, useState } from 'react';
 import './Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
@@ -14,7 +14,6 @@ function useIsMobile(breakpoint = 768) {
     const mql = window.matchMedia(`(max-width:${breakpoint}px)`);
     const handler = (e) => setIsMobile(e.matches);
     mql.addEventListener?.('change', handler);
-    // Safari fallback
     mql.addListener?.(handler);
     return () => {
       mql.removeEventListener?.('change', handler);
@@ -38,15 +37,28 @@ export default function Liv() {
   const [mounted, setMounted] = useState(false);
   const isMobile = useIsMobile(768);
 
+  const [showToTop, setShowToTop] = useState(false);
   useEffect(() => {
-    // On mobile, kill all overlay/observer behavior
+    const onScroll = () => {
+      // Toggle after ~1 viewport of scroll; tweak as you like
+      setShowToTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // initialize on first mount
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const handleToTop = () => {
+    // honor reduced motion automatically (browser will still jump)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
     if (isMobile) {
       setCompact(false);
       setMounted(true);
-      return; // don't create IO
+      return;
     }
-
-    // Desktop behavior: enable transitions after first paint, wire IO
     setCompact(false);
     const raf = requestAnimationFrame(() => {
       setMounted(true);
@@ -60,7 +72,6 @@ export default function Liv() {
       io.observe(node);
       return () => io.disconnect();
     });
-
     return () => cancelAnimationFrame(raf);
   }, [isMobile]);
 
@@ -69,7 +80,6 @@ export default function Liv() {
       {/* HERO */}
       <section id="hero" aria-label="Hero">
         <div className="hero-bg" aria-hidden="true" />
-        {/* IO sentinel (harmless on mobile; CSS hides effects) */}
         <div ref={heroEndRef} className="hero-sentinel" aria-hidden="true" />
       </section>
 
@@ -93,20 +103,16 @@ export default function Liv() {
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
           <h5 id="right">Researcher</h5>
-
-          {/* Hide scroll cue on mobile (linear flow) */}
           {!isMobile && !compact && (
             <a className="scroll-cue" href="#work" aria-label="Scroll to work">
               ↓ View selected work
             </a>
           )}
         </div>
-
-        {/* Right column only on desktop/hero */}
         {!isMobile && !compact && <div id="inner-right">hey hi hello</div>}
       </section>
 
-      {/* CONTACT: fixed on desktop, inline on mobile */}
+      {/* CONTACT */}
       <section
         id="content-overlay"
         className={`bottom-right ${isMobile ? 'bottom-right--mobile' : ''}`}
@@ -288,6 +294,16 @@ export default function Liv() {
           </a>
         </h5>
       </section>
+
+      <button
+        type="button"
+        className={`to-top ${showToTop ? 'is-visible' : ''}`}
+        onClick={handleToTop}
+        aria-label="Scroll to top"
+        title="Scroll to top"
+      >
+        <span aria-hidden="true">↑</span>
+      </button>
     </div>
   );
 }
