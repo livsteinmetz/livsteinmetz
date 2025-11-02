@@ -2,8 +2,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ITLearningLayout from './components/it-learning/ITLearningLayout';
-import ITLearningPortfolio from './components/it-learning/ITLearningPortfolio';
+import Academic from './components/Academic/Academic';
 import Liv from './components/Liv/Liv';
 
 export default function App() {
@@ -11,9 +10,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Liv />} />
-        <Route path="/it-learning" element={<ITLearningLayout />}>
-          <Route path="PDA-675" element={<ITLearningPortfolio />} />
-        </Route>
+        <Route path="/academic-portfolio" element={<Academic />} />
       </Routes>
     </BrowserRouter>
   );
