@@ -1,7 +1,7 @@
-// Liv.jsx (additions marked)
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import './Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
 
 import projects from '../../copy/projects.json';
 import Work, { Lightbox } from '../Work/Work';
@@ -41,19 +41,13 @@ export default function Liv() {
 
   const [showToTop, setShowToTop] = useState(false);
   useEffect(() => {
-    const onScroll = () => {
-      // Toggle after ~1 viewport of scroll; tweak as you like
-      setShowToTop(window.scrollY > 400);
-    };
+    const onScroll = () => setShowToTop(window.scrollY > 400);
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // initialize on first mount
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleToTop = () => {
-    // honor reduced motion automatically (browser will still jump)
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const handleToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   useEffect(() => {
     if (isMobile) {
@@ -77,6 +71,77 @@ export default function Liv() {
     });
     return () => cancelAnimationFrame(raf);
   }, [isMobile]);
+
+  // [filter] Derive unique objective filters from projects.json
+  const objectiveFilters = useMemo(() => {
+    const map = new Map(); // key = label
+    projects.forEach((p) => {
+      (p.objectives || []).forEach((o) => {
+        const label = o.label?.trim();
+        if (!label) return;
+        if (!map.has(label)) {
+          // prefer provided color; otherwise default by category
+          const color =
+            o.color ||
+            (o.category === 'Course'
+              ? '#5E81AC' // blue
+              : o.category === 'Program'
+                ? '#A3BE8C' // green
+                : '#888888'); // fallback
+          map.set(label, { label, category: o.category || 'Program', color });
+        }
+      });
+    });
+    // Sort by category then label
+    return Array.from(map.values()).sort((a, b) => {
+      if (a.category === b.category) return a.label.localeCompare(b.label);
+      return a.category.localeCompare(b.category);
+    });
+  }, []);
+
+  // [filter] Selected pills (by label)
+  const [selected, setSelected] = useState(new Set());
+
+  // [filter] Toggle a pill
+  const toggleFilter = useCallback((label) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(label) ? next.delete(label) : next.add(label);
+      return next;
+    });
+  }, []);
+
+  // [filter] Clear all
+  const clearFilters = useCallback(() => setSelected(new Set()), []);
+
+  // [filter] Filtered projects (OR logic across selected objective labels)
+  const filteredProjects = useMemo(() => {
+    if (selected.size === 0) return projects;
+    return projects.filter((p) => {
+      const labels = (p.objectives || []).map((o) => o.label);
+      // show if any selected label is in the project's objectives
+      for (const lab of selected) {
+        if (labels.includes(lab)) return true;
+      }
+      return false;
+    });
+  }, [selected]);
+
+  // [filter] Map filtered index to original index for the Lightbox controls
+  const originalIndexByFilteredIndex = useMemo(() => {
+    const idxMap = new Map();
+    filteredProjects.forEach((p, i) => {
+      const originalIdx = projects.findIndex((x) => x.title === p.title);
+      idxMap.set(i, originalIdx);
+    });
+    return idxMap;
+  }, [filteredProjects]);
+
+  // [filter] Open lightbox using filtered index -> original index
+  const openFilteredProject = (filteredIdx) => {
+    const originalIdx = originalIndexByFilteredIndex.get(filteredIdx);
+    if (originalIdx != null) setProjIndex(originalIdx);
+  };
 
   return (
     <div id="container" ref={containerRef} data-mobile={isMobile ? 'true' : 'false'}>
@@ -105,14 +170,15 @@ export default function Liv() {
             </a>
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
-          <h5 id="right">Researcher</h5>
+          <h5 id="right">
+            <Link to="/academic-portfolio">Researcher</Link>
+          </h5>
           {!isMobile && !compact && (
             <a className="scroll-cue" href="#work" aria-label="Scroll to work">
               ↓ View selected work
             </a>
           )}
         </div>
-        {!isMobile && !compact && <div id="inner-right">hey hi hello</div>}
       </section>
 
       {/* CONTACT */}
@@ -154,7 +220,8 @@ export default function Liv() {
       {/* WORK */}
       <section id="work" aria-label="Selected work">
         <div className="work-inner">
-          <Work />
+          {/* [filter] pass filteredProjects to Work (if Work accepts a prop); else leave as-is */}
+          <Work projects={filteredProjects} />
         </div>
       </section>
 
@@ -174,27 +241,105 @@ export default function Liv() {
         className="list-section"
         aria-label="List of Projects, Former Work, Clients, and Collaborators"
       >
-        <h2>[Projects]</h2>
-        {projects.map((p, i) => (
+        {/* <h2>[Projects]</h2> */}
+
+        {/* [filter] Pills */}
+        {/* <div className="filters" role="group" aria-label="Filter projects by learning objectives"> */}
+        {/* Category chips (static labels) */}
+        {/* <div className="filters-row">
+            <span className="filters-label">Filter:</span>
+            {objectiveFilters.map((f) => {
+              const active = selected.has(f.label);
+              return (
+                <button
+                  key={f.label}
+                  type="button"
+                  className={`pill ${active ? 'pill--active' : ''}`}
+                  onClick={() => toggleFilter(f.label)}
+                  style={{
+                    // background for active, border/text for inactive
+                    backgroundColor: active ? f.color : 'transparent',
+                    borderColor: f.color,
+                    color: active ? '#0B0E14' : f.color,
+                  }}
+                  aria-pressed={active ? 'true' : 'false'}
+                  title={`${f.category} • ${f.label}`}
+                >
+                  <span
+                    className="pill-dot"
+                    aria-hidden="true"
+                    style={{ backgroundColor: f.color }}
+                  />
+                  {f.label}
+                </button>
+              );
+            })}
+            {objectiveFilters.length > 0 && (
+              <button
+                type="button"
+                className="pill pill--reset"
+                onClick={clearFilters}
+                aria-label="Clear all filters"
+                title="Clear all filters"
+              >
+                Clear
+              </button>
+            )}
+          </div> */}
+        {/* </div> */}
+
+        {/* [filter] Filtered list of titles opens the correct (original) index
+        {filteredProjects.map((p, i) => (
           <h5 key={p.title || i} id="right">
             <button
               type="button"
               className="project-title-btn as-link"
-              onClick={() => openProject(i)}
+              onClick={() => openFilteredProject(i)}
               aria-label={`Open ${p.title}`}
             >
               {p.title}
             </button>
           </h5>
-        ))}
+        ))} */}
+
         <h2>[Former Work + Clients + Collaborators]</h2>
         <h5 id="right">
+          Accenture
+          <br />
+          <a href="https://alliedmedia.org/" target="_blank" rel="noopener noreferrer">
+            Allied Media Projects
+          </a>
+          <br />
           <a href="https://caldergardens.org/" target="_blank" rel="noopener noreferrer">
             Calder Gardens
           </a>
           <br />
+          <a href="https://www.capitalone.com/" target="_blank" rel="noopener noreferrer">
+            Capital One
+          </a>
+          <br />
+          Children&apos;s Hospital of Philadelphia Neurovascular Imaging Lab
+          <br />
           <a href="https://www.curtis.edu/" target="_blank" rel="noopener noreferrer">
             Curtis Institute of Music
+          </a>
+          <br />
+          <a href="https://designforamerica.com/" target="_blank" rel="noopener noreferrer">
+            Design for America
+          </a>
+          <br />
+          <a href="https://www.vanderbilt.edu/dive/" target="_blank" rel="noopener noreferrer">
+            Design as an Immersive Vanderbilt Experience (DIVE)
+          </a>
+          <br />
+          <a href="https://designjustice.org/" target="_blank" rel="noopener noreferrer">
+            Design Justice Network
+          </a>
+          <br />
+          KPMG
+          <br />
+          <a href="https://www.cnm.org/" target="_blank" rel="noopener noreferrer">
+            Nashville Center for Nonprofit Management
           </a>
           <br />
           <a
@@ -233,6 +378,10 @@ export default function Liv() {
             Symphony in C
           </a>
           <br />
+          <a href="https://www.vanderbiltscno.com/" target="_blank" rel="noopener noreferrer">
+            Students Consulting for Nonprofit Organizations (SCNO)
+          </a>
+          <br />
           <a
             href="https://boyer.temple.edu/academics/ensemble/temple-university-composers-orchestra"
             target="_blank"
@@ -253,45 +402,10 @@ export default function Liv() {
             Utah Metropolitan Ballet
           </a>
           <br />
-        </h5>
-        <h5 id="right">
-          Accenture
+          Vanderbilt Memory & Alzheimer’s Center
           <br />
-          <a href="https://alliedmedia.org/" target="_blank" rel="noopener noreferrer">
-            Allied Media Projects
-          </a>
+          Vanderbilt Programming Board (VPB)
           <br />
-          <a href="https://www.capitalone.com/" target="_blank" rel="noopener noreferrer">
-            Capital One
-          </a>
-          <br />
-          <a href="https://designforamerica.com/" target="_blank" rel="noopener noreferrer">
-            Design for America
-          </a>
-          <br />
-          <a href="https://designjustice.org/" target="_blank" rel="noopener noreferrer">
-            Design Justice Network
-          </a>
-          <br />
-          KPMG
-          <br />
-          <a href="https://www.vanderbiltscno.com/" target="_blank" rel="noopener noreferrer">
-            Students Consulting for Nonprofit Organizations (SCNO)
-          </a>
-          <br />
-        </h5>
-        <h5 id="right">
-          Children&apos;s Hospital of Philadelphia Neurovascular Imaging Lab <br />
-          <a href="https://www.cnm.org/" target="_blank" rel="noopener noreferrer">
-            Nashville Center for Nonprofit Management
-          </a>
-          <br />
-          <a href="https://www.vanderbilt.edu/dive/" target="_blank" rel="noopener noreferrer">
-            Design as an Immersive Vanderbilt Experience (DIVE)
-          </a>
-          <br />
-          Vanderbilt Memory & Alzheimer’s Center <br />
-          Vanderbilt Programming Board (VPB) <br />
           <a href="https://www.vanderbilt.edu/thewondry/" target="_blank" rel="noopener noreferrer">
             Wond&apos;ry Center for Innovation and Entrepreneurship
           </a>

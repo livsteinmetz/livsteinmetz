@@ -90,13 +90,7 @@ line-height: 1;
   animation: none;                 /* pause gradient while full-screen */
   box-shadow: none;
   backdrop-filter: none;
-    background-color: black;
-#inner-right, #inner-left {
-  width: 50%;
-}
-#inner-right {
-  text-align: right;
-}
+  background-color: black;
 }
 
 /* Shrinks and floats over Work */
@@ -162,7 +156,8 @@ line-height: 1;
   right: clamp(0.75rem, 3vw, 2rem);
     padding: clamp(1rem, 2.5vw, 1.5rem);
   text-align: right;
-  max-width: 66vw;
+  max-width: 50vw;
+    padding-bottom: 8rem;
 }
 
 /* --------------------------------------
@@ -229,19 +224,16 @@ line-height: 1;
   outline-offset: 2px;
 }
 
-/* MOBILE: linear layout (hero → work → projects) */
 @media (max-width: 768px) {
   /* Base */
   #container {
     overflow-x: hidden;
   }
 
-  /* HERO stays full-width but we don’t do overlay tricks */
   #hero {
-    min-height: 60svh; /* shorter hero on phones; adjust as you like */
+    min-height: 60svh;
   }
 
-  /* Kill overlay positioning; make it a normal block */
   #content-overlay.overlay {
     position: static !important;
     inset: auto !important;
@@ -258,7 +250,6 @@ line-height: 1;
     border-radius: 0 !important;
   }
 
-  /* Make sure we don't rely on hero/compact classes on mobile */
   #content-overlay.overlay.overlay--hero,
   #content-overlay.overlay.overlay--compact,
   #content-overlay.overlay.overlay--mobile {
