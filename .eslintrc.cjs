@@ -42,7 +42,7 @@ module.exports = {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
 
     // Reasonable React defaults
-    'react/prop-types': 'off', // turn on if you use PropTypes
+    'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off', // CRA/Next don’t need React in scope
 
     // Hooks safety
@@ -65,7 +65,7 @@ module.exports = {
         ],
       },
     ],
-    'import/no-unresolved': 'off', // CRA aliasing often confuses this; enable if you want stricter checks
+    'import/no-unresolved': 'off',
 
     // Optional: nudge toward const/let correctness
     'no-unused-vars': 'warn',

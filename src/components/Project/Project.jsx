@@ -12,10 +12,6 @@ import './Project.scss';
  *   body="Description…"
  *   compact={false}
  * />
- *
- * Notes:
- * - Keeps your existing image box-shadow (CSS targets img only).
- * - Video intentionally has no shadow, per your request.
  */
 export default function Project({ title, img, img2, video, link, body, compact = false }) {
   const Wrapper = ({ children }) =>

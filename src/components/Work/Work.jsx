@@ -78,7 +78,6 @@ export default function Work() {
               onClick={() => openAt(idx)}
               aria-label={`Open ${p.title}`}
             >
-              {/* Tiles are always images/GIFs per your requirement */}
               <div className="tile-media" aria-hidden="true">
                 {p.img && <img src={p.img} alt={p.title} loading="lazy" className="tile-img" />}
                 {p.img2 && <img src={p.img2} alt="" className="tile-img alt" aria-hidden="true" />}
@@ -168,6 +167,16 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
         <div id="inner">
           <h2 className="lb-title">{item.title}</h2>
           {item.body && <p className="lb-body">{item.body}</p>}
+          {Array.isArray(item.takeaways) && item.takeaways.length > 0 && (
+            <div className="lightbox-takeaways">
+              <h6>Takeaways</h6>
+              <ul>
+                {item.takeaways.map((t, i) => (
+                  <li key={i}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {item.link && (
             <a className="lb-link" href={item.link} target="_blank" rel="noopener noreferrer">
               Learn more
