@@ -74,6 +74,9 @@ export default function ReflectionForm({
         />
       ))}
       <div>
+        <button type="button" onClick={() => navigate('/academic-portfolio')}>
+          Back
+        </button>
         <button type="submit">{id ? 'Save' : 'Create'}</button>
         {id && (
           <button type="button" onClick={handleDelete} style={{ marginLeft: 8 }}>

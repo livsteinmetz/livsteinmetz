@@ -30,7 +30,7 @@ export default function ReflectionPublic() {
 
   return (
     <article style={{ maxWidth: 700, margin: '2rem auto' }}>
-      <a href="/">← Back</a>
+      <a href="/academic-portfolio/#projects">← Back</a>
       <h1>{r.title}</h1>
       <p>
         <strong>Citation:</strong> {r.citation}
