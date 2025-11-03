@@ -106,7 +106,7 @@ export default function Liv() {
           <h1 className={`title ${!isMobile && compact ? 'title--compact' : 'title--hero'}`}>
             Olivia Steinmetz
           </h1>
-          <h2>[Current Work]</h2>
+          <h2>[Current Professional Work]</h2>
           <h5 id="right">
             Front-End Software Engineer &amp; Product Manager for Digital Initiatives @{' '}
             <a href="https://barnesfoundation.org/" target="_blank" rel="noopener noreferrer">
@@ -114,9 +114,6 @@ export default function Liv() {
             </a>
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
-          <h5 id="right">
-            <Link to="/academic-portfolio">Researcher</Link>
-          </h5>
           {!isMobile && !compact && (
             <a className="scroll-cue" href="#work" aria-label="Scroll to work">
               ↓ View selected work

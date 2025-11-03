@@ -294,7 +294,7 @@ export default function Academic() {
           </h5>
 
           <a className="scroll-cue" href="/" aria-label="Back to main portfolio">
-            ← View professional projects
+            ← View professional work
           </a>
           <br />
 
@@ -389,7 +389,7 @@ export default function Academic() {
         <h2>[Academic Projects]</h2>
 
         {filteredProjects.map((p, i) => (
-          <div key={p.title}>
+          <div id="projects" key={p.title}>
             <h5 id="right" style={{ marginBottom: 6 }}>
               <button
                 type="button"
