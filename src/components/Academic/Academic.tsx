@@ -3,6 +3,10 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import '../Liv/Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
+
+import { useAuth } from '../../auth';
+import { listReflections } from '../../lib/api';
 
 const INTERESTS = [
   'HCI',
@@ -71,14 +75,6 @@ const COURSE_OBJECTIVES_GROUPS = [
   },
 ];
 
-/** Flattened list for filters (label + category) */
-const PROGRAM_OBJECTIVES = PROGRAM_OBJECTIVES_GROUPS.flatMap((group) =>
-  group.items.map((label) => ({
-    label,
-    category: group.heading, // keeps the group label to color/sort by
-  })),
-);
-
 /** Example project */
 const PROJECTS = [
   {
@@ -121,7 +117,8 @@ function useIsMobile(breakpoint = 768) {
   );
   useEffect(() => {
     const mql = window.matchMedia(`(max-width:${breakpoint}px)`);
-    const handler = (e) => setIsMobile(e.matches);
+    const handler = (e: { matches: boolean | ((prevState: boolean) => boolean) }) =>
+      setIsMobile(e.matches);
     mql.addEventListener?.('change', handler);
     mql.addListener?.(handler); // Safari fallback
     return () => {
@@ -133,7 +130,7 @@ function useIsMobile(breakpoint = 768) {
 }
 
 /** color by category group */
-function colorForCategory(category) {
+function colorForCategory(category: string) {
   if (category.startsWith('Knowledge')) return '#5E81AC'; // blue
   if (category.startsWith('Competence')) return '#A3BE8C'; // green
   if (category.startsWith('Judgement')) return '#D08770'; // orange
@@ -151,6 +148,53 @@ export default function Academic() {
   const isMobile = useIsMobile(768);
 
   const [showToTop, setShowToTop] = useState(false);
+  const [reflections, setReflections] = useState<any[]>([]);
+  const [reflectionsLoading, setReflectionsLoading] = useState(true);
+  const [reflectionsError, setReflectionsError] = useState('');
+  const { token } = useAuth?.() || { token: null };
+
+  // Fetch reflections on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        setReflectionsLoading(true);
+        const data = await listReflections();
+        // sort newest → oldest by createdAt if present
+        const sorted = Array.isArray(data)
+          ? [...data].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            )
+          : [];
+        setReflections(sorted);
+      } catch (e) {
+        setReflectionsError('Could not load reflections.');
+      } finally {
+        setReflectionsLoading(false);
+      }
+    })();
+  }, []);
+
+  // Fetch reflections on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        setReflectionsLoading(true);
+        const data = await listReflections();
+        // sort newest → oldest by createdAt if present
+        const sorted = Array.isArray(data)
+          ? [...data].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            )
+          : [];
+        setReflections(sorted);
+      } catch (e) {
+        setReflectionsError('Could not load reflections.');
+      } finally {
+        setReflectionsLoading(false);
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     const onScroll = () => setShowToTop(window.scrollY > 400);
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -183,41 +227,8 @@ export default function Academic() {
     return () => cancelAnimationFrame(raf);
   }, [isMobile]);
 
-  /** ============ PROGRAM OBJECTIVES FILTERS ============ */
-
-  // Use the flattened PROGRAM_OBJECTIVES to build pills
-  const objectiveFilters = useMemo(() => {
-    const byLabel = new Map();
-    PROGRAM_OBJECTIVES.forEach((o) => {
-      const label = (o.label || '').trim();
-      if (!label) return;
-      if (!byLabel.has(label)) {
-        byLabel.set(label, {
-          label,
-          category: o.category,
-          color: colorForCategory(o.category),
-        });
-      }
-    });
-    // sort by category then alpha
-    return Array.from(byLabel.values()).sort((a, b) => {
-      if (a.category === b.category) return a.label.localeCompare(b.label);
-      return a.category.localeCompare(b.category);
-    });
-  }, []);
-
   // Selected objective labels (Set)
-  const [selected, setSelected] = useState(new Set());
-
-  const toggleFilter = useCallback((label) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.has(label) ? next.delete(label) : next.add(label);
-      return next;
-    });
-  }, []);
-
-  const clearFilters = useCallback(() => setSelected(new Set()), []);
+  const [selected] = useState(new Set());
 
   // Filtered projects (OR across selected labels). If none selected -> all.
   const filteredProjects = useMemo(() => {
@@ -225,13 +236,28 @@ export default function Academic() {
     return PROJECTS.filter((p) => {
       const labels = (p.objectives || []).map((o) => o.label);
       for (const lab of selected) {
-        if (labels.includes(lab)) return true;
+        if (labels.includes(lab as string)) return true;
       }
       return false;
     });
   }, [selected]);
 
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  function fmtDate(value: string | number | Date) {
+    if (!value) return '';
+    try {
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return '';
+      return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(d);
+    } catch {
+      return '';
+    }
+  }
 
   return (
     <div id="container" ref={containerRef} data-mobile={isMobile ? 'true' : 'false'}>
@@ -317,7 +343,7 @@ export default function Academic() {
       </section>
 
       {/* PROGRAM OBJECTIVES — grouped, right-aligned */}
-      <section id="list" className="list-section" aria-label="Program Objectives">
+      <section id="list" className="list-section">
         <h2>[Program Objectives]</h2>
         {PROGRAM_OBJECTIVES_GROUPS.map((group) => (
           <div key={group.heading} style={{ marginBottom: 16 }}>
@@ -358,110 +384,133 @@ export default function Academic() {
           </div>
         ))}
 
-        {/* FILTERS — built from PROGRAM_OBJECTIVES
-        {objectiveFilters.length > 0 && (
-          <section className="list-section" aria-label="Filter projects by program objectives">
-            <h2>[Filter]</h2>
-            <div className="filters-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              <span className="filters-label" style={{ marginRight: 8 }}>
-                Objectives:
-              </span>
-              {objectiveFilters.map((f) => {
-                const active = selected.has(f.label);
-                return (
-                  <button
-                    key={f.label}
-                    type="button"
-                    className={`pill ${active ? 'pill--active' : ''}`}
-                    onClick={() => toggleFilter(f.label)}
-                    aria-pressed={active ? 'true' : 'false'}
-                    title={`${f.category} • ${f.label}`}
-                    style={{
-                      backgroundColor: active ? f.color : 'transparent',
-                      borderColor: f.color,
-                      color: active ? '#0B0E14' : f.color,
-                      borderWidth: 1,
-                      borderStyle: 'solid',
-                      borderRadius: 999,
-                      padding: '4px 10px',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    <span
-                      className="pill-dot"
-                      aria-hidden="true"
-                      style={{
-                        display: 'inline-block',
-                        width: 8,
-                        height: 8,
-                        borderRadius: '50%',
-                        backgroundColor: f.color,
-                        marginRight: 6,
-                        verticalAlign: 'middle',
-                      }}
-                    />
-                    {f.label}
-                  </button>
-                );
-              })}
+        {/* PROJECTS — right column list; shows tags under title; filters apply */}
+
+        <h2>[Academic Projects]</h2>
+
+        {filteredProjects.map((p, i) => (
+          <div key={p.title}>
+            <h5 id="right" style={{ marginBottom: 6 }}>
               <button
                 type="button"
-                className="pill pill--reset"
-                onClick={clearFilters}
-                aria-label="Clear all filters"
-                title="Clear all filters"
-                style={{
-                  borderRadius: 999,
-                  padding: '4px 10px',
-                  border: '1px dashed #AAA',
-                  color: '#AAA',
-                  background: 'transparent',
-                }}
+                className="project-title-btn as-link"
+                onClick={() => setOpenIndex(i)}
+                aria-label={`Open ${p.title}`}
+                title={p.title}
               >
-                Clear
+                {p.title}
               </button>
-            </div>
-          </section>
-        )} */}
+            </h5>
+            {/* tags inline */}
+            {Array.isArray(p.tags) && p.tags.length > 0 && (
+              <div id="right" className="muted" style={{ marginBottom: 18 }}>
+                {p.tags.map((t, idx) => (
+                  <span key={`${p.title}-tag-${t}-${idx}`}>
+                    {t}
+                    {idx < p.tags.length - 1 ? ' • ' : ''}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
 
-        {/* PROJECTS — right column list; shows tags under title; filters apply */}
-        <section id="projects" className="list-section" aria-label="Academic Projects">
-          <h2>[Academic Projects]</h2>
+        {/* empty state when no match */}
+        {filteredProjects.length === 0 && (
+          <h5 id="right" className="muted">
+            No projects match the selected objectives.
+          </h5>
+        )}
 
-          {filteredProjects.map((p, i) => (
-            <div key={p.title}>
-              <h5 id="right" style={{ marginBottom: 6 }}>
-                <button
-                  type="button"
-                  className="project-title-btn as-link"
-                  onClick={() => setOpenIndex(i)}
-                  aria-label={`Open ${p.title}`}
-                  title={p.title}
-                >
-                  {p.title}
-                </button>
-              </h5>
-              {/* tags inline */}
-              {Array.isArray(p.tags) && p.tags.length > 0 && (
-                <div id="right" className="muted" style={{ marginBottom: 18 }}>
-                  {p.tags.map((t, idx) => (
-                    <span key={`${p.title}-tag-${t}-${idx}`}>
-                      {t}
-                      {idx < p.tags.length - 1 ? ' • ' : ''}
-                    </span>
-                  ))}
+        {/* ---- MY REFLECTIONS (from API) ---- */}
+
+        <h2>[My Reflections]</h2>
+        {token && (
+          <Link to="/admin/new" className="as-link" style={{ marginLeft: 8 }}>
+            + New
+          </Link>
+        )}
+        {reflectionsLoading && <h5 id="right">Loading reflections…</h5>}
+        {reflectionsError && (
+          <h5 id="right" style={{ color: '#E57373' }}>
+            {reflectionsError}
+          </h5>
+        )}
+
+        {!reflectionsLoading && !reflectionsError && reflections.length === 0 && (
+          <h5 id="right" className="muted">
+            No reflections yet.
+          </h5>
+        )}
+
+        {!reflectionsLoading &&
+          reflections.map((r) => (
+            <article
+              key={r.id}
+              className="reading-card"
+              style={{
+                border: '1px solid #2b2f36',
+                borderRadius: 14,
+                padding: 16,
+                marginBottom: 16,
+                background: 'rgba(20,22,28,0.6)',
+                boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset',
+              }}
+            >
+              <header style={{ marginBottom: 8 }}>
+                <h5 id="right" style={{ margin: 0 }}>
+                  <strong>{r.title}</strong>
+                </h5>
+                <div id="right" className="muted" style={{ fontSize: 14, marginTop: 4 }}>
+                  {r.citation || '—'} {r.createdAt ? ` • ${fmtDate(r.createdAt)}` : ''}
+                </div>
+                <div id="right" style={{ marginTop: 6 }}>
+                  <Link
+                    to={`/r/${r.id}`}
+                    className="as-link"
+                    aria-label={`Open public view for ${r.title}`}
+                    title="Public view"
+                    style={{ marginRight: 12 }}
+                  >
+                    ↗ View
+                  </Link>
+                  {token && (
+                    <Link
+                      to={`/admin/edit/${r.id}`}
+                      className="as-link"
+                      aria-label={`Edit ${r.title}`}
+                      title="Edit"
+                    >
+                      ✎ Edit
+                    </Link>
+                  )}
+                </div>
+              </header>
+
+              {r.tags && (
+                <div id="right" style={{ margin: '8px 0 12px' }}>
+                  {String(r.tags)
+                    .split(',')
+                    .map((t) => t.trim())
+                    .filter(Boolean)
+                    .map((t) => (
+                      <span
+                        key={`${r.id}-${t}`}
+                        style={{ fontSize: 12, opacity: 0.85, marginRight: 8 }}
+                      >
+                        #{t}
+                      </span>
+                    ))}
                 </div>
               )}
-            </div>
-          ))}
 
-          {/* empty state when no match */}
-          {filteredProjects.length === 0 && (
-            <h5 id="right" className="muted">
-              No projects match the selected objectives.
-            </h5>
-          )}
-        </section>
+              {r.summary && (
+                <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
+                  {r.summary}
+                </p>
+              )}
+            </article>
+          ))}
       </section>
 
       {/* LIGHTBOX — includes tags + objectives */}

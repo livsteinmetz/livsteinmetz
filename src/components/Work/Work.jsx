@@ -38,7 +38,7 @@ const PROJECTS_INCREMENT = 12;
 
 export default function Work() {
   const data = useMemo(() => [...projects], []);
-  const [visibleCount, setVisibleCount] = useState(PROJECTS_INCREMENT);
+  const [visibleCount] = useState(PROJECTS_INCREMENT);
   const [activeIndex, setActiveIndex] = useState(null);
 
   const gridRef = useRef(null);
@@ -112,10 +112,6 @@ export function Lightbox({ items, index, onClose, onNext, onPrev }) {
   const item = items[index];
   const [videoError, setVideoError] = React.useState(false);
   const hasVideo = Boolean(item.video) && !videoError;
-
-  const onBackdrop = (e) => {
-    if (e.target === e.currentTarget) onClose();
-  };
 
   useEffect(() => {
     const prev = document.body.style.overflow;

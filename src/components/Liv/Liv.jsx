@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import './Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import './Liv.scss';
 import { Link } from 'react-router-dom';
 
 import projects from '../../copy/projects.json';
@@ -29,7 +29,6 @@ export default function Liv() {
   const containerRef = useRef(null);
   const heroEndRef = useRef(null);
   const [projIndex, setProjIndex] = useState(null);
-  const openProject = (i) => setProjIndex(i);
   const closeProject = () => setProjIndex(null);
   const nextProject = () => setProjIndex((i) => (i == null ? 0 : (i + 1) % projects.length));
   const prevProject = () =>
@@ -72,47 +71,8 @@ export default function Liv() {
     return () => cancelAnimationFrame(raf);
   }, [isMobile]);
 
-  // [filter] Derive unique objective filters from projects.json
-  const objectiveFilters = useMemo(() => {
-    const map = new Map(); // key = label
-    projects.forEach((p) => {
-      (p.objectives || []).forEach((o) => {
-        const label = o.label?.trim();
-        if (!label) return;
-        if (!map.has(label)) {
-          // prefer provided color; otherwise default by category
-          const color =
-            o.color ||
-            (o.category === 'Course'
-              ? '#5E81AC' // blue
-              : o.category === 'Program'
-                ? '#A3BE8C' // green
-                : '#888888'); // fallback
-          map.set(label, { label, category: o.category || 'Program', color });
-        }
-      });
-    });
-    // Sort by category then label
-    return Array.from(map.values()).sort((a, b) => {
-      if (a.category === b.category) return a.label.localeCompare(b.label);
-      return a.category.localeCompare(b.category);
-    });
-  }, []);
-
   // [filter] Selected pills (by label)
-  const [selected, setSelected] = useState(new Set());
-
-  // [filter] Toggle a pill
-  const toggleFilter = useCallback((label) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.has(label) ? next.delete(label) : next.add(label);
-      return next;
-    });
-  }, []);
-
-  // [filter] Clear all
-  const clearFilters = useCallback(() => setSelected(new Set()), []);
+  const [selected] = useState(new Set());
 
   // [filter] Filtered projects (OR logic across selected objective labels)
   const filteredProjects = useMemo(() => {
@@ -126,22 +86,6 @@ export default function Liv() {
       return false;
     });
   }, [selected]);
-
-  // [filter] Map filtered index to original index for the Lightbox controls
-  const originalIndexByFilteredIndex = useMemo(() => {
-    const idxMap = new Map();
-    filteredProjects.forEach((p, i) => {
-      const originalIdx = projects.findIndex((x) => x.title === p.title);
-      idxMap.set(i, originalIdx);
-    });
-    return idxMap;
-  }, [filteredProjects]);
-
-  // [filter] Open lightbox using filtered index -> original index
-  const openFilteredProject = (filteredIdx) => {
-    const originalIdx = originalIndexByFilteredIndex.get(filteredIdx);
-    if (originalIdx != null) setProjIndex(originalIdx);
-  };
 
   return (
     <div id="container" ref={containerRef} data-mobile={isMobile ? 'true' : 'false'}>

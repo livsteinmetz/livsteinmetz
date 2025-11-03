@@ -45,6 +45,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "colors": "^1.4.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
@@ -55,6 +57,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "firebase-tools": "^14.17.0",
     "git-state": "^4.1.0",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
   }
 }
