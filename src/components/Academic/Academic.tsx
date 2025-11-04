@@ -140,6 +140,26 @@ function colorForCategory(category: string) {
 }
 
 export default function Academic() {
+  type Reflection = {
+    id: string;
+    title: string;
+    citation?: string;
+    tags?: string;
+    summary?: string;
+    createdAt?: string | { seconds: number } | null;
+  };
+
+  const toMillis = (v: Reflection['createdAt']): number => {
+    if (typeof v === 'string') {
+      const t = Date.parse(v);
+      return Number.isFinite(t) ? t : 0;
+    }
+    if (v && typeof v === 'object' && 'seconds' in v) {
+      return (v.seconds as number) * 1000;
+    }
+    return 0;
+  };
+
   const containerRef = useRef(null);
   const heroEndRef = useRef(null);
 
@@ -148,46 +168,23 @@ export default function Academic() {
   const isMobile = useIsMobile(768);
 
   const [showToTop, setShowToTop] = useState(false);
-  const [reflections, setReflections] = useState<any[]>([]);
+  const [reflections, setReflections] = useState<Reflection[]>([]);
   const [reflectionsLoading, setReflectionsLoading] = useState(true);
   const [reflectionsError, setReflectionsError] = useState('');
   const { token } = useAuth?.() || { token: null };
 
-  // Fetch reflections on mount
+  // Fetch reflections on mount (single effect)
   useEffect(() => {
     (async () => {
       try {
         setReflectionsLoading(true);
         const data = await listReflections();
-        // sort newest → oldest by createdAt if present
         const sorted = Array.isArray(data)
-          ? [...data].sort(
-              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-            )
+          ? [...data].sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt))
           : [];
-        setReflections(sorted);
+        setReflections(sorted as Reflection[]);
       } catch (e) {
-        setReflectionsError('Could not load reflections.');
-      } finally {
-        setReflectionsLoading(false);
-      }
-    })();
-  }, []);
-
-  // Fetch reflections on mount
-  useEffect(() => {
-    (async () => {
-      try {
-        setReflectionsLoading(true);
-        const data = await listReflections();
-        // sort newest → oldest by createdAt if present
-        const sorted = Array.isArray(data)
-          ? [...data].sort(
-              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-            )
-          : [];
-        setReflections(sorted);
-      } catch (e) {
+        console.error('[listReflections] failed:', e);
         setReflectionsError('Could not load reflections.');
       } finally {
         setReflectionsLoading(false);
@@ -244,11 +241,23 @@ export default function Academic() {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  function fmtDate(value: string | number | Date) {
+  function fmtDate(value: Reflection['createdAt']) {
     if (!value) return '';
     try {
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return '';
+      let d: Date;
+      if (typeof value === 'string') {
+        const t = Date.parse(value);
+        if (!Number.isFinite(t)) return '';
+        d = new Date(t);
+      } else if (
+        typeof value === 'object' &&
+        'seconds' in value &&
+        typeof value.seconds === 'number'
+      ) {
+        d = new Date(value.seconds * 1000);
+      } else {
+        return '';
+      }
       return new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: 'short',
