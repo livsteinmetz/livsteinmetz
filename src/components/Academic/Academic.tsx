@@ -1,3 +1,4 @@
+// src/pages/Academic/Academic.tsx
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
@@ -6,108 +7,13 @@ import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-reac
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../../auth';
+import {
+  COURSE_OBJECTIVES_GROUPS,
+  PROGRAM_OBJECTIVES_GROUPS,
+  INTERESTS,
+  PROJECTS,
+} from '../../copy/constants';
 import { listReflections } from '../../lib/api';
-
-const INTERESTS = [
-  'HCI',
-  'interaction design',
-  'learning design',
-  'museum education',
-  'AI + pedagogy',
-];
-
-/** Program objectives — grouped for display */
-const PROGRAM_OBJECTIVES_GROUPS = [
-  {
-    heading: 'Knowledge & understanding',
-    items: [
-      'demonstrate knowledge and understanding in the main field of study, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
-      'demonstrate specialised methodological knowledge in the main field of study',
-    ],
-  },
-  {
-    heading: 'Competence & skills',
-    items: [
-      'demonstrate the ability to critically and systematically integrate knowledge and analyse, assess and deal with complex phenomena, issues and situations even with limited information',
-      'demonstrate the ability to identify and formulate issues critically, autonomously and creatively as well as to plan and, using appropriate methods, undertake advanced tasks within predetermined time frames and so contribute to the formation of knowledge as well as the ability to evaluate this work',
-      'demonstrate the ability in speech and writing both nationally and internationally to clearly report and discuss his or her conclusions and the knowledge and arguments on which they are based in dialogue with different audiences, and',
-      'demonstrate the skills required for participation in research and development work or autonomous employment in some other qualified capacity.',
-      'demonstrate ability to analyse the relationship between the historical development of information technologies and the changing premises for communication and learning',
-      'describe and conceptualise how knowledge and learning is organised in institutions, working life and society based on current research and relevant theoretical approaches',
-    ],
-  },
-  {
-    heading: 'Judgement & approach',
-    items: [
-      'demonstrate the ability to make assessments in the main field of study informed by relevant disciplinary, social and ethical issues and also to',
-      'demonstrate awareness of ethical aspects of research and development work',
-      'demonstrate insight into the possibilities and limitations of research, its role in society and the responsibility of the individual for how it is used, and',
-      'demonstrate the ability to identify the personal need for further knowledge and take responsibility for his or her ongoing learning.',
-      'critically investigate, analyse and discuss the interaction between users and information technologies in institutions, working life and society',
-      'evaluate and adapt the design of digital environments for communication and learning in institutions, working life and society',
-    ],
-  },
-];
-
-/** Program objectives — grouped for display */
-const COURSE_OBJECTIVES_GROUPS = [
-  {
-    heading: 'Knowledge & understanding',
-    items: [
-      'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
-      'relate central perspectives on learning to research and practice in the field of IT and Learning',
-      'critically analyze and discuss recent research in relation to central perspectives on learning within the field of IT and Learning',
-    ],
-  },
-  {
-    heading: 'Competence & skills',
-    items: [
-      'assemble a selection of research literature in the field of IT and Learning for a defined question or topic',
-      'present arguments based on the research literature in the form of an academic paper',
-    ],
-  },
-  {
-    heading: 'Judgement & approach',
-    items: [
-      'reflect on and document their own knowledge and experience in relation to future work life possibilities in a portfolio',
-      'discuss social and technical sustainability issues within the research and applied field of IT and learning',
-    ],
-  },
-];
-
-/** Example project */
-const PROJECTS = [
-  {
-    kind: 'LITERATURE REVIEW',
-    title: 'Learning to See: Technology as a Medium for Experiential Museum Education',
-    summary:
-      'This systematic literature review was inspired by my work at the Barnes Foundation developing technology for experiential art learning. The paper investigates how digital mediation reshapes museum education and what it means to "learn to see" in virtual and hybrid contexts. Following the PRISMA framework, I systematically reviewed post-2020 peer-reviewed studies across museum education, human–computer interaction, and learning sciences. The review compares theoretical perspectives—drawing on Dewey’s experiential aesthetics, constructivist learning theories, and research on slow and close looking—to evaluate how digital environments can sustain deep engagement rather than distraction. Findings suggest that technology, when intentionally designed with light scaffolding and affective awareness, can cultivate attention, reflection, and perceptual literacy as learnable skills. The paper concludes that digital tools in museum education should not replicate in-person encounters but create new conditions for learning to see through mediated experience.',
-    takeaways: [
-      'Learning to see is a cultivable skill in mediated contexts.',
-      'Light scaffolding sustains slow/close looking online.',
-      'Affective awareness improves depth of engagement.',
-    ],
-    tags: ['Research & Reflection', 'Learning Design', 'HCI'],
-    /** Map this project to any program objectives it advances (labels should match PROGRAM_OBJECTIVES labels). */
-    objectives: [
-      {
-        label: 'demonstrate specialised methodological knowledge in the main field of study',
-        category: 'Knowledge & understanding',
-      },
-      {
-        label:
-          'demonstrate the ability to critically and systematically integrate knowledge and analyse, assess and deal with complex phenomena, issues and situations even with limited information',
-        category: 'Competence & skills',
-      },
-      {
-        label:
-          'critically investigate, analyse and discuss the interaction between users and information technologies in institutions, working life and society',
-        category: 'Local outcomes — Judgement & approach',
-      },
-    ],
-    link: null,
-  },
-];
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -139,50 +45,39 @@ function colorForCategory(category: string) {
   return '#888888';
 }
 
+/** Shape as returned from API/Firestore (CSV tags, no createdAt used here) */
+type ReflectionDoc = {
+  id: string;
+  title: string;
+  type: 'Reading' | 'Paper' | 'Project' | 'Presentation' | '';
+  tags?: string; // CSV of learning objectives
+  summary?: string;
+  reflection?: string;
+};
+
 export default function Academic() {
-  type Reflection = {
-    id: string;
-    title: string;
-    citation?: string;
-    tags?: string;
-    summary?: string;
-    createdAt?: string | { seconds: number } | null;
-  };
-
-  const toMillis = (v: Reflection['createdAt']): number => {
-    if (typeof v === 'string') {
-      const t = Date.parse(v);
-      return Number.isFinite(t) ? t : 0;
-    }
-    if (v && typeof v === 'object' && 'seconds' in v) {
-      return (v.seconds as number) * 1000;
-    }
-    return 0;
-  };
-
-  const containerRef = useRef(null);
-  const heroEndRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const heroEndRef = useRef<HTMLDivElement | null>(null);
 
   const [mounted, setMounted] = useState(false);
   const [compact, setCompact] = useState(false);
   const isMobile = useIsMobile(768);
 
   const [showToTop, setShowToTop] = useState(false);
-  const [reflections, setReflections] = useState<Reflection[]>([]);
+  const [reflections, setReflections] = useState<ReflectionDoc[]>([]);
   const [reflectionsLoading, setReflectionsLoading] = useState(true);
   const [reflectionsError, setReflectionsError] = useState('');
   const { token } = useAuth?.() || { token: null };
 
-  // Fetch reflections on mount (single effect)
+  // Fetch reflections on mount
   useEffect(() => {
     (async () => {
       try {
         setReflectionsLoading(true);
         const data = await listReflections();
-        const sorted = Array.isArray(data)
-          ? [...data].sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt))
-          : [];
-        setReflections(sorted as Reflection[]);
+        const arr = Array.isArray(data) ? (data as ReflectionDoc[]) : [];
+        // No createdAt sorting; keep backend/order-by default
+        setReflections(arr);
       } catch (e) {
         console.error('[listReflections] failed:', e);
         setReflectionsError('Could not load reflections.');
@@ -225,7 +120,7 @@ export default function Academic() {
   }, [isMobile]);
 
   // Selected objective labels (Set)
-  const [selected] = useState(new Set());
+  const [selected] = useState<Set<string>>(new Set());
 
   // Filtered projects (OR across selected labels). If none selected -> all.
   const filteredProjects = useMemo(() => {
@@ -233,7 +128,7 @@ export default function Academic() {
     return PROJECTS.filter((p) => {
       const labels = (p.objectives || []).map((o) => o.label);
       for (const lab of selected) {
-        if (labels.includes(lab as string)) return true;
+        if (labels.includes(lab)) return true;
       }
       return false;
     });
@@ -241,39 +136,12 @@ export default function Academic() {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  function fmtDate(value: Reflection['createdAt']) {
-    if (!value) return '';
-    try {
-      let d: Date;
-      if (typeof value === 'string') {
-        const t = Date.parse(value);
-        if (!Number.isFinite(t)) return '';
-        d = new Date(t);
-      } else if (
-        typeof value === 'object' &&
-        'seconds' in value &&
-        typeof value.seconds === 'number'
-      ) {
-        d = new Date(value.seconds * 1000);
-      } else {
-        return '';
-      }
-      return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }).format(d);
-    } catch {
-      return '';
-    }
-  }
-
   return (
     <div id="container" ref={containerRef} data-mobile={isMobile ? 'true' : 'false'}>
       {/* HERO */}
       <section id="hero" aria-label="Hero">
         <div className="hero-bg" aria-hidden="true" />
-        <div ref={heroEndRef} className="hero-sentinel" aria-hidden="true" />
+        <div ref={heroEndRef as any} className="hero-sentinel" aria-hidden="true" />
       </section>
 
       {/* OVERLAY CARD */}
@@ -394,11 +262,10 @@ export default function Academic() {
         ))}
 
         {/* PROJECTS — right column list; shows tags under title; filters apply */}
-
-        <h2>[Academic Projects]</h2>
+        <h2 id="projects">[Academic Projects]</h2>
 
         {filteredProjects.map((p, i) => (
-          <div id="projects" key={p.title}>
+          <div key={p.title}>
             <h5 id="right" style={{ marginBottom: 6 }}>
               <button
                 type="button"
@@ -416,7 +283,7 @@ export default function Academic() {
                 {p.tags.map((t, idx) => (
                   <span key={`${p.title}-tag-${t}-${idx}`}>
                     {t}
-                    {idx < p.tags.length - 1 ? ' • ' : ''}
+                    {p.tags && idx < p.tags.length - 1 ? ' • ' : ''}
                   </span>
                 ))}
               </div>
@@ -432,7 +299,6 @@ export default function Academic() {
         )}
 
         {/* ---- MY REFLECTIONS (from API) ---- */}
-
         <h2>[My Reflections]</h2>
         {token && (
           <Link to="/admin/new" className="as-link" style={{ marginLeft: 8 }}>
@@ -453,73 +319,103 @@ export default function Academic() {
         )}
 
         {!reflectionsLoading &&
-          reflections.map((r) => (
-            <article
-              key={r.id}
-              className="reading-card"
-              style={{
-                border: '1px solid #2b2f36',
-                borderRadius: 14,
-                padding: 16,
-                marginBottom: 16,
-                background: 'rgba(20,22,28,0.6)',
-                boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset',
-              }}
-            >
-              <header style={{ marginBottom: 8 }}>
-                <h5 id="right" style={{ margin: 0 }}>
-                  <strong>{r.title}</strong>
-                </h5>
-                <div id="right" className="muted" style={{ fontSize: 14, marginTop: 4 }}>
-                  {r.citation || '—'} {r.createdAt ? ` • ${fmtDate(r.createdAt)}` : ''}
-                </div>
-                <div id="right" style={{ marginTop: 6 }}>
-                  <Link
-                    to={`/r/${r.id}`}
-                    className="as-link"
-                    aria-label={`Open public view for ${r.title}`}
-                    title="Public view"
-                    style={{ marginRight: 12 }}
-                  >
-                    ↗ View
-                  </Link>
-                  {token && (
-                    <Link
-                      to={`/admin/edit/${r.id}`}
-                      className="as-link"
-                      aria-label={`Edit ${r.title}`}
-                      title="Edit"
-                    >
-                      ✎ Edit
-                    </Link>
-                  )}
-                </div>
-              </header>
+          reflections.map((r) => {
+            const tagChips = String(r.tags || '')
+              .split(',')
+              .map((t) => t.trim())
+              .filter(Boolean);
 
-              {r.tags && (
-                <div id="right" style={{ margin: '8px 0 12px' }}>
-                  {String(r.tags)
-                    .split(',')
-                    .map((t) => t.trim())
-                    .filter(Boolean)
-                    .map((t) => (
+            return (
+              <article
+                key={r.id}
+                className="reading-card"
+                style={{
+                  border: '1px solid #2b2f36',
+                  borderRadius: 14,
+                  padding: 16,
+                  marginBottom: 16,
+                  background: 'rgba(20,22,28,0.6)',
+                  boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset',
+                }}
+              >
+                <header style={{ marginBottom: 8 }}>
+                  <h5
+                    id="right"
+                    style={{
+                      margin: 0,
+                      display: 'flex',
+                      gap: 8,
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <strong>{r.title}</strong>
+                    {r.type && (
+                      <span
+                        style={{
+                          fontSize: 12,
+                          padding: '2px 8px',
+                          borderRadius: 999,
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          background: 'rgba(255,255,255,0.06)',
+                          display: 'inline-block',
+                        }}
+                        title={`Type: ${r.type}`}
+                      >
+                        {r.type}
+                      </span>
+                    )}
+                  </h5>
+
+                  <div id="right" style={{ marginTop: 6 }}>
+                    <Link
+                      to={`/r/${r.id}`}
+                      className="as-link"
+                      aria-label={`Open public view for ${r.title}`}
+                      title="Public view"
+                      style={{ marginRight: 12 }}
+                    >
+                      ↗ View
+                    </Link>
+                    {token && (
+                      <Link
+                        to={`/admin/edit/${r.id}`}
+                        className="as-link"
+                        aria-label={`Edit ${r.title}`}
+                        title="Edit"
+                      >
+                        ✎ Edit
+                      </Link>
+                    )}
+                  </div>
+                </header>
+
+                {tagChips.length > 0 && (
+                  <div id="right" style={{ margin: '8px 0 12px' }}>
+                    {tagChips.map((t) => (
                       <span
                         key={`${r.id}-${t}`}
-                        style={{ fontSize: 12, opacity: 0.85, marginRight: 8 }}
+                        style={{
+                          fontSize: 12,
+                          opacity: 0.85,
+                          marginRight: 8,
+                          paddingRight: 2,
+                        }}
                       >
                         #{t}
                       </span>
                     ))}
-                </div>
-              )}
+                  </div>
+                )}
 
-              {r.summary && (
-                <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
-                  {r.summary}
-                </p>
-              )}
-            </article>
-          ))}
+                {r.summary && (
+                  <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
+                    {r.summary}
+                  </p>
+                )}
+              </article>
+            );
+          })}
       </section>
 
       {/* LIGHTBOX — includes tags + objectives */}
