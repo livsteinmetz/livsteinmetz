@@ -10,6 +10,7 @@ export type Reflection = {
   id?: string; // optional in the form
   title: string;
   type: 'Reading' | 'Paper' | 'Project' | 'Presentation' | ''; // empty until chosen
+  course: string; // <-- added, required in the form
   tags: string[]; // UI uses an array; saved as CSV on submit
   summary: string;
   reflection: string;
@@ -444,6 +445,7 @@ export default function ReflectionForm({
   const [form, setForm] = useState<Reflection>({
     title: initial.title || '',
     type: (initial as any).type || '', // show placeholder until user picks
+    course: (initial as any).course || '', // <-- initialize course
     tags: Array.isArray(initial.tags)
       ? (initial.tags as string[])
       : (initial.tags ?? '')
@@ -469,6 +471,7 @@ export default function ReflectionForm({
       ...form,
       tags: form.tags.join(','), // CSV for Firestore
       type: form.type,
+      course: form.course, // <-- included in payload
     } as any;
     await upsertReflection(token!, id || null, payload);
     navigate('/admin');
@@ -506,14 +509,22 @@ export default function ReflectionForm({
         placeholder="Select a type…"
       />
 
-      {/* 3) Learning Objectives */}
+      {/* 3) Course (free text, e.g., PDA-675) */}
+      <Field
+        name="course"
+        label="Course (e.g., PDA-675)"
+        value={form.course}
+        onChange={handleTextChange}
+      />
+
+      {/* 4) Learning Objectives */}
       <ObjectiveMultiSelect
         value={form.tags}
         onChange={(tags) => setForm((p) => ({ ...p, tags }))}
         groupedOptions={GROUPED_OBJECTIVES}
       />
 
-      {/* 4) Summary */}
+      {/* 5) Summary */}
       <Field
         name="summary"
         label="Summary"
@@ -522,7 +533,7 @@ export default function ReflectionForm({
         rows={4}
       />
 
-      {/* 5) Reflection */}
+      {/* 6) Reflection */}
       <Field
         name="reflection"
         label="Reflection"

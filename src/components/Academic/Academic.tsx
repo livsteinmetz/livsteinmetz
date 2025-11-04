@@ -282,6 +282,21 @@ export default function Academic() {
                       {r.type}
                     </span>
                   )}
+                  {r.course && (
+                    <span
+                      style={{
+                        fontSize: 12,
+                        padding: '2px 8px',
+                        borderRadius: 999,
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        background: 'rgba(255,255,255,0.06)',
+                        display: 'inline-block',
+                      }}
+                      title={`Type: ${r.course}`}
+                    >
+                      {r.course}
+                    </span>
+                  )}
                 </h5>
 
                 {token && (

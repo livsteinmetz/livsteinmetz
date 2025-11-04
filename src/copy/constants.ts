@@ -144,6 +144,7 @@ export type ReflectionItem = {
   id: string;
   title: string;
   type: 'Reading' | 'Assignment' | 'Group work';
+  course: string;
   /** CSV of selected learning objective labels (matches items[] strings above) */
   tags: string;
   summary: string;
@@ -155,6 +156,7 @@ export const REFLECTIONS: ReflectionItem[] = [
     id: 'seed-assignment-1',
     title: 'Learning to See: Systematic Literature Review (PRISMA)',
     type: 'Assignment',
+    course: 'PDA-675',
     tags: [
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
       'present arguments based on the research literature in the form of an academic paper',
@@ -164,13 +166,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Systematic review of technology-mediated slow/close looking in museum education post-2020; explores how digital environments sustain perceptual learning.',
     reflection:
-      'I chose this topic to connect my museum work with the learning theories I’m studying now. Reading adjacent studies sharpened my sense of what my past projects actually supported. My takeaway: “learning to see” can be cultivated online with light scaffolding and affect-aware design—digital should create new conditions for engagement rather than imitate the gallery one-to-one.',
+      'I chose this topic to connect my museum work with the learning theories I’m studying now. Conducting a formal literature review helped me move from intuitive design decisions toward a research-informed understanding of perceptual learning online. Reading adjacent studies sharpened my awareness of how digital mediation alters both the pacing and affective quality of engagement. Using the PRISMA framework also strengthened my methodological confidence—especially in managing scope and inclusion criteria. My main conclusion was that “learning to see” is cultivable online with light scaffolding and affect-aware design. Rather than imitating the gallery experience, digital tools should be designed to create new conditions for sustained attention and reflective interpretation.',
   },
 
   {
     id: 'seed-assignment-portfolio-project',
     title: 'Digital Portfolio: CRUD App as Reflective Practice',
     type: 'Assignment',
+    course: 'PDA-675',
     tags: [
       'reflect on and document their own knowledge and experience in relation to future work life possibilities in a portfolio',
       'discuss social and technical sustainability issues within the research and applied field of IT and learning',
@@ -179,12 +182,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Refactored this site into a CRUD app to log reflections with objective-aligned tags; treating the site itself as a learning tool.',
     reflection:
-      'I split academic and professional work and added objective-based tagging. The submission form became a metacognitive checkpoint. The portfolio now works as assessment-for-learning: iterate, reflect, align, repeat.',
+      'Developing my digital portfolio as an actual web application made reflection an iterative design process rather than a static submission. I separated academic and professional sections to better represent different forms of expertise, and tagged each reflection with course and programme objectives. This structure turned the submission form into a metacognitive checkpoint: every entry required me to align my work with learning outcomes. Building the system in React, TypeScript, and Firebase was also an exercise in sustainability—designing something modular and reusable beyond the course. The result functions as “assessment for learning”: each iteration helps me see my growth, identify gaps, and consciously connect theory to practice.',
   },
+
   {
     id: 'seed-group-presentation-theories',
     title: 'Group Presentations: Comparing Learning Theories',
     type: 'Group work',
+    course: 'PDA-675',
     tags: [
       'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
       'assemble a selection of research literature in the field of IT and Learning for a defined question or topic',
@@ -192,13 +197,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Collaborative seminar contrasting behaviorism, cognitivism, and constructivism; mapped implications to instructional and learning-experience design.',
     reflection:
-      'Dialogue surfaced the affordances and limits of each theory. The exercise itself modeled constructivist learning—knowledge built through discussion, iteration, and application.',
+      'Working collaboratively forced me to articulate not just what each theory states, but how it shapes actual design decisions. Our dialogue revealed how each framework supports different kinds of learning outcomes—efficiency and precision under behaviorism, transfer under cognitivism, and exploration under constructivism. The presentation process itself was constructivist: we built understanding together through discussion, critique, and synthesis. I left with a clearer sense of when and why to draw on each framework, and how the learning context and constraints should determine the theoretical lens.',
   },
 
   {
     id: 'seed-reading-skinner-1968',
     title: 'Skinner (1968): The Technology of Teaching',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -206,13 +212,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Behaviorist design principles—sequencing, immediate feedback, and reinforcement—applied to teaching machines and instructional design.',
     reflection:
-      'This felt foundational. Skinner’s logic still shows up in today’s adaptive systems: small steps, tight feedback loops, visible progress. Even if mechanistic at times, his insistence that technology augments rather than replaces teachers remains a useful design constraint.',
+      'Skinner’s principles—small steps, immediate feedback, and visible progress—still underpin most adaptive learning systems today. What struck me most was his framing of technology as an amplifier of teaching rather than a replacement. While behaviorism can feel mechanistic, it highlights the importance of structure and feedback in shaping learning behaviors. Understanding this perspective helps me identify when procedural reinforcement is beneficial and where deeper conceptual engagement is required. It clarified that effective digital learning often depends on balancing automation with human guidance.',
   },
 
   {
     id: 'seed-reading-papert-1980',
     title: 'Papert (1980): Mindstorms — Children, Computers, and Powerful Ideas',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -220,13 +227,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Constructionism extends constructivism: learning through making, with computers as “objects-to-think-with” and microworlds for exploration.',
     reflection:
-      'Papert reframed tech as a medium for thinking, not delivery. I read beyond the assignment because the ideas still feel alive in contemporary tools. I’ll keep returning to this as I design activities that let learners build and reason through artifacts.',
+      'Papert’s idea of computers as “objects-to-think-with” reframed technology for me—not as a channel for content delivery, but as a partner in thought. His notion that learners construct knowledge through creating artifacts resonates strongly with my work in interactive learning environments. Reading Mindstorms reminded me that design should invite exploration and creativity, not just comprehension. I also appreciated Papert’s stance on learner agency—how programming and making can externalize thinking processes and allow learners to debug both code and ideas. This reading continues to influence how I think about designing reflective, learner-driven technologies.',
   },
 
   {
     id: 'seed-reading-lave-wenger-1991',
     title: 'Lave & Wenger (1991): Situated Learning — Legitimate Peripheral Participation',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -234,13 +242,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Learning as participation in communities of practice; emphasis on identity, context, and gradual movement from periphery to fuller participation.',
     reflection:
-      'This helped me see museum education as participation rather than acquisition. Entries on my site can act as steps from peripheral awareness toward fuller scholarly practice. I want to apply this lens more deliberately to future activities.',
+      'Lave and Wenger’s concept of legitimate peripheral participation helped me reconceptualize museum learning as participation rather than acquisition. This aligns with how visitors and educators co-construct meaning around artworks—each encounter moving from peripheral observation toward more engaged interpretation. Applying this to my own studies, I see each assignment and discussion as steps toward fuller participation in the academic community. It also pushed me to consider how digital tools might scaffold entry points into professional or disciplinary communities online.',
   },
 
   {
     id: 'seed-reading-1',
     title: 'Ertmer & Newby (2013): Behaviorism, Cognitivism, Constructivism',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -248,13 +257,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Comparison of three foundational learning theories from an instructional design lens, focusing on when and how each is appropriate.',
     reflection:
-      'In professional practice I rarely named a lens, even though I was using one. This piece clarified the “fit for purpose” mindset: choose the theory based on the learning problem and constraints. Going forward I’ll state the lens up front so strategy and evaluation criteria are transparent.',
+      'Ertmer and Newby helped me explicitly connect design decisions to theoretical frameworks. In professional practice I had been intuitively mixing approaches without naming them. This article clarified when each perspective best fits—behaviorism for skill automation, cognitivism for conceptual organization, and constructivism for open-ended exploration. The most important insight was that theory choice should be driven by the learning problem, not personal preference. I now make it a habit to identify my guiding theory in each project so that instructional strategies remain transparent and grounded.',
   },
 
   {
     id: 'seed-reading-collins-stockton-2018',
     title: 'Collins & Stockton (2018): The Central Role of Theory in Qualitative Research',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'critically analyze and discuss recent research in relation to central perspectives on learning within the field of IT and Learning',
       'demonstrate the ability to identify and formulate issues critically, autonomously and creatively as well as to plan and, using appropriate methods, undertake advanced tasks within predetermined time frames and so contribute to the formation of knowledge as well as the ability to evaluate this work',
@@ -262,13 +272,14 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Argues that theory structures nearly every aspect of qualitative work and offers tools to calibrate theory–method balance.',
     reflection:
-      'On the first read this felt abstract; in study group it clicked. I realized I already carry theoretical commitments from lived experience. Big shift: theory isn’t an add-on—it scaffolds questions, coding, and interpretation. I’m now naming lenses explicitly in my reflections and designs.',
+      'When I first read this article, it felt abstract and inaccessible. Discussing it with classmates helped me realize that I already hold implicit theoretical assumptions from my own professional practice. The key shift for me was seeing theory as scaffolding rather than constraint—it structures questions, interpretation, and meaning-making. This realization has changed how I approach both research and design: I now articulate the theoretical stance guiding my choices, acknowledging that it shapes how I see and what I value in the data.',
   },
 
   {
     id: 'seed-reading-selwyn-2022',
     title: 'Selwyn (2022): Technology and Learning (Chapter 4)',
     type: 'Reading',
+    course: 'PDA-675',
     tags: [
       'critically analyze and discuss recent research in relation to central perspectives on learning within the field of IT and Learning',
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -277,6 +288,6 @@ export const REFLECTIONS: ReflectionItem[] = [
     summary:
       'Synthesizes how digital tech aligns with behaviorist, cognitivist, constructivist, constructionist, and sociocultural theories; highlights design implications.',
     reflection:
-      'Selwyn connected the dots—from Skinner’s programmed instruction to Papert’s microworlds to sociocultural participation online. Theories don’t replace one another; they accrete and redirect design choices. I noted the affordances he outlines and have been cross-checking them with interviews and podcasts to keep the ideas grounded.',
+      'Selwyn’s synthesis was the first time I saw all the theories from this course mapped to digital contexts. His argument that theories accumulate rather than replace one another helped me see the field as iterative and layered. He showed how behaviorist traces persist in adaptive software, how constructivism drives participatory learning, and how sociocultural theory reframes online collaboration. This reading gave me a language for identifying these influences in my own work and in the technologies I design. It also reminded me that theory should inform ethical as well as functional choices in technology-mediated learning.',
   },
 ];
