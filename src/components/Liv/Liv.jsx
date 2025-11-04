@@ -319,10 +319,6 @@ export default function Liv() {
             Symphony in C
           </a>
           <br />
-          <a href="https://www.vanderbiltscno.com/" target="_blank" rel="noopener noreferrer">
-            Students Consulting for Nonprofit Organizations (SCNO)
-          </a>
-          <br />
           <a
             href="https://boyer.temple.edu/academics/ensemble/temple-university-composers-orchestra"
             target="_blank"
