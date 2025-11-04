@@ -1,8 +1,59 @@
-// data/constants.ts
 export const INTERESTS = [
-  'Human Computer Interaction',
-  'UI/UX Design',
-  'Museum Education',
+  {
+    name: 'Human–Computer Interaction (HCI)',
+    definition:
+      'The study and design of how people engage with digital technologies — integrating computing, design, and social science to understand and improve human experiences with technology.',
+    references: ['Ben Shneiderman', 'Kristina Höök', 'Hiroshi Ishii (MIT Media Lab)'],
+  },
+  {
+    name: 'Constructionist Learning Theory',
+    definition:
+      'A theory of learning through making, introduced by Seymour Papert at MIT, emphasizing that learners build knowledge most effectively by constructing meaningful artifacts and reflecting on their process.',
+    references: ['Seymour Papert'],
+  },
+  {
+    name: 'Critical Interface Design',
+    definition:
+      'An approach that interrogates how interfaces reflect and shape power, identity, and access — asking not just how interfaces work, but whose values they serve.',
+    references: ['Sasha Costanza-Chock', 'Anne Marie Piper', 'Phoebe Sengers'],
+  },
+  {
+    name: 'Digital Storytelling and Curation',
+    definition:
+      'The use of digital media to craft and contextualize narratives — blending art, education, and interaction to help audiences connect with ideas and culture.',
+    references: ['Janet Murray', 'Henry Jenkins', 'MIT Open Documentary Lab'],
+  },
+  {
+    name: 'Participatory Design',
+    definition:
+      'A collaborative design method that values users and communities as co-creators, ensuring that design outcomes reflect their lived experiences and priorities.',
+    references: ['Pelle Ehn', 'Shaowen Bardzell', 'Elizabeth Churchill'],
+  },
+  {
+    name: 'Design Justice',
+    definition:
+      'A framework for equitable design that centers the voices and leadership of those most impacted by design processes. Originated by Sasha Costanza-Chock at MIT, it challenges extractive, exclusionary design practices and promotes community-led creation.',
+    references: ['Sasha Costanza-Chock', 'Design Justice Network'],
+  },
+  {
+    name: 'Algorithmic Justice and AI Ethics',
+    definition:
+      'The study and activism surrounding bias, accountability, and transparency in artificial intelligence. Coined and advanced by Joy Buolamwini and the Algorithmic Justice League at MIT, this work exposes how algorithmic systems reproduce social inequities and seeks more just, inclusive technological futures.',
+    references: ['Joy Buolamwini', 'Algorithmic Justice League (MIT Media Lab)'],
+  },
+  {
+    name: 'Data Feminism',
+    definition:
+      'A feminist approach to data science developed by Catherine D’Ignazio and Lauren Klein that highlights how power and privilege shape data systems — and how intersectional feminism can guide more equitable, ethical data practices.',
+    references: ['Catherine D’Ignazio', 'Lauren F. Klein'],
+  },
+
+  {
+    name: 'Speculative and Critical Design',
+    definition:
+      'A design practice that uses imagination and provocation to question social, cultural, and ethical assumptions — inviting reflection on alternative technological futures.',
+    references: ['Anthony Dunne', 'Fiona Raby', 'Carl DiSalvo'],
+  },
 ] as const;
 
 export const PROGRAM_OBJECTIVES_GROUPS = [

@@ -201,9 +201,10 @@ export default function Academic() {
           {/* INTERESTS — right-aligned list */}
           <h2>[Research Interests]</h2>
           <h5 id="right">
-            {INTERESTS.filter(Boolean).map((t, i, arr) => (
-              <span key={t}>
-                {t}
+            {INTERESTS.map(({ name, definition }, i, arr) => (
+              <span key={name} className="tooltip">
+                {name}
+                <span className="tooltiptext">{definition}</span>
                 {i < arr.length - 1 ? <br /> : null}
               </span>
             ))}
