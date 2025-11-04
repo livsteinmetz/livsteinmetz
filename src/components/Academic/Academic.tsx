@@ -1,19 +1,14 @@
 // src/pages/Academic/Academic.tsx
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useMemo, useRef, useState, useCallback, useEffect } from 'react';
 import '../Liv/Liv.scss';
 import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../../auth';
-import {
-  COURSE_OBJECTIVES_GROUPS,
-  PROGRAM_OBJECTIVES_GROUPS,
-  INTERESTS,
-  PROJECTS,
-} from '../../copy/constants';
-import { listReflections } from '../../lib/api';
+import { INTERESTS, PROJECTS, REFLECTIONS } from '../../copy/constants';
+// import { listReflections } from '../../lib/api'; // Firestore fully disabled
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -45,16 +40,6 @@ function colorForCategory(category: string) {
   return '#888888';
 }
 
-/** Shape as returned from API/Firestore (CSV tags, no createdAt used here) */
-type ReflectionDoc = {
-  id: string;
-  title: string;
-  type: 'Reading' | 'Paper' | 'Project' | 'Presentation' | '';
-  tags?: string; // CSV of learning objectives
-  summary?: string;
-  reflection?: string;
-};
-
 export default function Academic() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const heroEndRef = useRef<HTMLDivElement | null>(null);
@@ -64,28 +49,10 @@ export default function Academic() {
   const isMobile = useIsMobile(768);
 
   const [showToTop, setShowToTop] = useState(false);
-  const [reflections, setReflections] = useState<ReflectionDoc[]>([]);
-  const [reflectionsLoading, setReflectionsLoading] = useState(true);
-  const [reflectionsError, setReflectionsError] = useState('');
   const { token } = useAuth?.() || { token: null };
 
-  // Fetch reflections on mount
-  useEffect(() => {
-    (async () => {
-      try {
-        setReflectionsLoading(true);
-        const data = await listReflections();
-        const arr = Array.isArray(data) ? (data as ReflectionDoc[]) : [];
-        // No createdAt sorting; keep backend/order-by default
-        setReflections(arr);
-      } catch (e) {
-        console.error('[listReflections] failed:', e);
-        setReflectionsError('Could not load reflections.');
-      } finally {
-        setReflectionsLoading(false);
-      }
-    })();
-  }, []);
+  // no Firestore: reflect directly from constants
+  const reflections = REFLECTIONS;
 
   useEffect(() => {
     const onScroll = () => setShowToTop(window.scrollY > 400);
@@ -161,11 +128,7 @@ export default function Academic() {
             {INTERESTS.filter(Boolean).map((t, i, arr) => (
               <span key={t}>
                 {t}
-                {i < arr.length - 1 ? (
-                  <>
-                    <br />
-                  </>
-                ) : null}
+                {i < arr.length - 1 ? <br /> : null}
               </span>
             ))}
           </h5>
@@ -221,48 +184,8 @@ export default function Academic() {
 
       {/* PROGRAM OBJECTIVES — grouped, right-aligned */}
       <section id="list" className="list-section">
-        <h2>[Program Objectives]</h2>
-        {PROGRAM_OBJECTIVES_GROUPS.map((group) => (
-          <div key={group.heading} style={{ marginBottom: 16 }}>
-            <h5 id="right">
-              <strong>{group.heading}</strong>
-              <br />
-              {group.items.map((t, i) => (
-                <p key={t}>
-                  {t}
-                  {i < group.items.length - 1 ? (
-                    <>
-                      <br />
-                    </>
-                  ) : null}
-                </p>
-              ))}
-            </h5>
-          </div>
-        ))}
-
-        <h2>[Course Objectives]</h2>
-        {COURSE_OBJECTIVES_GROUPS.map((group) => (
-          <div key={group.heading} style={{ marginBottom: 16 }}>
-            <h5 id="right">
-              <strong>{group.heading}</strong>
-              <br />
-              {group.items.map((t, i) => (
-                <p key={t}>
-                  {t}
-                  {i < group.items.length - 1 ? (
-                    <>
-                      <br />
-                    </>
-                  ) : null}
-                </p>
-              ))}
-            </h5>
-          </div>
-        ))}
-
         {/* PROJECTS — right column list; shows tags under title; filters apply */}
-        <h2 id="projects">[Academic Projects]</h2>
+        <h2 id="projects">[Projects]</h2>
 
         {filteredProjects.map((p, i) => (
           <div key={p.title}>
@@ -298,124 +221,111 @@ export default function Academic() {
           </h5>
         )}
 
-        {/* ---- MY REFLECTIONS (from API) ---- */}
-        <h2>[My Reflections]</h2>
+        {/* ---- MY REFLECTIONS (direct from constants) ---- */}
+        <h2>[Reflections]</h2>
+        {/* Optional admin quick-link; safe to leave or remove */}
         {token && (
           <Link to="/admin/new" className="as-link" style={{ marginLeft: 8 }}>
             + New
           </Link>
         )}
-        {reflectionsLoading && <h5 id="right">Loading reflections…</h5>}
-        {reflectionsError && (
-          <h5 id="right" style={{ color: '#E57373' }}>
-            {reflectionsError}
-          </h5>
-        )}
 
-        {!reflectionsLoading && !reflectionsError && reflections.length === 0 && (
+        {reflections.length === 0 && (
           <h5 id="right" className="muted">
             No reflections yet.
           </h5>
         )}
 
-        {!reflectionsLoading &&
-          reflections.map((r) => {
-            const tagChips = String(r.tags || '')
-              .split(',')
-              .map((t) => t.trim())
-              .filter(Boolean);
+        {reflections.map((r) => {
+          const tagChips = String(r.tags || '')
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean);
 
-            return (
-              <article
-                key={r.id}
-                className="reading-card"
-                style={{
-                  border: '1px solid #2b2f36',
-                  borderRadius: 14,
-                  padding: 16,
-                  marginBottom: 16,
-                  background: 'rgba(20,22,28,0.6)',
-                  boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset',
-                }}
-              >
-                <header style={{ marginBottom: 8 }}>
-                  <h5
-                    id="right"
-                    style={{
-                      margin: 0,
-                      display: 'flex',
-                      gap: 8,
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <strong>{r.title}</strong>
-                    {r.type && (
-                      <span
-                        style={{
-                          fontSize: 12,
-                          padding: '2px 8px',
-                          borderRadius: 999,
-                          border: '1px solid rgba(255,255,255,0.2)',
-                          background: 'rgba(255,255,255,0.06)',
-                          display: 'inline-block',
-                        }}
-                        title={`Type: ${r.type}`}
-                      >
-                        {r.type}
-                      </span>
-                    )}
-                  </h5>
+          return (
+            <article
+              key={r.id}
+              className="reading-card"
+              style={{
+                border: '1px solid #2b2f36',
+                borderRadius: 14,
+                padding: 16,
+                marginBottom: 16,
+                background: 'rgba(20,22,28,0.6)',
+                boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset',
+              }}
+            >
+              <header style={{ marginBottom: 8 }}>
+                <h5
+                  id="right"
+                  style={{
+                    margin: 0,
+                    display: 'flex',
+                    gap: 8,
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <strong>{r.title}</strong>
+                  {r.type && (
+                    <span
+                      style={{
+                        fontSize: 12,
+                        padding: '2px 8px',
+                        borderRadius: 999,
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        background: 'rgba(255,255,255,0.06)',
+                        display: 'inline-block',
+                      }}
+                      title={`Type: ${r.type}`}
+                    >
+                      {r.type}
+                    </span>
+                  )}
+                </h5>
 
+                {token && (
                   <div id="right" style={{ marginTop: 6 }}>
                     <Link
-                      to={`/r/${r.id}`}
+                      to={`/admin/edit/${r.id}`}
                       className="as-link"
-                      aria-label={`Open public view for ${r.title}`}
-                      title="Public view"
-                      style={{ marginRight: 12 }}
+                      aria-label={`Edit ${r.title}`}
+                      title="Edit"
                     >
-                      ↗ View
+                      ✎ Edit
                     </Link>
-                    {token && (
-                      <Link
-                        to={`/admin/edit/${r.id}`}
-                        className="as-link"
-                        aria-label={`Edit ${r.title}`}
-                        title="Edit"
-                      >
-                        ✎ Edit
-                      </Link>
-                    )}
-                  </div>
-                </header>
-
-                {tagChips.length > 0 && (
-                  <div id="right" style={{ margin: '8px 0 12px' }}>
-                    {tagChips.map((t) => (
-                      <span
-                        key={`${r.id}-${t}`}
-                        style={{
-                          fontSize: 12,
-                          opacity: 0.85,
-                          marginRight: 8,
-                          paddingRight: 2,
-                        }}
-                      >
-                        #{t}
-                      </span>
-                    ))}
                   </div>
                 )}
+              </header>
 
-                {r.summary && (
-                  <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
-                    {r.summary}
-                  </p>
-                )}
-              </article>
-            );
-          })}
+              {tagChips.length > 0 && (
+                <div id="right" style={{ margin: '8px 0 12px' }}>
+                  {tagChips.map((t) => (
+                    <span
+                      key={`${r.id}-${t}`}
+                      style={{ fontSize: 12, opacity: 0.85, marginRight: 8, color: 'white' }}
+                    >
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {r.summary && (
+                <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
+                  {r.summary}
+                </p>
+              )}
+
+              {/* Show full reflection text if provided */}
+              {'reflection' in r && r.reflection && (
+                <p id="right" style={{ marginTop: 10, whiteSpace: 'pre-wrap' }}>
+                  {r.reflection}
+                </p>
+              )}
+            </article>
+          );
+        })}
       </section>
 
       {/* LIGHTBOX — includes tags + objectives */}
@@ -456,18 +366,6 @@ export default function Academic() {
                   <ul>
                     {filteredProjects[openIndex].objectives.map((o, j) => (
                       <li key={`${o.label}-${j}`}>
-                        <span
-                          aria-hidden="true"
-                          style={{
-                            display: 'inline-block',
-                            width: 8,
-                            height: 8,
-                            borderRadius: '50%',
-                            backgroundColor: colorForCategory(o.category),
-                            marginRight: 8,
-                            verticalAlign: 'middle',
-                          }}
-                        />
                         <span>{o.label}</span>
                         <span className="muted" style={{ marginLeft: 8 }}>
                           [{o.category}]
@@ -477,29 +375,6 @@ export default function Academic() {
                   </ul>
                 </div>
               ) : null}
-
-              {/* Takeaways */}
-              {filteredProjects[openIndex].takeaways?.length ? (
-                <div className="lightbox-takeaways">
-                  <h6>Takeaways</h6>
-                  <ul>
-                    {filteredProjects[openIndex].takeaways.map((t, j) => (
-                      <li key={j}>{t}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {filteredProjects[openIndex].link && (
-                <a
-                  className="lb-link"
-                  href={filteredProjects[openIndex].link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Read full paper
-                </a>
-              )}
             </div>
           </div>
           <button className="lb-close" aria-label="Close" onClick={() => setOpenIndex(null)}>

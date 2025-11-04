@@ -1,10 +1,8 @@
 // src/lib/api.ts
-
+import { getApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
-  query,
-  orderBy,
   getDocs,
   getDoc,
   addDoc,
@@ -17,14 +15,19 @@ import {
 
 import { app } from '../firebaseConfig';
 
+const appInstance = getApp();
+console.info('[Firebase projectId]', appInstance.options.projectId); // ⇠ sanity check in console
+
 const db = getFirestore(app);
 
 /** Shape stored in Firestore */
 export type ReflectionRecord = {
   title: string;
+  type?: 'Reading' | 'Assignment' | 'Group work' | string;
   summary?: string;
+  reflection?: string;
   citation?: string;
-  tags?: string; // comma-separated
+  tags?: string; // CSV
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
@@ -33,11 +36,13 @@ export type ReflectionRecord = {
 export type Reflection = {
   id: string;
   title: string;
+  type?: 'Reading' | 'Assignment' | 'Group work' | string;
   summary?: string;
+  reflection?: string;
   citation?: string;
-  tags?: string;
-  createdAt?: string | null; // ISO string for easy Date handling in UI
-  updatedAt?: string | null; // ISO string
+  tags?: string; // CSV to keep the public views simple
+  createdAt?: string | null; // ISO
+  updatedAt?: string | null; // ISO
 };
 
 /** Helper to normalize Firestore timestamps -> ISO strings */
@@ -52,20 +57,24 @@ function toIso(ts?: Timestamp): string | null {
 /** ---- CRUD (Firestore) ---- */
 
 export async function listReflections(): Promise<Reflection[]> {
-  const q = query(collection(db, 'reflections'), orderBy('createdAt', 'desc'));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => {
-    const data = d.data() as ReflectionRecord;
-    return {
-      id: d.id,
-      title: data.title,
-      summary: data.summary ?? '',
-      citation: data.citation ?? '',
-      tags: data.tags ?? '',
-      createdAt: toIso(data.createdAt),
-      updatedAt: toIso(data.updatedAt),
-    };
-  });
+  const snap = await getDocs(collection(db, 'reflections'));
+
+  return snap.docs
+    .filter((d) => !d.id.startsWith('_')) // ignore _seed_meta
+    .map((d) => {
+      const data = d.data() as ReflectionRecord;
+      return {
+        id: d.id,
+        title: data.title,
+        type: data.type,
+        summary: data.summary ?? '',
+        reflection: data.reflection ?? '',
+        citation: data.citation ?? '',
+        tags: data.tags ?? '',
+        createdAt: toIso(data.createdAt),
+        updatedAt: toIso(data.updatedAt),
+      };
+    });
 }
 
 export async function getReflection(id: string): Promise<Reflection> {
@@ -78,7 +87,9 @@ export async function getReflection(id: string): Promise<Reflection> {
   return {
     id: snap.id,
     title: data.title,
+    type: data.type,
     summary: data.summary ?? '',
+    reflection: data.reflection ?? '',
     citation: data.citation ?? '',
     tags: data.tags ?? '',
     createdAt: toIso(data.createdAt),
@@ -91,25 +102,26 @@ export async function upsertReflection(
   id: string | null,
   payload: Partial<ReflectionRecord> & { title: string },
 ): Promise<Reflection> {
-  const base = {
+  const base: ReflectionRecord = {
     title: payload.title,
+    type: payload.type,
     summary: payload.summary ?? '',
+    reflection: payload.reflection ?? '',
     citation: payload.citation ?? '',
     tags: payload.tags ?? '',
   };
 
   if (id) {
     const ref = doc(db, 'reflections', id);
-    await updateDoc(ref, {
-      ...base,
-      updatedAt: serverTimestamp(),
-    });
+    await updateDoc(ref, { ...base, updatedAt: serverTimestamp() });
     const snap = await getDoc(ref);
     const data = snap.data() as ReflectionRecord;
     return {
       id: snap.id,
       title: data.title,
+      type: data.type,
       summary: data.summary ?? '',
+      reflection: data.reflection ?? '',
       citation: data.citation ?? '',
       tags: data.tags ?? '',
       createdAt: toIso(data.createdAt),
@@ -127,7 +139,9 @@ export async function upsertReflection(
     return {
       id: docRef.id,
       title: data.title,
+      type: data.type,
       summary: data.summary ?? '',
+      reflection: data.reflection ?? '',
       citation: data.citation ?? '',
       tags: data.tags ?? '',
       createdAt: toIso(data.createdAt),

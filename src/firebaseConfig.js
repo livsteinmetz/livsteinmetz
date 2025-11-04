@@ -1,7 +1,7 @@
 // src/firebaseConfig.js
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,4 +18,4 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 // Optional sanity log
-console.log("[Firebase projectId]", app.options.projectId);
+console.log('[Firebase projectId]', app.options.projectId);

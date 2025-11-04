@@ -1,9 +1,59 @@
-build
-node_modules
-*.env*
-.eslintcache
-package-lock.json
+# --- Node / TypeScript ---
+node_modules/
+dist/
+lib/
+build/
+*.tsbuildinfo
+*.log
+
+# --- Firebase ---
+.firebase/
+.firebaserc
 .firebase/*.cache
+functions/lib/
+functions/node_modules/
+
+# --- Environment + Credentials ---
+# Local .env files (dotenv, local dev, CI)
+.env
+.env.*
+!.env.example
+# Firebase / Admin keys
+service-account.json
+*.key.json
+*.pem
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# --- OS / Misc ---
 .DS_Store
-.eslintignore
-.prettierignore
+Thumbs.db
+
+# --- Package lock files (if you want reproducible builds, keep them; otherwise ignore) ---
+# Uncomment to ignore globally:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# --- Compiled Firebase Cloud Functions ---
+functions/lib/
+functions/*.js.map
+
+# --- Prisma / SQLite dev DB ---
+server/prisma/dev.db
+
+# --- Optional logs / caches ---
+.eslintcache
+.cache/
+.tmp/
+.nyc_output/
+coverage/
+
+# --- Build artifacts ---
+public/**/*.map
