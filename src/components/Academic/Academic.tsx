@@ -7,8 +7,84 @@ import { IconBrandLinkedin, IconBrandGithub, IconMail } from '@tabler/icons-reac
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../../auth';
-import { INTERESTS, PROJECTS, REFLECTIONS } from '../../copy/constants';
+import { COURSE_OBJECTIVES_GROUPS, INTERESTS, PROJECTS, REFLECTIONS } from '../../copy/constants';
 // import { listReflections } from '../../lib/api'; // Firestore fully disabled
+
+/** ---- Hashtag formatting helpers ---- */
+const STOPWORDS = new Set([
+  'the',
+  'and',
+  'of',
+  'in',
+  'to',
+  'for',
+  'a',
+  'an',
+  'on',
+  'with',
+  'their',
+  'his',
+  'her',
+  'its',
+  'is',
+  'are',
+  'as',
+  'by',
+  'at',
+  'from',
+  'this',
+  'that',
+  'within',
+  'into',
+  'across',
+  'over',
+  'under',
+  'about',
+  'between',
+  'be',
+  'or',
+  'it',
+  'field',
+  'program',
+  'programme',
+  'course',
+]);
+
+function stripPrefix(label: string) {
+  // remove leading "Course — ..." or "Program — ..." prefix if present
+  return label.replace(/^\s*(course|program|programme)\s*—\s*/i, '');
+}
+
+function toHashtag(raw: string) {
+  const cleaned = stripPrefix(raw);
+  const tokens = cleaned
+    .toLowerCase()
+    .split(/[^a-z0-9+]+/g)
+    .filter(Boolean)
+    .filter((w) => !STOPWORDS.has(w));
+
+  if (tokens.length === 0) return '';
+
+  // Prefer first 3–4 meaningful tokens for readability
+  const picked = tokens.slice(0, 4).map((w) => {
+    // keep common acronyms uppercase (e.g., IT, HCI)
+    if (w === 'it' || w === 'hci' || w === 'ai' || w === 'ux' || w === 'ui') return w.toUpperCase();
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  });
+
+  const tag = '#' + picked.join('');
+  return tag.slice(0, 120); // keep it scannable
+}
+
+function formatHashtags(labels: string[], max = 6) {
+  const formatted = labels.map(toHashtag).filter(Boolean);
+
+  const unique = Array.from(new Set(formatted));
+  const shown = unique.slice(0, max);
+  const extraCount = unique.length - shown.length;
+
+  return { shown, extraCount };
+}
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
@@ -313,19 +389,6 @@ export default function Academic() {
                 )}
               </header>
 
-              {tagChips.length > 0 && (
-                <div id="right" style={{ margin: '8px 0 12px' }}>
-                  {tagChips.map((t) => (
-                    <span
-                      key={`${r.id}-${t}`}
-                      style={{ fontSize: 12, opacity: 0.85, marginRight: 8, color: 'white' }}
-                    >
-                      #{t}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               {r.summary && (
                 <p id="right" className="muted" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
                   {r.summary}
@@ -338,6 +401,43 @@ export default function Academic() {
                   {r.reflection}
                 </p>
               )}
+
+              {(() => {
+                const { shown, extraCount } = formatHashtags(tagChips, 6);
+                if (shown.length === 0) return null;
+
+                return (
+                  <div
+                    id="right"
+                    style={{ margin: '8px 0 12px', display: 'flex', flexWrap: 'wrap', gap: 8 }}
+                  >
+                    {shown.map((t) => (
+                      <span
+                        key={`${r.id}-${t}`}
+                        style={{
+                          fontSize: 12,
+                          padding: '4px 10px',
+                          borderRadius: 999,
+                          border: '1px solid rgba(255,255,255,0.18)',
+                          background: 'rgba(255,255,255,0.06)',
+                          color: 'white',
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                    {extraCount > 0 && (
+                      <span
+                        title={tagChips.join(', ')}
+                        style={{ fontSize: 12, opacity: 0.85, alignSelf: 'center' }}
+                      >
+                        +{extraCount} more
+                      </span>
+                    )}
+                  </div>
+                );
+              })()}
             </article>
           );
         })}
@@ -373,23 +473,6 @@ export default function Academic() {
 
               {/* Summary */}
               <p className="lb-body">{filteredProjects[openIndex].summary}</p>
-
-              {/* Objectives */}
-              {filteredProjects[openIndex].objectives?.length ? (
-                <div className="lightbox-takeaways">
-                  <h6>Objectives mapped</h6>
-                  <ul>
-                    {filteredProjects[openIndex].objectives.map((o, j) => (
-                      <li key={`${o.label}-${j}`}>
-                        <span>{o.label}</span>
-                        <span className="muted" style={{ marginLeft: 8 }}>
-                          [{o.category}]
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
             </div>
           </div>
           <button className="lb-close" aria-label="Close" onClick={() => setOpenIndex(null)}>

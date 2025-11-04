@@ -154,7 +154,7 @@ export type ReflectionItem = {
 export const REFLECTIONS: ReflectionItem[] = [
   {
     id: 'seed-assignment-1',
-    title: 'Learning to See: Systematic Literature Review (PRISMA)',
+    title: 'Systematic Literature Review',
     type: 'Assignment',
     course: 'PDA-675',
     tags: [
@@ -171,7 +171,7 @@ export const REFLECTIONS: ReflectionItem[] = [
 
   {
     id: 'seed-assignment-portfolio-project',
-    title: 'Digital Portfolio: CRUD App as Reflective Practice',
+    title: 'Digital Portfolio',
     type: 'Assignment',
     course: 'PDA-675',
     tags: [

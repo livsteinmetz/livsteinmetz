@@ -114,10 +114,21 @@ export default function Liv() {
             </a>
           </h5>
           <h5 id="right">Freelance Double Bassist</h5>
+
           {!isMobile && !compact && (
-            <a className="scroll-cue" href="#work" aria-label="Scroll to work">
-              ↓ View selected work
-            </a>
+            <>
+              <a
+                className="scroll-cue"
+                href="/academic-portfolio"
+                aria-label="To academic portfolio"
+              >
+                View academic work →
+              </a>
+              <br />
+              <a className="scroll-cue" href="#work" aria-label="Scroll to work">
+                ↓ View selected work
+              </a>
+            </>
           )}
         </div>
       </section>
