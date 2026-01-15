@@ -16,7 +16,6 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Liv />} />
-          <Route path="/academic-portfolio" element={<Academic />} />
           <Route path="/signin" element={<SignIn />} />
           <Route
             path="/admin"

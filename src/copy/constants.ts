@@ -152,7 +152,7 @@ export const PROJECTS: Project[] = [
         category: 'Local outcomes — Judgement & approach',
       },
     ],
-    link: null,
+    link: 'https://drive.google.com/file/d/1JHxXcz8-V0UcsRyc6ImQD7bO0QPDtzeU/view',
   },
 
   {
@@ -183,7 +183,34 @@ export const PROJECTS: Project[] = [
         category: 'Judgement & approach',
       },
     ],
-    link: 'https://livsteinmetz.github.io/',
+    link: 'https://livsteinmetz.web.app/',
+  },
+    {
+    "title": "An Analysis of Blockchain for Social Impact Objectives",
+    "img": "",
+    "img2": "",
+    "body": "As an undergraduate researcher, I analyzed blockchain vendors and start-ups for supply chain and social impact applications. I presented a semester-long report on the risks and opportunities of blockchain adoption in nonprofit and procurement contexts, using Microsoft Suite data analytics and market trend forecasting.",
+    "link": "https://docs.google.com/presentation/d/1NfYjcmzr6LwwNdaLbAIPokper-k0b8v7AeYCxTPzZWE/edit#slide=id.g35f391192_00",
+    "objectives": [
+      { "label": "Critically analyse research on learning", "category": "Course" },
+      { "label": "Curate research literature for a defined topic", "category": "Course" },
+      { "label": "Present academic arguments clearly", "category": "Course" },
+      { "label": "Ethical and societal awareness in research", "category": "Program" },
+      { "label": "Critical and systematic analysis", "category": "Program" }
+    ]
+  },
+  {
+    "title": "Forecast and Assessment of Quantum Computing Viability",
+    "img": "",
+    "img2": "",
+    "body": "As an undergraduate researcher, I conducted scenario-based assessments of quantum computing, combining Delphi forecasting, trend analysis, and monitoring techniques to evaluate the social and technological viability of the field. This work culminated in a report on adoption pathways and barriers for quantum technologies.",
+    "link": "/Forecast and Technology Assessment for Quantum Computing Technologies.pdf",
+    "objectives": [
+      { "label": "Critically analyse research on learning", "category": "Course" },
+      { "label": "Present academic arguments clearly", "category": "Course" },
+      { "label": "Insight into current research and methods", "category": "Program" },
+      { "label": "Critical and systematic analysis", "category": "Program" }
+    ]
   },
 ];
 
@@ -194,7 +221,7 @@ export const PROJECTS: Project[] = [
 export type ReflectionItem = {
   id: string;
   title: string;
-  type: 'Reading' | 'Assignment' | 'Group work';
+  type: 'Reading' | 'Paper' | 'Design';
   course: string;
   /** CSV of selected learning objective labels (matches items[] strings above) */
   tags: string;
@@ -206,7 +233,7 @@ export const REFLECTIONS: ReflectionItem[] = [
   {
     id: 'seed-assignment-1',
     title: 'Systematic Literature Review',
-    type: 'Assignment',
+    type: 'Paper',
     course: 'PDA-675',
     tags: [
       'relate central perspectives on learning to research and practice in the field of IT and Learning',
@@ -223,7 +250,7 @@ export const REFLECTIONS: ReflectionItem[] = [
   {
     id: 'seed-assignment-portfolio-project',
     title: 'Digital Portfolio',
-    type: 'Assignment',
+    type: 'Design',
     course: 'PDA-675',
     tags: [
       'reflect on and document their own knowledge and experience in relation to future work life possibilities in a portfolio',
@@ -235,20 +262,63 @@ export const REFLECTIONS: ReflectionItem[] = [
     reflection:
       'Developing my digital portfolio as an actual web application made reflection an iterative design process rather than a static submission. I separated academic and professional sections to better represent different forms of expertise, and tagged each reflection with course and programme objectives. This structure turned the submission form into a metacognitive checkpoint: every entry required me to align my work with learning outcomes. Building the system in React, TypeScript, and Firebase was also an exercise in sustainability—designing something modular and reusable beyond the course. The result functions as “assessment for learning”: each iteration helps me see my growth, identify gaps, and consciously connect theory to practice.',
   },
-
   {
-    id: 'seed-group-presentation-theories',
-    title: 'Group Presentations: Comparing Learning Theories',
-    type: 'Group work',
-    course: 'PDA-675',
+    id: 'reading-norman-doet',
+    title: 'Norman (2013): The Design of Everyday Things',
+    type: 'Reading',
+    course: 'Independent Reading',
     tags: [
-      'account for and compare central perspectives on learning, including both broad knowledge of the field and a considerable degree of specialised knowledge in certain areas of the field as well as insight into current research and development work, and',
-      'assemble a selection of research literature in the field of IT and Learning for a defined question or topic',
+      'evaluate and adapt the design of digital environments for communication and learning in institutions, working life and society',
+      'demonstrate specialised methodological knowledge in the main field of study',
     ].join(','),
     summary:
-      'Collaborative seminar contrasting behaviorism, cognitivism, and constructivism; mapped implications to instructional and learning-experience design.',
+      'Reflection on Norman’s principles of human-centered design, focusing on affordances, signifiers, feedback, and error recovery as foundations for intuitive interaction.',
     reflection:
-      'Working collaboratively forced me to articulate not just what each theory states, but how it shapes actual design decisions. Our dialogue revealed how each framework supports different kinds of learning outcomes—efficiency and precision under behaviorism, transfer under cognitivism, and exploration under constructivism. The presentation process itself was constructivist: we built understanding together through discussion, critique, and synthesis. I left with a clearer sense of when and why to draw on each framework, and how the learning context and constraints should determine the theoretical lens.',
+      'Norman’s articulation of affordances and signifiers gave me a stronger vocabulary for diagnosing usability issues in digital environments. His insistence on error-tolerant design resonated with my own product work, especially in complex flows like ticketing, checkout, and membership systems. The reading pushed me to think more deliberately about how interfaces communicate possibilities and constraints. One practical shift I made was paying closer attention to micro-feedback loops—ensuring every action receives a clear, immediate response. The book reinforced that intuitive design is not about simplicity for its own sake but about aligning interfaces with human expectations and reasoning.',
+  },
+  {
+  id: 'reading-lowgren-stolterman-complete',
+  title: 'Löwgren & Stolterman (2007): Thoughtful Interaction Design',
+  type: 'Reading',
+  course: 'TIA132',
+  tags: [
+    'demonstrate the ability to critically and systematically integrate knowledge and analyse, assess and deal with complex phenomena, issues and situations even with limited information',
+    'critically investigate, analyse and discuss the interaction between users and information technologies in institutions, working life and society',
+    'demonstrate awareness of ethical aspects of research and development work',
+  ].join(','),
+  summary:
+    'A comprehensive reflection on Löwgren and Stolterman’s argument that interaction design is a value-laden, judgment-driven practice. The book positions design as a dialectical process shaped by ambiguity, ethics, and situated decision-making rather than by linear methods or best practices.',
+  reflection:
+    'This book clarified several dimensions of design practice that I have experienced intuitively but struggled to articulate. The clearest takeaway is their insistence that design judgment—not methods—is the core of interaction design. They argue that toolkits, processes, and checklists can support the work, but they cannot replace the cultivated ability to make situated, value-laden decisions in complex contexts. This resonates strongly with my own practice, especially when working on institutional systems like ticketing, membership, or learning platforms, where the real work happens in interpreting constraints, balancing competing values, and defending choices that have no obvious “correct” answer.\n\nTheir second major contribution is the claim that design is never neutral. Every system embodies ideological assumptions about people, institutions, behaviors, and desired futures. Reading the book made me more aware of how even small interaction decisions—visibility, flow, control, error recovery—shape participation and access. In my museum work, this feels particularly relevant: the design of digital environments influences who feels addressed, whose knowledge is centered, and how learning and interpretation unfold. Löwgren and Stolterman push this further than I expected by framing design as world-building, with ethical accountability as an inherent part of the job.\n\nA third insight that stayed with me is their distinction between functionality and use-qualities. Functionality describes what a system can do; use-qualities describe what it is like to use. While I understand why they separate the two conceptually, I still find it difficult to operationalize in complex systems where they constantly intertwine. Designing deliberately for qualities like fluency, transparency, or playability is important, but the book offers few concrete heuristics for doing so without reducing the idea to another checklist. This is an area I want to explore further.\n\nTwo ideas were challenging and worth discussing: first, their concept of the “ideal” design process, which prizes openness, reflection, and ongoing reinterpretation. I agree with the spirit, but balancing that openness with the need for structure in production environments remains difficult. Second, their emphasis on philosophical grounding—ontology, epistemology, and ethics—as a foundation for design practice. I understand the claim intellectually, but I am still figuring out how explicit these commitments should be in the rhythm of everyday decision-making.\n\nOverall, the book gave me a stronger conceptual grounding for how I already work: design as the cultivation of judgment, the shaping of opportunities for action rather than control, and the responsibility to recognize that every design decision constructs a particular world. It reinforced the need to be deliberate about values, transparent in reasoning, and aware that ambiguity is not a flaw in the process—it is the medium in which thoughtful interaction design actually operates.',
+},
+  {
+    id: 'reading-design-justice',
+    title: 'Costanza-Chock (2020): Design Justice',
+    type: 'Reading',
+    course: 'Independent Reading',
+    tags: [
+      'critically investigate, analyse and discuss the interaction between users and information technologies in institutions, working life and society',
+      'demonstrate awareness of ethical aspects of research and development work',
+    ].join(','),
+    summary:
+      'A reflection on Design Justice principles—centering marginalized communities, challenging extractive design practices, and prioritizing community-led, liberatory approaches.',
+    reflection:
+      'Reading Design Justice reframed how I think about power in design work. The framework makes visible the structural inequities that can easily be reproduced through digital tools, interfaces, and data systems. It pushed me to consider who benefits, who is harmed, and who gets to participate in decision-making. I connected this directly to my own work in cultural and public institutions, where design decisions shape access, representation, and interpretation. The text clarified that equitable design is not an aesthetic choice but a governance one, and that meaningful participation must exist throughout a project’s life cycle—not just during user testing.',
+  },
+
+  {
+    id: 'reading-data-feminism',
+    title: 'D’Ignazio & Klein (2020): Data Feminism',
+    type: 'Reading',
+    course: 'Independent Reading',
+    tags: [
+      'discuss social and technical sustainability issues within the research and applied field of IT and learning',
+      'demonstrate insight into the possibilities and limitations of research and its role in society',
+    ].join(','),
+    summary:
+      'A critical analysis of how power, privilege, and inequality shape data collection, interpretation, and visualization, offering feminist principles for more just data practices.',
+    reflection:
+      'Data Feminism highlighted that data work is never neutral and that context, embodiment, and lived experience must shape how data is collected, structured, and interpreted. This reading helped me see how data infrastructures can reinforce inequality when underlying assumptions go unquestioned. It influenced how I approach any design that touches data—whether metadata schemas, analytics dashboards, or discovery interfaces. I am now more intentional about asking who is represented, who is missing, and who is allowed to define categories. The book also strengthened my commitment to participatory approaches, particularly when designing systems that influence public understanding or cultural meaning.',
   },
 
   {

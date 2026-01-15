@@ -123,33 +123,7 @@
       { "label": "Evaluate and design digital learning environments", "category": "Program" }
     ]
   },
-  {
-    "title": "An Analysis of Blockchain for Social Impact Objectives",
-    "img": "",
-    "img2": "",
-    "body": "As an undergraduate researcher, I analyzed blockchain vendors and start-ups for supply chain and social impact applications. I presented a semester-long report on the risks and opportunities of blockchain adoption in nonprofit and procurement contexts, using Microsoft Suite data analytics and market trend forecasting.",
-    "link": "https://docs.google.com/presentation/d/1NfYjcmzr6LwwNdaLbAIPokper-k0b8v7AeYCxTPzZWE/edit#slide=id.g35f391192_00",
-    "objectives": [
-      { "label": "Critically analyse research on learning", "category": "Course" },
-      { "label": "Curate research literature for a defined topic", "category": "Course" },
-      { "label": "Present academic arguments clearly", "category": "Course" },
-      { "label": "Ethical and societal awareness in research", "category": "Program" },
-      { "label": "Critical and systematic analysis", "category": "Program" }
-    ]
-  },
-  {
-    "title": "Forecast and Assessment of Quantum Computing Viability",
-    "img": "",
-    "img2": "",
-    "body": "As an undergraduate researcher, I conducted scenario-based assessments of quantum computing, combining Delphi forecasting, trend analysis, and monitoring techniques to evaluate the social and technological viability of the field. This work culminated in a report on adoption pathways and barriers for quantum technologies.",
-    "link": "/Forecast and Technology Assessment for Quantum Computing Technologies.pdf",
-    "objectives": [
-      { "label": "Critically analyse research on learning", "category": "Course" },
-      { "label": "Present academic arguments clearly", "category": "Course" },
-      { "label": "Insight into current research and methods", "category": "Program" },
-      { "label": "Critical and systematic analysis", "category": "Program" }
-    ]
-  },
+
   {
     "title": "Accessibility and Connected Health Product Consulting",
     "img": "",

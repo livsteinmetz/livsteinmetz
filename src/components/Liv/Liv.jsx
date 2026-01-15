@@ -106,28 +106,33 @@ export default function Liv() {
           <h1 className={`title ${!isMobile && compact ? 'title--compact' : 'title--hero'}`}>
             Olivia Steinmetz
           </h1>
+
           <h2>[Current Professional Work]</h2>
-          <h5 id="right">
-            Front-End Software Engineer &amp; Product Manager for Digital Initiatives @{' '}
+
+          <h5 id="right" style={{ marginBottom: 16 }}>
+            Currently leading front-end, design, and product work <br />
+            for digital initiatives @{' '}
             <a href="https://barnesfoundation.org/" target="_blank" rel="noopener noreferrer">
               the Barnes Foundation
             </a>
           </h5>
-          <h5 id="right">Freelance Double Bassist</h5>
+
+          <p className="muted" id="right" style={{ maxWidth: 520, marginBottom: 16 }}>
+            I design and build brand-driven, human-centered, conversion-focused digital products –
+            from research and UX strategy to interface design and implementation.
+          </p>
+
+          <p className="muted" id="right" style={{ marginBottom: 8 }}>
+            Outside of product and design work, I&apos;m also an active freelance double bassist.
+          </p>
 
           {!isMobile && !compact && (
             <>
-              <a
-                className="scroll-cue"
-                href="/academic-portfolio"
-                aria-label="To academic portfolio"
-              >
-                View academic work →
-              </a>
-              <br />
               <a className="scroll-cue" href="#work" aria-label="Scroll to work">
-                ↓ View selected work
+                ↓ View professional work
               </a>
+
+              <br />
             </>
           )}
         </div>
