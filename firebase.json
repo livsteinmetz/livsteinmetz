@@ -2,15 +2,14 @@
   "hosting": {
     "site": "livsteinmetz",
     "public": "build",
-    "ignore": ["firebase.json","**/.*","**/node_modules/**"],
-    "rewrites": [
-      { "source": "**", "destination": "/index.html" }
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**/*.@(mp4|webp|woff|svg)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      }
     ]
-  },
-  "firestore": {
-    "database": "(default)",
-    "location": "us-east1",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }

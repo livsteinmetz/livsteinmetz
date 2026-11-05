@@ -1,0 +1,26 @@
+name: Preview branch
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment: build_env
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/fetch-medium.mjs
+      - run: node scripts/build.mjs
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}
+          channelId: preview
+          expires: 30d
+          projectId: livsteinmetz-bb868
+          target: livsteinmetz

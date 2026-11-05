@@ -1,70 +1,12 @@
 {
   "name": "livsteinmetz",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
-  "dependencies": {
-    "@tabler/icons-react": "^3.35.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "firebase": "^11.10.0",
-    "firebase-admin": "^13.5.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-responsive-masonry": "^2.7.1",
-    "react-router-dom": "^7.9.3",
-    "react-scripts": "^5.0.1",
-    "sass": "^1.89.2",
-    "tabler-icons-react": "^1.56.0",
-    "web-vitals": "^5.0.3"
-  },
+  "type": "module",
+  "description": "Olivia Steinmetz's personal site. Plain Node, no dependencies.",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "functions:build": "npm --prefix functions run build",
-    "deploy:all": "npm run build && npm run functions:build && firebase deploy --only hosting,functions,firestore:rules,firestore:indexes",
-    "deploy:hosting": "npm run build && firebase deploy --only hosting",
-    "deploy:rules": "firebase deploy --only firestore:rules",
-    "deploy:indexes": "firebase deploy --only firestore:indexes",
-    "deploy:functions": "npm run functions:build && firebase deploy --only functions",
-        "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.26",
-    "@types/react-dom": "^18.3.7",
-    "colors": "^1.4.0",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "firebase-tools": "^14.17.0",
-    "git-state": "^4.1.0",
-    "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "build": "node scripts/build.mjs",
+    "notes": "node scripts/fetch-medium.mjs",
+    "preview": "npm run build && npx --yes serve build"
   }
 }

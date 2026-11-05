@@ -1,0 +1,115 @@
+[
+  {
+    "slug": "visual-experience-platform",
+    "title": "Visual Experience Platform",
+    "short": "An online classroom for looking at art together",
+    "org": "Barnes Foundation",
+    "years": "2021 to now",
+    "role": "Product, UX/UI design, and front-end development",
+    "video": "vxp", "poster": "vxp-still",
+    "alt": "A virtual Barnes gallery wall with Matisse's Red Madras Headdress in the center and class tools around it",
+    "link": "https://www.barnesfoundation.org/visual-experience-platform",
+    "linkText": "See the VXP at the Barnes",
+    "body": [
+      "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
+      "So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
+      "Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP, and 14% of them were on scholarship. Replay followed in March 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.",
+      "Other institutions noticed. In 2025 the Penn Museum became the first outside institution to teach on the platform, and I built the pricing, onboarding, and support model behind that license."
+    ],
+    "stack": "React, GraphQL, AWS Chime, IIIF deep zoom"
+  },
+  {
+    "slug": "calder-gardens",
+    "title": "Calder Gardens",
+    "short": "A whole digital ecosystem for a brand-new institution",
+    "org": "Calder Gardens",
+    "years": "2025",
+    "role": "Product and design direction",
+    "video": "calder", "poster": "calder-still",
+    "alt": "The Calder Gardens site, with a black Calder mobile on a pale grey field",
+    "link": "https://caldergardens.org/",
+    "linkText": "Visit caldergardens.org",
+    "body": [
+      "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
+      "Underneath, one codebase and one ticketing pipeline serve both institutions, with brand, type, and color injected at the interface layer. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering."
+    ],
+    "stack": "Next.js, Mantine, Sanity, npm workspaces, AWS Lambda, ACME",
+    "note": { "title": "One Codebase, Two Brands", "url": "https://medium.com/barnes-foundation/one-codebase-two-brands-386835d886d4" }
+  },
+  {
+    "slug": "membership",
+    "title": "Membership",
+    "short": "A portal, digital cards, and renewals people finish",
+    "org": "Barnes Foundation",
+    "years": "2021 to now",
+    "role": "Product, design, and development",
+    "image": "member",
+    "alt": "The Barnes member portal with a Cezanne still life behind a welcome message and a bright orange menu",
+    "body": [
+      "The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.",
+      "Redesigning the join and renewal flows, with renewal upsells inside the portal, brought a 37% increase in renewals and 22% higher member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
+    ],
+    "stack": "TypeScript, ACME, AWS Pinpoint, Firebase notifications"
+  },
+  {
+    "slug": "deep-zoom",
+    "title": "Deep zoom",
+    "short": "Close looking, down to the brushstroke",
+    "org": "Barnes Foundation",
+    "years": "2021 to now",
+    "role": "Front-end development and design",
+    "video": "postman", "poster": "postman",
+    "alt": "Zooming into the brushwork of Van Gogh's The Postman",
+    "link": "https://iiif.io",
+    "linkText": "Learn about IIIF",
+    "body": [
+      "We built a custom IIIF deep-zoom viewer that tiles artworks on the fly through an AWS Lambda microservice and S3. It runs on the online collection and the VXP, where it keeps pan and zoom in sync during live classes so an instructor and a room full of students can look at the same few inches of paint."
+    ],
+    "stack": "IIIF, AWS Lambda, S3, React, GraphQL"
+  },
+  {
+    "slug": "online-collection",
+    "title": "Online collection",
+    "short": "Browse the Barnes by color, light, line, and space",
+    "org": "Barnes Foundation",
+    "years": "2021 to now",
+    "role": "Development and design",
+    "video": "collection", "poster": "collection",
+    "alt": "Browsing the Barnes online collection",
+    "link": "https://collection.barnesfoundation.org/",
+    "linkText": "Explore the collection",
+    "body": [
+      "The Barnes collection site lets you sort by color, light, line, and space, the four plastic means of the Barnes method. I've updated and maintained it to carry the brand designed by our colleagues at AREA 17, and that work grew into a shared style guide for later projects."
+    ],
+    "stack": "React, GraphQL, IIIF"
+  },
+  {
+    "slug": "sms-ticketing",
+    "title": "SMS ticketing",
+    "short": "Your ticket, with a tour upgrade, right in a text",
+    "org": "Barnes Foundation",
+    "years": "2021",
+    "role": "Product, design, and development",
+    "image": "sms",
+    "alt": "A phone showing a Barnes ticket with a QR code and an offer to join a tour",
+    "body": [
+      "Borrowing from the member site, we built a ticket page that gets texted to guests before their arrival time. It includes a tour upgrade, so someone standing in the building can turn a general admission ticket into a tour ticket on the spot. Good for the guest, and good for earned revenue."
+    ]
+  },
+  {
+    "slug": "barnes-live",
+    "title": "Barnes Live",
+    "short": "The pandemic classroom that started all of this",
+    "org": "Barnes Foundation",
+    "years": "2021",
+    "role": "Front-end development",
+    "image": "live",
+    "alt": "The Barnes Live player showing an art talk on Suzanne Valadon with chat beside it",
+    "link": "https://aws.amazon.com/blogs/publicsector/barnes-foundation-takes-art-education-virtual-and-reaches-record-number-of-new-learners/",
+    "linkText": "Read the AWS story",
+    "body": [
+      "The Barnes rolled out online education in April 2020, and I joined in 2021 to help keep it growing. Barnes Live paired low-latency video with chat, and with our Education team it tripled online adult enrollment and reached 40% more school-age students in 2020-2021 than in-person courses did in pre-pandemic years. What we learned here shaped the VXP."
+    ],
+    "stack": "React, Node.js, AWS IVS, Stream, Serverless"
+  }
+]
