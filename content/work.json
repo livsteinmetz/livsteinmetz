@@ -16,7 +16,8 @@
    "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
    "So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
    "Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP. Replay followed in 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.",
-   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."
+   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing.",
+   "Other museums wanted it too, so we turned it into a licensed product, with onboarding and support built for peer institutions."
   ],
   "lines": [
    "VISUAL",
@@ -154,6 +155,29 @@
   "mat": "#b15e8f"
  },
  {
+  "slug": "commerce",
+  "title": "Commerce",
+  "tag": "a way in the door",
+  "date": "2021 to now",
+  "art": "roulin",
+  "font": "didone",
+  "short": "Tickets, memberships, gifts, and retail on one stack",
+  "role": "Product",
+  "org": "Barnes Foundation and Calder Gardens",
+  "link": "https://github.com/BarnesFoundation/acme-ticketing-client",
+  "linkText": "The open source ACME client",
+  "stack": "TypeScript, ACME, headless front ends",
+  "body": [
+   "Almost everything a museum sells or asks for runs through the same few screens: a ticket, a membership, a gift, something from the shop. I own the ACME commerce stack at the Barnes and the purchase journeys on top of it.",
+   "When Calder Gardens opened, it needed all of that on day one under its own brand, so we built one multi-tenant setup that serves both institutions. We also keep an ACME client open source, so other museums on the platform don't have to write their own."
+  ],
+  "lines": [
+   "Commerce"
+  ],
+  "align": "left",
+  "mat": "#66c4ff"
+ },
+ {
   "slug": "deep-zoom",
   "title": "Deep Zoom",
   "tag": "a close look",
@@ -214,5 +238,53 @@
   "align": "center",
   "width": 0.78,
   "mat": "#efa090"
+ },
+ {
+  "slug": "tours",
+  "title": "Tours and Eye Spy",
+  "tag": "a walk through the rooms",
+  "date": "2021 to now",
+  "font": "grotesk",
+  "short": "Room by room tours and scavenger hunts on the collection site",
+  "role": "Product and development",
+  "org": "Barnes Foundation",
+  "link": "https://collection.barnesfoundation.org",
+  "linkText": "The collection site",
+  "stack": "React, Node",
+  "color": "#16246e",
+  "flat": "#fff27a",
+  "body": [
+   "The collection site also carries tours and Eye Spy scavenger hunts, in English and Spanish, ordered by the rooms you walk through.",
+   "Each one is a single config file, so adding a new tour doesn't touch the front end. That's what keeps it in the hands of the people writing the tours."
+  ],
+  "lines": [
+   "TOURS",
+   "EYE SPY"
+  ],
+  "align": "left",
+  "mat": "#efa090"
+ },
+ {
+  "slug": "salesforce",
+  "title": "Moving to Salesforce",
+  "tag": "a shared record",
+  "date": "2024",
+  "font": "soft",
+  "short": "Moving the Barnes from Raiser's Edge to Salesforce",
+  "role": "Product direction",
+  "org": "Barnes Foundation",
+  "stack": "Salesforce, ACME",
+  "color": "#16246e",
+  "flat": "#efb4f7",
+  "body": [
+   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce. The hard part wasn't the data, it was getting Advancement, Marketing, and Guest Services to agree on what a customer journey looks like across all three.",
+   "It now sits underneath membership and ticketing, so what someone does online and what staff see at the desk come from the same record."
+  ],
+  "lines": [
+   "MOVING TO",
+   "SALESFORCE"
+  ],
+  "align": "left",
+  "mat": "#ef8f35"
  }
 ]
