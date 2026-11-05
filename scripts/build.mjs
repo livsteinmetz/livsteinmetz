@@ -4,6 +4,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
+const wall = read('wall');
 const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -66,13 +67,14 @@ function shell({ path, title, description, body, canonical, top = true }) {
 <header class="top"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
 <div class="vinyl" aria-hidden="true"><i></i></div><main id="main">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
-<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
+<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and the Cleveland Museum of Art. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js"></script></body></html>`;
 }
 
 const shelf = (key, label, id) => `<section class="side ${key}" id="${id}"><h2>${label}</h2><div class="shelf">${side[key].map((c) => cover(c)).join('')}</div></section>`;
+const wallShelf = wall.length ? `<section class="side c" id="on-the-wall"><h2>On the wall today, from the Cleveland Museum of Art's open access collection</h2><div class="shelf">${wall.map((w, i) => `<a class="hang" href="${w.url}"><span class="still" data-print="${w.print}"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></span><span class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}</span></a>`).join('')}</div></section>` : '';
 const pages = {};
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<p class="statement">${STATEMENT}</p>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}` });
+pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<p class="statement">${STATEMENT}</p>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${wallShelf}` });
 
 function record(current, sideKey) {
   const list = side[sideKey];
@@ -126,6 +128,7 @@ for (const [k, a] of Object.entries(art)) {
   const body = { id: a.barnes ? `https://d2r83x5xt28klo.cloudfront.net/tiles/${a.barnes}/0,0,1024,1024/256,/0/color.jpg` : a.image, type: 'Image', format: 'image/jpeg', width: a.w, height: a.h, ...(service && { service }) };
   writeFileSync(`build/iiif/${k}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: [a.barnes ? 'Courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania' : a.rights] } }, rights: 'https://creativecommons.org/publicdomain/mark/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body }] }] }] }, null, 1));
 }
+wall.forEach((a) => { const id = `${SITE}/iiif/wall-${a.id}.json`; writeFileSync(`build/iiif/wall-${a.id}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: ['Cleveland Museum of Art, CC0'] } }, rights: 'https://creativecommons.org/publicdomain/zero/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body: { id: a.print, type: 'Image', format: 'image/jpeg' } }] }] }] }, null, 1)); });
 const urls = Object.keys(pages).filter((f) => f !== '404.html').map((f) => `${SITE}/${f.replace(/(index)?\.html$/, '')}`);
 writeFileSync('build/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${u}</loc></url>`).join('')}</urlset>`);
 writeFileSync('build/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);

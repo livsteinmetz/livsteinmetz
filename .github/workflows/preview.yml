@@ -17,10 +17,9 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/fetch-medium.mjs
+      - run: node scripts/fetch-wall.mjs
       - run: node scripts/build.mjs
       - run: node scripts/check-art.mjs
-      - run: node .ci/sources.mjs
-        continue-on-error: true
       - run: npm i --no-save playwright && npx playwright install --with-deps chromium && node .ci/shots.mjs
         continue-on-error: true
       - name: Publish screenshots to a scratch branch
