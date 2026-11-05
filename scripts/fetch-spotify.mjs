@@ -57,7 +57,15 @@ try {
     if (!res.ok) throw new Error(`top artists ${res.status}`);
     windows.push({ label, artists: (await res.json()).items.map((a) => a.name) });
   }
-  writeFileSync('content/trends.json', `${JSON.stringify({ windows }, null, 1)}\n`);
+  const top = await fetch('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', { headers });
+  if (!top.ok) throw new Error(`top tracks ${top.status}`);
+  const tracks = (await top.json()).items.map((t) => ({ title: t.name, artist: t.artists?.[0]?.name || '' }));
+  const recent = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=50', { headers });
+  const hours = Array(24).fill(0);
+  if (recent.ok) {
+    for (const r of (await recent.json()).items) hours[Number(new Date(r.played_at).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' })) % 24] += 1;
+  }
+  writeFileSync('content/trends.json', `${JSON.stringify({ windows, tracks, hours }, null, 1)}\n`);
   console.log(`Saved top artists for ${windows.length} windows`);
 } catch (err) {
   console.warn(`Spotify skipped: ${err.message}`);

@@ -132,3 +132,6 @@ html:has(.wrapped){scroll-snap-type:y proximity}
 @media(prefers-reduced-motion:reduce){.hang:hover .jacket:has(.blurb) img{transform:none;opacity:.08}.hang:hover .disc{transform:none}}
 
 #site-content{overflow-x:clip}
+
+.tracks-list{margin:0;padding-left:1.6em;font-size:1.0625rem;line-height:1.3}.tracks-list li{padding:5px 0}.tracks-list b{font-weight:500;display:block}
+#scene-clock:not(.x) rect{transform-box:fill-box}

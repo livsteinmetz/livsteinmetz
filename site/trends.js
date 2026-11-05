@@ -46,7 +46,7 @@ export function sample() {
 }
 
 function fingerprint(s) {
-  const weeks = Object.keys(s.years).sort().flatMap((y) => s.years[y]);
+  const weeks = s.weeks || Object.keys(s.years).sort().flatMap((y) => s.years[y]);
   const peak = Math.max(...weeks, 0.001), at = (i) => weeks[Math.floor(i) % weeks.length] / peak;
   const seed = hash(s.top.map((a) => a.name).join()) % 97, cx = 300, cy = 330;
   let out = '';
@@ -124,7 +124,39 @@ function countUp(el, to) {
   requestAnimationFrame(tick);
 }
 
+const shown = (ids, on) => ids.forEach((id) => { $(`scene-${id}`).hidden = !on; });
+
+function bars(hours) {
+  const peak = Math.max(...hours, 1);
+  const cols = hours.map((v, h) => `<rect x="${h * 25}" y="${260 - (v / peak) * 240}" width="22" height="${(v / peak) * 240}" fill="${INK}" style="--i:${h}"><title>${hourName(h)}: ${v} plays</title></rect>`).join('');
+  const marks = [['midnight', 0], ['6am', 6], ['noon', 12], ['6pm', 18]].map(([l, h]) => `<text x="${h * 25}" y="284" font-size="14">${l}</text>`).join('');
+  return `<svg viewBox="0 0 600 290" role="img" aria-label="My last 50 plays by hour of day">${cols}${marks}</svg>`;
+}
+
+// The live view, from what Spotify shares day to day. The full history replaces it.
+function drawLive(t) {
+  const [now, mid] = t.windows, top = now.artists[0];
+  const moved = now.artists.map((a) => ({ a, by: (mid.artists.includes(a) ? mid.artists.indexOf(a) : 10) - now.artists.indexOf(a) })).sort((x, y) => y.by - x.by)[0];
+  const steady = now.artists.filter((a) => t.windows.every((w) => w.artists.includes(a)));
+  $('deck').hidden = false;
+  shown(['open', 'season', 'clock', 'print'], true);
+  shown(['artist'], false);
+  $('hours').hidden = true;
+  scene('open', top, 'has been on the most for the last four weeks.');
+  scene('season', moved.by > 0 ? `${moved.a} is on the rise` : 'My top tracks lately', moved.by > 0 ? `Up ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'} on the last six months. These are my top tracks right now.` : 'From the last four weeks.');
+  $('rings').innerHTML = `<ol class="tracks-list">${t.tracks.map((x) => `<li><b>${esc(x.title)}</b> ${esc(x.artist)}</li>`).join('')}</ol>`;
+  const hour = t.hours.indexOf(Math.max(...t.hours));
+  scene('clock', `I'm at it around ${hourName(hour)}`, 'My last 50 plays by hour of the day.');
+  $('clock').innerHTML = bars(t.hours);
+  scene('print', 'This is my print', steady.length ? `Drawn from my top artists, led by the ones who've stayed: ${steady.slice(0, 3).join(', ')}.` : 'Drawn from my top artists.');
+  const names = t.windows.flatMap((w) => w.artists);
+  $('fingerprint').innerHTML = fingerprint({ weeks: names.map((n) => (hash(n) % 100) + 1), top: names.slice(0, 5).map((name) => ({ name })) });
+  document.querySelectorAll('.scene').forEach((el) => { el.classList.remove('on'); seen.unobserve(el); seen.observe(el); });
+}
+
 function draw(s, who) {
+  shown(['open', 'season', 'clock', 'artist', 'print'], true);
+  $('hours').hidden = false;
   const me = who === 'mine' ? { I: 'I', my: 'my', Im: "I'm", was: 'my' } : { I: 'You', my: 'your', Im: "You're", was: 'your' };
   $('deck').hidden = false;
   $('hours').dataset.to = s.hours;
@@ -148,7 +180,10 @@ const seen = new IntersectionObserver((entries) => entries.forEach((e) => {
 
 const mine = JSON.parse($('history').textContent);
 const go = () => $('scene-open').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-if (mine) draw(mine, 'mine'); else $('reset').hidden = true;
+const live = JSON.parse($('live').textContent);
+const canLive = live.windows?.length && live.tracks?.length;
+const own = () => (mine ? draw(mine, 'mine') : drawLive(live));
+if (mine || canLive) own(); else $('reset').hidden = true;
 
 $('file').onchange = async (e) => {
   try {
@@ -163,7 +198,7 @@ $('file').onchange = async (e) => {
   }
 };
 $('demo').onclick = () => { draw(sample(), 'yours'); go(); };
-$('reset').onclick = () => { draw(mine, 'mine'); go(); };
+$('reset').onclick = () => { own(); go(); };
 $('save').onclick = () => {
   const svg = $('fingerprint').innerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
   const a = document.createElement('a');
