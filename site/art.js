@@ -66,6 +66,42 @@ if (typeof document !== 'undefined') {
     })
     .catch(() => {});
 
+  // Sound stays off until someone asks for it, so a page never starts playing by surprise.
+  const audio = new Audio();
+  audio.volume = 0.5;
+  let sound = false;
+  const soundBtn = document.querySelector('.sound');
+  if (soundBtn) {
+    if (!document.querySelector('[data-preview]')) soundBtn.hidden = true;
+    soundBtn.addEventListener('click', () => {
+      sound = !sound;
+      soundBtn.setAttribute('aria-pressed', sound);
+      soundBtn.textContent = sound ? 'Sound on' : 'Sound off';
+      if (!sound) audio.pause();
+    });
+  }
+  document.querySelectorAll('[data-preview]').forEach((el) => {
+    const link = el.closest('.hang'), cap = link.querySelector('.cap'), label = cap.textContent;
+    link.addEventListener('mouseenter', () => {
+      cap.textContent = el.dataset.song;
+      if (!sound) return;
+      audio.src = el.dataset.preview;
+      audio.play().then(() => el.classList.add('playing')).catch(() => {});
+    });
+    link.addEventListener('mouseleave', () => {
+      cap.textContent = label;
+      audio.pause();
+      el.classList.remove('playing');
+    });
+  });
+  document.querySelectorAll('.look .still').forEach((el) => {
+    const img = el.querySelector('img');
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      img.style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`;
+    });
+  });
+
   const box = document.querySelector('.lookbox');
   if (box) {
     document.querySelectorAll('.look').forEach((a) => a.addEventListener('click', (e) => {

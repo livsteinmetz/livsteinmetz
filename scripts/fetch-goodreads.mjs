@@ -45,6 +45,8 @@ const profile = async () => {
       const data = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
       book.title = decode(data.name || book.title);
       book.author = decode([data.author].flat()[0]?.name || book.author);
+      const about = decode(first(page, /<meta[^>]*property="og:description"[^>]*content="([^"]+)"/));
+      if (about) book.blurb = about.length > 190 ? `${about.slice(0, 190).replace(/\s+\S*$/, '')}...` : about;
     } catch { /* keep what the profile gave us */ }
   }
   console.log(`profile: ${html.length} bytes, ${books.length} books`, books.map((b) => `${b.title} / ${b.author}`));
