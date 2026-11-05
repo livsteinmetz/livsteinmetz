@@ -30,8 +30,15 @@ a.cover:hover{color:inherit}
 .ctag{display:block;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:9cqw;line-height:1.1}
 .tag-bottom{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
 .tag-strip{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
-.f-anton{font-family:Anton,Impact,sans-serif}.f-shoulders{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;text-transform:uppercase;line-height:.95}
+.ln{display:block;line-height:.95;white-space:nowrap}.ln.just{letter-spacing:.42em}
+.f-anton{font-family:Anton,Impact,sans-serif}.f-playfair{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:800;letter-spacing:-.02em}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:800}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:800}.f-rozha{font-family:"Rozha One",Georgia,serif}.f-unbounded{font-family:Unbounded,Arial,sans-serif;font-weight:800;letter-spacing:-.02em}.f-syne{font-family:Syne,Arial,sans-serif;font-weight:800}.f-abril{font-family:"Abril Fatface",Georgia,serif}.f-bowlby{font-family:"Bowlby One",Impact,sans-serif}
 .f-bodoni{font-family:"Bodoni Moda",Georgia,serif;font-weight:500}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:700}
+.loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .15s;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
+.loupe .crop{transform:scale(2.6);transform-origin:var(--x,50%) var(--y,50%)}
+.cover:hover .loupe{opacity:1}.loupe::after{content:"";position:absolute;inset:0;background:radial-gradient(circle var(--r,96px) at var(--x,50%) var(--y,50%),transparent 97%,#fff 98%)}
+.words,.tag-strip,.tag-bottom{z-index:2}
+.vinyl{position:fixed;right:18px;bottom:18px;width:64px;height:64px;border-radius:50%;z-index:5;background:repeating-radial-gradient(circle,#111 0 2px,#2b2b2b 2px 3px);pointer-events:none}
+.vinyl i{position:absolute;inset:34%;border-radius:50%;background:#fff27a}.vinyl i::before{content:"";position:absolute;left:50%;top:0;width:18%;height:50%;margin-left:-9%;background:#d81f8a}
 .credit{font-size:.8125rem;padding:16px var(--gutter) 20px}
 .credit a{margin-right:14px}
 /* the record */
@@ -59,4 +66,5 @@ a.cover:hover{color:inherit}
 .btn{display:inline-block;margin-top:18px;background:#000;color:#fff;padding:12px 22px;text-decoration:none}.btn:hover{color:var(--yellow)}
 .play{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}.play iframe{width:100%;height:352px;border:0}
 @media(max-width:760px){.detail{grid-template-columns:1fr}.stage{flex-basis:100%}.track{font-size:1.375rem}.shelf>a{flex-basis:74vw}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}@view-transition{navigation:none}}
+@media(hover:none){.vinyl{display:none}}
+@media(prefers-reduced-motion:reduce){.vinyl{display:none}*{transition:none!important}@view-transition{navigation:none}}

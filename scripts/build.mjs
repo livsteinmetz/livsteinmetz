@@ -9,23 +9,28 @@ const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
-const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Big+Shoulders+Display:wght@800&family=Bodoni+Moda:opsz,wght@6..96,500&family=Grenze+Gotisch:wght@700&family=Instrument+Serif:ital@1&family=League+Spartan:wght@700&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Big+Shoulders+Display:wght@800&family=Abril+Fatface&family=Bowlby+One&family=Grenze+Gotisch:wght@800&family=Instrument+Serif:ital@1&family=League+Spartan:wght@800&family=Playfair+Display:ital,wght@1,800&family=Rozha+One&family=Syne:wght@800&family=Unbounded:wght@800&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const STATEMENT = "I lead digital product, experience, and strategy for cultural and educational institutions. I design and build at the intersection of the arts and tech, and I build for the long haul. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
 // The covers on Side B rotate through the paintings; a daily build moves them along.
 const day = Math.floor(Date.now() / 864e5);
-const pool = ['beatrice', 'sailor', 'roulin', 'flower'];
+const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
 
+function noteLines(title, i) {
+  const w = title.split(' '), cut = Math.min(i % 2 ? 2 : 3, w.length - 1);
+  const a = w.slice(0, cut).join(' '), b = w.slice(cut).join(' ');
+  const [f1, f2] = [['playfair', 'spartan'], ['anton', 'playfair'], ['abril', 'spartan'], ['rozha', 'playfair']][i % 4];
+  return [[a, f1, a.length > 12 ? 11.5 : 14], [b, f2, b.length > 30 ? 7.5 : 9]];
+}
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: ['bodoni', 'spartan'][i % 2], size: n.title.length > 32 ? '2.5' : '3.5', color: ['#ffffff', '#ffe36b'][i % 2], edge: 'top', href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'all-notes', title: 'All the notes', tag: 'opinions my own', date: `${notes.length} so far`, font: 'shoulders', size: '4.4', color: '#000000', flat: '#d8ff3d', href: '/notes' },
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'anton', size: '4.6', color: '#ffe36b', edge: 'top', href: '/bass' },
-    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'gothic', size: '4.6', color: '#000000', flat: '#ffb3d9', href: '/playlists' },
+    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), lines: noteLines(n.title, i), href: n.html ? `/notes/${n.slug}` : n.url })),
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', lines: [['Double', 'unbounded', 12.5], ['BASS', 'anton', 50]], href: '/bass' },
+    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', lines: [['Play', 'rozha', 34], ['LISTS', 'bowlby', 20]], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
   ],
 };
 const covers = [...side.a, ...side.b];
@@ -40,11 +45,10 @@ function cropEl(key) {
 function cover(c0, tag = 'a') {
   const a = c0.art && art[c0.art];
   const c = a ? { ...c0, edge: a.edge, color: a.ink, tagColor: a.tagInk } : c0;
-  const size = `font-size:${(c.size * 4.5).toFixed(1)}cqw;color:${c.color}`;
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
   const tagEl = `<span class="ctag" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</span>`;
   const below = c.edge === 'bottom';
-  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}" style="${size}">${esc(c.title)}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
+  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle" style="color:${c.color}">${c.lines.map(([t, f, z, j]) => `<span class="ln f-${f}${j ? ' just' : ''}" style="font-size:${z}cqw">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs} aria-label="${esc(c.title)}${a ? `. ${esc(alt)}` : ''}">${inner}</a>` : `<span ${attrs} data-slug="${c.slug}" role="img" aria-label="${esc(c.title)}">${inner}</span>`;
 }
@@ -60,7 +64,7 @@ function shell({ path, title, description, body, canonical, top = true }) {
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-WZM6YLSHQY');</script>
 </head><body><a class="skip" href="#main">Skip to content</a>
 <header class="top"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
-<main id="main">${body}</main>
+<div class="vinyl" aria-hidden="true"><i></i></div><main id="main">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
 <p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js"></script></body></html>`;
@@ -87,17 +91,15 @@ work.forEach((w) => {
 });
 
 const sideB = side.b;
-pages['notes.html'] = shell({ path: '/notes', title: 'Notes for the field', description: 'Notes on museum digital product work, written in service to the field. Opinions are my own.',
-  body: `${record(sideB.find((c) => c.slug === 'all-notes'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">I write down what we're learning at the Barnes so that other small museum teams can skip the hard way. Disagree, or working on the same problem? <a href="mailto:${EMAIL}">Tell me about it.</a></p><div class="cols" style="margin-top:24px"><ul>${notes.map((n) => `<li><a href="${n.html ? `/notes/${n.slug}` : n.url}">${esc(n.title)}</a>${n.date ? `, ${fmt(n.date)}` : ''}</li>`).join('')}</ul></div></div>` });
 feed.forEach((n) => {
-  const cur = sideB.find((c) => c.slug === n.slug) || sideB.find((c) => c.slug === 'all-notes');
+  const cur = sideB.find((c) => c.slug === n.slug) || sideB[0];
   pages[`notes/${n.slug}.html`] = shell({ path: `/notes/${n.slug}`, title: n.title, description: n.excerpt, canonical: n.url,
     body: `${record(cur, 'b')}<article class="detail" style="grid-template-columns:1fr"><h1>${esc(n.title)}</h1><div class="prose"><p><a href="${n.url}">First published on the Barnes Foundation's Medium</a>, ${fmt(n.date)}.</p>${n.html}</div></article>` });
 });
 
 const list = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 pages['bass.html'] = shell({ path: '/bass', title: 'Double bass', description: 'Olivia Steinmetz is a freelance double bassist around Philadelphia.',
-  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">I've freelanced since 2015 in orchestras, opera pits, and ballet pits around Philadelphia, Nashville, and Salt Lake City. I studied performance and engineering at the same time at Vanderbilt, and I've never been able to choose. Contractors, I'd love to hear from you.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section><section><h2>Teachers</h2>${list(music.teachers)}</section></div></div>` });
+  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">I've freelanced since 2015 in orchestras, opera pits, and ballet pits around Philadelphia, Nashville, and Salt Lake City. I studied performance and engineering at the same time at Vanderbilt, and I've never been able to choose. Contractors, I'd love to hear from you.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
 pages['playlists.html'] = shell({ path: '/playlists', title: 'Playlists', description: "What Olivia Steinmetz is listening to.",
   body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : `<p>Playlists are on the way.</p>`}</div>` });
 

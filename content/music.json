@@ -1,22 +1,21 @@
 {
-  "ensembles": [
-    "Utah Metropolitan Ballet Orchestra, principal",
-    "New Jersey Chamber Orchestra, principal",
-    "Berks Opera Company, principal",
-    "Ballet West Orchestra",
-    "Symphony in C",
-    "Curtis Symphony Orchestra",
-    "Pennsylvania Sinfonia Orchestra",
-    "Penn Symphony Orchestra",
-    "Temple University Orchestra",
-    "Philadelphia Network for New Music",
-    "Vanderbilt University Orchestra"
-  ],
-  "teaching": [
-    "Philadelphia Youth Orchestra",
-    "Philadelphia Young Artists Orchestra",
-    "W.O. Smith Settlement Music School",
-    "Project 440"
-  ],
-  "teachers": ["Mary Javian", "Joseph Conyers", "Joel Reist"]
+ "ensembles": [
+  "Utah Metropolitan Ballet Orchestra, principal",
+  "New Jersey Chamber Orchestra, principal",
+  "Berks Opera Company, principal",
+  "Ballet West Orchestra",
+  "Symphony in C",
+  "Curtis Symphony Orchestra",
+  "Pennsylvania Sinfonia Orchestra",
+  "Penn Symphony Orchestra",
+  "Temple University Orchestra",
+  "Philadelphia Network for New Music",
+  "Vanderbilt University Orchestra"
+ ],
+ "teaching": [
+  "Philadelphia Youth Orchestra",
+  "Philadelphia Young Artists Orchestra",
+  "W.O. Smith Settlement Music School",
+  "Project 440"
+ ]
 }

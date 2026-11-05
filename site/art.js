@@ -45,6 +45,47 @@ if (typeof document !== 'undefined') {
   }), { rootMargin: '300px' });
   document.querySelectorAll('.crop[data-barnes]').forEach((c) => io.observe(c));
 
+  // A loupe that follows the cursor, using the same IIIF tiles at a closer scale.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (matchMedia('(hover: hover)').matches && !still) {
+    document.querySelectorAll('.cover.has-art').forEach((c) => {
+      const src = c.querySelector('.crop[data-barnes]');
+      if (!src) return;
+      let lens;
+      c.addEventListener('pointerenter', () => {
+        if (lens) return;
+        lens = document.createElement('span'); lens.className = 'loupe';
+        const z = src.cloneNode(false); lens.append(z);
+        src.after(lens);
+        const crop = z.dataset.crop.split(',').map(Number);
+        const a = { id: z.dataset.barnes, w: +z.dataset.w, h: +z.dataset.h, crop };
+        for (const t of tiles(a, scaleFor(crop[2] * a.w, c.clientWidth * 2.6 * 1.5))) {
+          const i = new Image(); i.alt = ''; i.src = t.url;
+          i.style.cssText = `left:${t.left}%;top:${t.top}%;width:${t.width + 0.08}%;height:${t.height + 0.08}%`;
+          z.append(i);
+        }
+      });
+      c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect();
+        c.style.setProperty('--x', `${e.clientX - r.left}px`);
+        c.style.setProperty('--y', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  // Scrolling plays the record, and drifts the shelves.
+  if (!still) {
+    const vinyl = document.querySelector('.vinyl'), shelves = [...document.querySelectorAll('.shelf')];
+    let queued = false;
+    const onScroll = () => {
+      queued = false;
+      vinyl.style.transform = `rotate(${scrollY * 0.4}deg)`;
+      shelves.forEach((s, i) => { const r = s.getBoundingClientRect(); s.style.transform = `translateX(${((r.top - innerHeight / 2) / innerHeight) * (i ? 28 : -28)}px)`; });
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(onScroll); } }, { passive: true });
+    onScroll();
+  }
+
   // Flip the record: hovering a track shows its cover.
   const stage = document.querySelector('[data-stage]');
   if (stage) {

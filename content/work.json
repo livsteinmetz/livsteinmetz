@@ -1,23 +1,232 @@
 [
- {"slug":"visual-experience-platform","title":"Visual Experience Platform","tag":"a classroom","date":"2021 to now","art":"postman","font":"shoulders","size":"2.9","color":"#ffc2b8","edge":"top",
-  "short":"An online classroom for looking at art together","role":"Product, UX/UI design, and front-end development","org":"Barnes Foundation","media":{"image":"vxp-still","alt":"A virtual Barnes gallery wall with a class's tools around it"},"link":"https://www.barnesfoundation.org/visual-experience-platform","linkText":"See the VXP at the Barnes","stack":"React, GraphQL, AWS Chime, IIIF deep zoom",
-  "body":["When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.","So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.","Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP. Replay followed in 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.","In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."]},
- {"slug":"focus","title":"Barnes Focus","tag":"a guide with no labels","date":"2021 to now","art":"jeanne","font":"bodoni","size":"3.6","color":"#ffffff","edge":"top",
-  "short":"Point your phone at a painting and it tells you what you're looking at","role":"Product and front-end development","org":"Barnes Foundation","link":"https://www.barnesfoundation.org/press/press-releases/the-barnes-foundation-unveils-barnes-focus-new-mobile-guide","linkText":"Read about Barnes Focus","stack":"Image recognition, React",
-  "body":["The Barnes hangs no wall labels. Dr. Barnes arranged the collection in ensembles so you'd look at relationships of color, light, line, and space instead of reading a placard and moving on.","Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. This year we rebuilt the recognition engine in house, which is the kind of project that used to be out of reach for a small museum team."]},
- {"slug":"calder-gardens","title":"Calder Gardens","tag":"a new institution","date":"2025","font":"anton","size":"4.6","color":"#000000","flat":"#e8b2ff",
-  "short":"A whole digital ecosystem for a brand-new institution","role":"Product and design direction","org":"Calder Gardens","media":{"video":"calder","poster":"calder-still","alt":"The Calder Gardens site"},"link":"https://caldergardens.org/","linkText":"Visit caldergardens.org","stack":"Next.js, Mantine, Sanity, AWS, ACME","note":{"title":"One Codebase, Two Brands","url":"https://medium.com/barnes-foundation/one-codebase-two-brands-386835d886d4"},
-  "body":["As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.","Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering."]},
- {"slug":"membership","title":"Membership","tag":"a renewal flow","date":"2021 to now","art":"bouquet","font":"spartan","size":"3.1","color":"#b8ffe0","edge":"bottom",
-  "short":"A portal, digital cards, and renewals people finish","role":"Product, design, and development","org":"Barnes Foundation","media":{"image":"member","alt":"The Barnes member portal"},"stack":"TypeScript, ACME, Salesforce",
-  "body":["The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.","Redesigning the join and renewal flows, with renewal upsells inside the portal, brought a 37% increase in renewals and 22% higher member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."]},
- {"slug":"deep-zoom","title":"Deep Zoom","tag":"a close look","date":"2021 to now","art":"jungle","font":"gothic","size":"4.6","color":"#c9ff9e","edge":"top",
-  "short":"Close looking, down to the brushstroke","role":"Front-end development and design","org":"Barnes Foundation","media":{"video":"postman","poster":"postman","alt":"Zooming into The Postman"},"link":"https://iiif.io","linkText":"Learn about IIIF","stack":"IIIF, AWS Lambda, S3, React",
-  "body":["We built a custom IIIF deep-zoom pipeline that tiles artworks through an AWS Lambda and S3. It runs on the online collection and the VXP, where it keeps pan and zoom in sync during live classes so an instructor and a room full of students can look at the same few inches of paint.","Every painting on this site is served the same way. The covers are assembled from the Barnes's public IIIF tiles in your browser, so you're looking at that pipeline right now."]},
- {"slug":"online-collection","title":"Online Collection","tag":"a way to browse","date":"2021 to now","art":"polkadot","font":"bodoni","size":"3.4","color":"#ffffff","edge":"bottom",
-  "short":"Browse the Barnes by color, light, line, and space","role":"Development and design","org":"Barnes Foundation","media":{"video":"collection","poster":"collection","alt":"Browsing the Barnes online collection"},"link":"https://collection.barnesfoundation.org/","linkText":"Explore the collection","stack":"React, Node, AWS Lambda, CloudFront",
-  "body":["The Barnes collection site lets you sort by color, light, line, and space, the four plastic means of the Barnes method. I've built on it since 2021, including the brand work, the 404 and tour pages, and the shared style guide that grew out of it.","This fall the team moved the whole site to Lambda and CloudFront with no downtime, and rebuilt measurement on GA4 so we can see what people do there."]},
- {"slug":"technology-plan","title":"The Technology Plan","tag":"a three-year score","date":"FY27 to FY29","art":"annunciation","font":"anton","size":"3.5","color":"#ffe36b","edge":"top",
-  "short":"A shared roadmap for three institutions","role":"Co-author with the CTO","org":"Barnes Foundation, Calder Gardens, Pew Center for Arts & Heritage",
-  "body":["I co-own our FY27 to FY29 technology plan with our CTO. It started as a listening tour across every department, because a plan only holds if the people named in it helped write it.","The plan treats our in-house platforms as a product line, not a pile of projects, so each capability we build serves all three institutions by default. It's the same instinct as playing in a section: listen first, and hold the group together from the back."]}
+ {
+  "slug": "visual-experience-platform",
+  "title": "Visual Experience Platform",
+  "tag": "a classroom",
+  "date": "2021 to now",
+  "art": "postman",
+  "font": "shoulders",
+  "size": "2.9",
+  "color": "#ffc2b8",
+  "edge": "top",
+  "short": "An online classroom for looking at art together",
+  "role": "Product, UX/UI design, and front-end development",
+  "org": "Barnes Foundation",
+  "media": {
+   "image": "vxp-still",
+   "alt": "A virtual Barnes gallery wall with a class's tools around it"
+  },
+  "link": "https://www.barnesfoundation.org/visual-experience-platform",
+  "linkText": "See the VXP at the Barnes",
+  "stack": "React, GraphQL, AWS Chime, IIIF deep zoom",
+  "body": [
+   "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
+   "So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
+   "Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP. Replay followed in 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.",
+   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."
+  ],
+  "lines": [
+   [
+    "Visual",
+    "playfair",
+    25
+   ],
+   [
+    "EXPERIENCE",
+    "anton",
+    23.5
+   ],
+   [
+    "Platform",
+    "spartan",
+    15,
+    "j"
+   ]
+  ]
+ },
+ {
+  "slug": "focus",
+  "title": "Barnes Focus",
+  "tag": "a guide with no labels",
+  "date": "2021 to now",
+  "art": "jeanne",
+  "font": "bodoni",
+  "size": "3.6",
+  "color": "#ffffff",
+  "edge": "top",
+  "short": "Point your phone at a painting and it tells you what you're looking at",
+  "role": "Product and front-end development",
+  "org": "Barnes Foundation",
+  "link": "https://www.barnesfoundation.org/press/press-releases/the-barnes-foundation-unveils-barnes-focus-new-mobile-guide",
+  "linkText": "Read about Barnes Focus",
+  "stack": "Image recognition, React",
+  "body": [
+   "The Barnes hangs no wall labels. Dr. Barnes arranged the collection in ensembles so you'd look at relationships of color, light, line, and space instead of reading a placard and moving on.",
+   "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. This year we rebuilt the recognition engine in house, which is the kind of project that used to be out of reach for a small museum team."
+  ],
+  "lines": [
+   [
+    "Barnes",
+    "rozha",
+    19
+   ],
+   [
+    "FOCUS",
+    "unbounded",
+    16.5
+   ]
+  ]
+ },
+ {
+  "slug": "calder-gardens",
+  "title": "Calder Gardens",
+  "tag": "a new institution",
+  "date": "2025",
+  "font": "anton",
+  "size": "4.6",
+  "color": "#000000",
+  "flat": "#e8b2ff",
+  "short": "A whole digital ecosystem for a brand-new institution",
+  "role": "Product and design direction",
+  "org": "Calder Gardens",
+  "media": {
+   "video": "calder",
+   "poster": "calder-still",
+   "alt": "The Calder Gardens site"
+  },
+  "link": "https://caldergardens.org/",
+  "linkText": "Visit caldergardens.org",
+  "stack": "Next.js, Mantine, Sanity, AWS, ACME",
+  "note": {
+   "title": "One Codebase, Two Brands",
+   "url": "https://medium.com/barnes-foundation/one-codebase-two-brands-386835d886d4"
+  },
+  "body": [
+   "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
+   "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering."
+  ],
+  "lines": [
+   [
+    "Calder",
+    "syne",
+    20
+   ],
+   [
+    "Gardens",
+    "playfair",
+    24
+   ]
+  ]
+ },
+ {
+  "slug": "membership",
+  "title": "Membership",
+  "tag": "a renewal flow",
+  "date": "2021 to now",
+  "art": "bouquet",
+  "font": "spartan",
+  "size": "3.1",
+  "color": "#b8ffe0",
+  "edge": "bottom",
+  "short": "A portal, digital cards, and renewals people finish",
+  "role": "Product, design, and development",
+  "org": "Barnes Foundation",
+  "media": {
+   "image": "member",
+   "alt": "The Barnes member portal"
+  },
+  "stack": "TypeScript, ACME, Salesforce",
+  "body": [
+   "The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.",
+   "Redesigning the join and renewal flows, with renewal upsells inside the portal, brought a 37% increase in renewals and 22% higher member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
+  ],
+  "lines": [
+   [
+    "MEMBER",
+    "bowlby",
+    15
+   ],
+   [
+    "ship",
+    "playfair",
+    30
+   ]
+  ]
+ },
+ {
+  "slug": "deep-zoom",
+  "title": "Deep Zoom",
+  "tag": "a close look",
+  "date": "2021 to now",
+  "art": "jungle",
+  "font": "gothic",
+  "size": "4.6",
+  "color": "#c9ff9e",
+  "edge": "top",
+  "short": "Close looking, down to the brushstroke",
+  "role": "Front-end development and design",
+  "org": "Barnes Foundation",
+  "media": {
+   "video": "postman",
+   "poster": "postman",
+   "alt": "Zooming into The Postman"
+  },
+  "link": "https://iiif.io",
+  "linkText": "Learn about IIIF",
+  "stack": "IIIF, AWS Lambda, S3, React",
+  "body": [
+   "We built a custom IIIF deep-zoom pipeline that tiles artworks through an AWS Lambda and S3. It runs on the online collection and the VXP, where it keeps pan and zoom in sync during live classes so an instructor and a room full of students can look at the same few inches of paint.",
+   "Every painting on this site is served the same way. The covers are assembled from the Barnes's public IIIF tiles in your browser, so you're looking at that pipeline right now."
+  ],
+  "lines": [
+   [
+    "Deep",
+    "gothic",
+    26
+   ],
+   [
+    "Zoom",
+    "gothic",
+    44
+   ]
+  ]
+ },
+ {
+  "slug": "online-collection",
+  "title": "Online Collection",
+  "tag": "a way to browse",
+  "date": "2021 to now",
+  "art": "polkadot",
+  "font": "bodoni",
+  "size": "3.4",
+  "color": "#ffffff",
+  "edge": "bottom",
+  "short": "Browse the Barnes by color, light, line, and space",
+  "role": "Development and design",
+  "org": "Barnes Foundation",
+  "media": {
+   "video": "collection",
+   "poster": "collection",
+   "alt": "Browsing the Barnes online collection"
+  },
+  "link": "https://collection.barnesfoundation.org/",
+  "linkText": "Explore the collection",
+  "stack": "React, Node, AWS Lambda, CloudFront",
+  "body": [
+   "The Barnes collection site lets you sort by color, light, line, and space, the four plastic means of the Barnes method. I've built on it since 2021, including the brand work, the 404 and tour pages, and the shared style guide that grew out of it.",
+   "This fall the team moved the whole site to Lambda and CloudFront with no downtime, and rebuilt measurement on GA4 so we can see what people do there."
+  ],
+  "lines": [
+   [
+    "ONLINE",
+    "unbounded",
+    12.5
+   ],
+   [
+    "Collection",
+    "abril",
+    14.5
+   ]
+  ]
+ }
 ]
