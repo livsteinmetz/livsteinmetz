@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const wall = read('wall'), listening = read('listening');
+const type = read('type'), wall = read('wall'), listening = read('listening');
 const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -46,7 +46,10 @@ function cover(c0, tag = 'a') {
   const below = c.edge === 'bottom';
   const heading = `<h3 class="ctitle f-${c.font} a-${c.align || 'left'}${c.long ? ' long' : ''}" style="color:${c.color}"${c.width ? ` data-width="${c.width}"` : ''}>${c.lines.map((t) => `<span class="ln">${esc(t).replace(' ', '<i></i>')}</span>`).join('')}</h3>`;
   const tagline = `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
-  const body = `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption><div class="words ${c.edge}">${heading}${below ? tagline : ''}</div>${below ? '' : `<div class="${a ? 'tag-strip' : 'tag-bottom'}">${tagline}</div>`}</figcaption></figure>`;
+  const t = type[c.slug];
+  const spray = t?.spray ? '<path d="M90 0H288V42C276 50 274 76 266 76C258 76 260 44 248 44C238 44 240 88 230 88C220 88 222 40 208 40C192 40 170 22 90 0Z" fill="#d44cf0"/>' : '';
+  const drawn = t && `<h3 class="drawn"><svg viewBox="0 0 288 420" fill="${t.fill}" role="img" aria-label="${esc(c.title)}">${spray}${t.t.map(([text, x, y, w, size, font, weight, adjust = 'spacingAndGlyphs']) => `<text x="${x}" y="${y}" textLength="${w}" lengthAdjust="${adjust}" font-family="${font}" font-weight="${weight}" font-size="${size}">${text}</text>`).join('')}</svg></h3>`;
+  const body = drawn ? `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption>${drawn}</figcaption></figure>` : `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption><div class="words ${c.edge}">${heading}${below ? tagline : ''}</div>${below ? '' : `<div class="${a ? 'tag-strip' : 'tag-bottom'}">${tagline}</div>`}</figcaption></figure>`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs}>${body}</a>` : `<div ${attrs} data-slug="${c.slug}">${body}</div>`;
 }

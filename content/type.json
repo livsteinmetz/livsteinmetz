@@ -1,0 +1,225 @@
+{
+ "visual-experience-platform": {
+  "fill": "#e64aa6",
+  "t": [
+   [
+    "VISUAL",
+    12,
+    38,
+    264,
+    34,
+    "Anton",
+    400
+   ],
+   [
+    "EXPERIENCE",
+    12,
+    84,
+    264,
+    50,
+    "Anton",
+    400
+   ],
+   [
+    "PLATFORM",
+    12,
+    150,
+    264,
+    76,
+    "Anton",
+    400
+   ]
+  ]
+ },
+ "focus": {
+  "fill": "#ffffff",
+  "spray": true,
+  "t": [
+   [
+    "Barnes",
+    12,
+    84,
+    190,
+    84,
+    "Bodoni Moda",
+    500
+   ],
+   [
+    "Focus",
+    12,
+    160,
+    190,
+    84,
+    "Bodoni Moda",
+    500
+   ]
+  ]
+ },
+ "deep-zoom": {
+  "fill": "#fff27a",
+  "t": [
+   [
+    "DEEP",
+    64,
+    92,
+    160,
+    84,
+    "Jost",
+    700
+   ],
+   [
+    "ZOOM",
+    64,
+    166,
+    160,
+    84,
+    "Jost",
+    700
+   ]
+  ]
+ },
+ "membership": {
+  "fill": "#8dff72",
+  "t": [
+   [
+    "MEM",
+    12,
+    322,
+    150,
+    46,
+    "Archivo",
+    700
+   ],
+   [
+    "BER",
+    12,
+    360,
+    150,
+    46,
+    "Archivo",
+    700
+   ],
+   [
+    "SHIP",
+    12,
+    398,
+    150,
+    46,
+    "Archivo",
+    700
+   ]
+  ]
+ },
+ "online-collection": {
+  "fill": "#a3eccb",
+  "t": [
+   [
+    "ONLINE",
+    14,
+    62,
+    260,
+    52,
+    "Marcellus",
+    400,
+    "spacing"
+   ],
+   [
+    "COLLECTION",
+    14,
+    392,
+    260,
+    34,
+    "Marcellus",
+    400,
+    "spacing"
+   ]
+  ]
+ },
+ "calder-gardens": {
+  "fill": "#8f1259",
+  "t": [
+   [
+    "CALDER",
+    12,
+    92,
+    264,
+    84,
+    "Anton",
+    400
+   ],
+   [
+    "GARDENS",
+    12,
+    172,
+    264,
+    84,
+    "Anton",
+    400
+   ]
+  ]
+ },
+ "double-bass": {
+  "fill": "#e8ee7d",
+  "t": [
+   [
+    "DOUBLE",
+    12,
+    84,
+    264,
+    100,
+    "Archivo",
+    700
+   ],
+   [
+    "BASS",
+    12,
+    160,
+    264,
+    100,
+    "Archivo",
+    700
+   ]
+  ]
+ },
+ "one-codebase": {
+  "fill": "#fff27a",
+  "t": [
+   [
+    "ONE",
+    12,
+    54,
+    74,
+    46,
+    "Fraunces",
+    500
+   ],
+   [
+    "CODEBASE",
+    12,
+    94,
+    200,
+    38,
+    "Fraunces",
+    500
+   ],
+   [
+    "TWO",
+    202,
+    346,
+    74,
+    46,
+    "Fraunces",
+    500
+   ],
+   [
+    "BRANDS",
+    76,
+    392,
+    200,
+    38,
+    "Fraunces",
+    500
+   ]
+  ]
+ }
+}

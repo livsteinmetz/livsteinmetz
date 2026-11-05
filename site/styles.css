@@ -38,6 +38,7 @@ a.cover:hover{color:inherit}
 .a-spread .ln{display:flex;justify-content:space-between;font-size:17cqw;line-height:1.05}
 .long .ln{white-space:normal;font-size:10.5cqw;line-height:1.1;text-wrap:balance}
 h3.ctitle{margin:0;font-weight:inherit}
+.drawn{position:absolute;inset:0;margin:0;pointer-events:none}.drawn svg{display:block;width:100%;height:100%}
 .ctag{margin:0}
 .f-grotesk{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;font-weight:700;letter-spacing:-.01em}
 .f-didone{font-family:"Bodoni Moda",Didot,Georgia,serif;font-weight:500}
