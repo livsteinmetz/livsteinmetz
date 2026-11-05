@@ -16,8 +16,7 @@
    "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
    "So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
    "Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP. Replay followed in 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.",
-   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing.",
-   "Other museums wanted it too, so we turned it into a licensed product, with onboarding and support built for peer institutions."
+   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."
   ],
   "lines": [
    "VISUAL",
@@ -255,7 +254,7 @@
   "flat": "#fff27a",
   "body": [
    "The collection site also carries tours and Eye Spy scavenger hunts, in English and Spanish, ordered by the rooms you walk through.",
-   "Each one is a single config file, so adding a new tour doesn't touch the front end. That's what keeps it in the hands of the people writing the tours."
+   "Each one is a single config file, so adding a new tour doesn't touch the front end."
   ],
   "lines": [
    "TOURS",
@@ -277,8 +276,7 @@
   "color": "#16246e",
   "flat": "#efb4f7",
   "body": [
-   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce. The hard part wasn't the data, it was getting Advancement, Marketing, and Guest Services to agree on what a customer journey looks like across all three.",
-   "It now sits underneath membership and ticketing, so what someone does online and what staff see at the desk come from the same record."
+   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share."
   ],
   "lines": [
    "MOVING TO",
