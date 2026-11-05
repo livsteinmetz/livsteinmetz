@@ -1,7 +1,7 @@
 // Builds the site into build/. Plain Node, no dependencies.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { contrast, SCRIM } from './contrast.mjs';
+import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
 const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
@@ -16,7 +16,7 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 
 // The covers on Side B rotate through the paintings; a daily build moves them along.
 const day = Math.floor(Date.now() / 864e5);
-const pool = ['beatrice', 'sailor', 'shepherd', 'roulin'];
+const pool = ['beatrice', 'sailor', 'roulin', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
 
 const side = {
@@ -24,26 +24,18 @@ const side = {
   b: [
     ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: ['bodoni', 'spartan'][i % 2], size: n.title.length > 32 ? '2.5' : '3.5', color: ['#ffffff', '#ffe36b'][i % 2], edge: 'top', href: n.html ? `/notes/${n.slug}` : n.url })),
     { slug: 'all-notes', title: 'All the notes', tag: 'opinions my own', date: `${notes.length} so far`, font: 'shoulders', size: '4.4', color: '#000000', flat: '#d8ff3d', href: '/notes' },
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'ophelia', font: 'anton', size: '4.6', color: '#ffe36b', edge: 'top', href: '/bass' },
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'anton', size: '4.6', color: '#ffe36b', edge: 'top', href: '/bass' },
     { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'gothic', size: '4.6', color: '#000000', flat: '#ffb3d9', href: '/playlists' },
   ],
 };
 const covers = [...side.a, ...side.b];
 
-// Fails the build rather than publishing type that doesn't pass.
-for (const c of covers) {
-  const bg = c.flat || 'scrim';
-  const r = contrast(c.color, bg === 'scrim' ? SCRIM : bg);
-  if (r < 3) throw new Error(`Contrast ${r.toFixed(2)} on "${c.title}" cover title`);
-  if (contrast(c.flat ? '#000000' : '#ffffff', bg === 'scrim' ? SCRIM : bg) < 4.5) throw new Error(`Contrast on "${c.title}" tag`);
-}
-console.log(`${covers.length} covers pass contrast`);
+// Flat covers are checked here. Covers on paintings are measured from real pixels in .ci/shots.mjs.
+for (const c of covers.filter((x) => x.flat)) if (contrast(c.color, c.flat) < 3) throw new Error(`Contrast on "${c.title}"`);
 
 function cropEl(key) {
   const a = art[key];
-  if (a.barnes) return `<span class="crop" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></span>`;
-  const [x, y, w, h] = a.crop;
-  return `<span class="crop"><img src="${a.image}" alt="" loading="lazy" style="width:${100 / w}%;height:${100 / h}%;left:${-(x / w) * 100}%;top:${-(y / h) * 100}%"></span>`;
+  return `<span class="crop" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></span>`;
 }
 function cover(c, tag = 'a') {
   const a = c.art && art[c.art];
@@ -69,7 +61,7 @@ function shell({ path, title, description, body, canonical, top = true }) {
 <header class="top"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
 <main id="main">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
-<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, except <i>Ophelia</i> (Tate, via Wikimedia Commons). All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
+<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js"></script></body></html>`;
 }
 

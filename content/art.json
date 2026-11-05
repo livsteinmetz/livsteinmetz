@@ -125,20 +125,6 @@
   ],
   "rights": "BF977, public domain"
  },
- "ophelia": {
-  "title": "Ophelia",
-  "artist": "John Everett Millais",
-  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg?width=2600",
-  "w": 7087,
-  "h": 4820,
-  "crop": [
-   0.3,
-   0.24,
-   0.36,
-   0.7
-  ],
-  "rights": "Tate, public domain, via Wikimedia Commons"
- },
  "roulin": {
   "title": "The Postman (Joseph-Étienne Roulin)",
   "artist": "Vincent van Gogh",
@@ -149,6 +135,20 @@
    0.22,
    0.58,
    0.56,
+   0.4
+  ],
+  "rights": "BF37, public domain"
+ },
+ "flower": {
+  "title": "The Postman (Joseph-Étienne Roulin)",
+  "artist": "Vincent van Gogh",
+  "barnes": 4720,
+  "w": 4613,
+  "h": 5556,
+  "crop": [
+   0.62,
+   0.1,
+   0.36,
    0.4
   ],
   "rights": "BF37, public domain"
