@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const settings = read('settings'), type = read('type'), wall = read('wall'), listening = read('listening'), reading = read('reading');
+const settings = read('settings'), type = read('type'), wall = read('wall'), trends = read('trends'), reading = read('reading');
 const work = read('work'), music = read('music'), myPlaylists = read('my-playlists'), playlists = [...read('playlists'), ...settings.playlists.map((p) => myPlaylists.find((m) => m.id === (p.id || p))).filter(Boolean)], art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -27,7 +27,7 @@ const side = {
   b: [
     ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
     { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'grotesk', mat: '#d9534a', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
-    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Playlists'], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
+    { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Listening'], color: '#000000', flat: '#ffb3d9', href: '/listening' },
   ],
 };
 const covers = [...side.a, ...side.b];
@@ -78,11 +78,12 @@ const isMusic = (c) => ['double-bass', 'playlists'].includes(c.slug);
 const shelf = (items, label, id) => `<section class="side" id="${id}" aria-labelledby="${id}-title"><h2 id="${id}-title">${label}</h2><ol class="shelf">${items.filter((c) => shown(`${id}:${c.slug}`)).map((c) => `<li class="mat" data-item="${id}:${c.slug}" style="--mat:${c.mat}">${cover(c)}</li>`).join('')}</ol></section>`;
 const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-labelledby="on-the-wall-title"><h2 id="on-the-wall-title">Looking</h2><ol class="shelf">${wall.filter((w) => shown(`looking:${w.id}`)).map((w, i) => `<li data-item="looking:${w.id}"><a class="hang look" href="${w.web}" data-caption="${esc(w.title)}, ${esc(w.artist)}. ${esc(w.museum)}"><figure role="group" aria-label="media"><div class="still"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></div><figcaption class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}<br>${esc(w.museum)}</figcaption></figure></a></li>`).join('')}</ol><dialog class="lookbox"><img alt=""><p></p></dialog></section>` : '';
 const pages = {};
-const listeningShelf = listening.length ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening</h2><ol class="shelf">${listening.filter((t) => shown(`listening:${t.url}`)).map((t) => `<li data-item="listening:${t.url}"><a class="hang" href="${t.url}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${t.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap"><i>${esc(t.title)}</i>, ${esc(t.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
+const trendsCard = trends.windows.length ? `<li><a class="hang" href="/listening/trends"><figure role="group" aria-label="media"><div class="still sleeve trends-card"><span>Trends</span></div><figcaption class="cap">What I've had on lately</figcaption></figure></a></li>` : '';
+const listeningShelf = playlists.length || trendsCard ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening</h2><ol class="shelf">${trendsCard}${playlists.map((p) => `<li data-item="listening:${p.id}"><a class="hang" href="/listening#${p.id}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${p.cover || p.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap">${esc(p.title)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
 const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading</h2><ol class="shelf">${reading.filter((b) => shown(`reading:${b.url}`)).map((b) => `<li data-item="reading:${b.url}"><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket"><img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>${b.author ? `, ${esc(b.author)}` : ''}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf(side.a, 'Working', 'working')}${shelf(side.b.filter((c) => !isMusic(c)), 'Writing', 'writing')}${readingShelf}${wallShelf}${listeningShelf}${shelf(side.b.filter(isMusic), 'Playing', 'playing')}</article>` });
+pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf(side.a, 'Working', 'working')}${shelf(side.b.filter((c) => !isMusic(c)), 'Writing', 'writing')}${readingShelf}${wallShelf}${listeningShelf}${shelf(side.b.filter((c) => c.slug === 'double-bass'), 'Playing', 'playing')}</article>` });
 
 function record(current, sideKey) {
   const list = side[sideKey].filter((c) => c.slug === current.slug || shown(`${sideKey === 'a' ? 'working' : isMusic(c) ? 'playing' : 'writing'}:${c.slug}`));
@@ -112,8 +113,21 @@ feed.forEach((n) => {
 const list = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 pages['bass.html'] = shell({ path: '/bass', title: 'Double bass', description: 'Olivia Steinmetz is a freelance double bassist around Philadelphia.',
   body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">I've freelanced since 2015 in orchestras, opera pits, and ballet pits around Philadelphia, Nashville, and Salt Lake City. I studied performance and engineering at the same time at Vanderbilt, and I've never been able to choose. Contractors, I'd love to hear from you.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
-pages['playlists.html'] = shell({ path: '/playlists', title: 'Playlists', description: "What Olivia Steinmetz is listening to.",
-  body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : `<p>Playlists are on the way.</p>`}</div>` });
+pages['listening.html'] = shell({ path: '/listening', title: 'Listening', description: "What Olivia Steinmetz is listening to.",
+  body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${trends.windows.length ? '<p><a href="/listening/trends">See my listening trends</a></p>' : ''}${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe id="${esc(p.id)}" title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : ''}</div>` });
+
+const slope = () => {
+  const W = trends.windows, x = (i) => 170 + i * 280, y = (r) => 40 + r * 34;
+  const names = [...new Set(W.flatMap((w) => w.artists))];
+  const lines = names.map((n) => {
+    const pts = W.map((w, i) => [i, w.artists.indexOf(n)]).filter(([, r]) => r >= 0);
+    return pts.length > 1 ? `<polyline fill="none" stroke="#16246e" stroke-width="${pts.length === W.length ? 2.5 : 1}" points="${pts.map(([i, r]) => `${x(i)},${y(r)}`).join(' ')}"/>` : '';
+  }).join('');
+  const labels = W.map((w, i) => `<text x="${x(i)}" y="18" text-anchor="middle" font-weight="500">${esc(w.label)}</text>${w.artists.map((n, r) => `<text x="${x(i) + (i === 2 ? 8 : i === 0 ? -8 : 0)}" y="${y(r) - (i === 1 ? 6 : -5)}" text-anchor="${i === 0 ? 'end' : i === 2 ? 'start' : 'middle'}" font-size="14">${esc(n)}</text>`).join('')}`).join('');
+  return `<figure role="group" aria-label="media"><div class="scroll"><svg viewBox="0 0 900 400" role="img" aria-label="My top artists across three time ranges">${lines}${labels}</svg></div><figcaption>Thicker lines stayed in my top ten across all three ranges.</figcaption></figure>`;
+};
+pages['listening/trends.html'] = shell({ path: '/listening/trends', title: 'Listening trends', description: "Olivia Steinmetz's top artists over time.",
+  body: `<article class="detail" id="story" style="grid-template-columns:1fr"><header><h1>Listening trends</h1></header><section name="articleBody" class="prose trends">${trends.windows.length ? slope() : ''}</section></article>` });
 
 pages['about.html'] = shell({ path: '/about', title: 'About', description: STATEMENT, body: `<div class="page"><div class="prose"><h1>About</h1>
 <p>I'm Liv. I lead digital product across the Barnes Foundation, Calder Gardens, and the Pew Center for Arts &amp; Heritage, working from Philadelphia. My title is Product Manager, Digital Initiatives. In practice I write the roadmap and then help design and build it, which covers ticketing, membership, giving, and the teaching tools behind Barnes classes.</p>
@@ -146,7 +160,6 @@ const adminItems = [
   { name: 'Writing', items: side.b.filter((c) => !isMusic(c)).map((c) => ({ key: `writing:${c.slug}`, label: c.title })) },
   { name: 'Reading', items: reading.map((b) => ({ key: `reading:${b.url}`, label: `${b.title}, ${b.author}` })) },
   { name: 'Looking', items: wall.map((w) => ({ key: `looking:${w.id}`, label: `${w.title}, ${w.artist}` })) },
-  { name: 'Listening', items: listening.map((t) => ({ key: `listening:${t.url}`, label: `${t.title}, ${t.artist}` })) },
   { name: 'Playing', items: side.b.filter(isMusic).map((c) => ({ key: `playing:${c.slug}`, label: c.title })) },
 ];
 writeFileSync('build/admin.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Admin</title><link rel="stylesheet" href="/styles.css?v=${V}"><style>.admin{max-width:720px;margin:0 auto;padding:32px var(--gutter)}.admin fieldset{border:0;border-top:1px solid #000;margin:24px 0;padding:12px 0}.admin legend{font-weight:500;padding-right:12px}.admin label{display:block;padding:4px 0}.admin .row{display:flex;gap:8px;margin:8px 0}.admin .pl{display:flex;align-items:center;gap:10px;padding:4px 0}.admin .pl img{width:36px;height:36px}.admin .pl span{flex:1;min-width:0}.admin input:not([type=checkbox]):not([type=radio]){flex:1;min-width:0;width:100%;font:inherit;padding:8px;border:1px solid #000}.admin button{font:inherit;padding:8px 14px;border:1px solid #000;background:#fff;cursor:pointer}</style></head><body><main class="admin"><h1>Admin</h1><div id="signed-out"><button id="in" type="button">Sign in with Google</button></div><div id="panel" hidden><div id="sections"></div><fieldset><legend>Your playlists</legend><p>Check the ones to show on your Playlists page. Pick one for the Listening shelf. Private playlists can't show on the site.</p><input id="filter" aria-label="Filter playlists" placeholder="Filter"><div id="playlists"></div></fieldset><p><button id="save" type="button">Save</button> <button id="out" type="button">Sign out</button></p></div><p id="status" role="status"></p></main><script id="items" type="application/json">${JSON.stringify(adminItems).replace(/</g, '\\u003c')}</script><script id="mine" type="application/json">${JSON.stringify(myPlaylists).replace(/</g, '\\u003c')}</script><script type="module" src="/admin.js?v=${V}"></script></body></html>`);

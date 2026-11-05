@@ -1,11 +1,10 @@
 // Saves all of Olivia's playlists to content/my-playlists.json for /admin, and
-// the tracks of the one she picks for Listening to content/listening.json.
+// her top artists to content/trends.json for the listening trends page.
 // Skips quietly until the SPOTIFY_ secrets are set, and a failed request never
 // blocks a deploy: the section just stays off the page.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
-const { listening } = JSON.parse(readFileSync('content/settings.json', 'utf8'));
 if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
 try {
@@ -24,27 +23,20 @@ try {
     const res = await fetch(next, { headers });
     if (!res.ok) throw new Error(`playlists ${res.status}`);
     const page = await res.json();
-    mine.push(...page.items.filter(Boolean).map((p) => ({ id: p.id, title: p.name, image: p.images?.at(-1)?.url || '', isPublic: p.public })));
+    mine.push(...page.items.filter(Boolean).map((p) => ({ id: p.id, title: p.name, image: p.images?.at(-1)?.url || '', cover: p.images?.[0]?.url || '', isPublic: p.public })));
     next = page.next;
   }
   writeFileSync('content/my-playlists.json', `${JSON.stringify(mine, null, 1)}\n`);
   console.log(`Saved ${mine.length} playlists`);
-  if (!listening) process.exit(0);
 
-  const base = `https://api.spotify.com/v1/playlists/${listening}`;
-  let res = await fetch(`${base}/items?limit=12`, { headers });
-  if (res.status === 404) res = await fetch(`${base}/tracks?limit=12`, { headers });
-  if (!res.ok) throw new Error(`playlist ${res.status}`);
-  const items = (await res.json()).items.map((row) => row.item || row.track).filter((t) => t?.album);
-
-  const tracks = items.map((t) => ({
-    title: t.name,
-    artist: t.artists.map((a) => a.name).join(', '),
-    url: t.external_urls.spotify,
-    image: t.album.images.find((i) => i.width >= 300)?.url || t.album.images[0]?.url,
-  })).filter((t) => t.image);
-  writeFileSync('content/listening.json', `${JSON.stringify(tracks, null, 1)}\n`);
-  console.log(`Saved ${tracks.length} tracks`);
+  const windows = [];
+  for (const [range, label] of [['short_term', 'Last four weeks'], ['medium_term', 'Last six months'], ['long_term', 'Last year']]) {
+    const res = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${range}&limit=10`, { headers });
+    if (!res.ok) throw new Error(`top artists ${res.status}`);
+    windows.push({ label, artists: (await res.json()).items.map((a) => a.name) });
+  }
+  writeFileSync('content/trends.json', `${JSON.stringify({ windows }, null, 1)}\n`);
+  console.log(`Saved top artists for ${windows.length} windows`);
 } catch (err) {
   console.warn(`Spotify skipped: ${err.message}`);
 }

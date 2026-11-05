@@ -23,15 +23,13 @@ const renderPlaylists = (settings) => {
     const row = document.createElement('div');
     row.className = 'pl';
     row.dataset.title = p.title.toLowerCase();
-    row.innerHTML = '<input type="checkbox"><img alt=""><span></span><label><input type="radio" name="listening"> Listening</label>';
-    const [box, img, name, pick] = row.children;
+    row.innerHTML = '<input type="checkbox"><img alt=""><span></span>';
+    const [box, img, name] = row.children;
     box.dataset.playlist = p.id;
     box.checked = chosen.has(p.id);
     box.setAttribute('aria-label', `Show ${p.title}`);
     if (p.image) img.src = p.image;
     name.textContent = p.isPublic === false ? `${p.title} (private)` : p.title;
-    pick.firstChild.value = p.id;
-    pick.firstChild.checked = settings.listening === p.id;
     return row;
   }));
 };
@@ -67,7 +65,6 @@ $('out').onclick = () => signOut(auth);
 $('save').onclick = async () => {
   const settings = {
     hidden: [...document.querySelectorAll('[data-key]')].filter((b) => !b.checked).map((b) => b.dataset.key),
-    listening: document.querySelector('[name=listening]:checked')?.value || '',
     playlists: [...document.querySelectorAll('[data-playlist]')].filter((b) => b.checked).map((b) => b.dataset.playlist),
   };
   status('Saving');
