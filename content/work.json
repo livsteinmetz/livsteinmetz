@@ -12,10 +12,6 @@
   "short": "An online classroom for looking at art together",
   "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation",
-  "media": {
-   "image": "vxp-still",
-   "alt": "A virtual Barnes gallery wall with a class's tools around it"
-  },
   "link": "https://www.barnesfoundation.org/visual-experience-platform",
   "linkText": "See the VXP at the Barnes",
   "stack": "React, GraphQL, AWS Chime, IIIF deep zoom",
@@ -42,6 +38,38 @@
     15,
     "j"
    ]
+  ],
+  "gallery": [
+   {
+    "video": "vxp-class",
+    "alt": "An instructor teaching live on the VXP beside a Renaissance portrait",
+    "cap": "Focus mode in a live class"
+   },
+   {
+    "video": "vxp-gallery",
+    "alt": "Moving through a virtual Barnes gallery wall",
+    "cap": "A class moving through the galleries"
+   },
+   {
+    "video": "vxp-object",
+    "alt": "Zooming into a metal object on the VXP canvas",
+    "cap": "Close looking at an object"
+   },
+   {
+    "image": "vxp-wireframes",
+    "alt": "Wireframes for the VXP classroom",
+    "cap": "Early wireframes"
+   },
+   {
+    "image": "vxp-replay",
+    "alt": "Replay keeps the interactive canvas alongside the recording",
+    "cap": "Replay"
+   },
+   {
+    "image": "vxp-admin",
+    "alt": "Screens from the VXP admin flows",
+    "cap": "The next admin experience"
+   }
   ]
  },
  {
@@ -57,8 +85,6 @@
   "short": "Point your phone at a painting and it tells you what you're looking at",
   "role": "Product and front-end development",
   "org": "Barnes Foundation",
-  "link": "https://www.barnesfoundation.org/press/press-releases/the-barnes-foundation-unveils-barnes-focus-new-mobile-guide",
-  "linkText": "Read about Barnes Focus",
   "stack": "Image recognition, React",
   "body": [
    "The Barnes hangs no wall labels. Dr. Barnes arranged the collection in ensembles so you'd look at relationships of color, light, line, and space instead of reading a placard and moving on.",
@@ -75,6 +101,14 @@
     "unbounded",
     16.5
    ]
+  ],
+  "gallery": [
+   {
+    "video": "focus-app",
+    "alt": "The Barnes Focus flow on a phone",
+    "cap": "Barnes Focus on a phone",
+    "tall": true
+   }
   ]
  },
  {
@@ -89,11 +123,6 @@
   "short": "A whole digital ecosystem for a brand-new institution",
   "role": "Product and design direction",
   "org": "Calder Gardens",
-  "media": {
-   "video": "calder",
-   "poster": "calder-still",
-   "alt": "The Calder Gardens site"
-  },
   "link": "https://caldergardens.org/",
   "linkText": "Visit caldergardens.org",
   "stack": "Next.js, Mantine, Sanity, AWS, ACME",
@@ -116,6 +145,13 @@
     "playfair",
     24
    ]
+  ],
+  "gallery": [
+   {
+    "video": "calder-site",
+    "alt": "Scrolling caldergardens.org",
+    "cap": "caldergardens.org today"
+   }
   ]
  },
  {
@@ -204,11 +240,6 @@
   "short": "Browse the Barnes by color, light, line, and space",
   "role": "Development and design",
   "org": "Barnes Foundation",
-  "media": {
-   "video": "collection",
-   "poster": "collection",
-   "alt": "Browsing the Barnes online collection"
-  },
   "link": "https://collection.barnesfoundation.org/",
   "linkText": "Explore the collection",
   "stack": "React, Node, AWS Lambda, CloudFront",
@@ -227,6 +258,13 @@
     "abril",
     14.5
    ]
+  ],
+  "gallery": [
+   {
+    "video": "collection-site",
+    "alt": "Scrolling the Barnes online collection",
+    "cap": "The collection site today"
+   }
   ]
  }
 ]

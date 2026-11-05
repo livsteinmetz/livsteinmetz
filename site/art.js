@@ -45,6 +45,23 @@ if (typeof document !== 'undefined') {
   }), { rootMargin: '300px' });
   document.querySelectorAll('.crop[data-barnes]').forEach((c) => io.observe(c));
 
+  // Long lines shrink to fit their cover, whatever font they're in.
+  const fit = (root = document) => root.querySelectorAll('.ln:not(.wrap)').forEach((l) => {
+    const box = l.parentElement.clientWidth;
+    if (!box) return;
+    l.style.display = 'inline-block';
+    const w = l.offsetWidth, cur = parseFloat(l.style.fontSize);
+    if (w > box) l.style.fontSize = `${(cur * box / w * 0.985).toFixed(2)}cqw`;
+    l.style.display = '';
+  });
+  document.fonts.ready.then(() => fit());
+
+  // Clips play while they're on screen, unless motion is reduced.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const vio = new IntersectionObserver((es) => es.forEach((e) => { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause(); }), { threshold: 0.3 });
+    document.querySelectorAll('video[data-auto]').forEach((v) => vio.observe(v));
+  } else document.querySelectorAll('video[data-auto]').forEach((v) => { v.controls = true; });
+
   // A loupe that follows the cursor, using the same IIIF tiles at a closer scale.
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (matchMedia('(hover: hover)').matches && !still) {
@@ -93,6 +110,7 @@ if (typeof document !== 'undefined') {
     const show = (slug) => covers.forEach((c) => {
       const on = c.dataset.slug === slug;
       c.hidden = !on;
+      if (on) fit(c);
       if (on) c.querySelectorAll('.crop[data-barnes]:not(:has(img))').forEach(paint);
     });
     document.querySelectorAll('[data-track]').forEach((a) => {

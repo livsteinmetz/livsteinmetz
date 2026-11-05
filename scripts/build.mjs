@@ -23,7 +23,7 @@ function noteLines(title, i) {
   const w = title.split(' '), cut = Math.min(i % 2 ? 2 : 3, w.length - 1);
   const a = w.slice(0, cut).join(' '), b = w.slice(cut).join(' ');
   const [f1, f2] = [['playfair', 'spartan'], ['anton', 'playfair'], ['abril', 'spartan'], ['rozha', 'playfair']][i % 4];
-  return [[a, f1, a.length > 12 ? 11.5 : 14], [b, f2, b.length > 30 ? 7.5 : 9]];
+  return [[a, f1, a.length > 12 ? 11.5 : 14, 'wrap'], [b, f2, b.length > 30 ? 7.5 : 9, 'wrap']];
 }
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
@@ -48,7 +48,7 @@ function cover(c0, tag = 'a') {
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
   const tagEl = `<span class="ctag" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</span>`;
   const below = c.edge === 'bottom';
-  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle" style="color:${c.color}">${c.lines.map(([t, f, z, j]) => `<span class="ln f-${f}${j ? ' just' : ''}" style="font-size:${z}cqw">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
+  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle" style="color:${c.color}">${c.lines.map(([t, f, z, j]) => `<span class="ln f-${f}${j ? ` ${j === 'j' ? 'just' : 'wrap'}` : ''}" style="font-size:${z}cqw">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs} aria-label="${esc(c.title)}${a ? `. ${esc(alt)}` : ''}">${inner}</a>` : `<span ${attrs} data-slug="${c.slug}" role="img" aria-label="${esc(c.title)}">${inner}</span>`;
 }
@@ -85,9 +85,11 @@ function record(current, sideKey) {
 const viewer = (key) => { const a = art[key]; return a?.barnes ? `<section class="closer"><p>Look closer: <i>${esc(a.title)}</i>, ${esc(a.artist)}. Drag and pinch to zoom. <a href="/iiif/${key}.json">IIIF manifest</a></p><div class="viewer" data-viewer="${a.barnes}" role="application" aria-label="Deep zoom viewer for ${esc(a.title)}"></div></section>` : ''; };
 
 work.forEach((w) => {
+  const item = (m) => `<figure class="${m.tall ? 'tall' : ''}">${m.video ? `<video data-auto muted loop playsinline preload="none" aria-label="${esc(m.alt)}"><source src="/media/${m.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${m.image}.webp" alt="${esc(m.alt)}" loading="lazy">`}<figcaption>${esc(m.cap)}</figcaption></figure>`;
+  const gallery = w.gallery ? `<div class="gallery">${w.gallery.map(item).join('')}</div>` : '';
   const shot = w.media ? `<div class="shot">${w.media.video ? `<video controls muted loop playsinline preload="none" poster="/media/${w.media.poster}.webp" aria-label="${esc(w.media.alt)}"><source src="/media/${w.media.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${w.media.image}.webp" alt="${esc(w.media.alt)}" loading="lazy">`}</div>` : '';
   pages[`work/${w.slug}.html`] = shell({ path: `/work/${w.slug}`, title: w.title, description: `${w.short}. ${w.role} for ${w.org}.`,
-    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail"><h1>${esc(w.short)}</h1><div class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.note ? `<p>I wrote more in <a href="${w.note.url}">${esc(w.note.title)}</a>.</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</div><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}</article>${viewer(w.art)}` });
+    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail"><h1>${esc(w.short)}</h1><div class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.note ? `<p>I wrote more in <a href="${w.note.url}">${esc(w.note.title)}</a>.</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</div><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
 });
 
 const sideB = side.b;

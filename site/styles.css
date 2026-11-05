@@ -30,7 +30,7 @@ a.cover:hover{color:inherit}
 .ctag{display:block;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:9cqw;line-height:1.1}
 .tag-bottom{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
 .tag-strip{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
-.ln{display:block;line-height:.95;white-space:nowrap}.ln.just{letter-spacing:.42em}
+.ln{display:block;line-height:.95;white-space:nowrap}.ln.just{letter-spacing:.42em}.ln.wrap{white-space:normal;line-height:1.02}
 .f-anton{font-family:Anton,Impact,sans-serif}.f-playfair{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:800;letter-spacing:-.02em}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:800}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:800}.f-rozha{font-family:"Rozha One",Georgia,serif}.f-unbounded{font-family:Unbounded,Arial,sans-serif;font-weight:800;letter-spacing:-.02em}.f-syne{font-family:Syne,Arial,sans-serif;font-weight:800}.f-abril{font-family:"Abril Fatface",Georgia,serif}.f-bowlby{font-family:"Bowlby One",Impact,sans-serif}
 .f-bodoni{font-family:"Bodoni Moda",Georgia,serif;font-weight:500}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:700}
 .loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .15s;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
@@ -56,6 +56,7 @@ a.cover:hover{color:inherit}
 .prose blockquote{margin:1.2em 0;padding-left:18px;border-left:3px solid #000}
 .meta{font-size:1rem}.meta dt{font-weight:500}.meta dd{margin:0 0 12px}
 .shot{grid-column:1/-1;background:#000}.shot img,.shot video{width:100%}
+.gallery{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px}.gallery figure{margin:0}.gallery figure.tall{max-width:320px}.gallery video,.gallery img{width:100%;display:block;background:#000}.gallery figcaption{font-size:.9375rem;margin-top:6px}
 .closer{background:#111;color:#fff;padding:20px var(--gutter)}
 .closer a{color:#fff}.closer p{margin-bottom:12px}
 .viewer{height:min(78vh,720px);background:#111}
