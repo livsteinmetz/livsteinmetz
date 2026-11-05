@@ -25,7 +25,7 @@ const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'le
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
+    ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
     { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'grotesk', mat: '#d9534a', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
     { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Playlists'], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
   ],
