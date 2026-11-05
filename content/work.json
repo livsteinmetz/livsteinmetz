@@ -6,9 +6,6 @@
   "date": "2021 to now",
   "art": "postman",
   "font": "grotesk",
-  "size": "2.9",
-  "color": "#ffc2b8",
-  "edge": "top",
   "short": "An online classroom for looking at art together",
   "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation",
@@ -57,7 +54,10 @@
     "alt": "Screens from the VXP admin flows",
     "cap": "The next admin experience"
    }
-  ]
+  ],
+  "align": "center",
+  "width": 0.74,
+  "mat": "#fff27a"
  },
  {
   "slug": "focus",
@@ -66,9 +66,6 @@
   "date": "2021 to now",
   "art": "jeanne",
   "font": "didone",
-  "size": "3.6",
-  "color": "#ffffff",
-  "edge": "top",
   "short": "Point your phone at a painting and it tells you what you're looking at",
   "role": "Product and front-end development",
   "org": "Barnes Foundation",
@@ -88,17 +85,19 @@
     "cap": "Barnes Focus on a phone",
     "tall": true
    }
-  ]
+  ],
+  "align": "left",
+  "width": 0.8,
+  "mat": "#ef8f35"
  },
  {
   "slug": "calder-gardens",
   "title": "Calder Gardens",
   "tag": "a new institution",
   "date": "2025",
-  "font": "geo",
-  "size": "4.6",
-  "color": "#000000",
-  "flat": "#e8b2ff",
+  "font": "compressed",
+  "color": "#c2277f",
+  "flat": "#a9c4a4",
   "short": "A whole digital ecosystem for a brand-new institution",
   "role": "Product and design direction",
   "org": "Calder Gardens",
@@ -123,7 +122,10 @@
     "alt": "Scrolling caldergardens.org",
     "cap": "caldergardens.org today"
    }
-  ]
+  ],
+  "align": "center",
+  "width": 0.86,
+  "mat": "#66c4ff"
  },
  {
   "slug": "membership",
@@ -131,10 +133,7 @@
   "tag": "a renewal flow",
   "date": "2021 to now",
   "art": "bouquet",
-  "font": "compressed",
-  "size": "3.1",
-  "color": "#b8ffe0",
-  "edge": "bottom",
+  "font": "soft",
   "short": "A portal, digital cards, and renewals people finish",
   "role": "Product, design, and development",
   "org": "Barnes Foundation",
@@ -149,7 +148,10 @@
   ],
   "lines": [
    "MEMBERSHIP"
-  ]
+  ],
+  "align": "center",
+  "width": 0.8,
+  "mat": "#b15e8f"
  },
  {
   "slug": "deep-zoom",
@@ -157,10 +159,7 @@
   "tag": "a close look",
   "date": "2021 to now",
   "art": "jungle",
-  "font": "gothic",
-  "size": "4.6",
-  "color": "#c9ff9e",
-  "edge": "top",
+  "font": "geo",
   "short": "Close looking, down to the brushstroke",
   "role": "Front-end development and design",
   "org": "Barnes Foundation",
@@ -177,9 +176,12 @@
    "Every painting on this site is served the same way. The covers are assembled from the Barnes's public IIIF tiles in your browser, so you're looking at that pipeline right now."
   ],
   "lines": [
-   "Deep",
-   "Zoom"
-  ]
+   "DEEP",
+   "ZOOM"
+  ],
+  "align": "center",
+  "width": 0.62,
+  "mat": "#fff27a"
  },
  {
   "slug": "online-collection",
@@ -188,9 +190,6 @@
   "date": "2021 to now",
   "art": "polkadot",
   "font": "inscribed",
-  "size": "3.4",
-  "color": "#ffffff",
-  "edge": "bottom",
   "short": "Browse the Barnes by color, light, line, and space",
   "role": "Development and design",
   "org": "Barnes Foundation",
@@ -202,8 +201,8 @@
    "This fall the team moved the whole site to Lambda and CloudFront with no downtime, and rebuilt measurement on GA4 so we can see what people do there."
   ],
   "lines": [
-   "ONLINE",
-   "COLLECTION"
+   "Online",
+   "Collection"
   ],
   "gallery": [
    {
@@ -211,6 +210,9 @@
     "alt": "Scrolling the Barnes online collection",
     "cap": "The collection site today"
    }
-  ]
+  ],
+  "align": "center",
+  "width": 0.78,
+  "mat": "#efa090"
  }
 ]

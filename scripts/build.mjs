@@ -10,7 +10,7 @@ const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
-const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@100,800&family=Big+Shoulders+Display:wght@800&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,600&family=Grenze+Gotisch:wght@700&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural institutions, designing and building at the intersection of culture and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -21,13 +21,13 @@ const day = Math.floor(Date.now() / 864e5);
 const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
 
-const noteFonts = ['soft', 'didone', 'grotesk', 'soft'];
+const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'left'], ['didone', '#66c4ff', 'left'], ['geo', '#efa090', 'center']];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteFonts[i % 4], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'shoulders', lines: ['DOUBLE', 'BASS'], href: '/bass' },
-    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'grotesk', lines: ['PLAY', 'LISTS'], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
+    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'grotesk', mat: '#d9534a', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
+    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Playlists'], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
   ],
 };
 const covers = [...side.a, ...side.b];
@@ -35,66 +35,70 @@ const covers = [...side.a, ...side.b];
 // Flat covers are checked here. Covers on paintings are measured from real pixels in .ci/shots.mjs.
 for (const c of covers.filter((x) => x.flat)) if (contrast(c.color, c.flat) < 3) throw new Error(`Contrast on "${c.title}"`);
 
-function cropEl(key) {
+function cropEl(key, alt) {
   const a = art[key];
-  return `<span class="crop" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></span>`;
+  return `<div class="crop" role="img" aria-label="${esc(alt)}" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></div>`;
 }
 function cover(c0, tag = 'a') {
   const a = c0.art && art[c0.art];
-  const c = a ? { ...c0, edge: a.edge, color: a.ink, tagColor: a.tagInk } : c0;
+  const c = a ? { ...c0, edge: a.edge, color: a.ink, tagColor: a.tagInk } : { edge: 'top', ...c0 };
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
-  const tagEl = `<span class="ctag" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</span>`;
   const below = c.edge === 'bottom';
-  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}${c.long ? ' long' : ''}" style="color:${c.color}">${c.lines.map((t) => `<span class="ln">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
+  const heading = `<h3 class="ctitle f-${c.font} a-${c.align || 'left'}${c.long ? ' long' : ''}" style="color:${c.color}"${c.width ? ` data-width="${c.width}"` : ''}>${c.lines.map((t) => `<span class="ln">${esc(t).replace(' ', '<i></i>')}</span>`).join('')}</h3>`;
+  const tagline = `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
+  const body = `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption><div class="words ${c.edge}">${heading}${below ? tagline : ''}</div>${below ? '' : `<div class="${a ? 'tag-strip' : 'tag-bottom'}">${tagline}</div>`}</figcaption></figure>`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
-  return tag === 'a' ? `<a href="${c.href}" ${attrs} aria-label="${esc(c.title)}${a ? `. ${esc(alt)}` : ''}">${inner}</a>` : `<span ${attrs} data-slug="${c.slug}" role="img" aria-label="${esc(c.title)}">${inner}</span>`;
+  return tag === 'a' ? `<a href="${c.href}" ${attrs}>${body}</a>` : `<div ${attrs} data-slug="${c.slug}">${body}</div>`;
 }
 
-function shell({ path, title, description, body, canonical, top = true }) {
+const jsonLd = (o) => `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', ...o }).replace(/</g, '\\u003c')}</script>`;
+const PERSON = { '@type': 'Person', '@id': `${SITE}/#person`, name: 'Olivia Steinmetz', url: SITE, jobTitle: 'Product Manager, Digital Initiatives', worksFor: { '@type': 'Organization', name: 'Barnes Foundation', url: 'https://www.barnesfoundation.org/' }, sameAs: ['https://www.linkedin.com/in/livsteinmetz/', 'https://github.com/livsteinmetz', 'https://medium.com/@osteinmetz'] };
+
+function shell({ path, title, description, body, canonical, ld = [], type = 'website', meta = '' }) {
   const full = title ? `${title} | Olivia Steinmetz` : 'Olivia Steinmetz | Digital product, experience, and strategy';
   const nav = [['/#side-a', 'Side A'], ['/#side-b', 'Side B'], ['/about', 'About']].map(([h, t]) => `<a href="${h}"${path === h ? ' aria-current="page"' : ''}>${t}</a>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#fff27a">
-<link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${SITE}${path}"><meta property="og:image" content="${SITE}/media/og.jpg"><meta name="twitter:card" content="summary_large_image">
+${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${type}">${meta}<meta property="og:url" content="${SITE}${path}"><meta property="og:image" content="${SITE}/media/og.jpg"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS.replace(/&/g, '&amp;')}"><link rel="stylesheet" href="/styles.css?v=${V}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-WZM6YLSHQY');</script>
-</head><body><a class="skip" href="#main">Skip to content</a>
-<header class="top"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
-<div class="vinyl" aria-hidden="true"><i></i></div><main id="main">${body}</main>
+</head><body><a class="skip" href="#site-content">Skip to content</a>
+<header class="masthead"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
+<div class="vinyl" aria-hidden="true"><i></i></div><main id="site-content">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
 <p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and the Cleveland Museum of Art. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
 
-const shelf = (key, label, id) => `<section class="side ${key}" id="${id}"><h2>${label}</h2><div class="shelf">${side[key].map((c) => cover(c)).join('')}</div></section>`;
-const wallShelf = wall.length ? `<section class="side c" id="on-the-wall"><h2>On the wall today, from the Cleveland Museum of Art's open access collection</h2><div class="shelf">${wall.map((w, i) => `<a class="hang" href="${w.url}"><span class="still" data-print="${w.print}"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></span><span class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}</span></a>`).join('')}</div></section>` : '';
+const shelf = (key, label, id) => `<section class="side" id="${id}" aria-labelledby="${id}-title"><h2 id="${id}-title">${label}</h2><ol class="shelf">${side[key].map((c) => `<li class="mat" style="--mat:${c.mat}">${cover(c)}</li>`).join('')}</ol></section>`;
+const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-labelledby="on-the-wall-title"><h2 id="on-the-wall-title">On the wall today, from the Cleveland Museum of Art's open access collection</h2><ol class="shelf">${wall.map((w, i) => `<li><a class="hang" href="${w.url}"><figure role="group" aria-label="media"><div class="still"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></div><figcaption class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 const pages = {};
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<p class="statement">${STATEMENT}</p>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${wallShelf}` });
+pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${wallShelf}</article>` });
 
 function record(current, sideKey) {
   const list = side[sideKey];
   const tracks = list.map((c) => `<a class="track" data-track="${c.slug}" href="${c.href}"${c.slug === current.slug ? ' aria-current="page"' : ''}><span>${esc(c.title)}</span><small>${esc(c.date)}</small></a>`).join('');
   const other = sideKey === 'a' ? side.b[0] : side.a[0];
   const flip = `<div class="flip"><a href="${sideKey === 'a' ? current.href : side.a[0].href}"${sideKey === 'a' ? ' aria-current="true"' : ''}>Side A</a><a href="${sideKey === 'b' ? current.href : side.b[0].href}"${sideKey === 'b' ? ' aria-current="true"' : ''}>Side B</a></div>`;
-  const stage = list.map((c) => cover(c, 'span').replace('class="cover', `${c.slug === current.slug ? '' : 'hidden '}class="cover`)).join('');
+  const stage = list.map((c) => cover(c, 'div').replace('class="cover', `${c.slug === current.slug ? '' : 'hidden '}class="cover`)).join('');
   return `<section class="record"><div class="tracks" data-tracks>${flip}${tracks}</div><div class="stage ${sideKey === 'b' ? 'notes-stage' : ''}" data-stage data-current="${current.slug}">${stage}</div></section>`;
 }
 const viewer = (key) => { const a = art[key]; return a?.barnes ? `<section class="closer"><p>Look closer: <i>${esc(a.title)}</i>, ${esc(a.artist)}. Drag and pinch to zoom. <a href="/iiif/${key}.json">IIIF manifest</a></p><div class="viewer" data-viewer="${a.barnes}" role="application" aria-label="Deep zoom viewer for ${esc(a.title)}"></div></section>` : ''; };
 
 work.forEach((w) => {
-  const item = (m) => `<figure class="${m.tall ? 'tall' : ''}">${m.video ? `<video data-auto muted loop playsinline preload="none" aria-label="${esc(m.alt)}"><source src="/media/${m.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${m.image}.webp" alt="${esc(m.alt)}" loading="lazy">`}<figcaption>${esc(m.cap)}</figcaption></figure>`;
+  const item = (m) => `<figure class="${m.tall ? 'tall' : ''}" role="group" aria-label="media">${m.video ? `<video data-auto muted loop playsinline preload="none" aria-label="${esc(m.alt)}"><source src="/media/${m.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${m.image}.webp" alt="${esc(m.alt)}" loading="lazy">`}<figcaption>${esc(m.cap)}</figcaption></figure>`;
   const gallery = w.gallery ? `<div class="gallery">${w.gallery.map(item).join('')}</div>` : '';
   const shot = w.media ? `<div class="shot">${w.media.video ? `<video controls muted loop playsinline preload="none" poster="/media/${w.media.poster}.webp" aria-label="${esc(w.media.alt)}"><source src="/media/${w.media.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${w.media.image}.webp" alt="${esc(w.media.alt)}" loading="lazy">`}</div>` : '';
-  pages[`work/${w.slug}.html`] = shell({ path: `/work/${w.slug}`, title: w.title, description: `${w.short}. ${w.role} for ${w.org}.`,
-    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail"><h1>${esc(w.short)}</h1><div class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.note ? `<p>I wrote more in <a href="${w.note.url}">${esc(w.note.title)}</a>.</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</div><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
+  pages[`work/${w.slug}.html`] = shell({ path: `/work/${w.slug}`, title: w.title, description: `${w.short}. ${w.role} for ${w.org}.`, ld: [{ '@type': 'CreativeWork', name: w.title, abstract: w.short, creator: { '@id': `${SITE}/#person` }, url: `${SITE}/work/${w.slug}` }],
+    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail" id="story"><header><h1>${esc(w.short)}</h1></header><section name="articleBody" class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.note ? `<p>I wrote more in <a href="${w.note.url}">${esc(w.note.title)}</a>.</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</section><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
 });
 
 const sideB = side.b;
 feed.forEach((n) => {
   const cur = sideB.find((c) => c.slug === n.slug) || sideB[0];
-  pages[`notes/${n.slug}.html`] = shell({ path: `/notes/${n.slug}`, title: n.title, description: n.excerpt, canonical: n.url,
-    body: `${record(cur, 'b')}<article class="detail" style="grid-template-columns:1fr"><h1>${esc(n.title)}</h1><div class="prose"><p><a href="${n.url}">First published on the Barnes Foundation's Medium</a>, ${fmt(n.date)}.</p>${n.html}</div></article>` });
+  pages[`notes/${n.slug}.html`] = shell({ path: `/notes/${n.slug}`, title: n.title, description: n.excerpt, canonical: n.url, type: 'article', meta: `<meta property="article:published_time" content="${n.date}"><meta property="article:author" content="Olivia Steinmetz">`, ld: [{ '@type': 'Article', headline: n.title, datePublished: n.date, author: { '@id': `${SITE}/#person` }, url: n.url }],
+    body: `${record(cur, 'b')}<article class="detail" id="story" style="grid-template-columns:1fr"><header><h1>${esc(n.title)}</h1></header><section name="articleBody" class="prose"><p><a href="${n.url}">First published on the Barnes Foundation's Medium</a>, ${fmt(n.date)}.</p>${n.html}</section></article>` });
 });
 
 const list = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;

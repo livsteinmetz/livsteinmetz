@@ -46,13 +46,13 @@ if (typeof document !== 'undefined') {
   document.querySelectorAll('.crop[data-barnes]').forEach((c) => io.observe(c));
 
   // Long lines shrink to fit their cover, whatever font they're in.
-  const fit = (root = document) => root.querySelectorAll('.ctitle:not(.long) .ln').forEach((l) => {
-    const cover = l.closest('.cover'), box = cover.clientWidth * 0.86;
+  const fit = (root = document) => root.querySelectorAll('.ctitle:not(.long):not(.a-spread) .ln').forEach((l) => {
+    const cover = l.closest('.cover'), title = l.parentElement;
+    const box = cover.clientWidth * Number(title.dataset.width || 0.86);
     if (!box) return;
     l.style.display = 'inline-block'; l.style.fontSize = '100px';
     const w = l.offsetWidth; l.style.display = '';
-    const lines = l.parentElement.children.length;
-    const max = (cover.clientHeight * (lines > 2 ? 0.17 : lines > 1 ? 0.23 : 0.34));
+    const lines = title.children.length, max = cover.clientHeight * (lines > 2 ? 0.16 : lines > 1 ? 0.22 : 0.3);
     l.style.fontSize = `${(Math.min(100 * box / w, max) / cover.clientWidth * 100).toFixed(2)}cqw`;
   });
   document.fonts.ready.then(() => fit());
