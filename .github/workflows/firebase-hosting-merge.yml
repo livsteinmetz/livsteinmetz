@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '17 11 * * *' # daily, picks up new Medium posts
+    - cron: '17 11 * * *' # daily, picks up new Medium posts and listening
   workflow_dispatch:
 
 jobs:
@@ -17,6 +17,11 @@ jobs:
           node-version: 22
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/fetch-wall.mjs
+      - run: node scripts/fetch-spotify.mjs
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
       - run: node scripts/build.mjs
       - run: node scripts/check-art.mjs
       - uses: FirebaseExtended/action-hosting-deploy@v0

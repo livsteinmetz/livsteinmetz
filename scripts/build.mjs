@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const wall = read('wall');
+const wall = read('wall'), listening = read('listening');
 const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -74,7 +74,9 @@ ${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical |
 const shelf = (key, label, id) => `<section class="side" id="${id}" aria-labelledby="${id}-title"><h2 id="${id}-title">${label}</h2><ol class="shelf">${side[key].map((c) => `<li class="mat" style="--mat:${c.mat}">${cover(c)}</li>`).join('')}</ol></section>`;
 const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-labelledby="on-the-wall-title"><h2 id="on-the-wall-title">On the wall today, from the Cleveland Museum of Art's open access collection</h2><ol class="shelf">${wall.map((w, i) => `<li><a class="hang" href="${w.url}"><figure role="group" aria-label="media"><div class="still"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></div><figcaption class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 const pages = {};
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${wallShelf}</article>` });
+const listeningShelf = listening.length ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening to this month</h2><ol class="shelf">${listening.map((t) => `<li><a class="hang" href="${t.url}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${t.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap"><i>${esc(t.title)}</i>, ${esc(t.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
+
+pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${listeningShelf}${wallShelf}</article>` });
 
 function record(current, sideKey) {
   const list = side[sideKey];
