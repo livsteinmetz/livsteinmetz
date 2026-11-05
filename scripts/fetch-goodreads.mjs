@@ -1,7 +1,8 @@
 // Writes the books on Olivia's currently-reading shelf, then what she finished
 // in the past year, to content/reading.json from her public Goodreads feeds.
-// A failed request keeps the committed file, so it never blocks a deploy.
-import { writeFileSync } from 'node:fs';
+// If Goodreads won't answer, it falls back to content/reading.seed.json with
+// covers from Open Library, so a failed request never blocks a deploy.
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const USER = '187582052';
 const YEAR = 365 * 24 * 60 * 60 * 1000;
@@ -36,4 +37,14 @@ try {
   console.log(`Saved ${current.length} current and ${read.length} finished books`);
 } catch (err) {
   console.warn(`Goodreads skipped: ${err.message}`);
+  const books = [];
+  for (const b of JSON.parse(readFileSync('content/reading.seed.json', 'utf8'))) {
+    try {
+      const q = new URLSearchParams({ title: b.title, author: b.author, limit: '1', fields: 'cover_i' });
+      const { docs } = await (await fetch(`https://openlibrary.org/search.json?${q}`, { headers: { 'User-Agent': 'livsteinmetz-site-build' } })).json();
+      if (docs[0]?.cover_i) books.push({ ...b, url: `https://www.goodreads.com/search?q=${encodeURIComponent(b.title)}`, cover: `https://covers.openlibrary.org/b/id/${docs[0].cover_i}-L.jpg` });
+    } catch { /* leave this book out */ }
+  }
+  if (books.length) writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
+  console.log(`Saved ${books.length} books from the seed list`);
 }
