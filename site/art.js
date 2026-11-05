@@ -55,6 +55,8 @@ if (typeof document !== 'undefined') {
     l.style.display = '';
   });
   document.fonts.ready.then(() => fit());
+  document.fonts.addEventListener('loadingdone', () => fit());
+  addEventListener('load', () => fit());
 
   // Clips play while they're on screen, unless motion is reduced.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
