@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const type = read('type'), wall = read('wall'), listening = read('listening');
+const type = read('type'), wall = read('wall'), listening = read('listening'), reading = read('reading');
 const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -79,7 +79,9 @@ const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-lab
 const pages = {};
 const listeningShelf = listening.length ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening to this month</h2><ol class="shelf">${listening.map((t) => `<li><a class="hang" href="${t.url}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${t.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap"><i>${esc(t.title)}</i>, ${esc(t.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${listeningShelf}${wallShelf}</article>` });
+const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading this month</h2><ol class="shelf">${reading.map((b) => `<li><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket"><img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>, ${esc(b.author)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
+
+pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf('a', 'Side A, the work', 'side-a')}${shelf('b', 'Side B, the notes', 'side-b')}${listeningShelf}${readingShelf}${wallShelf}</article>` });
 
 function record(current, sideKey) {
   const list = side[sideKey];
