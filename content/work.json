@@ -160,15 +160,16 @@
   "date": "2021 to now",
   "art": "roulin",
   "font": "didone",
-  "short": "Tickets, memberships, gifts, and retail on one stack",
+  "short": "Tickets, memberships, and gifts on one stack",
   "role": "Product",
   "org": "Barnes Foundation and Calder Gardens",
   "link": "https://github.com/BarnesFoundation/acme-ticketing-client",
   "linkText": "The open source ACME client",
   "stack": "TypeScript, ACME, headless front ends",
   "body": [
-   "Almost everything a museum sells or asks for runs through the same few screens: a ticket, a membership, a gift, something from the shop. I own the ACME commerce stack at the Barnes and the purchase journeys on top of it.",
-   "When Calder Gardens opened, it needed all of that on day one under its own brand, so we built one multi-tenant setup that serves both institutions. We also keep an ACME client open source, so other museums on the platform don't have to write their own."
+   "Almost everything a museum sells or asks for runs through the same few screens: a ticket, a membership, a donation, a class. My team builds and maintains those online flows on ACME for the Barnes and Calder Gardens.",
+   "When Calder Gardens opened it needed all of that under its own brand, so one codebase deploys twice, with one ACME tenant and one customer data layer underneath. Two front doors, one back office. That's also what made Plus admission possible: one ticket to both institutions, composed at purchase and put back together at the gate.",
+   "We keep our ACME client open source, so any museum on the platform can use it."
   ],
   "lines": [
    "Commerce"
