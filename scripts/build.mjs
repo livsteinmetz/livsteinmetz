@@ -4,8 +4,8 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const type = read('type'), wall = read('wall'), listening = read('listening'), reading = read('reading');
-const work = read('work'), music = read('music'), playlists = read('playlists'), art = read('art');
+const settings = read('settings'), type = read('type'), wall = read('wall'), listening = read('listening'), reading = read('reading');
+const work = read('work'), music = read('music'), playlists = [...read('playlists'), ...settings.playlists], art = read('art');
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
@@ -73,18 +73,19 @@ ${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical |
 <script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
 
+const shown = (key) => !settings.hidden.includes(key);
 const isMusic = (c) => ['double-bass', 'playlists'].includes(c.slug);
-const shelf = (items, label, id) => `<section class="side" id="${id}" aria-labelledby="${id}-title"><h2 id="${id}-title">${label}</h2><ol class="shelf">${items.map((c) => `<li class="mat" style="--mat:${c.mat}">${cover(c)}</li>`).join('')}</ol></section>`;
-const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-labelledby="on-the-wall-title"><h2 id="on-the-wall-title">Looking</h2><ol class="shelf">${wall.map((w, i) => `<li><a class="hang look" href="${w.web}" data-caption="${esc(w.title)}, ${esc(w.artist)}. ${esc(w.museum)}"><figure role="group" aria-label="media"><div class="still"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></div><figcaption class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}<br>${esc(w.museum)}</figcaption></figure></a></li>`).join('')}</ol><dialog class="lookbox"><img alt=""><p></p></dialog></section>` : '';
+const shelf = (items, label, id) => `<section class="side" id="${id}" aria-labelledby="${id}-title"><h2 id="${id}-title">${label}</h2><ol class="shelf">${items.filter((c) => shown(`${id}:${c.slug}`)).map((c) => `<li class="mat" data-item="${id}:${c.slug}" style="--mat:${c.mat}">${cover(c)}</li>`).join('')}</ol></section>`;
+const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-labelledby="on-the-wall-title"><h2 id="on-the-wall-title">Looking</h2><ol class="shelf">${wall.filter((w) => shown(`looking:${w.id}`)).map((w, i) => `<li data-item="looking:${w.id}"><a class="hang look" href="${w.web}" data-caption="${esc(w.title)}, ${esc(w.artist)}. ${esc(w.museum)}"><figure role="group" aria-label="media"><div class="still"><img src="${w.web}" alt="${esc(w.title)} by ${esc(w.artist)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}" style="object-position:${[50, 30, 70, 40][i % 4]}% ${[35, 60, 45, 25][i % 4]}%"></div><figcaption class="cap"><i>${esc(w.title)}</i>, ${esc(w.artist)}<br>${esc(w.museum)}</figcaption></figure></a></li>`).join('')}</ol><dialog class="lookbox"><img alt=""><p></p></dialog></section>` : '';
 const pages = {};
-const listeningShelf = listening.length ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening</h2><ol class="shelf">${listening.map((t) => `<li><a class="hang" href="${t.url}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${t.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap"><i>${esc(t.title)}</i>, ${esc(t.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
+const listeningShelf = listening.length ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening</h2><ol class="shelf">${listening.filter((t) => shown(`listening:${t.url}`)).map((t) => `<li data-item="listening:${t.url}"><a class="hang" href="${t.url}"><figure role="group" aria-label="media"><div class="still sleeve"><img src="${t.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap"><i>${esc(t.title)}</i>, ${esc(t.artist)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
-const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading</h2><ol class="shelf">${reading.map((b) => `<li><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket"><img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>${b.author ? `, ${esc(b.author)}` : ''}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
+const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading</h2><ol class="shelf">${reading.filter((b) => shown(`reading:${b.url}`)).map((b) => `<li data-item="reading:${b.url}"><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket"><img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>${b.author ? `, ${esc(b.author)}` : ''}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
 pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf(side.a, 'Working', 'working')}${shelf(side.b.filter((c) => !isMusic(c)), 'Writing', 'writing')}${readingShelf}${wallShelf}${listeningShelf}${shelf(side.b.filter(isMusic), 'Playing', 'playing')}</article>` });
 
 function record(current, sideKey) {
-  const list = side[sideKey];
+  const list = side[sideKey].filter((c) => c.slug === current.slug || shown(`${sideKey === 'a' ? 'working' : isMusic(c) ? 'playing' : 'writing'}:${c.slug}`));
   const tracks = list.map((c) => `<a class="track" data-track="${c.slug}" href="${c.href}"${c.slug === current.slug ? ' aria-current="page"' : ''}><span>${esc(c.title)}</span><small>${esc(c.date)}</small></a>`).join('');
   const other = sideKey === 'a' ? side.b[0] : side.a[0];
   const flip = `<div class="flip"><a href="${sideKey === 'a' ? current.href : side.a[0].href}"${sideKey === 'a' ? ' aria-current="true"' : ''}>Side A</a><a href="${sideKey === 'b' ? current.href : side.b[0].href}"${sideKey === 'b' ? ' aria-current="true"' : ''}>Side B</a></div>`;
@@ -138,5 +139,16 @@ for (const [k, a] of Object.entries(art)) {
 wall.forEach((a) => { const id = `${SITE}/iiif/wall-${a.id}.json`; writeFileSync(`build/iiif/wall-${a.id}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: ['${a.museum}, CC0'] } }, rights: 'https://creativecommons.org/publicdomain/zero/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body: { id: a.print, type: 'Image', format: 'image/jpeg' } }] }] }] }, null, 1)); });
 const urls = Object.keys(pages).filter((f) => f !== '404.html').map((f) => `${SITE}/${f.replace(/(index)?\.html$/, '')}`);
 writeFileSync('build/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${u}</loc></url>`).join('')}</urlset>`);
+
+// Admin lives outside the sitemap and asks search engines to skip it.
+const adminItems = [
+  { name: 'Working', items: side.a.map((c) => ({ key: `working:${c.slug}`, label: c.title })) },
+  { name: 'Writing', items: side.b.filter((c) => !isMusic(c)).map((c) => ({ key: `writing:${c.slug}`, label: c.title })) },
+  { name: 'Reading', items: reading.map((b) => ({ key: `reading:${b.url}`, label: `${b.title}, ${b.author}` })) },
+  { name: 'Looking', items: wall.map((w) => ({ key: `looking:${w.id}`, label: `${w.title}, ${w.artist}` })) },
+  { name: 'Listening', items: listening.map((t) => ({ key: `listening:${t.url}`, label: `${t.title}, ${t.artist}` })) },
+  { name: 'Playing', items: side.b.filter(isMusic).map((c) => ({ key: `playing:${c.slug}`, label: c.title })) },
+];
+writeFileSync('build/admin.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Admin</title><link rel="stylesheet" href="/styles.css?v=${V}"><style>.admin{max-width:720px;margin:0 auto;padding:32px var(--gutter)}.admin fieldset{border:0;border-top:1px solid #000;margin:24px 0;padding:12px 0}.admin legend{font-weight:500;padding-right:12px}.admin label{display:block;padding:4px 0}.admin .row{display:flex;gap:8px;margin:8px 0}.admin input:not([type=checkbox]){flex:1;min-width:0;width:100%;font:inherit;padding:8px;border:1px solid #000}.admin button{font:inherit;padding:8px 14px;border:1px solid #000;background:#fff;cursor:pointer}</style></head><body><main class="admin"><h1>Admin</h1><div id="signed-out"><button id="in" type="button">Sign in with Google</button></div><div id="panel" hidden><div id="sections"></div><fieldset><legend>Listening playlist</legend><input id="listening" aria-label="Listening playlist link" placeholder="Spotify playlist link"></fieldset><fieldset><legend>Curated playlists</legend><div id="playlists"></div><button id="add" type="button">Add a playlist</button></fieldset><p><button id="save" type="button">Save</button> <button id="out" type="button">Sign out</button></p></div><p id="status" role="status"></p></main><script id="items" type="application/json">${JSON.stringify(adminItems).replace(/</g, '\\u003c')}</script><script type="module" src="/admin.js?v=${V}"></script></body></html>`);
 writeFileSync('build/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log(`Built ${Object.keys(pages).length} pages`);

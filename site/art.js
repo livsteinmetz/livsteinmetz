@@ -55,6 +55,17 @@ if (typeof document !== 'undefined') {
     const lines = title.children.length, max = cover.clientHeight * (lines > 2 ? 0.16 : lines > 1 ? 0.22 : 0.3);
     l.style.fontSize = `${(Math.min(100 * box / w, max) / cover.clientWidth * 100).toFixed(2)}cqw`;
   });
+  // Items hidden at /admin leave right away; the next build drops them from the page.
+  fetch('https://firestore.googleapis.com/v1/projects/livsteinmetz-bb868/databases/(default)/documents/site/settings')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => {
+      if (!d) return;
+      const hidden = new Set(JSON.parse(d.fields.json.stringValue).hidden);
+      document.querySelectorAll('[data-item]').forEach((el) => { if (hidden.has(el.dataset.item)) el.remove(); });
+      document.querySelectorAll('.side').forEach((sec) => { if (!sec.querySelector('li')) sec.remove(); });
+    })
+    .catch(() => {});
+
   const box = document.querySelector('.lookbox');
   if (box) {
     document.querySelectorAll('.look').forEach((a) => a.addEventListener('click', (e) => {

@@ -15,6 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: node scripts/fetch-settings.mjs
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/fetch-wall.mjs
       - run: node scripts/fetch-goodreads.mjs

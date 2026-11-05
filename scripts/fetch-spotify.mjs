@@ -1,11 +1,11 @@
 // Writes the tracks of one chosen playlist to content/listening.json, so the
-// shelf shows only what's on that playlist. Set its id in content/spotify.json.
+// shelf shows only what's on that playlist. Choose it at /admin.
 // Skips quietly until the id and the three SPOTIFY_ secrets are set, and a
 // failed request never blocks a deploy: the section just stays off the page.
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
-const { listening } = JSON.parse(readFileSync('content/spotify.json', 'utf8'));
+const { listening } = JSON.parse(readFileSync('content/settings.json', 'utf8'));
 if (!id || !secret || !refresh || !listening) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
 try {
