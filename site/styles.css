@@ -138,3 +138,13 @@ html:has(.wrapped){scroll-snap-type:y proximity}
 
 .scene[hidden]{display:none}
 #save{margin-top:16px}
+
+.lib[hidden]{display:none}
+.deck-bars{display:flex;align-items:flex-end;gap:6px;height:min(46vh,380px)}.deck-bars button{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;border:0!important;background:none!important;padding:0!important;cursor:pointer}.deck-bars i{display:block;height:var(--h);background:#16246e;transition:background .15s}.deck-bars button[aria-pressed=true] i{background:#e64aa6}.deck-bars span{font-size:.875rem}
+.note{margin:14px 0 0;font-size:1.0625rem}.big-num{font:400 clamp(80px,12vw,180px)/.9 Anton,Impact,sans-serif;margin:0}
+.cloud{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:1.25rem}
+.scrub{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:1.125rem}.scrub input{flex:1;accent-color:#16246e}.scrub output{font-weight:700}
+.gig-list{list-style:none;margin:0;padding:0;overflow:auto;max-height:calc(100svh - 150px)}.gig-list li{display:grid;grid-template-columns:5.5em 1fr;gap:0 12px;padding:9px 0;border-top:1px solid #000}.gig-list time{grid-row:span 2;font-size:.9375rem}.gig-list b{font-weight:500}.gig-list span{font-size:.9375rem}
+.poem{color:#f6d44f;text-align:center}.poem .scene-copy{max-width:1100px}.kicker{margin:0 auto 24px!important}.poem blockquote{font:400 clamp(44px,8vw,124px)/1.05 "Bodoni Moda",Didot,Georgia,serif;margin:0 0 32px;text-wrap:balance}.poem button{background:#f6d44f!important;border-color:#f6d44f!important}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:2px;max-height:calc(100svh - 150px);overflow:auto}.wall img{display:block;width:100%;aspect-ratio:1;object-fit:cover;transition:transform .15s}.wall img:hover{transform:scale(1.8);position:relative;z-index:1}
+.diary{display:flex;gap:6px;overflow-x:auto}.day{display:flex;flex-direction:column;gap:3px}.day time{font-size:.6875rem;writing-mode:vertical-rl}.day i{display:block;width:18px;height:18px}

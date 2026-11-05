@@ -18,11 +18,12 @@ try {
 
   const headers = { Authorization: `Bearer ${token}` };
 
-  const mine = [];
+  const mine = [], raw = [];
   for (let next = 'https://api.spotify.com/v1/me/playlists?limit=50'; next;) {
     const res = await fetch(next, { headers });
     if (!res.ok) throw new Error(`playlists ${res.status}`);
     const page = await res.json();
+    raw.push(...page.items.filter(Boolean));
     mine.push(...page.items.filter(Boolean).map((p) => ({ id: p.id, title: p.name, image: p.images?.at(-1)?.url || '', cover: p.images?.[0]?.url || '', isPublic: p.public })));
     next = page.next;
   }
@@ -51,6 +52,59 @@ try {
   writeFileSync('content/previews.json', `${JSON.stringify(previews, null, 1)}\n`);
   console.log(`Saved ${Object.keys(previews).length} song previews`);
 
+  // Reads her own playlists for the listening story. Only public playlists feed
+  // anything named on the site; private gig lists contribute just their title and date.
+  const profile = await (await fetch('https://api.spotify.com/v1/me', { headers })).json();
+  const GIG = /^(PSO|CSO|TUSO|NJCO|YCO|SinC|Elgar|Curtis Rep)\b/i;
+  const adds = {}, decades = {}, seen = new Map(), gigs = [];
+  const count = (o, k) => { o[k] = (o[k] || 0) + 1; };
+  const weekOf = (d) => Math.min(51, Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 6048e5));
+  const own = raw.filter((p) => p.owner?.id === profile.id);
+  let read = 0;
+  scan: for (const p of own) {
+    const gig = GIG.test(p.name);
+    if (p.public === false && !gig) continue;
+    const here = {};
+    let first = null, tracks = 0;
+    for (let next = `https://api.spotify.com/v1/playlists/${p.id}/items?limit=50`, pages = 0; next && pages < 10; pages++) {
+      const res = await fetch(next, { headers });
+      if (res.status === 429) { console.warn('Spotify asked to slow down, stopping the scan'); break scan; }
+      if (!res.ok) break;
+      const page = await res.json();
+      read += 1;
+      for (const row of page.items) {
+        const t = row.item || row.track, when = row.added_at && new Date(row.added_at);
+        const artist = t?.artists?.[0]?.name;
+        if (!artist || !when) continue;
+        tracks += 1;
+        if (!first || when < first) first = when;
+        count(here, artist);
+        if (p.public === false) continue;
+        (adds[when.getUTCFullYear()] ||= Array(52).fill(0))[weekOf(when)] += 1;
+        const year = Number(t.album?.release_date?.slice(0, 4));
+        if (year) { const k = Math.floor(year / 10) * 10; (decades[k] ||= { count: 0, artists: {} }).count += 1; count(decades[k].artists, artist); }
+        const known = seen.get(artist);
+        if (!known) seen.set(artist, { when, n: 1 }); else { known.n += 1; if (when < known.when) known.when = when; }
+      }
+      next = page.next;
+    }
+    if (gig && first) gigs.push({ title: p.name, date: first.toISOString().slice(0, 7), tracks, composer: Object.entries(here).sort((a, b) => b[1] - a[1])[0]?.[0] || '' });
+  }
+  const leaders = (o, n) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, n).map(([k]) => k);
+  const firsts = {};
+  for (const [artist, a] of seen) { const y = a.when.getUTCFullYear(); (firsts[y] ||= { count: 0, all: {} }).count += 1; firsts[y].all[artist] = a.n; }
+  const pub = mine.filter((p) => p.isPublic !== false);
+  const library = {
+    adds,
+    decades: Object.fromEntries(Object.entries(decades).map(([k, d]) => [k, { count: d.count, artists: leaders(d.artists, 4) }])),
+    firsts: Object.fromEntries(Object.entries(firsts).map(([y, f]) => [y, { count: f.count, artists: leaders(f.all, 8) }])),
+    gigs: gigs.sort((a, b) => b.date.localeCompare(a.date)),
+    titles: pub.map((p) => p.title).filter((t) => t.trim().split(/\s+/).length >= 4),
+    wall: pub.filter((p) => p.image).map((p) => ({ image: p.image, title: p.title })),
+  };
+  writeFileSync('content/library.json', `${JSON.stringify(library)}\n`);
+  console.log(`Library: ${read} pages from ${own.length} own playlists, ${seen.size} artists, ${gigs.length} gigs, ${library.titles.length} titles`);
+
   const windows = [];
   for (const [range, label] of [['short_term', 'Last four weeks'], ['medium_term', 'Last six months'], ['long_term', 'Last year']]) {
     const res = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${range}&limit=10`, { headers });
@@ -65,6 +119,13 @@ try {
   if (recent.ok) {
     for (const r of (await recent.json()).items) hours[Number(new Date(r.played_at).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' })) % 24] += 1;
   }
+  // A diary of top artists. Each build adds today to what the live site already has.
+  let diary = [];
+  try { const res = await fetch('https://livsteinmetz.web.app/data/diary.json'); if (res.ok) diary = await res.json(); } catch { /* start fresh */ }
+  const today = new Date().toISOString().slice(0, 10);
+  if (!diary.some((d) => d.d === today) && windows[0].artists.length) diary.push({ d: today, artists: windows[0].artists.slice(0, 5) });
+  writeFileSync('content/diary.json', `${JSON.stringify(diary)}\n`);
+
   writeFileSync('content/trends.json', `${JSON.stringify({ windows, tracks, hours }, null, 1)}\n`);
   console.log(`Saved top artists for ${windows.length} windows`);
 } catch (err) {
