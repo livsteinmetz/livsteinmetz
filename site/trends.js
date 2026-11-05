@@ -59,7 +59,7 @@ function fingerprint(s) {
       pts.push(`${(cx + rr * 0.82 * Math.cos(t)).toFixed(1)},${(cy + rr * 1.05 * Math.sin(t)).toFixed(1)}`);
     }
     const gap = 8 + (seed * (r + 3)) % 70;
-    out += `<polyline pathLength="1" style="--i:${r}" points="${pts.slice(0, gap).join(' ')}"/><polyline pathLength="1" style="--i:${r}" points="${pts.slice(gap + 3).join(' ')}"/>`;
+    out += `<polyline class="draw" pathLength="1" style="--i:${r}" points="${pts.slice(0, gap).join(' ')}"/><polyline class="draw" pathLength="1" style="--i:${r}" points="${pts.slice(gap + 3).join(' ')}"/>`;
   }
   return `<svg viewBox="0 0 600 660" role="img" aria-label="A fingerprint drawn from weekly listening"><g fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round">${out}</g></svg>`;
 }
@@ -71,7 +71,7 @@ function rings(s) {
     const r = 56 + i * 38;
     s.years[y].forEach((v, w) => {
       const a = (w / 52) * 2 * Math.PI - Math.PI / 2, L = 2 + 30 * (v / peak);
-      out += `<line x1="${(cx + r * Math.cos(a)).toFixed(1)}" y1="${(cy + r * Math.sin(a)).toFixed(1)}" x2="${(cx + (r + L) * Math.cos(a)).toFixed(1)}" y2="${(cy + (r + L) * Math.sin(a)).toFixed(1)}" stroke="${i % 2 ? '#d9534a' : INK}" stroke-width="3" pathLength="1" style="--i:${w}"/>`;
+      out += `<line x1="${(cx + r * Math.cos(a)).toFixed(1)}" y1="${(cy + r * Math.sin(a)).toFixed(1)}" x2="${(cx + (r + L) * Math.cos(a)).toFixed(1)}" y2="${(cy + (r + L) * Math.sin(a)).toFixed(1)}" stroke="${i % 2 ? '#d9534a' : INK}" stroke-width="3" class="draw" pathLength="1" style="--i:${w}"/>`;
     });
     out += `<text x="${cx + 4}" y="${cy - r + 4}" font-size="11">${y}</text>`;
   });
