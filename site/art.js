@@ -68,27 +68,41 @@ if (typeof document !== 'undefined') {
   // A loupe that follows the cursor, using the same IIIF tiles at a closer scale.
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (matchMedia('(hover: hover)').matches && !still) {
+    const R = 112, ZOOM = 5;
+    const glass = document.createElement('div');
+    glass.className = 'glass'; glass.setAttribute('aria-hidden', 'true');
+    glass.innerHTML = `<svg viewBox="0 0 400 400" width="400" height="400"><defs><linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a1"/><stop offset=".5" stop-color="#b8892e"/><stop offset="1" stop-color="#6e4a12"/></linearGradient></defs><g fill="none"><path d="M124 124 L212 212" stroke="#2a1a10" stroke-width="30" stroke-linecap="round" transform="translate(79 79)"/><path d="M203 203 L232 232" stroke="url(#brass)" stroke-width="20"/><circle cx="120" cy="120" r="${R}" stroke="url(#brass)" stroke-width="10"/><circle cx="120" cy="120" r="${R - 7}" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><path d="M58 92 A${R - 22} ${R - 22} 0 0 1 96 50" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round"/></g></svg>`;
+    document.body.append(glass);
     document.querySelectorAll('.cover.has-art').forEach((c) => {
       const src = c.querySelector('.crop[data-barnes]');
       if (!src) return;
-      let lens;
-      c.addEventListener('pointerenter', () => {
-        if (lens) return;
-        lens = document.createElement('span'); lens.className = 'loupe';
-        const z = src.cloneNode(false); lens.append(z);
-        src.after(lens);
-        const crop = z.dataset.crop.split(',').map(Number);
-        const a = { id: z.dataset.barnes, w: +z.dataset.w, h: +z.dataset.h, crop };
-        for (const t of tiles(a, scaleFor(crop[2] * a.w, c.clientWidth * 2.6 * 1.5))) {
+      c.classList.add('magnify');
+      c.style.setProperty('--r', `${R}px`); c.style.setProperty('--z', ZOOM);
+      let lens, z, all, done;
+      const reveal = (x, y) => {
+        const W = c.clientWidth, H = c.clientHeight, rx = ((R / ZOOM + 12) / W) * 100, ry = ((R / ZOOM + 12) / H) * 100, px = (x / W) * 100, py = (y / H) * 100;
+        all.forEach((t, n) => {
+          if (done.has(n) || t.left > px + rx || t.left + t.width < px - rx || t.top > py + ry || t.top + t.height < py - ry) return;
+          done.add(n);
           const i = new Image(); i.alt = ''; i.src = t.url;
           i.style.cssText = `left:${t.left}%;top:${t.top}%;width:${t.width + 0.08}%;height:${t.height + 0.08}%`;
           z.append(i);
-        }
+        });
+      };
+      c.addEventListener('pointerenter', () => {
+        glass.classList.add('on');
+        if (lens) return;
+        lens = document.createElement('span'); lens.className = 'loupe';
+        z = src.cloneNode(false); lens.append(z); src.after(lens);
+        const crop = z.dataset.crop.split(',').map(Number);
+        all = tiles({ id: z.dataset.barnes, w: +z.dataset.w, h: +z.dataset.h, crop }, 1); done = new Set();
       });
+      c.addEventListener('pointerleave', () => glass.classList.remove('on'));
       c.addEventListener('pointermove', (e) => {
-        const r = c.getBoundingClientRect();
-        c.style.setProperty('--x', `${e.clientX - r.left}px`);
-        c.style.setProperty('--y', `${e.clientY - r.top}px`);
+        const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+        c.style.setProperty('--x', `${x}px`); c.style.setProperty('--y', `${y}px`);
+        glass.style.transform = `translate(${e.clientX - 120}px,${e.clientY - 120}px)`;
+        reveal(x, y);
       });
     });
   }
