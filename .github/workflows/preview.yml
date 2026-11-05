@@ -8,7 +8,6 @@ on:
 jobs:
   preview:
     runs-on: ubuntu-latest
-    environment: build_env
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

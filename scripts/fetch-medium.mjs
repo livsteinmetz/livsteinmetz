@@ -44,3 +44,4 @@ for (const feed of FEEDS) {
 }
 writeFileSync('content/notes.feed.json', JSON.stringify([...posts.values()], null, 2));
 console.log(`${posts.size} posts from Medium`);
+for (const p of posts.values()) console.log(`  ${p.date} ${p.title} ${p.url}`);
