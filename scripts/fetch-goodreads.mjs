@@ -29,7 +29,25 @@ const shelf = async (name) => {
   }));
 };
 
+// The profile page is the one public view that lists current books.
+const profile = async () => {
+  const res = await fetch(`https://www.goodreads.com/user/show/${USER}`, { headers: { 'User-Agent': 'Mozilla/5.0 (livsteinmetz-site-build)' } });
+  if (!res.ok) throw new Error(`profile ${res.status}`);
+  const html = await res.text();
+  const seen = new Set();
+  const books = [...html.matchAll(/<a[^>]*href="(\/book\/show\/[^"?]+)[^"]*"[^>]*>\s*<img[^>]*alt="([^"]+)"[^>]*src="([^"]+)"/g)]
+    .filter(([, url]) => !seen.has(url) && seen.add(url))
+    .map(([, url, alt, cover]) => { const [title, author = ''] = decode(alt).split(/ by (?=[^]*$)/); return { title, author, url: `https://www.goodreads.com${url}`, cover: cover.replace(/\._S[XY]\d+_/, '') }; });
+  console.log(`profile: ${html.length} bytes, ${books.length} books`);
+  if (!books.length) { const i = html.indexOf('/book/show/'); console.log(html.slice(Math.max(0, i - 200), i + 400)); throw new Error('profile has no books'); }
+  return books;
+};
+
 try {
+  const books = await profile();
+  writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
+  console.log(`Saved ${books.length} books`);
+} catch (err) { try {
   const now = Date.now();
   const current = await shelf('currently-reading');
   const read = (await shelf('read'))
@@ -38,8 +56,8 @@ try {
   const books = [...current, ...read].filter((b) => b.cover).map(({ finished, ...b }) => b);
   writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
   console.log(`Saved ${current.length} current and ${read.length} finished books`);
-} catch (err) {
-  console.warn(`Goodreads skipped: ${err.message}`);
+} catch (e) {
+  console.warn(`Goodreads skipped: ${e.message}`);
   const books = [];
   for (const b of JSON.parse(readFileSync('content/reading.seed.json', 'utf8'))) {
     try {
@@ -50,4 +68,4 @@ try {
   }
   if (books.length) writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
   console.log(`Saved ${books.length} books from the seed list`);
-}
+} }
