@@ -55,6 +55,17 @@ if (typeof document !== 'undefined') {
     const lines = title.children.length, max = cover.clientHeight * (lines > 2 ? 0.16 : lines > 1 ? 0.22 : 0.3);
     l.style.fontSize = `${(Math.min(100 * box / w, max) / cover.clientWidth * 100).toFixed(2)}cqw`;
   });
+  const box = document.querySelector('.lookbox');
+  if (box) {
+    document.querySelectorAll('.look').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      box.querySelector('img').src = a.href;
+      box.querySelector('p').textContent = a.dataset.caption;
+      box.showModal();
+    }));
+    box.addEventListener('click', () => box.close());
+  }
+
   document.fonts.ready.then(() => fit());
   document.fonts.addEventListener('loadingdone', () => fit());
   addEventListener('load', () => fit());
