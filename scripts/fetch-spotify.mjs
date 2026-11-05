@@ -1,10 +1,12 @@
-// Writes the last four weeks of top tracks to content/listening.json.
-// Skips quietly until the three SPOTIFY_ secrets are set, and a failed
-// request never blocks a deploy: the section just stays off the page.
-import { writeFileSync } from 'node:fs';
+// Writes the tracks of one chosen playlist to content/listening.json, so the
+// shelf shows only what's on that playlist. Set its id in content/spotify.json.
+// Skips quietly until the id and the three SPOTIFY_ secrets are set, and a
+// failed request never blocks a deploy: the section just stays off the page.
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
-if (!id || !secret || !refresh) { console.log('Spotify not connected, skipping'); process.exit(0); }
+const { listening } = JSON.parse(readFileSync('content/spotify.json', 'utf8'));
+if (!id || !secret || !refresh || !listening) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
 try {
   const auth = await fetch('https://accounts.spotify.com/api/token', {
@@ -15,9 +17,12 @@ try {
   if (!auth.ok) throw new Error(`token ${auth.status}`);
   const { access_token: token } = await auth.json();
 
-  const res = await fetch('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=8', { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) throw new Error(`top tracks ${res.status}`);
-  const { items } = await res.json();
+  const headers = { Authorization: `Bearer ${token}` };
+  const base = `https://api.spotify.com/v1/playlists/${listening}`;
+  let res = await fetch(`${base}/items?limit=12`, { headers });
+  if (res.status === 404) res = await fetch(`${base}/tracks?limit=12`, { headers });
+  if (!res.ok) throw new Error(`playlist ${res.status}`);
+  const items = (await res.json()).items.map((row) => row.item || row.track).filter((t) => t?.album);
 
   const tracks = items.map((t) => ({
     title: t.name,
