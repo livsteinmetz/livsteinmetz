@@ -6,7 +6,7 @@
   "description": "Olivia Steinmetz's personal site. Plain Node, no dependencies.",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "content": "node scripts/fetch-medium.mjs && node scripts/fetch-wall.mjs && node scripts/fetch-spotify.mjs",
+    "content": "node scripts/fetch-medium.mjs && node scripts/fetch-wall.mjs && node scripts/fetch-goodreads.mjs && node scripts/fetch-spotify.mjs",
     "check": "node scripts/check-art.mjs"
   }
 }

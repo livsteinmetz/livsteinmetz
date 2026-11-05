@@ -11,7 +11,6 @@ const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url)
 
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
 const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
-const UPDATED = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'long', day: 'numeric', year: 'numeric' });
 const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural institutions, designing and building at the intersection of culture and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -71,7 +70,7 @@ ${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical |
 <header class="masthead"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
 <div class="vinyl" aria-hidden="true"><i></i></div><main id="site-content">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
-<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and the Cleveland Museum of Art. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own. This site rebuilds itself every morning from Medium, Spotify, and open museum collections. Last updated ${UPDATED}.</p></footer>
+<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and the Cleveland Museum of Art. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
 

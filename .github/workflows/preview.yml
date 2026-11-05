@@ -18,6 +18,7 @@ jobs:
           node-version: 22
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/fetch-wall.mjs
+      - run: node scripts/fetch-goodreads.mjs
       - run: node scripts/fetch-spotify.mjs
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
