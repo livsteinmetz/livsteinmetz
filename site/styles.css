@@ -19,11 +19,13 @@ h1,h2,h3,p{margin:0}
 .cover{position:relative;display:block;aspect-ratio:3/4;overflow:hidden;text-decoration:none;container-type:inline-size;background:#1b1712}
 .cover.flat{background:var(--flat)}
 a.cover:hover{color:inherit}
+.cover[hidden]{display:none}
 .crop{position:absolute;inset:0;overflow:hidden}
 .crop img{position:absolute;max-width:none}
 .crop.fill img{inset:0;width:100%;height:100%;object-fit:cover}
 .words{position:absolute;left:0;right:0;padding:5cqw 5cqw}
-.words.top{top:0;padding-bottom:13cqw}.words.bottom{bottom:0;padding-top:13cqw}
+.words.top{top:0;padding-bottom:13cqw}.words.bottom{bottom:0;padding-top:13cqw;padding-bottom:3cqw}
+.words.bottom .ctag{margin-top:2cqw}
 .has-art .words.top{background:linear-gradient(to bottom,rgba(0,0,0,var(--scrim)) calc(100% - 13cqw),transparent)}
 .has-art .words.bottom{background:linear-gradient(to top,rgba(0,0,0,var(--scrim)) calc(100% - 13cqw),transparent)}
 .ctitle{display:block;line-height:1;overflow-wrap:break-word;hyphens:manual}

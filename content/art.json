@@ -1,12 +1,156 @@
 {
-  "postman": { "title": "The Postman (Joseph-Étienne Roulin)", "artist": "Vincent van Gogh", "barnes": 4720, "w": 4613, "h": 5556, "crop": [0.22, 0.2, 0.56, 0.42], "rights": "BF37, public domain" },
-  "jeanne": { "title": "Jeanne Hébuterne", "artist": "Amedeo Modigliani", "barnes": 6288, "w": 4418, "h": 6889, "crop": [0.2, 0.08, 0.6, 0.5], "rights": "BF285, public domain" },
-  "jungle": { "title": "Monkeys and Parrot in the Virgin Forest", "artist": "Henri Rousseau", "barnes": 5515, "w": 4533, "h": 5474, "crop": [0.1, 0.2, 0.6, 0.66], "rights": "BF397, public domain" },
-  "bouquet": { "title": "Bouquet of Flowers", "artist": "Henri Rousseau", "barnes": 5520, "w": 4444, "h": 6204, "crop": [0.15, 0.12, 0.7, 0.6], "rights": "BF579, public domain" },
-  "annunciation": { "title": "Annunciation", "artist": "El Greco", "barnes": 5659, "w": 4728, "h": 5886, "crop": [0.2, 0.15, 0.6, 0.6], "rights": "BF117, public domain" },
-  "polkadot": { "title": "Girl with a Polka-Dot Blouse", "artist": "Amedeo Modigliani", "barnes": 5538, "w": 4296, "h": 6917, "crop": [0.2, 0.35, 0.6, 0.45], "rights": "BF180, public domain" },
-  "beatrice": { "title": "Beatrice (Portrait de Béatrice Hastings)", "artist": "Amedeo Modigliani", "barnes": 5804, "w": 4058, "h": 5859, "crop": [0.2, 0.12, 0.6, 0.5], "rights": "BF361, public domain" },
-  "sailor": { "title": "Boy in Sailor Suit", "artist": "Amedeo Modigliani", "barnes": 5704, "w": 4506, "h": 7018, "crop": [0.2, 0.3, 0.6, 0.46], "rights": "BF369, public domain" },
-  "shepherd": { "title": "Sleeping Shepherd", "artist": "Titian", "barnes": 4731, "w": 9133, "h": 1910, "crop": [0.3, 0, 0.24, 1], "rights": "BF977, public domain" },
-  "ophelia": { "title": "Ophelia", "artist": "John Everett Millais", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg?width=2600", "w": 7087, "h": 4820, "crop": [0.3, 0.24, 0.36, 0.7], "rights": "Tate, public domain, via Wikimedia Commons" }
+ "postman": {
+  "title": "The Postman (Joseph-Étienne Roulin)",
+  "artist": "Vincent van Gogh",
+  "barnes": 4720,
+  "w": 4613,
+  "h": 5556,
+  "crop": [
+   0.22,
+   0.2,
+   0.56,
+   0.42
+  ],
+  "rights": "BF37, public domain"
+ },
+ "jeanne": {
+  "title": "Jeanne Hébuterne",
+  "artist": "Amedeo Modigliani",
+  "barnes": 6288,
+  "w": 4418,
+  "h": 6889,
+  "crop": [
+   0.2,
+   0.08,
+   0.6,
+   0.5
+  ],
+  "rights": "BF285, public domain"
+ },
+ "jungle": {
+  "title": "Monkeys and Parrot in the Virgin Forest",
+  "artist": "Henri Rousseau",
+  "barnes": 5515,
+  "w": 4533,
+  "h": 5474,
+  "crop": [
+   0.1,
+   0.2,
+   0.6,
+   0.66
+  ],
+  "rights": "BF397, public domain"
+ },
+ "bouquet": {
+  "title": "Bouquet of Flowers",
+  "artist": "Henri Rousseau",
+  "barnes": 5520,
+  "w": 4444,
+  "h": 6204,
+  "crop": [
+   0.15,
+   0.12,
+   0.7,
+   0.6
+  ],
+  "rights": "BF579, public domain"
+ },
+ "annunciation": {
+  "title": "Annunciation",
+  "artist": "El Greco",
+  "barnes": 5659,
+  "w": 4728,
+  "h": 5886,
+  "crop": [
+   0.2,
+   0.15,
+   0.6,
+   0.6
+  ],
+  "rights": "BF117, public domain"
+ },
+ "polkadot": {
+  "title": "Girl with a Polka-Dot Blouse",
+  "artist": "Amedeo Modigliani",
+  "barnes": 5538,
+  "w": 4296,
+  "h": 6917,
+  "crop": [
+   0.2,
+   0.35,
+   0.6,
+   0.45
+  ],
+  "rights": "BF180, public domain"
+ },
+ "beatrice": {
+  "title": "Beatrice (Portrait de Béatrice Hastings)",
+  "artist": "Amedeo Modigliani",
+  "barnes": 5804,
+  "w": 4058,
+  "h": 5859,
+  "crop": [
+   0.2,
+   0.12,
+   0.6,
+   0.5
+  ],
+  "rights": "BF361, public domain"
+ },
+ "sailor": {
+  "title": "Boy in Sailor Suit",
+  "artist": "Amedeo Modigliani",
+  "barnes": 5704,
+  "w": 4506,
+  "h": 7018,
+  "crop": [
+   0.2,
+   0.3,
+   0.6,
+   0.46
+  ],
+  "rights": "BF369, public domain"
+ },
+ "shepherd": {
+  "title": "Sleeping Shepherd",
+  "artist": "Titian",
+  "barnes": 4731,
+  "w": 9133,
+  "h": 1910,
+  "crop": [
+   0.3,
+   0,
+   0.24,
+   1
+  ],
+  "rights": "BF977, public domain"
+ },
+ "ophelia": {
+  "title": "Ophelia",
+  "artist": "John Everett Millais",
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg?width=2600",
+  "w": 7087,
+  "h": 4820,
+  "crop": [
+   0.3,
+   0.24,
+   0.36,
+   0.7
+  ],
+  "rights": "Tate, public domain, via Wikimedia Commons"
+ },
+ "roulin": {
+  "title": "The Postman (Joseph-Étienne Roulin)",
+  "artist": "Vincent van Gogh",
+  "barnes": 4720,
+  "w": 4613,
+  "h": 5556,
+  "crop": [
+   0.22,
+   0.58,
+   0.56,
+   0.4
+  ],
+  "rights": "BF37, public domain"
+ }
 }

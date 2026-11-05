@@ -16,7 +16,7 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 
 // The covers on Side B rotate through the paintings; a daily build moves them along.
 const day = Math.floor(Date.now() / 864e5);
-const pool = ['beatrice', 'sailor', 'ophelia', 'shepherd', 'jungle', 'postman'];
+const pool = ['beatrice', 'sailor', 'shepherd', 'roulin'];
 const rotating = (i) => pool[(day + i) % pool.length];
 
 const side = {
@@ -49,7 +49,9 @@ function cover(c, tag = 'a') {
   const a = c.art && art[c.art];
   const size = `font-size:${(c.size * 4.5).toFixed(1)}cqw;color:${c.color}`;
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
-  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}" style="${size}">${esc(c.title)}</span></span><span class="${a ? 'tag-strip' : 'tag-bottom'}"><span class="ctag" style="color:${c.flat ? '#000' : '#fff'}">${esc(c.tag)}</span></span>`;
+  const tagEl = `<span class="ctag" style="color:${c.flat ? '#000' : '#fff'}">${esc(c.tag)}</span>`;
+  const below = c.edge === 'bottom';
+  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}" style="${size}">${esc(c.title)}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs} aria-label="${esc(c.title)}${a ? `. ${esc(alt)}` : ''}">${inner}</a>` : `<span ${attrs} data-slug="${c.slug}" role="img" aria-label="${esc(c.title)}">${inner}</span>`;
 }

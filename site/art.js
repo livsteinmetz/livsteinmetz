@@ -71,8 +71,8 @@ if (typeof document !== 'undefined') {
     const get = OSD.IIIFTileSource.prototype.getTileUrl;
     OSD.IIIFTileSource.prototype.getTileUrl = function (...a) { return get.call(this, ...a).replace('default', 'color'); };
     const info = await (await fetch(`${BASE}${id}/info.json`)).json();
-    info['@id'] = BASE + id; info.sizes = [{ width: info.width, height: info.height }];
+    info['@id'] = BASE + id; info.profile[1].qualities = ['color']; info.sizes = [{ width: info.width, height: info.height }];
     info.tiles = [{ width: TILE, height: TILE, scaleFactors: [1, 2, 4] }];
-    OSD({ element: v, tileSources: [info], showNavigationControl: false, gestureSettingsMouse: { scrollToZoom: false }, minZoomImageRatio: 0.9, crossOriginPolicy: 'Anonymous' });
+    OSD({ element: v, tileSources: [info], showNavigationControl: false, gestureSettingsMouse: { scrollToZoom: false }, minZoomImageRatio: 0.9 });
   }).observe(v);
 }
