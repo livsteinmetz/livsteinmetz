@@ -35,7 +35,7 @@ a.cover:hover{color:inherit}
 .ln{display:block;line-height:1;white-space:nowrap;font-size:20cqw}
 .ln i{display:inline-block}
 .a-center{text-align:center}.a-left{text-align:left}
-.a-spread .ln{display:flex;justify-content:space-between;font-size:30cqw}
+.a-spread .ln{display:flex;justify-content:space-between;font-size:24cqw;line-height:1.05}
 .long .ln{white-space:normal;font-size:10.5cqw;line-height:1.1;text-wrap:balance}
 h3.ctitle{margin:0;font-weight:inherit}
 .ctag{margin:0}
