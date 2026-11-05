@@ -15,17 +15,29 @@ const ref = doc(getFirestore(app), 'site', 'settings');
 const $ = (id) => document.getElementById(id);
 const sections = JSON.parse($('items').textContent);
 const status = (text) => { $('status').textContent = text; };
-const idFrom = (link) => link.trim().match(/playlist\/([A-Za-z0-9]+)/)?.[1] || link.trim();
+const mine = JSON.parse($('mine').textContent);
 
-const addPlaylistRow = (p = { title: '', id: '' }) => {
-  const row = document.createElement('p');
-  row.className = 'row';
-  row.innerHTML = '<input aria-label="Playlist name" placeholder="Name"><input aria-label="Spotify link" placeholder="Spotify link"><button type="button">Remove</button>';
-  const [title, link, remove] = row.children;
-  title.value = p.title;
-  link.value = p.id;
-  remove.onclick = () => row.remove();
-  $('playlists').append(row);
+const renderPlaylists = (settings) => {
+  const chosen = new Set(settings.playlists.map((p) => p.id || p));
+  $('playlists').replaceChildren(...mine.map((p) => {
+    const row = document.createElement('div');
+    row.className = 'pl';
+    row.dataset.title = p.title.toLowerCase();
+    row.innerHTML = '<input type="checkbox"><img alt=""><span></span><label><input type="radio" name="listening"> Listening</label>';
+    const [box, img, name, pick] = row.children;
+    box.dataset.playlist = p.id;
+    box.checked = chosen.has(p.id);
+    box.setAttribute('aria-label', `Show ${p.title}`);
+    if (p.image) img.src = p.image;
+    name.textContent = p.isPublic === false ? `${p.title} (private)` : p.title;
+    pick.firstChild.value = p.id;
+    pick.firstChild.checked = settings.listening === p.id;
+    return row;
+  }));
+};
+$('filter').oninput = (e) => {
+  const q = e.target.value.toLowerCase();
+  [...$('playlists').children].forEach((r) => { r.hidden = !r.dataset.title.includes(q); });
 };
 
 const render = (settings) => {
@@ -46,20 +58,17 @@ const render = (settings) => {
     });
     return set;
   }));
-  $('listening').value = settings.listening;
-  $('playlists').replaceChildren();
-  settings.playlists.forEach(addPlaylistRow);
+  renderPlaylists(settings);
 };
 
-$('add').onclick = () => addPlaylistRow();
 $('in').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => status(`Sign-in failed: ${e.code}`));
 $('out').onclick = () => signOut(auth);
 
 $('save').onclick = async () => {
   const settings = {
     hidden: [...document.querySelectorAll('[data-key]')].filter((b) => !b.checked).map((b) => b.dataset.key),
-    listening: idFrom($('listening').value),
-    playlists: [...$('playlists').children].map((r) => ({ title: r.children[0].value.trim(), id: idFrom(r.children[1].value) })).filter((p) => p.id),
+    listening: document.querySelector('[name=listening]:checked')?.value || '',
+    playlists: [...document.querySelectorAll('[data-playlist]')].filter((b) => b.checked).map((b) => b.dataset.playlist),
   };
   status('Saving');
   try {

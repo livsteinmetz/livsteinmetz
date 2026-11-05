@@ -1,12 +1,12 @@
-// Writes the tracks of one chosen playlist to content/listening.json, so the
-// shelf shows only what's on that playlist. Choose it at /admin.
-// Skips quietly until the id and the three SPOTIFY_ secrets are set, and a
-// failed request never blocks a deploy: the section just stays off the page.
+// Saves all of Olivia's playlists to content/my-playlists.json for /admin, and
+// the tracks of the one she picks for Listening to content/listening.json.
+// Skips quietly until the SPOTIFY_ secrets are set, and a failed request never
+// blocks a deploy: the section just stays off the page.
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
 const { listening } = JSON.parse(readFileSync('content/settings.json', 'utf8'));
-if (!id || !secret || !refresh || !listening) { console.log('Spotify not set up, skipping'); process.exit(0); }
+if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
 try {
   const auth = await fetch('https://accounts.spotify.com/api/token', {
@@ -18,6 +18,19 @@ try {
   const { access_token: token } = await auth.json();
 
   const headers = { Authorization: `Bearer ${token}` };
+
+  const mine = [];
+  for (let next = 'https://api.spotify.com/v1/me/playlists?limit=50'; next;) {
+    const res = await fetch(next, { headers });
+    if (!res.ok) throw new Error(`playlists ${res.status}`);
+    const page = await res.json();
+    mine.push(...page.items.filter(Boolean).map((p) => ({ id: p.id, title: p.name, image: p.images?.at(-1)?.url || '', isPublic: p.public })));
+    next = page.next;
+  }
+  writeFileSync('content/my-playlists.json', `${JSON.stringify(mine, null, 1)}\n`);
+  console.log(`Saved ${mine.length} playlists`);
+  if (!listening) process.exit(0);
+
   const base = `https://api.spotify.com/v1/playlists/${listening}`;
   let res = await fetch(`${base}/items?limit=12`, { headers });
   if (res.status === 404) res = await fetch(`${base}/tracks?limit=12`, { headers });
