@@ -5,7 +5,7 @@
   "tag": "a classroom",
   "date": "2021 to now",
   "art": "postman",
-  "font": "shoulders",
+  "font": "grotesk",
   "size": "2.9",
   "color": "#ffc2b8",
   "edge": "top",
@@ -22,22 +22,9 @@
    "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."
   ],
   "lines": [
-   [
-    "Visual",
-    "playfair",
-    25
-   ],
-   [
-    "EXPERIENCE",
-    "anton",
-    23.5
-   ],
-   [
-    "Platform",
-    "spartan",
-    15,
-    "j"
-   ]
+   "VISUAL",
+   "EXPERIENCE",
+   "PLATFORM"
   ],
   "gallery": [
    {
@@ -78,7 +65,7 @@
   "tag": "a guide with no labels",
   "date": "2021 to now",
   "art": "jeanne",
-  "font": "bodoni",
+  "font": "didone",
   "size": "3.6",
   "color": "#ffffff",
   "edge": "top",
@@ -91,16 +78,8 @@
    "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. This year we rebuilt the recognition engine in house, which is the kind of project that used to be out of reach for a small museum team."
   ],
   "lines": [
-   [
-    "Barnes",
-    "rozha",
-    19
-   ],
-   [
-    "FOCUS",
-    "unbounded",
-    16.5
-   ]
+   "Barnes",
+   "Focus"
   ],
   "gallery": [
    {
@@ -116,7 +95,7 @@
   "title": "Calder Gardens",
   "tag": "a new institution",
   "date": "2025",
-  "font": "anton",
+  "font": "geo",
   "size": "4.6",
   "color": "#000000",
   "flat": "#e8b2ff",
@@ -135,16 +114,8 @@
    "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering."
   ],
   "lines": [
-   [
-    "Calder",
-    "syne",
-    20
-   ],
-   [
-    "Gardens",
-    "playfair",
-    24
-   ]
+   "CALDER",
+   "GARDENS"
   ],
   "gallery": [
    {
@@ -160,7 +131,7 @@
   "tag": "a renewal flow",
   "date": "2021 to now",
   "art": "bouquet",
-  "font": "spartan",
+  "font": "compressed",
   "size": "3.1",
   "color": "#b8ffe0",
   "edge": "bottom",
@@ -177,16 +148,7 @@
    "Redesigning the join and renewal flows, with renewal upsells inside the portal, brought a 37% increase in renewals and 22% higher member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
   ],
   "lines": [
-   [
-    "MEMBER",
-    "bowlby",
-    15
-   ],
-   [
-    "ship",
-    "playfair",
-    30
-   ]
+   "MEMBERSHIP"
   ]
  },
  {
@@ -215,16 +177,8 @@
    "Every painting on this site is served the same way. The covers are assembled from the Barnes's public IIIF tiles in your browser, so you're looking at that pipeline right now."
   ],
   "lines": [
-   [
-    "Deep",
-    "gothic",
-    26
-   ],
-   [
-    "Zoom",
-    "gothic",
-    44
-   ]
+   "Deep",
+   "Zoom"
   ]
  },
  {
@@ -233,7 +187,7 @@
   "tag": "a way to browse",
   "date": "2021 to now",
   "art": "polkadot",
-  "font": "bodoni",
+  "font": "inscribed",
   "size": "3.4",
   "color": "#ffffff",
   "edge": "bottom",
@@ -248,16 +202,8 @@
    "This fall the team moved the whole site to Lambda and CloudFront with no downtime, and rebuilt measurement on GA4 so we can see what people do there."
   ],
   "lines": [
-   [
-    "ONLINE",
-    "unbounded",
-    12.5
-   ],
-   [
-    "Collection",
-    "abril",
-    14.5
-   ]
+   "ONLINE",
+   "COLLECTION"
   ],
   "gallery": [
    {

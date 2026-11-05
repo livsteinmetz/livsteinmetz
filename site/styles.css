@@ -14,24 +14,33 @@ h1,h2,h3,p{margin:0}
 .statement{font-size:clamp(1.9rem,4.6vw,3.75rem);line-height:1.08;letter-spacing:-.02em;font-weight:400;max-width:21em;padding:clamp(40px,7vw,72px) var(--gutter)}
 .side{padding:20px var(--gutter) 22px}.side.a{background:var(--yellow)}.side.b{background:var(--sky)}
 .side h2{font:500 1.125rem/1.4 var(--sans);margin-bottom:14px}
-.shelf{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:#000 transparent}
+.shelf{display:flex;gap:26px;overflow-x:auto;padding-right:8px;scroll-snap-type:x proximity;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:#000 transparent}
 .shelf>a{flex:0 0 clamp(240px,31vw,380px);scroll-snap-align:start}
-.cover{position:relative;display:block;aspect-ratio:3/4;overflow:hidden;text-decoration:none;container-type:inline-size;background:#1b1712}
+.cover{box-shadow:5px 7px 14px rgba(0,0,0,.3);border-radius:1px 3px 3px 1px;position:relative;display:block;aspect-ratio:3/4;overflow:hidden;text-decoration:none;container-type:inline-size;background:#1b1712}
 .cover.flat{background:var(--flat)}
 a.cover:hover{color:inherit}
 .cover[hidden]{display:none}
+.cover::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.28) 0,rgba(255,255,255,.14) 1.1%,rgba(0,0,0,.16) 2.4%,transparent 3.6%)}
 .crop{position:absolute;inset:0;overflow:hidden}
 .crop img{position:absolute;max-width:none}
 .crop.fill img{inset:0;width:100%;height:100%;object-fit:cover}
-.words{position:absolute;left:0;right:0;padding:5cqw 5cqw}
+.words{position:absolute;left:0;right:0;padding:5cqw 6cqw;box-sizing:border-box;overflow:hidden}
 .words.top{top:0;padding-bottom:13cqw}.words.bottom{bottom:0;padding-top:13cqw;padding-bottom:3cqw}
 .words.bottom .ctag{margin-top:2cqw}
 .ctitle{display:block;line-height:1;overflow-wrap:break-word;hyphens:manual}
 .ctag{display:block;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:9cqw;line-height:1.1}
 .tag-bottom{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
 .tag-strip{position:absolute;left:5cqw;right:5cqw;bottom:3cqw}
-.ln{display:block;line-height:.95;white-space:nowrap}.ln.just{letter-spacing:.42em}.ln.wrap{white-space:normal;line-height:1.02}
-.f-anton{font-family:Anton,Impact,sans-serif}.f-playfair{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:800;letter-spacing:-.02em}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:800}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:800}.f-rozha{font-family:"Rozha One",Georgia,serif}.f-unbounded{font-family:Unbounded,Arial,sans-serif;font-weight:800;letter-spacing:-.02em}.f-syne{font-family:Syne,Arial,sans-serif;font-weight:800}.f-abril{font-family:"Abril Fatface",Georgia,serif}.f-bowlby{font-family:"Bowlby One",Impact,sans-serif}
+.ln{display:block;line-height:1;white-space:nowrap;font-size:20cqw}
+.long .ln{white-space:normal;font-size:10.5cqw;line-height:1.08;text-wrap:balance}
+.f-grotesk{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;font-weight:800;font-stretch:100%;letter-spacing:-.02em}
+.f-didone{font-family:"Bodoni Moda",Didot,Georgia,serif;font-weight:500}
+.f-geo{font-family:Jost,Futura,Arial,sans-serif;font-weight:700;letter-spacing:.01em}
+.f-compressed{font-family:Anton,Impact,sans-serif;letter-spacing:.01em}
+.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700}
+.f-inscribed{font-family:Marcellus,Georgia,serif;letter-spacing:.14em}
+.f-shoulders{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800}
+.f-soft{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.01em}
 .f-bodoni{font-family:"Bodoni Moda",Georgia,serif;font-weight:500}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:700}
 .loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .15s;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
 .loupe .crop{transform:scale(2.6);transform-origin:var(--x,50%) var(--y,50%)}

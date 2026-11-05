@@ -10,7 +10,8 @@ const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
-const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Big+Shoulders+Display:wght@800&family=Abril+Fatface&family=Bowlby+One&family=Grenze+Gotisch:wght@800&family=Instrument+Serif:ital@1&family=League+Spartan:wght@800&family=Playfair+Display:ital,wght@1,800&family=Rozha+One&family=Syne:wght@800&family=Unbounded:wght@800&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@100,800&family=Big+Shoulders+Display:wght@800&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,600&family=Grenze+Gotisch:wght@700&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural institutions, designing and building at the intersection of culture and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -20,18 +21,13 @@ const day = Math.floor(Date.now() / 864e5);
 const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
 
-function noteLines(title, i) {
-  const w = title.split(' '), cut = Math.min(i % 2 ? 2 : 3, w.length - 1);
-  const a = w.slice(0, cut).join(' '), b = w.slice(cut).join(' ');
-  const [f1, f2] = [['playfair', 'spartan'], ['anton', 'playfair'], ['abril', 'spartan'], ['rozha', 'playfair']][i % 4];
-  return [[a, f1, a.length > 12 ? 11.5 : 14, 'wrap'], [b, f2, b.length > 30 ? 7.5 : 9, 'wrap']];
-}
+const noteFonts = ['soft', 'didone', 'grotesk', 'soft'];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), lines: noteLines(n.title, i), href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', lines: [['Double', 'unbounded', 12.5], ['BASS', 'anton', 50]], href: '/bass' },
-    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', lines: [['Play', 'rozha', 34], ['LISTS', 'bowlby', 20]], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
+    ...notes.slice(0, 4).map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteFonts[i % 4], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'shepherd', font: 'shoulders', lines: ['DOUBLE', 'BASS'], href: '/bass' },
+    { slug: 'playlists', title: 'Playlists', tag: 'on my stand lately', date: 'Spotify', font: 'grotesk', lines: ['PLAY', 'LISTS'], color: '#000000', flat: '#ffb3d9', href: '/playlists' },
   ],
 };
 const covers = [...side.a, ...side.b];
@@ -49,7 +45,7 @@ function cover(c0, tag = 'a') {
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
   const tagEl = `<span class="ctag" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</span>`;
   const below = c.edge === 'bottom';
-  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle" style="color:${c.color}">${c.lines.map(([t, f, z, j]) => `<span class="ln f-${f}${j ? ` ${j === 'j' ? 'just' : 'wrap'}` : ''}" style="font-size:${z}cqw">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
+  const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}${c.long ? ' long' : ''}" style="color:${c.color}">${c.lines.map((t) => `<span class="ln">${esc(t)}</span>`).join('')}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs} aria-label="${esc(c.title)}${a ? `. ${esc(alt)}` : ''}">${inner}</a>` : `<span ${attrs} data-slug="${c.slug}" role="img" aria-label="${esc(c.title)}">${inner}</span>`;
 }
@@ -61,14 +57,14 @@ function shell({ path, title, description, body, canonical, top = true }) {
 <title>${esc(full)}</title><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#fff27a">
 <link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${SITE}${path}"><meta property="og:image" content="${SITE}/media/og.jpg"><meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS.replace(/&/g, '&amp;')}"><link rel="stylesheet" href="/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS.replace(/&/g, '&amp;')}"><link rel="stylesheet" href="/styles.css?v=${V}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-WZM6YLSHQY');</script>
 </head><body><a class="skip" href="#main">Skip to content</a>
 <header class="top"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
 <div class="vinyl" aria-hidden="true"><i></i></div><main id="main">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
 <p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and the Cleveland Museum of Art. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
-<script type="module" src="/art.js"></script></body></html>`;
+<script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
 
 const shelf = (key, label, id) => `<section class="side ${key}" id="${id}"><h2>${label}</h2><div class="shelf">${side[key].map((c) => cover(c)).join('')}</div></section>`;
