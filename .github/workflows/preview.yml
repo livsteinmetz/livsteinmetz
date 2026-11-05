@@ -20,7 +20,7 @@ jobs:
       - run: node scripts/fetch-wall.mjs
       - run: node scripts/build.mjs
       - run: node scripts/check-art.mjs
-      - run: npm i --no-save playwright && npx playwright install --with-deps chromium && node .ci/shots.mjs
+      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node .ci/shots.mjs
         continue-on-error: true
       - name: Publish screenshots to a scratch branch
         continue-on-error: true
