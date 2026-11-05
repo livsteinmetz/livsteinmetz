@@ -1,5 +1,5 @@
 // Writes the books on Olivia's currently-reading shelf, then what she finished
-// in the past year, to content/reading.json from her public Goodreads feeds.
+// in the past year, to content/reading.json from her public Goodreads shelves.
 // If Goodreads won't answer, it falls back to content/reading.seed.json with
 // covers from Open Library, so a failed request never blocks a deploy.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -7,22 +7,25 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const USER = '187582052-liv';
 const YEAR = 365 * 24 * 60 * 60 * 1000;
 
-const tag = (item, name) => {
-  const m = item.match(new RegExp(`<${name}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?</${name}>`));
-  return m ? m[1].trim() : '';
-};
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"');
 
+const first = (html, re) => html.match(re)?.[1]?.trim() || '';
+const flip = (name) => name.split(', ').reverse().join(' ');
+
+// Goodreads retired its API and this account's feed, so read the public shelf page.
 const shelf = async (name) => {
-  const res = await fetch(`https://www.goodreads.com/review/list_rss/${USER}?shelf=${name}&per_page=100`, { headers: { 'User-Agent': 'livsteinmetz-site-build' } });
+  const res = await fetch(`https://www.goodreads.com/review/list/${USER}?shelf=${name}&per_page=100&print=true`, { headers: { 'User-Agent': 'Mozilla/5.0 (livsteinmetz-site-build)' } });
   if (!res.ok) throw new Error(`${name} ${res.status}`);
-  const xml = await res.text();
-  return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(([, item]) => ({
-    title: decode(tag(item, 'title')),
-    author: decode(tag(item, 'author_name')),
-    url: `https://www.goodreads.com/book/show/${tag(item, 'book_id')}`,
-    cover: tag(item, 'book_large_image_url') || tag(item, 'book_medium_image_url'),
-    finished: tag(item, 'user_read_at'),
+  const html = await res.text();
+  const rows = html.split(/<tr[^>]+id="review_\d+"/).slice(1);
+  console.log(`${name}: ${html.length} bytes, ${rows.length} rows`);
+  if (!rows.length) throw new Error(`${name} has no rows`);
+  return rows.map((row) => ({
+    title: decode(first(row, /field title[\s\S]*?<a[^>]*title="([^"]+)"/)),
+    author: flip(decode(first(row, /field author[\s\S]*?<a[^>]*>([^<]+)<\/a>/))),
+    url: `https://www.goodreads.com${first(row, /(\/book\/show\/[^"?]+)/)}`,
+    cover: first(row, /field cover[\s\S]*?<img[^>]*src="([^"]+)"/).replace(/\._S[XY]\d+_/, ''),
+    finished: first(row, /date_read_value">([^<]+)</),
   }));
 };
 
