@@ -19,9 +19,10 @@ jobs:
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/build.mjs
       - run: node scripts/check-art.mjs
-      - run: npm i --no-save playwright && npx playwright install --with-deps chromium && node .ci/shots.mjs && node .ci/sources.mjs
+      - run: npm i --no-save playwright@1.55.0 && npx playwright install --with-deps chromium && node .ci/shots.mjs && node .ci/sources.mjs
         continue-on-error: true
       - name: Publish screenshots to a scratch branch
+        continue-on-error: true
         run: |
           cd shots
           git init -q -b preview-shots
