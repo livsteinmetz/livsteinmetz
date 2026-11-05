@@ -37,11 +37,12 @@ function cropEl(key) {
   const a = art[key];
   return `<span class="crop" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></span>`;
 }
-function cover(c, tag = 'a') {
-  const a = c.art && art[c.art];
+function cover(c0, tag = 'a') {
+  const a = c0.art && art[c0.art];
+  const c = a ? { ...c0, edge: a.edge, color: a.ink, tagColor: a.tagInk } : c0;
   const size = `font-size:${(c.size * 4.5).toFixed(1)}cqw;color:${c.color}`;
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
-  const tagEl = `<span class="ctag" style="color:${c.flat ? '#000' : '#fff'}">${esc(c.tag)}</span>`;
+  const tagEl = `<span class="ctag" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</span>`;
   const below = c.edge === 'bottom';
   const inner = `${a ? cropEl(c.art) : ''}<span class="words ${c.edge || 'top'}"><span class="ctitle f-${c.font}" style="${size}">${esc(c.title)}</span>${below ? tagEl : ''}</span>${below ? '' : `<span class="${a ? 'tag-strip' : 'tag-bottom'}">${tagEl}</span>`}`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;

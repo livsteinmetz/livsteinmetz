@@ -6,12 +6,15 @@
   "w": 4613,
   "h": 5556,
   "crop": [
-   0.22,
    0.2,
-   0.56,
-   0.42
+   0.03,
+   0.6,
+   0.6642
   ],
-  "rights": "BF37, public domain"
+  "rights": "BF37, public domain",
+  "edge": "top",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "jeanne": {
   "title": "Jeanne Hébuterne",
@@ -20,12 +23,15 @@
   "w": 4418,
   "h": 6889,
   "crop": [
-   0.2,
-   0.08,
-   0.6,
-   0.5
+   0.22,
+   0.305,
+   0.34,
+   0.2907
   ],
-  "rights": "BF285, public domain"
+  "rights": "BF285, public domain",
+  "edge": "bottom",
+  "ink": "#000000",
+  "tagInk": "#000000"
  },
  "jungle": {
   "title": "Monkeys and Parrot in the Virgin Forest",
@@ -34,12 +40,15 @@
   "w": 4533,
   "h": 5474,
   "crop": [
-   0.1,
-   0.2,
-   0.6,
-   0.66
+   0.088,
+   0,
+   0.42,
+   0.4637
   ],
-  "rights": "BF397, public domain"
+  "rights": "BF397, public domain",
+  "edge": "bottom",
+  "ink": "#c9ff9e",
+  "tagInk": "#ffffff"
  },
  "bouquet": {
   "title": "Bouquet of Flowers",
@@ -48,12 +57,15 @@
   "w": 4444,
   "h": 6204,
   "crop": [
-   0.15,
-   0.12,
-   0.7,
-   0.6
+   0.33,
+   0.289,
+   0.34,
+   0.3247
   ],
-  "rights": "BF579, public domain"
+  "rights": "BF579, public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "annunciation": {
   "title": "Annunciation",
@@ -62,12 +74,15 @@
   "w": 4728,
   "h": 5886,
   "crop": [
-   0.2,
-   0.15,
-   0.6,
-   0.6
+   0.22,
+   0.282,
+   0.42,
+   0.4498
   ],
-  "rights": "BF117, public domain"
+  "rights": "BF117, public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "polkadot": {
   "title": "Girl with a Polka-Dot Blouse",
@@ -76,12 +91,15 @@
   "w": 4296,
   "h": 6917,
   "crop": [
-   0.2,
-   0.35,
-   0.6,
-   0.45
+   0.22,
+   0.413,
+   0.34,
+   0.2816
   ],
-  "rights": "BF180, public domain"
+  "rights": "BF180, public domain",
+  "edge": "top",
+  "ink": "#000000",
+  "tagInk": "#000000"
  },
  "beatrice": {
   "title": "Beatrice (Portrait de Béatrice Hastings)",
@@ -90,12 +108,15 @@
   "w": 4058,
   "h": 5859,
   "crop": [
-   0.2,
-   0.12,
+   0.396,
+   0.199,
    0.6,
-   0.5
+   0.5541
   ],
-  "rights": "BF361, public domain"
+  "rights": "BF361, public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "sailor": {
   "title": "Boy in Sailor Suit",
@@ -104,12 +125,15 @@
   "w": 4506,
   "h": 7018,
   "crop": [
-   0.2,
-   0.3,
-   0.6,
-   0.46
+   0.264,
+   0.48,
+   0.34,
+   0.2911
   ],
-  "rights": "BF369, public domain"
+  "rights": "BF369, public domain",
+  "edge": "bottom",
+  "ink": "#ffe36b",
+  "tagInk": "#ffffff"
  },
  "shepherd": {
   "title": "Sleeping Shepherd",
@@ -118,12 +142,15 @@
   "w": 9133,
   "h": 1910,
   "crop": [
-   0.3,
+   0.34,
    0,
-   0.24,
+   0.157,
    1
   ],
-  "rights": "BF977, public domain"
+  "rights": "BF977, public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "roulin": {
   "title": "The Postman (Joseph-Étienne Roulin)",
@@ -132,12 +159,15 @@
   "w": 4613,
   "h": 5556,
   "crop": [
-   0.22,
-   0.58,
-   0.56,
-   0.4
+   0,
+   0.54,
+   0.34,
+   0.3764
   ],
-  "rights": "BF37, public domain"
+  "rights": "BF37, public domain",
+  "edge": "top",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  },
  "flower": {
   "title": "The Postman (Joseph-Étienne Roulin)",
@@ -146,11 +176,14 @@
   "w": 4613,
   "h": 5556,
   "crop": [
-   0.62,
-   0.1,
-   0.36,
-   0.4
+   0.638,
+   0.605,
+   0.34,
+   0.3764
   ],
-  "rights": "BF37, public domain"
+  "rights": "BF37, public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }
