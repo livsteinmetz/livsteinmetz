@@ -117,14 +117,14 @@ pages['listening.html'] = shell({ path: '/listening', title: 'Listening', descri
   body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${trends.windows.length ? '<p><a href="/listening/trends">See my listening trends</a></p>' : ''}${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe id="${esc(p.id)}" title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : ''}</div>` });
 
 const slope = () => {
-  const W = trends.windows, x = (i) => 170 + i * 280, y = (r) => 40 + r * 34;
+  const W = trends.windows, x = (i) => 170 + i * 330, y = (r) => 44 + r * 34;
   const names = [...new Set(W.flatMap((w) => w.artists))];
   const lines = names.map((n) => {
     const pts = W.map((w, i) => [i, w.artists.indexOf(n)]).filter(([, r]) => r >= 0);
     return pts.length > 1 ? `<polyline fill="none" stroke="#16246e" stroke-width="${pts.length === W.length ? 2.5 : 1}" points="${pts.map(([i, r]) => `${x(i)},${y(r)}`).join(' ')}"/>` : '';
   }).join('');
-  const labels = W.map((w, i) => `<text x="${x(i)}" y="18" text-anchor="middle" font-weight="500">${esc(w.label)}</text>${w.artists.map((n, r) => `<text x="${x(i) + (i === 2 ? 8 : i === 0 ? -8 : 0)}" y="${y(r) - (i === 1 ? 6 : -5)}" text-anchor="${i === 0 ? 'end' : i === 2 ? 'start' : 'middle'}" font-size="14">${esc(n)}</text>`).join('')}`).join('');
-  return `<figure role="group" aria-label="media"><div class="scroll"><svg viewBox="0 0 900 400" role="img" aria-label="My top artists across three time ranges">${lines}${labels}</svg></div><figcaption>Thicker lines stayed in my top ten across all three ranges.</figcaption></figure>`;
+  const labels = W.map((w, i) => `<text x="${x(i)}" y="18" text-anchor="middle" font-weight="500">${esc(w.label)}</text>${w.artists.map((n, r) => `<text x="${x(i) + (i === 2 ? 8 : i === 0 ? -8 : 0)}" y="${y(r) + 5}" text-anchor="${i === 0 ? 'end' : i === 2 ? 'start' : 'middle'}" font-size="14" stroke="#fff" stroke-width="6" paint-order="stroke">${esc(n)}</text>`).join('')}`).join('');
+  return `<figure role="group" aria-label="media"><div class="scroll"><svg viewBox="0 0 1000 400" role="img" aria-label="My top artists across three time ranges">${lines}${labels}</svg></div><figcaption>Thicker lines stayed in my top ten across all three ranges.</figcaption></figure>`;
 };
 pages['listening/trends.html'] = shell({ path: '/listening/trends', title: 'Listening trends', description: "Olivia Steinmetz's top artists over time.",
   body: `<article class="detail" id="story" style="grid-template-columns:1fr"><header><h1>Listening trends</h1></header><section name="articleBody" class="prose trends">${trends.windows.length ? slope() : ''}</section></article>` });

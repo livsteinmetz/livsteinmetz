@@ -94,5 +94,5 @@ h3.ctitle{margin:0;font-weight:inherit}
 .lookbox{border:0;padding:0;background:#fff;max-width:min(92vw,1100px)}.lookbox::backdrop{background:#fff}.lookbox img{display:block;max-width:100%;max-height:82vh;margin:auto}.lookbox p{margin:10px 0 0;font-size:.9375rem}
 
 .trends-card{background:#16246e;color:#f6d44f;display:flex;align-items:center;justify-content:center;font:700 clamp(36px,5vw,60px)/1 Archivo,Arial,sans-serif}
-.scroll{overflow-x:auto}.trends svg{display:block;width:100%;min-width:720px;font-family:inherit}.trends figure{max-width:none}.trends figcaption{margin-top:8px;font-size:.9375rem}
+.detail:has(.trends){max-width:none;min-width:0}.prose.trends{max-width:1000px;width:100%;min-width:0}.scroll{overflow-x:auto;max-width:calc(100vw - 2 * var(--gutter))}.trends svg{display:block;width:100%;min-width:720px;font-family:inherit}.trends figure{max-width:none;margin:0}.trends figcaption{margin-top:8px;font-size:.9375rem}
 .play iframe{scroll-margin-top:24px}
