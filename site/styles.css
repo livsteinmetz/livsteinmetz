@@ -41,10 +41,10 @@ a.cover:hover{color:inherit}
 .f-shoulders{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800}
 .f-soft{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.01em}
 .f-bodoni{font-family:"Bodoni Moda",Georgia,serif;font-weight:500}.f-gothic{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700}.f-spartan{font-family:"League Spartan",Arial,sans-serif;font-weight:700}
-.loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;z-index:4;background:#1b1712;clip-path:circle(var(--r,112px) at var(--x,50%) var(--y,50%))}
+.loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;z-index:4;background:#1b1712;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
 .loupe .crop{transform:scale(var(--z,5));transform-origin:var(--x,50%) var(--y,50%)}
-.magnify{cursor:none}.magnify:hover .loupe{opacity:1}
-.glass{position:fixed;left:0;top:0;width:400px;height:400px;pointer-events:none;z-index:20;opacity:0}.glass.on{opacity:1}
+.magnify:hover .loupe{opacity:1}
+.loupe::after{content:"";position:absolute;inset:0;background:radial-gradient(circle var(--r,96px) at var(--x,50%) var(--y,50%),transparent 97%,#fff 98%)}
 .words,.tag-strip,.tag-bottom{z-index:2}
 .vinyl{position:fixed;right:18px;bottom:18px;width:64px;height:64px;border-radius:50%;z-index:5;background:repeating-radial-gradient(circle,#111 0 2px,#2b2b2b 2px 3px);pointer-events:none}
 .vinyl i{position:absolute;inset:34%;border-radius:50%;background:#fff27a}.vinyl i::before{content:"";position:absolute;left:50%;top:0;width:18%;height:50%;margin-left:-9%;background:#d81f8a}
