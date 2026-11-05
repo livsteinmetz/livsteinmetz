@@ -38,7 +38,16 @@ const profile = async () => {
   const books = [...html.matchAll(/<a[^>]*href="(\/book\/show\/[^"?]+)[^"]*"[^>]*>\s*<img[^>]*alt="([^"]+)"[^>]*src="([^"]+)"/g)]
     .filter(([, url]) => !seen.has(url) && seen.add(url))
     .map(([, url, alt, cover]) => { const [title, author = ''] = decode(alt).split(/ by (?=[^]*$)/); return { title, author, url: `https://www.goodreads.com${url}`, cover: cover.replace(/\._S[XY]\d+_/, '') }; });
-  console.log(`profile: ${html.length} bytes, ${books.length} books`);
+  // The profile shortens titles, so take the full title and author from each book's page.
+  for (const book of books) {
+    try {
+      const page = await (await fetch(book.url, { headers: { 'User-Agent': 'Mozilla/5.0 (livsteinmetz-site-build)' } })).text();
+      const data = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+      book.title = decode(data.name || book.title);
+      book.author = decode([data.author].flat()[0]?.name || book.author);
+    } catch { /* keep what the profile gave us */ }
+  }
+  console.log(`profile: ${html.length} bytes, ${books.length} books`, books.map((b) => `${b.title} / ${b.author}`));
   if (!books.length) { const i = html.indexOf('/book/show/'); console.log(html.slice(Math.max(0, i - 200), i + 400)); throw new Error('profile has no books'); }
   return books;
 };
