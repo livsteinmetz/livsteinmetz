@@ -13,9 +13,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/probe.mjs
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/build.mjs
+      - run: node scripts/check-art.mjs
+      - run: npm i --no-save playwright && npx playwright install --with-deps chromium && node .ci/shots.mjs
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shots
+          path: shots
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
