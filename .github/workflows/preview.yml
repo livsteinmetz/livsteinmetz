@@ -5,6 +5,9 @@ on:
     branches-ignore: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   preview:
     runs-on: ubuntu-latest
@@ -18,10 +21,13 @@ jobs:
       - run: node scripts/check-art.mjs
       - run: npm i --no-save playwright && npx playwright install --with-deps chromium && node .ci/shots.mjs
         continue-on-error: true
-      - uses: actions/upload-artifact@v4
-        with:
-          name: shots
-          path: shots
+      - name: Publish screenshots to a scratch branch
+        run: |
+          cd shots
+          git init -q -b preview-shots
+          git add -A
+          git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "preview screenshots"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" preview-shots
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
