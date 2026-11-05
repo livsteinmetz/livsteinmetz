@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: node scripts/probe.mjs
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/build.mjs
       - uses: FirebaseExtended/action-hosting-deploy@v0
