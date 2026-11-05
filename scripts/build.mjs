@@ -10,7 +10,7 @@ const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url)
 
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
 const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Big+Shoulders+Display:wght@800&family=Bodoni+Moda:opsz,wght@6..96,500&family=Grenze+Gotisch:wght@700&family=Instrument+Serif:ital@1&family=League+Spartan:wght@700&family=Schibsted+Grotesk:wght@400;500&display=swap';
-const STATEMENT = "I lead digital product, experience, and strategy for cultural institutions. I design and build at the intersection of the arts and tech, and I build for the long haul. Also a double bassist.";
+const STATEMENT = "I lead digital product, experience, and strategy for cultural and educational institutions. I design and build at the intersection of the arts and tech, and I build for the long haul. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
