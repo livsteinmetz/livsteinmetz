@@ -47,7 +47,7 @@ if (typeof document !== 'undefined') {
 
   // Long lines shrink to fit their cover, whatever font they're in.
   const fit = (root = document) => root.querySelectorAll('.ln:not(.wrap)').forEach((l) => {
-    const box = l.parentElement.clientWidth;
+    const box = l.closest('.cover').clientWidth * 0.9;
     if (!box) return;
     l.style.display = 'inline-block';
     const w = l.offsetWidth, cur = parseFloat(l.style.fontSize);
