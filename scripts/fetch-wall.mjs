@@ -32,12 +32,12 @@ const smk = async (a) => {
 
 // The Barnes, through the same search the collection site uses.
 const barnes = async () => {
-  const body = { from: 0, size: 300, _source: ['id', 'title', 'people', 'imageSecret', 'imageOriginalSecret', 'rightsType', 'classification'], query: { bool: { filter: [{ exists: { field: 'imageSecret' } }, { terms: { 'copyright.id': [4, 7, 8, 10] } }] } } };
+  const body = { from: 0, size: 2000, _source: ['id', 'title', 'people', 'imageSecret', 'objRightsTypeId', 'classification'], query: { bool: { filter: [{ exists: { field: 'imageSecret' } }, { term: { classification: 'Paintings' } }] } } };
   const res = await fetch('https://collection.barnesfoundation.org/api/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json(), hits = json.hits?.hits || json.body?.hits?.hits || json.hits || [];
   console.log('barnes sample', JSON.stringify(hits[0]?._source || hits[0] || json).slice(0, 400));
-  return hits.map((h) => h._source || h).filter((w) => w.imageSecret && w.classification === 'Paintings').map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://barnes-images.s3.amazonaws.com/images/${w.id}_${w.imageSecret}_n.jpg`, w: 800, h: 1000 }));
+  return hits.map((h) => h._source || h).filter((w) => [4, 7, 8, 10].includes(Number(w.objRightsTypeId))).map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://s3.amazonaws.com/barnes-image-repository/images/${w.id}_${w.imageSecret}_n.jpg`, w: 800, h: 1000 }));
 };
 
 // Wikidata reaches collections with no open API of their own, and Wikimedia
@@ -56,7 +56,7 @@ for (const [name, source] of Object.entries({ barnes: async (a) => (a === ARTIST
   }
   console.log(`${name}: ${n} works`, [...new Set(pool.map((w) => w.museum))].length, 'museums so far');
 }
-console.log(`${pool.length} works in the pool`);
+console.log(`${pool.length} works in the pool`, [...new Set(pool.map((w) => w.museum))].join('; '));
 if (pool.length >= COUNT) {
   const seed = (i) => { const x = Math.sin(day * 12.9898 + i * 78.233) * 43758.5453; return x - Math.floor(x); };
   const picked = pool.map((w, i) => [seed(i), w]).sort((a, b) => a[0] - b[0]).map(([, w]) => w);
