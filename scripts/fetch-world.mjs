@@ -14,7 +14,13 @@ try {
     const polys = g.type === 'Polygon' ? [g.arcs] : g.arcs;
     for (const p of polys) out.land.push(ring(p[0]));
   }
-  console.log(`Globe: ${out.land.length} land shapes`);
+  // A dotted globe: one dot every two degrees wherever there is land.
+  const inside = ([x, y], ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  const dots = [];
+  for (let la = -58; la <= 82; la += 2) for (let lo = -180; lo < 180; lo += 2 / Math.max(0.35, Math.cos(la * Math.PI / 180))) if (out.land.some((r) => inside([lo, la], r))) dots.push([+lo.toFixed(1), la]);
+  out.dots = dots;
+  out.land = [];
+  console.log(`Globe: ${dots.length} land dots`);
 } catch (e) { console.warn(`Globe coastlines skipped: ${e.message}`); }
 for (const p of h?.places || []) {
   try {
@@ -25,4 +31,4 @@ for (const p of h?.places || []) {
   } catch (e) { console.warn(`No clip for ${p.cc}: ${e.message}`); }
 }
 console.log(`Globe clips: ${Object.keys(out.clips).join(', ')}`);
-writeFileSync('content/world.json', `${JSON.stringify(out.land.length ? out : null)}\n`);
+writeFileSync('content/world.json', `${JSON.stringify(out.dots?.length ? out : null)}\n`);

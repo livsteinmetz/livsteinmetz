@@ -302,25 +302,27 @@ function drawGlobe(s, me) {
     if (canvas.width !== Math.round(size * dpr)) { canvas.width = canvas.height = Math.round(size * dpr); canvas.style.width = canvas.style.height = `${size}px`; }
     const R = size * dpr * 0.46, c = size * dpr / 2;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath(); ctx.arc(c, c, R, 0, 2 * Math.PI); ctx.fillStyle = '#c8d6ec'; ctx.fill();
+    ctx.beginPath(); ctx.arc(c, c, R, 0, 2 * Math.PI); ctx.fillStyle = '#eef2f9'; ctx.fill();
     ctx.strokeStyle = 'rgba(22,36,110,.12)'; ctx.lineWidth = dpr;
     for (let lo = -180; lo < 180; lo += 30) { ctx.beginPath(); for (let la = -90; la <= 90; la += 5) { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v) ctx.lineTo(x, y); else ctx.moveTo(x, y); } ctx.stroke(); }
     for (let la = -60; la <= 60; la += 30) { ctx.beginPath(); for (let lo = -180; lo <= 180; lo += 5) { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v) ctx.lineTo(x, y); else ctx.moveTo(x, y); } ctx.stroke(); }
-    ctx.fillStyle = '#ffffff';
-    for (const ring of world.land) { ctx.beginPath(); ring.forEach(([lo, la], i) => { const [x, y] = project(lo, la, l0, p0, R, c, c); if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); }); ctx.fill(); }
+    ctx.fillStyle = INK;
+    const dot = 1.25 * dpr * (size / 600 + 0.5);
+    for (const [lo, la] of world.dots) { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v) ctx.fillRect(x - dot / 2, y - dot / 2, dot, dot); }
     const st = steps[k];
     if (st.p && st.p !== home) {
       ctx.beginPath(); ctx.strokeStyle = RED; ctx.lineWidth = 2.5 * dpr; ctx.setLineDash([6 * dpr, 6 * dpr]);
       arc(PLACES[home.cc], st.at, Math.min(1, local * 1.6)).forEach(([lo, la], i) => { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v && i) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
       ctx.stroke(); ctx.setLineDash([]);
     }
+    const labels = [];
     order.forEach((p, i) => {
       const [x, y, v] = project(...PLACES[p.cc].slice(0, 2), l0, p0, R, c, c);
       if (!v) return;
       const on = st.p === p || !st.p;
       ctx.beginPath(); ctx.arc(x, y, (on ? 7 : 4.5) * dpr, 0, 2 * Math.PI); ctx.fillStyle = on ? RED : INK; ctx.fill();
       if (on && st.p) { ctx.beginPath(); ctx.arc(x, y, (10 + 8 * ((Date.now() / 900) % 1)) * dpr, 0, 2 * Math.PI); ctx.strokeStyle = RED; ctx.lineWidth = 1.5 * dpr; ctx.stroke(); }
-      if (on) { ctx.font = `600 ${15 * dpr}px ${getComputedStyle(document.body).fontFamily}`; ctx.fillStyle = INK; ctx.fillText(PLACES[p.cc][2].replace('Home, in ', ''), x + 12 * dpr, y - 10 * dpr); }
+      if (on && labels.every(([a, b]) => Math.hypot(a - x, b - y) > 34 * dpr)) { labels.push([x, y]); ctx.font = `600 ${15 * dpr}px ${getComputedStyle(document.body).fontFamily}`; ctx.fillStyle = INK; ctx.fillText(PLACES[p.cc][2].replace('Home, in ', ''), x + 12 * dpr, y - 10 * dpr); }
     });
   };
   let last = [PLACES[home.cc][0], PLACES[home.cc][1] * 0.7, 0, 0];
