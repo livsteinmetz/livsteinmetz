@@ -25,6 +25,6 @@ const names = /Paul C|Cézanne|Manet|Matisse|Seurat|Renoir|Degas|Gauguin|Toulous
 const count = {}, list = [];
 for (const w of hits) { if (!names.test(w.people || '')) continue; list.push(w); console.log('hit', w.id, w.people, '|', w.title, '|', w.objRightsTypeId); }
 fs.writeFileSync('shots/hits/list.json', JSON.stringify(list));
-const famous = /seated riffian|moorish|music lesson|blue still|gourds|domino|three sisters|/.source ? /seated riffian|moorish|music lesson|blue still|gourds|domino|three sisters|card players|bathers|bathing|sainte-victoire|sainte victoire|models|poseuses|bonheur|joy of life|dance|laundry|linge|conservatory|music|still life|apples|skulls|mme|madame|woman|boy|red|blue|haere/i;
-for (const w of list) { const a = (w.people.match(names) || ['x'])[0].toLowerCase(); count[a] = count[a] || 0; if (![4, 7, 8, 10].includes(Number(w.objRightsTypeId)) || !famous.test(w.title) || count[a] >= 14) continue; count[a]++; await save(`${IMG}/${w.id}_${w.imageSecret}_n.jpg`, `shots/hits/${w.id}.jpg`); }
+const famous = /seated riffian|moorish|music lesson|blue still|gourds|domino|three sisters|card players|large bathers|sainte-victoire|models|bonheur|laundry|conservatory|goldfish|aquarium|venetian|madras|boat|apples|skull|haere|dancers/i;
+for (const w of list) { const a = (w.people.match(names) || ['x'])[0].toLowerCase(); count[a] = count[a] || 0; if (![4, 7, 8, 10].includes(Number(w.objRightsTypeId)) || !famous.test(w.title) || count[a] >= 12) continue; count[a]++; await save(`${IMG}/${w.id}_${w.imageSecret}_n.jpg`, `shots/hits/${w.id}.jpg`); }
 const info = await fetch(`${IMG}/tiles/${list[0]?.id}/info.json`); console.log('info', info.status, (await info.text()).slice(0, 300));
