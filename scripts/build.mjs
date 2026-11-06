@@ -12,7 +12,7 @@ const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url)
 const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
 const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const V = Date.now().toString(36);
-const STATEMENT = "I lead digital product, experience, and strategy for cultural institutions, designing and building at the intersection of culture and tech. Also a double bassist.";
+const STATEMENT = "I lead digital product, experience, and strategy for cultural organizations, designing and building at the intersection of the arts and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
@@ -69,7 +69,7 @@ ${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical |
 <header class="masthead"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
 <div class="vinyl" aria-hidden="true"><i></i></div><main id="site-content">${body}</main>
 <footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
-<p style="margin-top:8px">Paintings courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania, and open access museum collections. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
+<p style="margin-top:8px">Paintings courtesy of open access museum collections. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
 
@@ -102,7 +102,7 @@ work.forEach((w) => {
   const gallery = w.gallery ? `<div class="gallery">${w.gallery.map(item).join('')}</div>` : '';
   const shot = w.media ? `<div class="shot">${w.media.video ? `<video controls muted loop playsinline preload="none" poster="/media/${w.media.poster}.webp" aria-label="${esc(w.media.alt)}"><source src="/media/${w.media.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${w.media.image}.webp" alt="${esc(w.media.alt)}" loading="lazy">`}</div>` : '';
   pages[`work/${w.slug}.html`] = shell({ path: `/work/${w.slug}`, title: w.title, description: `${w.short}. ${w.role} for ${w.org}.`, ld: [{ '@type': 'CreativeWork', name: w.title, abstract: w.short, creator: { '@id': `${SITE}/#person` }, url: `${SITE}/work/${w.slug}` }],
-    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail" id="story"><header><h1>${esc(w.short)}</h1></header><section name="articleBody" class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.note ? `<p>I wrote more in <a href="${w.note.url}">${esc(w.note.title)}</a>.</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</section><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
+    body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail" id="story"><header><h1>${esc(w.short)}</h1></header><section name="articleBody" class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.reads ? `<p>Read more: ${w.reads.map((r) => `<a href="/notes/${r.slug}">${esc(r.title)}</a>`).join(', ')}</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</section><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
 });
 
 const sideB = side.b;
@@ -114,7 +114,7 @@ feed.forEach((n) => {
 
 const list = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 pages['bass.html'] = shell({ path: '/bass', title: 'Double bass', description: 'Olivia Steinmetz is a freelance double bassist around Philadelphia.',
-  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">I've freelanced since 2015 in orchestras, opera pits, and ballet pits around Philadelphia, Nashville, and Salt Lake City. I studied performance and engineering at the same time at Vanderbilt, and I've never been able to choose. Contractors, I'd love to hear from you.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
+  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">A classical musician for over two decades, I've been performing professionally since 2015 in ensembles around the country.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
 pages['listening.html'] = shell({ path: '/listening', title: 'Listening', description: "What Olivia Steinmetz is listening to.",
   body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${trends.windows.length ? '<p><a href="/listening/trends">See my listening trends</a></p>' : ''}${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe id="${esc(p.id)}" title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : ''}</div>` });
 
@@ -138,7 +138,7 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. Orchestra taught me most of what I know about product work. You listen, you create a solid foundation, and you show up prepared because everybody else is counting on you. It's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
 <h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. <a href="mailto:${EMAIL}">${EMAIL}</a></p></div></div>` });
 pages['colophon.html'] = shell({ path: '/colophon', title: 'Colophon', description: 'How the paintings on this site are served.', body: `<div class="page"><div class="prose"><h1>Colophon</h1><p>Every painting here is public domain. The covers are assembled in your browser from IIIF image tiles, the same standard behind the Barnes online collection and the Visual Experience Platform. Each work has a IIIF manifest, so you can open it in any IIIF viewer.</p><ul>${Object.entries(art).map(([k, a]) => `<li><a href="/iiif/${k}.json">${esc(a.title)}</a>, ${esc(a.artist)} (${esc(a.rights)})</li>`).join('')}</ul></div></div>` });
-pages['404.html'] = shell({ path: '/404', title: 'Page not found', description: 'This page has moved.', body: `<div class="page"><h1>That track isn't on this record.</h1><p><a href="/">Go to the home page</a></p></div>` });
+pages['404.html'] = shell({ path: '/404', title: 'Page not found', description: 'This page has moved.', body: `<div class="page"><h1>Oops looks like we got lost.</h1><p><a href="/">Go to the home page</a></p></div>` });
 
 rmSync('build', { recursive: true, force: true }); mkdirSync('build/iiif', { recursive: true });
 cpSync('site', 'build', { recursive: true });

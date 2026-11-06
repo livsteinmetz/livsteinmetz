@@ -14,9 +14,9 @@
   "stack": "React, GraphQL, AWS Chime, IIIF deep zoom",
   "body": [
    "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
-   "So we built our own. The core idea is Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
-   "Since the first classes in 2023, more than 4,600 students have taken 110+ courses on the VXP. Replay followed in 2024, after research with staff, members, and students showed people were already watching flat recordings of classes. It keeps the interactive canvas, so you can stop the recording and go look for yourself.",
-   "In 2025 the Penn Museum became the first outside institution to teach on the platform, and a graduate program with Saint Joseph's University runs on it too. I built the pricing, onboarding, and support model behind that licensing."
+   "So we wrote down what the method requires and built to it: shared attention, instructor-led pacing, deep zoom that doesn't degrade, bounded exploration, accessibility from the start, and reliability. Those constraints produced Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
+   "As of 2026, since 2023 more than 7,000 students and event attendees have learned on the VXP, across 36,800 hours of online teaching and more than 110 classes. One in five users has been a scholarship recipient or an Art for All Community Pass holder. Research keeps shaping what we build. In 2023, course evaluations showed 42% of students watching flat recordings of live classes, so nineteen research sessions and an A/B test produced Replay, a recording that keeps the canvas explorable, and five learner types we still design for. Replay opened up on-demand courses. Students tell us it works: 80% report high or extremely high impact on critical thinking about art, and 91% say it inspired them to keep learning. This year we also built an AI pipeline that takes an educator's PowerPoint, finds higher-resolution images of the artworks, and turns it into a IIIF presentation they can teach from.",
+   "In 2025 the Penn Museum became the first institution to license the platform, and a graduate program with Saint Joseph's University runs on it too. A year of supporting another institution showed us where to scale, so fifteen interviews and an effort-by-impact matrix produced the roadmap for VXP 2.0, which shipped in September 2026 with a redesigned admin experience. One platform now supports live courses, on-demand courses, and licensing, and together they fund our mission and access. I built the pricing, onboarding, and support model behind that licensing."
   ],
   "lines": [
    "VISUAL",
@@ -57,7 +57,17 @@
   ],
   "align": "center",
   "width": 0.74,
-  "mat": "#fff27a"
+  "mat": "#fff27a",
+  "reads": [
+   {
+    "title": "Designing and Building a Platform for Close Looking",
+    "slug": "designing-and-building-a-platform-for-close-looking"
+   },
+   {
+    "title": "Scaling the Visual Experience Platform",
+    "slug": "scaling-the-visual-experience-platform"
+   }
+  ]
  },
  {
   "slug": "focus",
@@ -66,13 +76,13 @@
   "date": "2021 to now",
   "art": "jeanne",
   "font": "didone",
-  "short": "Point your phone at a painting and it tells you what you're looking at",
+  "short": "In-gallery interpretation, no wall labels",
   "role": "Product and front-end development",
   "org": "Barnes Foundation",
   "stack": "Image recognition, React",
   "body": [
    "The Barnes hangs no wall labels. Dr. Barnes arranged the collection in ensembles so you'd look at relationships of color, light, line, and space instead of reading a placard and moving on.",
-   "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. This year we rebuilt the recognition engine in house, which is the kind of project that used to be out of reach for a small museum team."
+   "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. In June 2026 we replaced the commercial engine behind it with our own, built in weeks rather than the year we would have scoped. The average scan now matches in 594 milliseconds, roughly five times faster, and 61% of first-time visitors have used Focus. That kind of project used to be out of reach for a small museum team, before AI tools came into our workflow."
   ],
   "lines": [
    "Barnes",
@@ -88,7 +98,13 @@
   ],
   "align": "left",
   "width": 0.8,
-  "mat": "#ef8f35"
+  "mat": "#ef8f35",
+  "reads": [
+   {
+    "title": "Digital Product as Institutional Practice at the Barnes Foundation",
+    "slug": "why-were-writing-about-digital-work-again-at-the-barnes"
+   }
+  ]
  },
  {
   "slug": "calder-gardens",
@@ -99,18 +115,14 @@
   "color": "#8f1259",
   "flat": "#a9c4a4",
   "short": "A whole digital ecosystem for a brand-new institution",
-  "role": "Product and design direction",
+  "role": "Product and front-end development",
   "org": "Calder Gardens",
   "link": "https://caldergardens.org/",
   "linkText": "Visit caldergardens.org",
   "stack": "Next.js, Mantine, Sanity, AWS, ACME",
-  "note": {
-   "title": "One Codebase, Two Brands",
-   "url": "https://medium.com/barnes-foundation/one-codebase-two-brands-386835d886d4"
-  },
   "body": [
    "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
-   "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering."
+   "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering. The site also has a multilingual, AI-powered search that answers visitors' questions from our own content."
   ],
   "lines": [
    "CALDER",
@@ -125,7 +137,13 @@
   ],
   "align": "center",
   "width": 0.86,
-  "mat": "#66c4ff"
+  "mat": "#66c4ff",
+  "reads": [
+   {
+    "title": "One Codebase, Two Brands",
+    "slug": "one-codebase-two-brands"
+   }
+  ]
  },
  {
   "slug": "membership",
@@ -135,7 +153,7 @@
   "art": "bouquet",
   "font": "soft",
   "short": "A portal, digital cards, and renewals people finish",
-  "role": "Product, design, and development",
+  "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation",
   "media": {
    "image": "member",
@@ -144,14 +162,20 @@
   "stack": "TypeScript, ACME, Salesforce",
   "body": [
    "The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.",
-   "Redesigning the join and renewal flows, with renewal upsells inside the portal, brought a 37% increase in renewals and 22% higher member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
+   "Redesigning the join and renewal flows, with renewal upsells inside the portal, grew renewals and member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
   ],
   "lines": [
    "MEMBERSHIP"
   ],
   "align": "center",
   "width": 0.8,
-  "mat": "#b15e8f"
+  "mat": "#b15e8f",
+  "reads": [
+   {
+    "title": "Digital Product as Institutional Practice at the Barnes Foundation",
+    "slug": "why-were-writing-about-digital-work-again-at-the-barnes"
+   }
+  ]
  },
  {
   "slug": "commerce",
@@ -161,7 +185,7 @@
   "art": "roulin",
   "font": "didone",
   "short": "Tickets, memberships, and gifts on one stack",
-  "role": "Product",
+  "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation and Calder Gardens",
   "link": "https://github.com/BarnesFoundation/acme-ticketing-client",
   "linkText": "The open source ACME client",
@@ -175,7 +199,13 @@
    "Commerce"
   ],
   "align": "left",
-  "mat": "#66c4ff"
+  "mat": "#66c4ff",
+  "reads": [
+   {
+    "title": "One Codebase, Two Brands",
+    "slug": "one-codebase-two-brands"
+   }
+  ]
  },
  {
   "slug": "deep-zoom",
@@ -205,7 +235,13 @@
   ],
   "align": "center",
   "width": 0.62,
-  "mat": "#fff27a"
+  "mat": "#fff27a",
+  "reads": [
+   {
+    "title": "Designing and Building a Platform for Close Looking",
+    "slug": "designing-and-building-a-platform-for-close-looking"
+   }
+  ]
  },
  {
   "slug": "online-collection",
@@ -214,8 +250,8 @@
   "date": "2021 to now",
   "art": "polkadot",
   "font": "inscribed",
-  "short": "Browse the Barnes by color, light, line, and space",
-  "role": "Development and design",
+  "short": "Search the Barnes Collection by color, light, line, and space",
+  "role": "Product and front-end development",
   "org": "Barnes Foundation",
   "link": "https://collection.barnesfoundation.org/",
   "linkText": "Explore the collection",
@@ -265,23 +301,23 @@
   "mat": "#efa090"
  },
  {
-  "slug": "salesforce",
-  "title": "Moving to Salesforce",
+  "slug": "one-visitor-one-record",
+  "title": "One Visitor, One Record",
   "tag": "a shared record",
   "date": "2024",
   "font": "soft",
   "short": "Moving the Barnes from Raiser's Edge to Salesforce",
-  "role": "Product direction",
+  "role": "Product",
   "org": "Barnes Foundation",
   "stack": "Salesforce, ACME",
   "color": "#16246e",
   "flat": "#efb4f7",
   "body": [
-   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share."
+   "In 2024 I managed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of three. That's what lets us recognize a member at checkout and see who's calling as the call connects, and it lets staff ask and answer questions through MCP connectors and AI-assisted reporting."
   ],
   "lines": [
-   "MOVING TO",
-   "SALESFORCE"
+   "ONE VISITOR",
+   "ONE RECORD"
   ],
   "align": "left",
   "mat": "#ef8f35"

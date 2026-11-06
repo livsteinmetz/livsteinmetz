@@ -159,7 +159,7 @@ try {
     firsts: Object.fromEntries(Object.entries(firsts).map(([y, f]) => [y, { count: f.count, artists: leaders(f.all, 8) }])),
     moods,
     gigs: gigs.sort((a, b) => b.date.localeCompare(a.date)),
-    titles: pub.map((p) => p.title).filter((t) => t.trim().split(/\s+/).length >= 4),
+    titles: [], // names can include friends, so this scene stays off until she picks them
     wall: pub.filter((p) => p.image).map((p) => ({ image: p.image, title: p.title })),
   };
   writeFileSync('content/library.json', `${JSON.stringify(library)}\n`);
