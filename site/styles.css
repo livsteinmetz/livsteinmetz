@@ -156,3 +156,4 @@ h3.ctitle{margin:0;font-weight:inherit}
 @media(max-width:800px){.tracks-list{columns:1}.scene{height:200svh}.scroll{overflow-x:auto}.scroll svg{min-width:640px;height:auto}}
 @media(prefers-reduced-motion:reduce){.scene{height:auto}.pin{position:static;height:auto;min-height:80svh}#progress{display:none}}
 .today-words{font:500 clamp(20px,2.4vw,30px)/1.25 var(--sans)!important;color:#000!important;margin:0 auto 10px!important;max-width:32em}#today-song{font-size:1.0625rem}
+.likes{margin:0 0 1.5em;padding-left:1.1em}.likes li{margin:.3em 0;padding-left:.2em}.likes li::marker{color:#c9321a}
