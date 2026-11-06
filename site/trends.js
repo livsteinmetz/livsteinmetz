@@ -6,6 +6,7 @@ const INK = '#16246e';
 const BANDS = ['#e64aa6', '#66c4ff', '#ef8f35', INK, '#8dbf6a'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const hourName = (h) => (h === 0 ? 'midnight' : h === 12 ? 'noon' : h < 12 ? `${h}am` : `${h - 12}pm`);
+const ap = (h) => (h === 0 ? 'midnight' : h === 12 ? 'noon' : h < 12 ? `${h} a.m.` : `${h - 12} p.m.`);
 const hash = (s) => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 const weekOf = (d) => Math.min(51, Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 6048e5));
 
@@ -142,14 +143,14 @@ function drawLive(t) {
   shown(['open', 'season', 'clock', 'print'], true);
   shown(['artist'], false);
   $('hours').hidden = true;
-  scene('open', top, 'has been on the most for the last four weeks.');
-  scene('season', moved.by > 0 ? `${moved.a} is on the rise` : 'My top tracks lately', moved.by > 0 ? `Up ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'}. My top tracks lately.` : 'From the last four weeks.');
+  scene('open', `${top} has been on more than anyone else this month.`, '');
+  scene('season', moved.by > 0 ? `${moved.a} climbed ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'}.` : 'What has been on repeat.', 'My most-played songs of the last four weeks.');
   $('rings').innerHTML = `<ol class="tracks-list">${t.tracks.map((x, i) => `<li class="in" style="--t:${(i / t.tracks.length).toFixed(3)}"><b>${esc(x.title)}</b> ${esc(x.artist)}</li>`).join('')}</ol>`;
   const hour = t.hours.indexOf(Math.max(...t.hours));
-  scene('clock', `I'm at it around ${hourName(hour)}`, 'My last 50 plays by hour of the day.');
+  scene('clock', `Most of my listening happens around ${ap(hour)}.`, 'My last 50 plays, by hour.');
   $('clock').innerHTML = bars(t.hours);
   if (library) drawLibrary(library);
-  scene('print', 'This is my print', steady.length ? `Its ridges come from every week I've saved music, and the people who've stayed: ${steady.slice(0, 3).join(', ')}.` : "Its ridges come from every week I've saved music.");
+  scene('print', 'All of it, drawn as a fingerprint.', 'Each ridge bends with a week of saved music.');
   const names = t.windows.flatMap((w) => w.artists);
   const weeks = library ? Object.keys(library.adds).sort().flatMap((y) => library.adds[y]) : names.map((n) => (hash(n) % 100) + 1);
   $('fingerprint').innerHTML = fingerprint({ weeks, top: names.slice(0, 5).map((name) => ({ name })) });
@@ -163,11 +164,11 @@ function draw(s, who) {
   const me = who === 'mine' ? { I: 'I', my: 'my', Im: "I'm", was: 'my' } : { I: 'You', my: 'your', Im: "You're", was: 'your' };
   $('deck').hidden = false;
   $('hours').dataset.to = s.hours;
-  scene('open', `hours of music`, `About ${Math.round(s.hours / 24).toLocaleString()} days straight, from ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}.`);
-  scene('season', `${seasonOf(s)} is ${me.my} loudest season`, 'One ring per year.');
-  scene('clock', `${me.Im} at it around ${hourName(peakHour(s))}`, 'Every month, hour by hour.');
-  scene('artist', `${s.top[0]?.name || 'Nobody'} takes the top spot`, s.top[0] ? `It peaked in ${peakMonth(s.top[0])}. Here's how the top five rose and fell.` : '');
-  scene('print', `This is ${me.my} print`, "It's drawn from every week of listening, so no two come out the same.");
+  scene('open', 'hours of music.', `About ${Math.round(s.hours / 24).toLocaleString()} days, end to end, from ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}.`);
+  scene('season', `${me.I} listen most in the ${seasonOf(s).toLowerCase()}.`, 'Each ring is a year. Each tick, a week.');
+  scene('clock', `The peak comes around ${ap(peakHour(s))}.`, 'Every month, hour by hour.');
+  scene('artist', s.top[0] ? `No one got more plays than ${s.top[0].name}.` : '', s.top[0] ? `The peak: ${peakMonth(s.top[0])}.` : '');
+  scene('print', 'All of it, drawn as a fingerprint.', 'Each ridge bends with a week of listening.');
   $('rings').innerHTML = rings(s);
   $('clock').innerHTML = clock(s);
   $('seasons').innerHTML = seasons(s);
@@ -204,11 +205,11 @@ function drawLibrary(l) {
   const byMonth = Array.from({ length: 12 }, (_, m) => Object.values(l.adds).reduce((n, w) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
   const sum = (ms) => ms.reduce((n, m) => n + byMonth[m], 0), g = { winter: [11, 0, 1], spring: [2, 3, 4], summer: [5, 6, 7], fall: [8, 9, 10] };
   const best = Object.keys(g).sort((a, b) => sum(g[b]) - sum(g[a]))[0];
-  scene('lib-rings', `I go looking in the ${best}`, `${totalAdds.toLocaleString()} songs saved, one tick per week.`);
+  scene('lib-rings', `I save the most music in the ${best}.`, `${totalAdds.toLocaleString()} songs. Each ring is a year. Each tick, a week.`);
   $('lib-rings-plate').innerHTML = rings({ years: l.adds });
 
   const era = Object.entries(l.decades).sort((a, b) => b[1].count - a[1].count)[0];
-  scene('decades', `My heart is in the ${era[0].slice(2)}s`, '');
+  scene('decades', `More of my library comes from the ${era[0]}s than any other decade.`, '');
   $('decades-plate').innerHTML = decadesChart(l);
   const pick = (k) => {
     document.querySelectorAll('[data-d]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.d === k));
@@ -221,7 +222,7 @@ function drawLibrary(l) {
 
   const years = Object.keys(l.firsts).sort(), range = $('year');
   const totalArtists = years.reduce((n, y) => n + l.firsts[y].count, 0);
-  scene('discover', `${totalArtists.toLocaleString()} artists and counting`, '');
+  scene('discover', `${totalArtists.toLocaleString()} artists have made it into my playlists.`, '');
   range.min = 0; range.max = years.length - 1; range.value = 0;
   const showYear = () => {
     const y = years[range.value], f = l.firsts[y];
@@ -233,7 +234,7 @@ function drawLibrary(l) {
 
   $('scene-gigs').hidden = !l.gigs.length;
   if (l.gigs.length) {
-    scene('gigs', 'What I had on the stand', '');
+    scene('gigs', `${l.gigs.length} programs, each with its own playlist.`, 'What I listened to before I played it.');
     $('gigs-plate').innerHTML = gigChart(l);
   }
 
@@ -245,7 +246,7 @@ function drawLibrary(l) {
     next();
   }
 
-  scene('wall', `${l.wall.length} playlists, by color`, '');
+  scene('wall', `${l.wall.length} playlists, sorted by color.`, '');
   $('wall-plate').innerHTML = `<div class="wall">${l.wall.map((p, i) => `<img class="in" style="--t:${((i * 37 % 100) / 100).toFixed(2)}" crossorigin="anonymous" src="${p.image}" alt="${esc(p.title)}" title="${esc(p.title)}">`).join('')}</div>`;
   const imgs = [...$('wall-plate').querySelectorAll('img')];
   Promise.all(imgs.map((im) => (im.complete ? 0 : new Promise((r) => { im.onload = r; im.onerror = r; })))).then(() => {
@@ -257,7 +258,7 @@ function drawLibrary(l) {
 
   $('scene-diary').hidden = diary.length < 7;
   if (diary.length >= 7) {
-    scene('diary', 'A diary that writes itself', `Each morning this page saves who I've had on. ${diary.length} days so far.`);
+    scene('diary', 'The page keeps its own diary.', `Each morning it records who has been on. ${diary.length} days so far.`);
     $('diary-plate').innerHTML = diaryChart(diary.slice(-60));
   }
 }
@@ -298,6 +299,7 @@ const live = JSON.parse($('live').textContent);
 const canLive = live.windows?.length && live.tracks?.length;
 const own = () => (mine ? draw(mine, 'mine') : drawLive(live));
 if (mine || canLive) own(); else $('reset').hidden = true;
+if (library && canLive) $('demo').textContent = 'See it with my data';
 tick();
 
 $('file').onchange = async (e) => {
@@ -312,7 +314,19 @@ $('file').onchange = async (e) => {
     $('drop-status').textContent = "That doesn't look like a Spotify history file. Unzip your export and choose the JSON files inside it.";
   }
 };
-$('demo').onclick = () => { draw(sample(), 'yours'); go(); };
+// Stands in for the full streaming history until it arrives: real saved-song
+// weeks and real top artists, with play time estimated from those saves.
+function modeled() {
+  const years = library.adds, weeks = Object.entries(years);
+  const season = Array.from({ length: 12 }, (_, m) => weeks.reduce((n, [, w]) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
+  const clockOf = live.hours?.some(Boolean) ? live.hours : Array(24).fill(1);
+  const clock = season.map((v) => clockOf.map((h) => v * (h + 0.3)));
+  const months = weeks.flatMap(([y]) => Array.from({ length: 12 }, (_, m) => `${y}-${String(m + 1).padStart(2, '0')}`));
+  const top = live.windows[0].artists.slice(0, 5).map((name, i) => ({ name, by: Object.fromEntries(months.map((k, n) => [k, 1 + (hash(name + k) % 5) * (1 + Math.sin(n / 5 + i * 1.7))])) }));
+  const hours = Math.round(weeks.flatMap(([, w]) => w).reduce((a, b) => a + b, 0) * 3.5 / 60);
+  return { hours, years, clock, top, months };
+}
+$('demo').onclick = () => { draw(library && canLive ? modeled() : sample(), 'mine'); $('open-sub').textContent = 'An estimate, built from the songs I have saved.'; go(); };
 $('reset').onclick = () => { own(); go(); };
 $('save').onclick = () => {
   const svg = $('fingerprint').innerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
