@@ -263,24 +263,32 @@
    {
     "text": "Scaling the",
     "x": 18,
-    "y": 46,
-    "size": 28,
+    "y": 50,
+    "size": 42,
     "font": "Jost",
     "wt": 700
    },
    {
-    "text": "Visual Experience",
+    "text": "Visual",
     "x": 18,
-    "y": 80,
-    "size": 28,
+    "y": 92,
+    "size": 42,
+    "font": "Jost",
+    "wt": 700
+   },
+   {
+    "text": "Experience",
+    "x": 18,
+    "y": 134,
+    "size": 42,
     "font": "Jost",
     "wt": 700
    },
    {
     "text": "Platform",
     "x": 18,
-    "y": 114,
-    "size": 28,
+    "y": 176,
+    "size": 42,
     "font": "Jost",
     "wt": 700
    }
