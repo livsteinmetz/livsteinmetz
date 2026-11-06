@@ -96,24 +96,9 @@ h3.ctitle{margin:0;font-weight:inherit}
 .trends-card{background:#16246e;color:#f6d44f;display:flex;align-items:center;justify-content:center;font:700 clamp(36px,5vw,60px)/1 Archivo,Arial,sans-serif}
 .play iframe{scroll-margin-top:24px}
 
-html:has(.wrapped){scroll-snap-type:y proximity}
-.wrapped-head{padding:12px var(--gutter) 24px}.wrapped-head h1{font-size:clamp(40px,6vw,76px);font-weight:400;letter-spacing:-.02em;margin:0}
-.scene{min-height:100svh;background:var(--mat);padding:clamp(24px,5vw,64px) var(--gutter);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,56px);align-items:center;scroll-snap-align:start;box-sizing:border-box}
-.scene.static{min-height:0;padding-block:clamp(32px,6vw,72px)}.scene.try{grid-template-columns:minmax(0,1fr)}.try .scene-copy{max-width:44em}
-.scene-copy h2{font:700 clamp(36px,5.2vw,76px)/1.02 Archivo,Arial,sans-serif;letter-spacing:-.02em;margin:0 0 16px;text-wrap:balance}.scene-copy p{font-size:1.125rem;line-height:1.4;margin:0;max-width:30em}
-.scene-copy.big{grid-column:1/-1;text-align:center;justify-self:center}.scene-copy.big p:last-child{margin-inline:auto}.count{font:400 clamp(90px,22vw,300px)/.9 Anton,Impact,sans-serif!important;margin:0 0 12px!important;max-width:none!important}
-.plate{background:#fff;padding:clamp(12px,2vw,28px);min-width:0;max-height:calc(100svh - 96px);display:flex;flex-direction:column;justify-content:center}.plate svg{display:block;width:100%;height:auto;max-height:calc(100svh - 150px);font-family:var(--sans)}
 .scroll{overflow-x:auto}.scroll svg{min-width:720px}.plate figure{margin:0}
 .legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;padding:0;margin:12px 0 0}.legend i{display:inline-block;width:12px;height:12px;margin-right:6px}
 .drop{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px!important;max-width:none!important}.drop label,.wrapped button{font:inherit;font-size:1rem;border:1px solid #000;background:#fff;color:#000;padding:10px 16px;cursor:pointer}.drop input{font-size:.875rem;max-width:100%}.wrapped button:focus-visible,.drop input:focus-visible{outline:2px solid #16246e;outline-offset:2px}
-@media(max-width:800px){.scene{grid-template-columns:minmax(0,1fr);align-content:center}.plate{max-height:none}.plate svg{max-height:none}html:has(.wrapped){scroll-snap-type:none}}
-@media(prefers-reduced-motion:no-preference){
-.scene .draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.1s ease-out}
-#fingerprint polyline{transition-delay:calc(var(--i)*70ms)}#rings line{transition-duration:.5s;transition-delay:calc(var(--i)*16ms)}
-.scene.on .draw{stroke-dashoffset:0}
-#clock rect{transform:scaleY(0);transform-box:fill-box;transform-origin:center;transition:transform .4s ease-out;transition-delay:calc(var(--i)*35ms)}.scene.on #clock rect{transform:none}
-#seasons svg{clip-path:inset(0 100% 0 0);transition:clip-path 1.6s ease-in-out}.scene.on #seasons svg{clip-path:inset(0 0 0 0)}
-}
 
 .sound{font:inherit;font-size:.875rem;border:1px solid #000;background:#fff;padding:2px 10px;margin-left:8px;cursor:pointer}.sound[aria-pressed=true]{background:#000;color:#fff}
 .still.sleeve{overflow:visible;background:none}.sleeve img{position:relative;z-index:1}
@@ -145,6 +130,31 @@ html:has(.wrapped){scroll-snap-type:y proximity}
 .cloud{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:1.25rem}
 .scrub{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:1.125rem}.scrub input{flex:1;accent-color:#16246e}.scrub output{font-weight:700}
 .gig-list{list-style:none;margin:0;padding:0;overflow:auto;max-height:calc(100svh - 150px)}.gig-list li{display:grid;grid-template-columns:5.5em 1fr;gap:0 12px;padding:9px 0;border-top:1px solid #000}.gig-list time{grid-row:span 2;font-size:.9375rem}.gig-list b{font-weight:500}.gig-list span{font-size:.9375rem}
-.poem{color:#f6d44f;text-align:center}.poem .scene-copy{max-width:1100px}.kicker{margin:0 auto 24px!important}.poem blockquote{font:400 clamp(44px,8vw,124px)/1.05 "Bodoni Moda",Didot,Georgia,serif;margin:0 0 32px;text-wrap:balance}.poem button{background:#f6d44f!important;border-color:#f6d44f!important}
 .wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:2px;max-height:calc(100svh - 150px);overflow:auto}.wall img{display:block;width:100%;aspect-ratio:1;object-fit:cover;transition:transform .15s}.wall img:hover{transform:scale(1.8);position:relative;z-index:1}
 .diary{display:flex;gap:6px;overflow-x:auto}.day{display:flex;flex-direction:column;gap:3px}.day time{font-size:.6875rem;writing-mode:vertical-rl}.day i{display:block;width:18px;height:18px}
+
+#progress{position:fixed;top:0;left:0;right:0;height:2px;background:#16246e;transform:scaleX(0);transform-origin:left;z-index:5}
+.wrapped-head{padding:12px var(--gutter) 0}.wrapped-head h1{font-size:clamp(28px,3vw,40px);font-weight:400;letter-spacing:-.01em;margin:0}
+.scene{--p:1;height:260svh;position:relative}
+.pin{position:sticky;top:0;height:100svh;box-sizing:border-box;padding:clamp(16px,3vh,32px) var(--gutter);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2.5vh,28px);overflow:hidden}
+.scene.static{height:auto;padding:clamp(40px,8vh,96px) var(--gutter)}.try .scene-copy{max-width:44em;margin:0 auto;text-align:left}
+.scene-copy{text-align:center;max-width:44em;flex:none}
+.scene-copy h2{font:500 clamp(20px,2.4vw,30px)/1.2 var(--sans);letter-spacing:-.01em;margin:0;text-wrap:balance}
+.scene-copy p{font-size:.9375rem;line-height:1.35;margin:4px auto 0;color:#444}.scene-copy p:empty{display:none}
+.count{font:400 clamp(100px,24vw,340px)/.95 Anton,Impact,sans-serif!important;color:#16246e!important;margin:0 0 8px!important;font-variant-numeric:tabular-nums}
+.plate{flex:1;min-height:0;width:min(100%,1100px);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.plate>svg,.plate svg{display:block;width:100%;height:100%;max-height:100%;font-family:var(--sans)}.plate figure{margin:0;width:100%;height:100%}
+.scroll{overflow:hidden;height:100%}.scroll svg{min-width:0}
+.big-num{color:#16246e}.scrub{display:none}
+.deck-bars{width:100%;height:min(56svh,460px)}.deck-bars i{height:calc(var(--h)*clamp(0,(var(--p) - var(--t)*.5)/.4,1))}.deck-bars button{justify-content:flex-end}
+.note{text-align:center}.cloud{justify-content:center}
+.draw{stroke-dasharray:1;stroke-dashoffset:calc(1 - clamp(0,(var(--p) - var(--t)*.6)/.4,1))}
+.grow{transform-box:fill-box;transform-origin:bottom;transform:scaleY(clamp(0,(var(--p) - var(--t)*.6)/.4,1))}
+.in{opacity:clamp(0,(var(--p) - var(--t)*.6)/.4,1)}
+#seasons{justify-content:center}#seasons svg{height:auto;max-height:70svh;clip-path:inset(0 calc((1 - var(--p))*100%) 0 0)}
+.tracks-list{columns:2;column-gap:40px;width:min(100%,760px);padding-left:1.4em}.tracks-list li{break-inside:avoid}
+.gig-list{width:min(100%,760px);max-height:none;overflow:hidden}.gig-list li{padding:6px 0}
+.wall{width:100%;grid-template-columns:repeat(auto-fill,minmax(36px,1fr));max-height:100%;overflow:hidden;align-content:center}
+.poem .pin{text-align:center}.kicker{margin:0 auto 20px!important}.poem blockquote{font:400 clamp(38px,7vw,110px)/1.05 "Bodoni Moda",Didot,Georgia,serif;color:#16246e;margin:0 auto 28px;max-width:1100px;text-wrap:balance}
+@media(max-width:800px){.tracks-list{columns:1}.scene{height:200svh}.scroll{overflow-x:auto}.scroll svg{min-width:640px;height:auto}}
+@media(prefers-reduced-motion:reduce){.scene{height:auto}.pin{position:static;height:auto;min-height:80svh}#progress{display:none}}

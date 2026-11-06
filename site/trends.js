@@ -59,7 +59,7 @@ function fingerprint(s) {
       pts.push(`${(cx + rr * 0.82 * Math.cos(t)).toFixed(1)},${(cy + rr * 1.05 * Math.sin(t)).toFixed(1)}`);
     }
     const gap = 8 + (seed * (r + 3)) % 70;
-    out += `<polyline class="draw" pathLength="1" style="--i:${r}" points="${pts.slice(0, gap).join(' ')}"/><polyline class="draw" pathLength="1" style="--i:${r}" points="${pts.slice(gap + 3).join(' ')}"/>`;
+    out += `<polyline class="draw" pathLength="1" style="--t:${(r / 24).toFixed(3)}" points="${pts.slice(0, gap).join(' ')}"/><polyline class="draw" pathLength="1" style="--t:${(r / 24).toFixed(3)}" points="${pts.slice(gap + 3).join(' ')}"/>`;
   }
   return `<svg viewBox="0 0 600 660" role="img" aria-label="A fingerprint drawn from weekly listening"><g fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round">${out}</g></svg>`;
 }
@@ -71,7 +71,7 @@ function rings(s) {
     const r = 56 + i * 38;
     s.years[y].forEach((v, w) => {
       const a = (w / 52) * 2 * Math.PI - Math.PI / 2, L = 2 + 30 * (v / peak);
-      out += `<line x1="${(cx + r * Math.cos(a)).toFixed(1)}" y1="${(cy + r * Math.sin(a)).toFixed(1)}" x2="${(cx + (r + L) * Math.cos(a)).toFixed(1)}" y2="${(cy + (r + L) * Math.sin(a)).toFixed(1)}" stroke="${i % 2 ? '#d9534a' : INK}" stroke-width="3" class="draw" pathLength="1" style="--i:${w}"/>`;
+      out += `<line x1="${(cx + r * Math.cos(a)).toFixed(1)}" y1="${(cy + r * Math.sin(a)).toFixed(1)}" x2="${(cx + (r + L) * Math.cos(a)).toFixed(1)}" y2="${(cy + (r + L) * Math.sin(a)).toFixed(1)}" stroke="${i % 2 ? '#d9534a' : INK}" stroke-width="3" class="draw" pathLength="1" style="--t:${(w / 52).toFixed(3)}"/>`;
     });
     out += `<text x="${cx + 4}" y="${cy - r + 4}" font-size="11">${y}</text>`;
   });
@@ -81,7 +81,7 @@ function rings(s) {
 
 function clock(s) {
   const peak = Math.max(...s.clock.flat(), 0.001);
-  const cells = s.clock.map((row, m) => row.map((v, h) => `<rect x="${60 + h * 22}" y="${40 + m * 40}" width="21" height="39" fill="${INK}" fill-opacity="${(v / peak).toFixed(2)}" style="--i:${h}"><title>${MONTHS[m]}, ${hourName(h)}: ${Math.round(v)} hours</title></rect>`).join('') + `<text x="50" y="${65 + m * 40}" text-anchor="end" font-size="14">${'JFMAMJJASOND'[m]}</text>`).join('');
+  const cells = s.clock.map((row, m) => row.map((v, h) => `<rect x="${60 + h * 22}" y="${40 + m * 40}" width="21" height="39" fill="${INK}" fill-opacity="${(v / peak).toFixed(2)}" class="grow" style="--t:${(h / 24).toFixed(3)}"><title>${MONTHS[m]}, ${hourName(h)}: ${Math.round(v)} hours</title></rect>`).join('') + `<text x="50" y="${65 + m * 40}" text-anchor="end" font-size="14">${'JFMAMJJASOND'[m]}</text>`).join('');
   const hours = [['midnight', 0], ['6am', 6], ['noon', 12], ['6pm', 18]].map(([l, h]) => `<text x="${60 + h * 22}" y="30" font-size="14">${l}</text>`).join('');
   return `<svg viewBox="0 0 600 530" role="img" aria-label="Listening by month and hour, in UTC">${hours}${cells}</svg>`;
 }
@@ -128,7 +128,7 @@ const shown = (ids, on) => ids.forEach((id) => { $(`scene-${id}`).hidden = !on; 
 
 function bars(hours) {
   const peak = Math.max(...hours, 1);
-  const cols = hours.map((v, h) => `<rect x="${h * 25}" y="${260 - (v / peak) * 240}" width="22" height="${(v / peak) * 240}" fill="${INK}" style="--i:${h}"><title>${hourName(h)}: ${v} plays</title></rect>`).join('');
+  const cols = hours.map((v, h) => `<rect x="${h * 25}" y="${260 - (v / peak) * 240}" width="22" height="${(v / peak) * 240}" fill="${INK}" class="grow" style="--t:${(h / 24).toFixed(3)}"><title>${hourName(h)}: ${v} plays</title></rect>`).join('');
   const marks = [['midnight', 0], ['6am', 6], ['noon', 12], ['6pm', 18]].map(([l, h]) => `<text x="${h * 25}" y="284" font-size="14">${l}</text>`).join('');
   return `<svg viewBox="0 0 600 290" role="img" aria-label="My last 50 plays by hour of day">${cols}${marks}</svg>`;
 }
@@ -143,8 +143,8 @@ function drawLive(t) {
   shown(['artist'], false);
   $('hours').hidden = true;
   scene('open', top, 'has been on the most for the last four weeks.');
-  scene('season', moved.by > 0 ? `${moved.a} is on the rise` : 'My top tracks lately', moved.by > 0 ? `Up ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'} on the last six months. These are my top tracks right now.` : 'From the last four weeks.');
-  $('rings').innerHTML = `<ol class="tracks-list">${t.tracks.map((x) => `<li><b>${esc(x.title)}</b> ${esc(x.artist)}</li>`).join('')}</ol>`;
+  scene('season', moved.by > 0 ? `${moved.a} is on the rise` : 'My top tracks lately', moved.by > 0 ? `Up ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'}. My top tracks lately.` : 'From the last four weeks.');
+  $('rings').innerHTML = `<ol class="tracks-list">${t.tracks.map((x, i) => `<li class="in" style="--t:${(i / t.tracks.length).toFixed(3)}"><b>${esc(x.title)}</b> ${esc(x.artist)}</li>`).join('')}</ol>`;
   const hour = t.hours.indexOf(Math.max(...t.hours));
   scene('clock', `I'm at it around ${hourName(hour)}`, 'My last 50 plays by hour of the day.');
   $('clock').innerHTML = bars(t.hours);
@@ -153,7 +153,7 @@ function drawLive(t) {
   const names = t.windows.flatMap((w) => w.artists);
   const weeks = library ? Object.keys(library.adds).sort().flatMap((y) => library.adds[y]) : names.map((n) => (hash(n) % 100) + 1);
   $('fingerprint').innerHTML = fingerprint({ weeks, top: names.slice(0, 5).map((name) => ({ name })) });
-  document.querySelectorAll('.scene').forEach((el) => { el.classList.remove('on'); seen.unobserve(el); seen.observe(el); });
+  tick();
 }
 
 function draw(s, who) {
@@ -164,15 +164,15 @@ function draw(s, who) {
   $('deck').hidden = false;
   $('hours').dataset.to = s.hours;
   scene('open', `hours of music`, `About ${Math.round(s.hours / 24).toLocaleString()} days straight, from ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}.`);
-  scene('season', `${seasonOf(s)} is ${me.my} loudest season`, 'One ring per year and one tick per week, so the seasons line up.');
-  scene('clock', `${me.Im} at it around ${hourName(peakHour(s))}`, 'Every month, hour by hour. The darker the square, the more was playing.');
+  scene('season', `${seasonOf(s)} is ${me.my} loudest season`, 'One ring per year.');
+  scene('clock', `${me.Im} at it around ${hourName(peakHour(s))}`, 'Every month, hour by hour.');
   scene('artist', `${s.top[0]?.name || 'Nobody'} takes the top spot`, s.top[0] ? `It peaked in ${peakMonth(s.top[0])}. Here's how the top five rose and fell.` : '');
   scene('print', `This is ${me.my} print`, "It's drawn from every week of listening, so no two come out the same.");
   $('rings').innerHTML = rings(s);
   $('clock').innerHTML = clock(s);
   $('seasons').innerHTML = seasons(s);
   $('fingerprint').innerHTML = fingerprint(s);
-  document.querySelectorAll('.scene').forEach((el) => { el.classList.remove('on'); seen.unobserve(el); seen.observe(el); });
+  tick();
 }
 
 const library = JSON.parse($('library').textContent);
@@ -180,9 +180,9 @@ const diary = JSON.parse($('diary').textContent);
 
 const decadesChart = (l) => {
   const rows = Object.entries(l.decades).sort((a, b) => a[0] - b[0]), peak = Math.max(...rows.map(([, d]) => d.count), 1);
-  return `<div class="deck-bars">${rows.map(([k, d]) => `<button type="button" data-d="${k}" style="--h:${Math.max(3, (d.count / peak) * 100)}%"><i></i><span>${k.slice(2)}s</span></button>`).join('')}</div><p id="decade-note" class="note" role="status"></p>`;
+  return `<div class="deck-bars">${rows.map(([k, d]) => `<button type="button" data-d="${k}" style="--h:${Math.max(3, (d.count / peak) * 100)}%;--t:${(rows.findIndex(([x]) => x === k) / rows.length).toFixed(3)}"><i></i><span>${k.slice(2)}s</span></button>`).join('')}</div><p id="decade-note" class="note" role="status"></p>`;
 };
-const gigChart = (l) => `<ol class="gig-list">${l.gigs.map((g) => `<li><time>${g.date}</time><b>${esc(g.title)}</b><span>${esc(g.composer)}, ${g.tracks} tracks</span></li>`).join('')}</ol>`;
+const gigChart = (l) => `<ol class="gig-list">${l.gigs.map((g, i) => `<li class="in" style="--t:${(i / l.gigs.length).toFixed(3)}"><time>${g.date}</time><b>${esc(g.title)}</b><span>${esc(g.composer)}, ${g.tracks} tracks</span></li>`).join('')}</ol>`;
 const diaryChart = (days) => {
   const names = [...new Set(days.flatMap((d) => d.artists))];
   return `<div class="diary">${days.map((d) => `<div class="day"><time>${d.d.slice(5)}</time>${d.artists.map((a) => `<i title="${esc(a)}" style="background:${BANDS[names.indexOf(a) % 5]}"></i>`).join('')}</div>`).join('')}</div>`;
@@ -204,11 +204,11 @@ function drawLibrary(l) {
   const byMonth = Array.from({ length: 12 }, (_, m) => Object.values(l.adds).reduce((n, w) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
   const sum = (ms) => ms.reduce((n, m) => n + byMonth[m], 0), g = { winter: [11, 0, 1], spring: [2, 3, 4], summer: [5, 6, 7], fall: [8, 9, 10] };
   const best = Object.keys(g).sort((a, b) => sum(g[b]) - sum(g[a]))[0];
-  scene('lib-rings', `I go looking in the ${best}`, `Every ring is a year of ${totalAdds.toLocaleString()} songs I saved to public playlists, one tick per week.`);
+  scene('lib-rings', `I go looking in the ${best}`, `${totalAdds.toLocaleString()} songs saved, one tick per week.`);
   $('lib-rings-plate').innerHTML = rings({ years: l.adds });
 
   const era = Object.entries(l.decades).sort((a, b) => b[1].count - a[1].count)[0];
-  scene('decades', `My heart is in the ${era[0].slice(2)}s`, 'Pick a decade to see who I keep going back to.');
+  scene('decades', `My heart is in the ${era[0].slice(2)}s`, '');
   $('decades-plate').innerHTML = decadesChart(l);
   const pick = (k) => {
     document.querySelectorAll('[data-d]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.d === k));
@@ -216,22 +216,24 @@ function drawLibrary(l) {
   };
   document.querySelectorAll('[data-d]').forEach((b) => { b.onclick = () => pick(b.dataset.d); b.onmouseenter = () => pick(b.dataset.d); });
   pick(era[0]);
+  const eras = Object.keys(l.decades).sort((a, b) => a - b);
+  scrub['scene-decades'] = (p) => pick(p >= 1 ? era[0] : eras[Math.min(eras.length - 1, Math.floor(p * eras.length))]);
 
   const years = Object.keys(l.firsts).sort(), range = $('year');
   const totalArtists = years.reduce((n, y) => n + l.firsts[y].count, 0);
-  scene('discover', `${totalArtists.toLocaleString()} artists and counting`, 'Drag through the years to see who showed up when.');
-  range.min = 0; range.max = years.length - 1; range.value = years.length - 1;
+  scene('discover', `${totalArtists.toLocaleString()} artists and counting`, '');
+  range.min = 0; range.max = years.length - 1; range.value = 0;
   const showYear = () => {
     const y = years[range.value], f = l.firsts[y];
     $('year-out').textContent = y;
     $('discover-plate').innerHTML = `<p class="big-num">${f.count.toLocaleString()}</p><p class="note">new in ${y}</p><ul class="cloud">${f.artists.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`;
   };
-  range.oninput = showYear;
   showYear();
+  scrub['scene-discover'] = (p) => { const i = Math.min(years.length - 1, Math.floor(p * years.length)); if (String(i) !== range.value) { range.value = i; showYear(); } };
 
   $('scene-gigs').hidden = !l.gigs.length;
   if (l.gigs.length) {
-    scene('gigs', 'What I had on the stand', `${l.gigs.length} programs I've played, from the playlists I made to learn them.`);
+    scene('gigs', 'What I had on the stand', '');
     $('gigs-plate').innerHTML = gigChart(l);
   }
 
@@ -243,8 +245,8 @@ function drawLibrary(l) {
     next();
   }
 
-  scene('wall', `${l.wall.length} playlists, by color`, 'Hover for the name.');
-  $('wall-plate').innerHTML = `<div class="wall">${l.wall.map((p) => `<img crossorigin="anonymous" src="${p.image}" alt="${esc(p.title)}" title="${esc(p.title)}" loading="lazy">`).join('')}</div>`;
+  scene('wall', `${l.wall.length} playlists, by color`, '');
+  $('wall-plate').innerHTML = `<div class="wall">${l.wall.map((p, i) => `<img class="in" style="--t:${((i * 37 % 100) / 100).toFixed(2)}" crossorigin="anonymous" src="${p.image}" alt="${esc(p.title)}" title="${esc(p.title)}">`).join('')}</div>`;
   const imgs = [...$('wall-plate').querySelectorAll('img')];
   Promise.all(imgs.map((im) => (im.complete ? 0 : new Promise((r) => { im.onload = r; im.onerror = r; })))).then(() => {
     try {
@@ -260,11 +262,35 @@ function drawLibrary(l) {
   }
 }
 
-const seen = new IntersectionObserver((entries) => entries.forEach((e) => {
-  if (!e.isIntersecting) return;
-  e.target.classList.add('on');
-  if (e.target.id === 'scene-open' && !$('hours').hidden) countUp($('hours'), Number($('hours').dataset.to));
-}), { threshold: 0.35 });
+// Scroll drives everything: each scene pins, and its charts draw as you move
+// through it. With reduced motion the scenes stay finished and nothing pins.
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scenes = [...document.querySelectorAll('.scene:not(.static)')];
+scenes.forEach((el) => {
+  const pin = document.createElement('div');
+  pin.className = 'pin';
+  pin.append(...el.childNodes);
+  el.append(pin);
+});
+let scrub = {};
+let queued = false;
+function tick() {
+  queued = false;
+  const vh = innerHeight;
+  for (const el of scenes) {
+    if (el.hidden || $('deck').hidden && el.closest('#deck')) continue;
+    const r = el.getBoundingClientRect();
+    const p = still ? 1 : Math.min(1, Math.max(0, (vh * 0.5 - r.top) / Math.max(1, r.height - vh * 0.75)));
+    el.style.setProperty('--p', p.toFixed(3));
+    if (el.id === 'scene-open' && !$('hours').hidden) $('hours').textContent = Math.round(Number($('hours').dataset.to) * p).toLocaleString();
+    scrub[el.id]?.(p);
+  }
+  const page = document.documentElement;
+  $('progress').style.transform = `scaleX(${(scrollY / Math.max(1, page.scrollHeight - vh)).toFixed(4)})`;
+}
+const queue = () => { if (!queued) { queued = true; requestAnimationFrame(tick); } };
+addEventListener('scroll', queue, { passive: true });
+addEventListener('resize', queue);
 
 const mine = JSON.parse($('history').textContent);
 const go = () => $('scene-open').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
@@ -272,6 +298,7 @@ const live = JSON.parse($('live').textContent);
 const canLive = live.windows?.length && live.tracks?.length;
 const own = () => (mine ? draw(mine, 'mine') : drawLive(live));
 if (mine || canLive) own(); else $('reset').hidden = true;
+tick();
 
 $('file').onchange = async (e) => {
   try {
