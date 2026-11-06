@@ -25,11 +25,15 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      - run: node scripts/fetch-weather-history.mjs
+        continue-on-error: true
+      - run: node scripts/fetch-world.mjs
+        continue-on-error: true
       - run: node scripts/build.mjs
         env:
           PREVIEW: '1'
       - run: node scripts/check-art.mjs
-      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/screens.mjs
+      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/screens.mjs; node scripts/qa/story.mjs
         continue-on-error: true
       - name: Publish screenshots to a scratch branch
         continue-on-error: true

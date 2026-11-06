@@ -1,41 +1,21 @@
-// Draws the listening charts in the browser. A visitor's Spotify export is read
+// Draws the listening story in the browser. A visitor's Spotify export is read
 // here and goes nowhere: there is no upload, and closing the tab clears it.
+import { summarize } from './summarize.js';
+const library = JSON.parse(document.getElementById('library').textContent);
+
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const INK = '#16246e';
-const BANDS = ['#e64aa6', '#66c4ff', '#ef8f35', INK, '#8dbf6a'];
+const INK = '#16246e', RED = '#c9321a';
+const RIVER = ['#e64aa6', '#66c4ff', '#ef8f35', '#16246e', '#8dbf6a', '#f6d44f', '#b15e8f', '#3aa8a0', '#c9321a', '#efa090', '#2f6b4f', '#9ab3e6', '#d98c2b', '#6c4fa3'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const hourName = (h) => (h === 0 ? 'midnight' : h === 12 ? 'noon' : h < 12 ? `${h}am` : `${h - 12}pm`);
 const ap = (h) => (h === 0 ? 'midnight' : h === 12 ? 'noon' : h < 12 ? `${h} a.m.` : `${h - 12} p.m.`);
-const hash = (s) => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
-const weekOf = (d) => Math.min(51, Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 6048e5));
-
-// Keeps counts only, so a summary never carries a full listening log.
-export function summarize(rows) {
-  const years = {}, clock = Array.from({ length: 12 }, () => Array(24).fill(0)), artists = {}, months = new Set();
-  let hours = 0;
-  for (const r of rows) {
-    const when = r.ts || (r.endTime && `${r.endTime.replace(' ', 'T')}:00Z`);
-    const ms = r.ms_played ?? r.msPlayed;
-    const artist = r.master_metadata_album_artist_name ?? r.artistName;
-    if (!when || !ms || !artist) continue;
-    const d = new Date(when);
-    if (Number.isNaN(+d)) continue;
-    const h = ms / 36e5, y = d.getUTCFullYear(), key = `${y}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-    hours += h;
-    (years[y] ||= Array(52).fill(0))[weekOf(d)] += h;
-    clock[d.getMonth()][d.getHours()] += h;
-    months.add(key);
-    ((artists[artist] ||= { total: 0, by: {} }).by[key] ||= 0);
-    artists[artist].by[key] += h;
-    artists[artist].total += h;
-  }
-  const top = Object.entries(artists).sort((a, b) => b[1].total - a[1].total).slice(0, 5).map(([name, a]) => ({ name, by: a.by }));
-  return { hours: Math.round(hours), years, clock, top, months: [...months].sort() };
-}
+const n = (v) => Math.round(v).toLocaleString();
+const dateOf = (start, i) => { const d = new Date(`${start}T12:00:00`); d.setDate(d.getDate() + i); return d; };
+const nice = (d) => `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 
 // Sample numbers for visitors who don't have an export yet. Never her listening.
-export function sample() {
+function sample() {
   const rows = [], names = ['First Artist', 'Second Artist', 'Third Artist', 'Fourth Artist', 'Fifth Artist'];
   for (let t = Date.UTC(2023, 0, 1); t < Date.UTC(2026, 0, 1); t += 36e5 * 5) {
     const d = new Date(t), m = d.getUTCMonth(), h = d.getUTCHours();
@@ -44,25 +24,6 @@ export function sample() {
     rows.push({ ts: d.toISOString(), ms_played: 1800000, master_metadata_album_artist_name: names[i] });
   }
   return summarize(rows);
-}
-
-function fingerprint(s) {
-  const weeks = s.weeks || Object.keys(s.years).sort().flatMap((y) => s.years[y]);
-  const peak = Math.max(...weeks, 0.001), at = (i) => weeks[Math.floor(i) % weeks.length] / peak;
-  const seed = hash(s.top.map((a) => a.name).join()) % 97, cx = 300, cy = 330;
-  let out = '';
-  for (let r = 0; r < 24; r++) {
-    const R = 20 + r * 12, pts = [];
-    for (let a = 0; a <= 360; a += 4) {
-      const t = (a * Math.PI) / 180;
-      const push = 7 * Math.sin(t * 3 + r * 0.35 + seed) + 9 * at((a / 360) * weeks.length + r * 9) * Math.sin(t * 5 + r);
-      const rr = R + push * (0.35 + r / 24);
-      pts.push(`${(cx + rr * 0.82 * Math.cos(t)).toFixed(1)},${(cy + rr * 1.05 * Math.sin(t)).toFixed(1)}`);
-    }
-    const gap = 8 + (seed * (r + 3)) % 70;
-    out += `<polyline class="draw" pathLength="1" style="--t:${(r / 24).toFixed(3)}" points="${pts.slice(0, gap).join(' ')}"/><polyline class="draw" pathLength="1" style="--t:${(r / 24).toFixed(3)}" points="${pts.slice(gap + 3).join(' ')}"/>`;
-  }
-  return `<svg viewBox="0 0 600 660" role="img" aria-label="A fingerprint drawn from weekly listening"><g fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round">${out}</g></svg>`;
 }
 
 function rings(s) {
@@ -84,23 +45,7 @@ function clock(s) {
   const peak = Math.max(...s.clock.flat(), 0.001);
   const cells = s.clock.map((row, m) => row.map((v, h) => `<rect x="${60 + h * 22}" y="${40 + m * 40}" width="21" height="39" fill="${INK}" fill-opacity="${(v / peak).toFixed(2)}" class="grow" style="--t:${(h / 24).toFixed(3)}"><title>${MONTHS[m]}, ${hourName(h)}: ${Math.round(v)} hours</title></rect>`).join('') + `<text x="50" y="${65 + m * 40}" text-anchor="end" font-size="14">${'JFMAMJJASOND'[m]}</text>`).join('');
   const hours = [['midnight', 0], ['6am', 6], ['noon', 12], ['6pm', 18]].map(([l, h]) => `<text x="${60 + h * 22}" y="30" font-size="14">${l}</text>`).join('');
-  return `<svg viewBox="0 0 600 530" role="img" aria-label="Listening by month and hour, in UTC">${hours}${cells}</svg>`;
-}
-
-function seasons(s) {
-  const months = s.months, W = 1000, H = 420;
-  if (months.length < 2 || !s.top.length) return '';
-  const series = s.top.map((a) => months.map((m) => a.by[m] || 0));
-  const tot = months.map((_, i) => series.reduce((n, a) => n + a[i], 0)), peak = Math.max(...tot, 0.001);
-  const x = (i) => (i / (months.length - 1)) * W, y = (v) => H / 2 + (v / peak) * (H / 2 - 10);
-  let base = tot.map((t) => -t / 2), out = '', legend = '';
-  series.forEach((a, k) => {
-    const top = base.map((b, i) => b + a[i]);
-    out += `<polygon fill="${BANDS[k]}" points="${top.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')} ${base.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).reverse().join(' ')}"/>`;
-    base = top;
-    legend += `<li><i style="background:${BANDS[k]}"></i>${esc(s.top[k].name)}</li>`;
-  });
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Top five artists by month">${out}</svg><ul class="legend">${legend}</ul>`;
+  return `<svg viewBox="0 0 600 560" role="img" aria-label="Listening by month and hour, in local time">${hours}${cells}</svg>`;
 }
 
 const seasonOf = (s) => {
@@ -111,84 +56,318 @@ const seasonOf = (s) => {
 const peakHour = (s) => { const t = Array(24).fill(0); s.clock.forEach((r) => r.forEach((v, h) => { t[h] += v; })); return t.indexOf(Math.max(...t)); };
 const peakMonth = (a) => { const [k] = Object.entries(a.by).sort((x, y) => y[1] - x[1])[0]; const [y, m] = k.split('-'); return `${MONTHS[m - 1]} ${y}`; };
 
-function scene(id, line, sub) { $(`${id}-line`).textContent = line; $(`${id}-sub`).textContent = sub; }
 
-function countUp(el, to) {
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (still) { el.textContent = to.toLocaleString(); return; }
-  const start = performance.now();
-  const tick = (now) => {
-    const t = Math.min(1, (now - start) / 1400);
-    el.textContent = Math.round(to * (1 - (1 - t) ** 3)).toLocaleString();
-    if (t < 1) requestAnimationFrame(tick);
+function scene(id, line, sub) { if ($(`${id}-line`)) $(`${id}-line`).textContent = line; if ($(`${id}-sub`)) $(`${id}-sub`).textContent = sub; }
+let scrub = {};
+
+// Smooth curve through points, so the river reads as water rather than steps.
+const curve = (pts) => pts.map(([x, y], i) => {
+  if (!i) return `M${x.toFixed(1)},${y.toFixed(1)}`;
+  const [x0, y0] = pts[Math.max(0, i - 2)], [x1, y1] = pts[i - 1], [x3, y3] = pts[Math.min(pts.length - 1, i + 1)];
+  return `C${(x1 + (x - x0) / 6).toFixed(1)},${(y1 + (y - y0) / 6).toFixed(1)} ${(x - (x3 - x1) / 6).toFixed(1)},${(y - (y3 - y1) / 6).toFixed(1)} ${x.toFixed(1)},${y.toFixed(1)}`;
+}).join('');
+const smooth = (a) => a.map((_, i) => (a[Math.max(0, i - 1)] + a[i] * 2 + a[Math.min(a.length - 1, i + 1)]) / 4);
+
+// Eight years as a river. The graphic holds still while the years scroll past it.
+function drawRiver(s, me) {
+  const W = 1000, H = 440, N = s.months.length, x = (i) => (i / (N - 1)) * W;
+  const series = s.river.map((a) => smooth(smooth(a.by)));
+  const tot = s.months.map((_, i) => series.reduce((t, a) => t + a[i], 0)), peak = Math.max(...tot, 0.01);
+  const y = (v) => H / 2 + (v / peak) * (H - 30);
+  let base = tot.map((t) => -t / 2), bands = '';
+  const mids = [];
+  series.forEach((a, k) => {
+    const top = base.map((b, i) => b + a[i]);
+    mids.push(top.map((t, i) => y((t + base[i]) / 2)));
+    bands += `<g class="band" data-n="${esc(s.river[k].name)}"><path fill="${RIVER[k % RIVER.length]}" d="${curve(top.map((v, i) => [x(i), y(v)]))}L${curve(base.map((v, i) => [x(i), y(v)]).reverse()).slice(1)}Z"/></g>`;
+    base = top;
+  });
+  const ticks = s.yearsInfo.map(({ y: yr }) => { const i = s.months.indexOf(`${yr}-01`); const at = x(Math.max(0, i)); return `<line x1="${at}" x2="${at}" y1="0" y2="${H}" stroke="#000" stroke-opacity=".12"/><text x="${at + 6}" y="${H + 26}" font-size="16">${yr}</text>`; }).join('');
+  $('river-plate').innerHTML = `<svg viewBox="0 -10 ${W} ${H + 46}" role="img" aria-label="Top artists by month, ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}"><defs><clipPath id="river-clip"><rect id="river-reveal" x="0" y="-10" width="0" height="${H + 20}"/></clipPath></defs>${ticks}<g clip-path="url(#river-clip)">${bands}</g><line id="river-edge" y1="-10" y2="${H + 8}" stroke="${RED}" stroke-width="2"/><text id="river-label" font-size="18" font-weight="600" paint-order="stroke" stroke="#fff" stroke-width="5"></text></svg>`;
+  const reveal = $('river-reveal'), edge = $('river-edge'), label = $('river-label'), groups = [...$('river-plate').querySelectorAll('.band')];
+  const endOf = (yr) => { const i = s.months.lastIndexOf(s.months.filter((m) => m.startsWith(`${yr}-`)).at(-1)); return i / (N - 1); };
+  const most = s.yearsInfo.reduce((a, b) => (b.hours > a.hours ? b : a));
+  const steps = s.yearsInfo.map((Y, k) => {
+    const partial = k === 0 ? ` (starting in ${MONTHS[+s.months[0].slice(5) - 1]})` : k === s.yearsInfo.length - 1 ? ' so far' : '';
+    return {
+      line: `${Y.y}${partial}: ${n(Y.hours)} hours${Y === most ? `, ${me.my} most ever` : ''}.`,
+      sub: `${Y.top} led the year, with ${n(Y.topHours)} hours.`, top: Y.top, from: k ? endOf(s.yearsInfo[k - 1].y) : 0, to: endOf(Y.y), yr: Y.y,
+    };
+  });
+  steps.push({ line: `${s.yearsInfo.length} years, ${n(s.hours)} hours.`, sub: `The biggest bands overall: ${s.allTop.slice(0, 3).map((a) => a.name).join(', ')}.`, from: 1, to: 1 });
+  let shown = -1;
+  scrub['scene-river'] = (p) => {
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999)), st = steps[k];
+    const local = Math.min(1, (p * steps.length - k) / 0.45), at = (st.from + (st.to - st.from) * (k === steps.length - 1 ? 1 : local)) * W;
+    reveal.setAttribute('width', at);
+    edge.setAttribute('x1', at); edge.setAttribute('x2', at); edge.style.opacity = k === steps.length - 1 ? 0 : 1;
+    if (k === shown) return;
+    shown = k;
+    scene('river', st.line, st.sub);
+    groups.forEach((g) => { g.style.opacity = !st.top || g.dataset.n === st.top ? 1 : 0.3; });
+    const idx = s.river.findIndex((a) => a.name === st.top);
+    if (idx < 0) { label.textContent = ''; return; }
+    const range = s.months.map((m, i) => [m, i]).filter(([m]) => m.startsWith(`${st.yr}-`)).map(([, i]) => i);
+    const i = range.reduce((a, b) => (s.river[idx].by[b] > s.river[idx].by[a] ? b : a), range[0]);
+    label.textContent = st.top;
+    label.setAttribute('x', Math.min(W - 200, x(i) + 8)); label.setAttribute('y', mids[idx][i] + 6);
   };
-  requestAnimationFrame(tick);
 }
 
-const shown = (ids, on) => ids.forEach((id) => { $(`scene-${id}`).hidden = !on; });
-
-function bars(hours) {
-  const peak = Math.max(...hours, 1);
-  const cols = hours.map((v, h) => `<rect x="${h * 25}" y="${260 - (v / peak) * 240}" width="22" height="${(v / peak) * 240}" fill="${INK}" class="grow" style="--t:${(h / 24).toFixed(3)}"><title>${hourName(h)}: ${v} plays</title></rect>`).join('');
-  const marks = [['midnight', 0], ['6am', 6], ['noon', 12], ['6pm', 18]].map(([l, h]) => `<text x="${h * 25}" y="284" font-size="14">${l}</text>`).join('');
-  return `<svg viewBox="0 0 600 290" role="img" aria-label="My last 50 plays by hour of day">${cols}${marks}</svg>`;
+// Every day as a thin bar, one row per year. The darker the bar, the longer the day.
+function drawDays(s, me) {
+  const { start, minutes } = s.days, W = 1000, L = 52, row = 52, first = dateOf(start, 0).getFullYear();
+  const yrs = dateOf(start, minutes.length - 1).getFullYear() - first + 1, scale = [...minutes].sort((a, b) => a - b)[Math.floor(minutes.length * 0.97)] || 1;
+  const pos = (i) => { const d = dateOf(start, i), doy = (d - new Date(d.getFullYear(), 0, 1)) / 864e5; return [L + (doy / 366) * (W - L), (d.getFullYear() - first) * row]; };
+  let bars = '', rows = '';
+  for (let r = 0; r < yrs; r++) rows += `<rect x="${L}" y="${r * row}" width="${W - L}" height="${row - 14}" fill="#f1f1f1"/><text x="0" y="${r * row + 26}" font-size="15">${first + r}</text>`;
+  minutes.forEach((m, i) => { if (!m) return; const [bx, by] = pos(i); bars += `<rect class="day" x="${bx.toFixed(1)}" y="${by}" width="2.4" height="${row - 14}" fill="${INK}" fill-opacity="${Math.min(1, 0.12 + m / scale).toFixed(2)}" style="--t:${(i / minutes.length).toFixed(4)}"/>`; });
+  const st = s.streak; let streak = '';
+  for (let i = st.start; i < st.start + st.len; i++) { const [bx, by] = pos(i); streak += `<rect x="${bx.toFixed(1)}" y="${by - 4}" width="2.8" height="${row - 6}" fill="${RED}"/>`; }
+  const [px, py] = pos(s.peakDay.i);
+  const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'].map((c, m) => `<text x="${L + (m / 12) * (W - L)}" y="-8" font-size="13" fill="#666">${c}</text>`).join('');
+  $('days-plate').innerHTML = `<svg viewBox="0 -24 ${W} ${yrs * row + 30}" role="img" aria-label="Minutes of music each day since ${start}">${months}${rows}${bars}<g id="days-streak">${streak}</g><g id="days-peak"><circle cx="${px + 1}" cy="${py - 8}" r="5" fill="${RED}"/></g></svg>`;
+  const a = nice(dateOf(start, st.start)), b = nice(dateOf(start, st.start + st.len - 1)), peakDay = nice(dateOf(start, s.peakDay.i));
+  const steps = [
+    [`Every day since ${nice(dateOf(start, 0))}.`, 'One thin bar per day. The darker the bar, the more music.'],
+    [`Music on ${n(s.playedDays)} of ${n(minutes.length)} days.`, `${me.My} biggest single day was ${peakDay}: ${n(s.peakDay.minutes / 60)} hours.`],
+    [`The longest run: ${st.len} days in a row.`, `From ${a} to ${b}.`],
+  ];
+  let shown = -1;
+  scrub['scene-days'] = (p) => {
+    const k = p < 0.55 ? 0 : p < 0.8 ? 1 : 2;
+    if (k === shown) return;
+    shown = k;
+    scene('days', ...steps[k]);
+    $('days-peak').style.opacity = k === 1 ? 1 : 0;
+    $('days-streak').style.opacity = k === 2 ? 1 : 0;
+  };
 }
 
-// The live view, from what Spotify shares day to day. The full history replaces it.
-function drawLive(t) {
-  const [now, mid] = t.windows, top = now.artists[0];
-  const moved = now.artists.map((a) => ({ a, by: (mid.artists.includes(a) ? mid.artists.indexOf(a) : 10) - now.artists.indexOf(a) })).sort((x, y) => y.by - x.by)[0];
-  const steady = now.artists.filter((a) => t.windows.every((w) => w.artists.includes(a)));
-  $('deck').hidden = false;
-  shown(['open', 'season', 'clock', 'print'], true);
-  shown(['artist'], false);
-  $('hours').hidden = true;
-  scene('open', `${top} has been on more than anyone else this month.`, '');
-  scene('season', moved.by > 0 ? `${moved.a} climbed ${moved.by} ${moved.by === 1 ? 'spot' : 'spots'}.` : 'What has been on repeat.', 'My most-played songs of the last four weeks.');
-  $('rings').innerHTML = `<ol class="tracks-list">${t.tracks.map((x, i) => `<li class="in" style="--t:${(i / t.tracks.length).toFixed(3)}"><b>${esc(x.title)}</b> ${esc(x.artist)}</li>`).join('')}</ol>`;
-  const hour = t.hours.indexOf(Math.max(...t.hours));
-  scene('clock', `Most of my listening happens around ${ap(hour)}.`, 'My last 50 plays, by hour.');
-  $('clock').innerHTML = bars(t.hours);
-  if (library) drawLibrary(library);
-  scene('print', 'All of it, drawn as a fingerprint.', 'Each ridge bends with a week of saved music.');
-  const names = t.windows.flatMap((w) => w.artists);
-  const weeks = library ? Object.keys(library.adds).sort().flatMap((y) => library.adds[y]) : names.map((n) => (hash(n) % 100) + 1);
-  $('fingerprint').innerHTML = fingerprint({ weeks, top: names.slice(0, 5).map((name) => ({ name })) });
-  tick();
+
+// --- Listening and its surroundings ---------------------------------------
+const weather = JSON.parse($('weather').textContent);
+const SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const kindF = (code, highC) => (code >= 71 && code <= 86 && ![80, 81, 82].includes(code) ? 'snow' : code >= 51 ? 'rain' : highC < 4 ? 'cold' : highC > 29 ? 'hot' : 'mild');
+const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
+const list3 = (w) => (w.length > 2 ? `${w.slice(0, -1).join(', ')} and ${w.at(-1)}` : w.join(' and '));
+
+// One record per day: minutes, where, and that day's weather if known.
+function daysWithWeather(s) {
+  const { start, minutes, place = [], tops = [], names = [] } = s.days;
+  return minutes.map((m, i) => {
+    const d = dateOf(start, i), out = { i, d, m, tops: (tops[i] || []).map((k) => names[k]) };
+    const w = weather?.[place[i]];
+    if (w) {
+      const j = Math.round((d - new Date(`${w.start}T12:00:00`)) / 864e5);
+      if (j >= 0 && w.code[j] != null && w.high[j] != null) Object.assign(out, { kind: kindF(w.code[j], w.high[j]), f: w.high[j] * 9 / 5 + 32, rain: w.rain[j], rise: w.sunrise[j], set: w.sunset[j] });
+    }
+    return out;
+  });
+}
+
+// Seasons, year over year: one ridge per year, months left to right.
+function drawSeasons(s, me) {
+  const per = {};
+  s.days.minutes.forEach((m, i) => { const d = dateOf(s.days.start, i); ((per[d.getFullYear()] ||= Array(12).fill(0))[d.getMonth()] += m / 60); });
+  const ys = Object.keys(per).sort(), W = 1000, row = 58, H = row * ys.length + 100, L = 70, lastM = dateOf(s.days.start, s.days.minutes.length - 1).getMonth(), firstM = dateOf(s.days.start, 0).getMonth();
+  const peak = Math.max(...ys.flatMap((y) => per[y]), 1), x = (m) => L + (m / 11) * (W - L - 20);
+  const ridges = ys.map((y, k) => {
+    const base = 70 + k * row, from = k === 0 ? firstM : 0, to = k === ys.length - 1 ? lastM : 11, pts = per[y].map((v, m) => [x(m), base - (v / peak) * row * 0.92]).slice(from, to + 1);
+    return `<g class="ridge" data-k="${k}"><line x1="${L}" x2="${W - 20}" y1="${base}" y2="${base}" stroke="#000" stroke-opacity=".15"/><path d="${curve(pts)}L${x(to)},${base}L${x(from)},${base}Z" fill="${INK}" fill-opacity=".14"/><path d="${curve(pts)}" fill="none" stroke="${INK}" stroke-width="2.4"/><text x="0" y="${base - 6}" font-size="15">${y}</text></g>`;
+  }).join('');
+  const marks = SHORT.map((m, i) => `<text x="${x(i)}" y="${H - 6}" font-size="13" fill="#666" text-anchor="middle">${m}</text>`).join('');
+  $('rings').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hours of music by month, one line per year">${ridges}${marks}<rect id="season-band" y="0" height="${H - 24}" fill="${RED}" fill-opacity=".08"/></svg>`;
+  const full = ys.filter((y) => per[y].every((v) => v > 0)), share = Array(12).fill(0);
+  full.forEach((y) => { const t = per[y].reduce((a, b) => a + b, 0) || 1; per[y].forEach((v, m) => { share[m] += v / t; }); });
+  const best = share.indexOf(Math.max(...share)), worst = share.indexOf(Math.min(...share));
+  const fall = (share[9] + share[10] + share[11]) / (full.length || 1), summer = (share[5] + share[6] + share[7]) / (full.length || 1);
+  const steps = ys.map((y) => { const m = per[y].indexOf(Math.max(...per[y])); return [`${y}: the loudest month was ${MONTHS[m]}.`, `${n(per[y][m])} hours that month.`, m]; });
+  steps.push([`Across the years, ${MONTHS[best]} is ${me.my} biggest month, and ${MONTHS[worst]} ${me.my} quietest.`, `October through December carries ${Math.round(fall * 100)}% of a year's listening. June through August, ${Math.round(summer * 100)}%.`, best]);
+  const ridgesEls = [...$('rings').querySelectorAll('.ridge')], band = $('season-band');
+  let shown = -1;
+  scrub['scene-season'] = (p) => {
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
+    if (k === shown) return;
+    shown = k;
+    scene('season', steps[k][0], steps[k][1]);
+    ridgesEls.forEach((g, j) => { g.style.opacity = j <= k ? (j === k || k === steps.length - 1 ? 1 : 0.35) : 0; });
+    const m = steps[k][2]; band.setAttribute('x', x(m) - 26); band.setAttribute('width', 52);
+  };
+}
+
+// Weather: every day she listened, placed by that day's high temperature.
+function drawWeather(s, me) {
+  const days = daysWithWeather(s).filter((d) => d.kind && d.m > 0);
+  $('scene-weather').hidden = days.length < 60;
+  if (days.length < 60) return;
+  const W = 1000, H = 460, L = 50, cap = [...days].sort((a, b) => a.m - b.m)[Math.floor(days.length * 0.98)].m;
+  const lo = Math.floor(Math.min(...days.map((d) => d.f)) / 10) * 10, hi = Math.ceil(Math.max(...days.map((d) => d.f)) / 10) * 10;
+  const x = (f) => L + ((f - lo) / (hi - lo)) * (W - L - 10), y = (m) => H - 10 - (Math.min(m, cap) / cap) * (H - 30);
+  const COL = { rain: '#2f7fd1', snow: '#9ab3e6', hot: RED, cold: INK, mild: '#999' };
+  const dots = days.map((d) => `<circle class="w-${d.kind}" cx="${(x(d.f) + ((d.i * 7919) % 9) - 4).toFixed(1)}" cy="${y(d.m).toFixed(1)}" r="3.6" fill="${COL[d.kind]}" fill-opacity=".7"/>`).join('');
+  const axis = Array.from({ length: (hi - lo) / 10 + 1 }, (_, k) => lo + k * 10).map((f) => `<text x="${x(f)}" y="${H + 22}" font-size="14" text-anchor="middle">${f}°F</text>`).join('');
+  const hours = [1, 2, 4, 6].filter((h) => h * 60 < cap).map((h) => `<line x1="${L}" x2="${W}" y1="${y(h * 60)}" y2="${y(h * 60)}" stroke="#000" stroke-opacity=".08"/><text x="0" y="${y(h * 60) + 5}" font-size="13" fill="#666">${h}h</text>`).join('');
+  $('weather-plate').innerHTML = `<svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Each day of listening, by that day's high temperature" data-focus="all">${hours}${axis}${dots}</svg>`;
+  const by = (k) => days.filter((d) => d.kind === k), mean = (a) => avg(a.map((d) => d.m));
+  const all = mean(days), dry = mean(days.filter((d) => d.kind !== 'rain' && d.kind !== 'snow'));
+  const lift = (k) => weather?.lift?.[k] || [];
+  const bands = {}; days.forEach((d) => { const b = Math.floor(d.f / 10) * 10; (bands[b] ||= []).push(d.m); });
+  const sweet = Object.entries(bands).filter(([, v]) => v.length >= 20).sort((p, q) => avg(q[1]) - avg(p[1]))[0];
+  const pct = (a, b) => { const r = Math.round((a / b - 1) * 100); return r >= 0 ? `${r}% more` : `${-r}% less`; };
+  const steps = [
+    ['all', `Every dot is a day ${me.I === 'I' ? 'I' : 'you'} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`],
+    ['rain', `On rainy days, ${me.I.toLowerCase() === 'i' ? 'I' : 'you'} listen ${pct(mean(by('rain')), dry)}.`, `${n(mean(by('rain')))} minutes on an average rainy day, ${n(dry)} on a dry one. ${lift('rain').length ? `Rain brings out ${list3(lift('rain'))}.` : ''}`],
+    ['snow', by('snow').length >= 5 ? `Snow days: ${n(mean(by('snow')))} minutes on average.` : 'Hardly any snow days.', by('snow').length >= 5 ? `${by('snow').length} of them.${lift('snow').length ? ` Snow brings out ${list3(lift('snow'))}.` : ''}` : ''],
+    ['hot', `Above 85°F, ${pct(mean(by('hot')), all)}.`, lift('hot').length ? `Heat brings out ${list3(lift('hot'))}.` : ''],
+    ['cold', `Below 40°F, ${pct(mean(by('cold')), all)}.`, lift('cold').length ? `Cold brings out ${list3(lift('cold'))}.` : ''],
+    ['all', sweet ? `${me.My} sweet spot is the ${sweet[0]}s.` : 'Every kind of day.', sweet ? `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, the most of any range.` : ''],
+  ].filter((st) => st[0] === 'all' || by(st[0]).length >= 5);
+  const svg = $('weather-plate').firstChild;
+  let shown = -1;
+  scrub['scene-weather'] = (p) => {
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
+    if (k === shown) return;
+    shown = k;
+    svg.dataset.focus = steps[k][0];
+    scene('weather', steps[k][1], steps[k][2]);
+  };
+}
+
+// Daylight: the hour-by-hour grid, with real sunrise and sunset laid over it.
+function drawLight(s, me) {
+  const days = weather ? daysWithWeather(s).filter((d) => d.rise != null && d.m > 0) : [];
+  const rise = Array(12).fill(0).map((_, m) => avg(days.filter((d) => d.d.getMonth() === m).map((d) => d.rise)));
+  const set = Array(12).fill(0).map((_, m) => avg(days.filter((d) => d.d.getMonth() === m).map((d) => d.set)));
+  const have = rise.every(Boolean);
+  const X = (h) => 60 + h * 22, Y = (m) => 60 + m * 40;
+  const line = (a, c) => `<polyline points="${a.map((h, m) => `${X(h).toFixed(1)},${Y(m)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="3.5" stroke-linejoin="round"/>`;
+  $('clock').innerHTML = clock(s).replace('</svg>', `<g id="sun" style="opacity:0">${have ? line(rise, '#ef8f35') + line(set, RED) + `<text x="${X(rise[11]) - 8}" y="${Y(11) + 34}" font-size="14" text-anchor="end" fill="#ef8f35">sunrise</text><text x="${X(set[11]) + 8}" y="${Y(11) + 34}" font-size="14" fill="${RED}">sunset</text>` : ''}</g></svg>`);
+  const dark = (m) => { const r = s.clock[m], t = r.reduce((a, b) => a + b, 0) || 1; return r.reduce((a, v, h) => a + (h + 0.5 < rise[m] || h + 0.5 > set[m] ? v : 0), 0) / t; };
+  const steps = [[`The peak comes around ${ap(peakHour(s)).replace(/\.$/, '')}.`, 'Every month, hour by hour. The darker the square, the more music.', 0]];
+  if (have) {
+    steps.push(['The orange line is sunrise. The red line is sunset.', 'Averaged across the days I was listening, wherever I was.', 1]);
+    const dec = dark(11), jun = dark(5);
+    steps.push([`In December, ${Math.round(dec * 100)}% of ${me.my} listening happens in the dark.`, `In June, ${Math.round(jun * 100)}%.`, 1]);
+  }
+  let shown = -1;
+  scrub['scene-clock'] = (p) => {
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
+    if (k === shown) return;
+    shown = k;
+    scene('clock', steps[k][0], steps[k][1]);
+    $('sun').style.opacity = steps[k][2];
+  };
+}
+
+
+// A globe that turns to each place the music was played, as you scroll.
+const world = JSON.parse($('world').textContent);
+const PLACES = { US: [-75.17, 39.95, 'Home, in Philadelphia'], SE: [11.97, 57.71, 'Sweden'], IE: [-6.26, 53.35, 'Ireland'], MX: [-99.13, 19.43, 'Mexico'], FI: [24.94, 60.17, 'Finland'], IT: [12.5, 41.9, 'Italy'], AT: [16.37, 48.21, 'Austria'], DK: [12.57, 55.68, 'Denmark'], GB: [-0.13, 51.5, 'England'], FR: [2.35, 48.86, 'France'], DE: [13.4, 52.52, 'Germany'], ES: [-3.7, 40.42, 'Spain'], NL: [4.9, 52.37, 'the Netherlands'], NO: [10.75, 59.91, 'Norway'], CA: [-79.38, 43.65, 'Canada'], PT: [-9.14, 38.72, 'Portugal'], GR: [23.73, 37.98, 'Greece'], JP: [139.69, 35.69, 'Japan'], IS: [-21.9, 64.15, 'Iceland'], CH: [8.54, 47.37, 'Switzerland'], BE: [4.35, 50.85, 'Belgium'], CZ: [14.42, 50.08, 'Czechia'] };
+const rad = Math.PI / 180;
+const span = (a, b) => {
+  const A = new Date(`${a}T12:00:00`), B = new Date(`${b}T12:00:00`);
+  if (a.slice(0, 7) === b.slice(0, 7)) return `${MONTHS[A.getMonth()]} ${A.getFullYear()}`;
+  if (A.getFullYear() === B.getFullYear()) return `${MONTHS[A.getMonth()]} to ${MONTHS[B.getMonth()]} ${A.getFullYear()}`;
+  return `${A.getFullYear()} to ${B.getFullYear()}`;
+};
+function drawGlobe(s, me) {
+  const places = (s.places || []).filter((p) => PLACES[p.cc]);
+  const sceneEl = $('scene-places');
+  sceneEl.hidden = !world || places.length < 2;
+  if (sceneEl.hidden) return;
+  const canvas = $('globe'), ctx = canvas.getContext('2d'), audio = new Audio(), btn = $('globe-sound');
+  audio.volume = 0.5;
+  let sound = false, playing = '';
+  btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Play the music'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
+  const home = places.find((p) => p.cc === 'US') || places[0];
+  const order = [home, ...places.filter((p) => p !== home)];
+  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: p === home ? `${PLACES[p.cc][2]}.` : `${PLACES[p.cc][2]}, ${span(p.first, p.last)}.`, sub: `On repeat: ${list3(p.artists)}.` }));
+  steps.push({ at: [-30, 45], line: `${order.length - 1} countries away from home, and the music came along.`, sub: '' });
+  const project = (lon, lat, l0, p0, R, cx, cy) => {
+    const L = (lon - l0) * rad, P = lat * rad, P0 = p0 * rad, cosc = Math.sin(P0) * Math.sin(P) + Math.cos(P0) * Math.cos(P) * Math.cos(L);
+    let x = Math.cos(P) * Math.sin(L), y = Math.cos(P0) * Math.sin(P) - Math.sin(P0) * Math.cos(P) * Math.cos(L);
+    if (cosc < 0) { const m = Math.hypot(x, y) || 1; x /= m; y /= m; }
+    return [cx + x * R, cy - y * R, cosc >= 0];
+  };
+  const arc = (a, b, t) => {
+    const v = ([lo, la]) => [Math.cos(la * rad) * Math.cos(lo * rad), Math.cos(la * rad) * Math.sin(lo * rad), Math.sin(la * rad)];
+    const A = v(a), B = v(b), d = Math.acos(Math.min(1, A[0] * B[0] + A[1] * B[1] + A[2] * B[2])) || 1e-6;
+    const f = (u) => { const k1 = Math.sin((1 - u) * d) / Math.sin(d), k2 = Math.sin(u * d) / Math.sin(d), p = A.map((c, i) => c * k1 + B[i] * k2); return [Math.atan2(p[1], p[0]) / rad, Math.asin(p[2]) / rad]; };
+    return Array.from({ length: Math.ceil(40 * t) + 1 }, (_, i) => f((i / 40)));
+  };
+  let shown = -1;
+  const render = (l0, p0, k, local) => {
+    const box = canvas.parentElement.getBoundingClientRect(), dpr = devicePixelRatio || 1, size = Math.min(box.width, box.height);
+    if (canvas.width !== Math.round(size * dpr)) { canvas.width = canvas.height = Math.round(size * dpr); canvas.style.width = canvas.style.height = `${size}px`; }
+    const R = size * dpr * 0.46, c = size * dpr / 2;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath(); ctx.arc(c, c, R, 0, 2 * Math.PI); ctx.fillStyle = '#c8d6ec'; ctx.fill();
+    ctx.strokeStyle = 'rgba(22,36,110,.12)'; ctx.lineWidth = dpr;
+    for (let lo = -180; lo < 180; lo += 30) { ctx.beginPath(); for (let la = -90; la <= 90; la += 5) { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v) ctx.lineTo(x, y); else ctx.moveTo(x, y); } ctx.stroke(); }
+    for (let la = -60; la <= 60; la += 30) { ctx.beginPath(); for (let lo = -180; lo <= 180; lo += 5) { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v) ctx.lineTo(x, y); else ctx.moveTo(x, y); } ctx.stroke(); }
+    ctx.fillStyle = '#ffffff';
+    for (const ring of world.land) { ctx.beginPath(); ring.forEach(([lo, la], i) => { const [x, y] = project(lo, la, l0, p0, R, c, c); if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); }); ctx.fill(); }
+    const st = steps[k];
+    if (st.p && st.p !== home) {
+      ctx.beginPath(); ctx.strokeStyle = RED; ctx.lineWidth = 2.5 * dpr; ctx.setLineDash([6 * dpr, 6 * dpr]);
+      arc(PLACES[home.cc], st.at, Math.min(1, local * 1.6)).forEach(([lo, la], i) => { const [x, y, v] = project(lo, la, l0, p0, R, c, c); if (v && i) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    order.forEach((p, i) => {
+      const [x, y, v] = project(...PLACES[p.cc].slice(0, 2), l0, p0, R, c, c);
+      if (!v) return;
+      const on = st.p === p || !st.p;
+      ctx.beginPath(); ctx.arc(x, y, (on ? 7 : 4.5) * dpr, 0, 2 * Math.PI); ctx.fillStyle = on ? RED : INK; ctx.fill();
+      if (on && st.p) { ctx.beginPath(); ctx.arc(x, y, (10 + 8 * ((Date.now() / 900) % 1)) * dpr, 0, 2 * Math.PI); ctx.strokeStyle = RED; ctx.lineWidth = 1.5 * dpr; ctx.stroke(); }
+      if (on) { ctx.font = `600 ${15 * dpr}px ${getComputedStyle(document.body).fontFamily}`; ctx.fillStyle = INK; ctx.fillText(PLACES[p.cc][2].replace('Home, in ', ''), x + 12 * dpr, y - 10 * dpr); }
+    });
+  };
+  let last = [PLACES[home.cc][0], PLACES[home.cc][1] * 0.7, 0, 0];
+  scrub['scene-places'] = (p) => {
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999)), local = Math.min(1, (p * steps.length - k) / 0.5);
+    const from = steps[Math.max(0, k - 1)].at, to = steps[k].at, e = k ? (1 - Math.cos(Math.PI * local)) / 2 : 1;
+    let dl = to[0] - from[0]; if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
+    last = [from[0] + dl * e, (from[1] + (to[1] - from[1]) * e) * 0.7, k, local];
+    render(...last);
+    if (k !== shown) {
+      shown = k;
+      scene('places', steps[k].line, steps[k].sub);
+      const song = steps[k].p?.song;
+      $('globe-song').textContent = song ? `Most played there: “${song[0].length > 60 ? `${song[0].slice(0, 58)}…` : song[0]}” by ${song[1]}` : '';
+    }
+    const cc = p > 0 && p < 1 ? steps[k].p?.cc : '', clip = cc && world.clips?.[cc];
+    if (sound && clip && playing !== cc) { playing = cc; audio.src = clip; audio.play().catch(() => {}); }
+    if ((!clip || !cc) && playing) { playing = ''; audio.pause(); }
+  };
+  // Keep the active ring pulsing while the scene is on screen.
+  const pulse = () => { if (!sceneEl.hidden && sceneEl.getBoundingClientRect().top < innerHeight && sceneEl.getBoundingClientRect().bottom > 0) render(...last); requestAnimationFrame(pulse); };
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(pulse);
+  $('globe-sound').hidden = !Object.keys(world.clips || {}).length;
 }
 
 function draw(s, who) {
-  document.querySelectorAll('.lib').forEach((el) => { el.hidden = who !== 'mine' || !library; });
-  shown(['open', 'season', 'clock', 'artist', 'print'], true);
-  $('hours').hidden = false;
-  const me = who === 'mine' ? { I: 'I', my: 'my', Im: "I'm", was: 'my' } : { I: 'You', my: 'your', Im: "You're", was: 'your' };
+  const me = who === 'mine' ? { I: 'I', my: 'my', My: 'My' } : { I: 'You', my: 'your', My: 'Your' };
   $('deck').hidden = false;
-  $('hours').dataset.to = s.hours;
-  scene('open', 'hours of music.', `About ${Math.round(s.hours / 24).toLocaleString()} days, end to end, from ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}.`);
-  scene('season', `${me.I} listen most in the ${seasonOf(s).toLowerCase()}.`, 'Each ring is a year. Each tick, a week.');
-  scene('clock', `The peak comes around ${ap(peakHour(s))}.`, 'Every month, hour by hour.');
-  scene('artist', s.top[0] ? `No one got more plays than ${s.top[0].name}.` : '', s.top[0] ? `The peak: ${peakMonth(s.top[0])}.` : '');
-  scene('print', 'All of it, drawn as a fingerprint.', 'Each ridge bends with a week of listening.');
-  $('rings').innerHTML = rings(s);
-  $('clock').innerHTML = clock(s);
-  $('seasons').innerHTML = seasons(s);
-  $('fingerprint').innerHTML = fingerprint(s);
+  scrub = {};
+  drawRiver(s, me);
+  drawDays(s, me);
+  drawSeasons(s, me);
+  if (who === 'mine') drawWeather(s, me); else $('scene-weather').hidden = true;
+  drawLight(s, me);
+  if (who === 'mine') drawGlobe(s, me); else $('scene-places').hidden = true;
+  if (who === 'mine' && library) drawLibrary(library);
+  document.querySelectorAll('.lib').forEach((el) => { el.hidden = who !== 'mine' || !library; });
+  if (who === 'mine' && library) $('scene-today').hidden = !library.moods?.seasons;
   tick();
 }
 
-const library = JSON.parse($('library').textContent);
-const diary = JSON.parse($('diary').textContent);
+
 
 const decadesChart = (l) => {
   const rows = Object.entries(l.decades).sort((a, b) => a[0] - b[0]), peak = Math.max(...rows.map(([, d]) => d.count), 1);
   return `<div class="deck-bars">${rows.map(([k, d]) => `<button type="button" data-d="${k}" style="--h:${Math.max(3, (d.count / peak) * 100)}%;--t:${(rows.findIndex(([x]) => x === k) / rows.length).toFixed(3)}"><i></i><span>${k.slice(2)}s</span></button>`).join('')}</div><p id="decade-note" class="note" role="status"></p>`;
 };
-const gigChart = (l) => `<ol class="gig-list">${l.gigs.map((g, i) => `<li class="in" style="--t:${(i / l.gigs.length).toFixed(3)}"><time>${g.date}</time><b>${esc(g.title)}</b><span>${esc(g.composer)}, ${g.tracks} tracks</span></li>`).join('')}</ol>`;
-const diaryChart = (days) => {
-  const names = [...new Set(days.flatMap((d) => d.artists))];
-  return `<div class="diary">${days.map((d) => `<div class="day"><time>${d.d.slice(5)}</time>${d.artists.map((a) => `<i title="${esc(a)}" style="background:${BANDS[names.indexOf(a) % 5]}"></i>`).join('')}</div>`).join('')}</div>`;
-};
-
 function hueOf(img) {
   const c = document.createElement('canvas');
   c.width = c.height = 1;
@@ -226,17 +405,9 @@ async function drawToday(l) {
   }
 }
 
-function drawLibrary(l) {
-  document.querySelectorAll('.lib').forEach((el) => { el.hidden = false; });
-  $('scene-today').hidden = !l.moods?.seasons;
-  if (l.moods?.seasons) drawToday(l);
-  const adds = Object.values(l.adds).flat(), totalAdds = adds.reduce((a, b) => a + b, 0);
-  const byMonth = Array.from({ length: 12 }, (_, m) => Object.values(l.adds).reduce((n, w) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
-  const sum = (ms) => ms.reduce((n, m) => n + byMonth[m], 0), g = { winter: [11, 0, 1], spring: [2, 3, 4], summer: [5, 6, 7], fall: [8, 9, 10] };
-  const best = Object.keys(g).sort((a, b) => sum(g[b]) - sum(g[a]))[0];
-  scene('lib-rings', `I save the most music in the ${best}.`, `${totalAdds.toLocaleString()} songs. Each ring is a year. Each tick, a week.`);
-  $('lib-rings-plate').innerHTML = rings({ years: l.adds });
 
+function drawLibrary(l) {
+  if (l.moods?.seasons) drawToday(l);
   const era = Object.entries(l.decades).sort((a, b) => b[1].count - a[1].count)[0];
   scene('decades', `More of my library comes from the ${era[0]}s than any other decade.`, '');
   $('decades-plate').innerHTML = decadesChart(l);
@@ -249,32 +420,6 @@ function drawLibrary(l) {
   const eras = Object.keys(l.decades).sort((a, b) => a - b);
   scrub['scene-decades'] = (p) => pick(p >= 1 ? era[0] : eras[Math.min(eras.length - 1, Math.floor(p * eras.length))]);
 
-  const years = Object.keys(l.firsts).sort(), range = $('year');
-  const totalArtists = years.reduce((n, y) => n + l.firsts[y].count, 0);
-  scene('discover', `${totalArtists.toLocaleString()} artists have made it into my playlists.`, '');
-  range.min = 0; range.max = years.length - 1; range.value = 0;
-  const showYear = () => {
-    const y = years[range.value], f = l.firsts[y];
-    $('year-out').textContent = y;
-    $('discover-plate').innerHTML = `<p class="big-num">${f.count.toLocaleString()}</p><p class="note">new in ${y}</p><ul class="cloud">${f.artists.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`;
-  };
-  showYear();
-  scrub['scene-discover'] = (p) => { const i = Math.min(years.length - 1, Math.floor(p * years.length)); if (String(i) !== range.value) { range.value = i; showYear(); } };
-
-  $('scene-gigs').hidden = !l.gigs.length;
-  if (l.gigs.length) {
-    scene('gigs', `${l.gigs.length} programs, each with its own playlist.`, 'What I listened to before I played it.');
-    $('gigs-plate').innerHTML = gigChart(l);
-  }
-
-  $('scene-titles').hidden = !l.titles.length;
-  if (l.titles.length) {
-    let i = Math.floor(Math.random() * l.titles.length);
-    const next = () => { i = (i + 1) % l.titles.length; $('title-text').textContent = l.titles[i]; };
-    $('title-next').onclick = next;
-    next();
-  }
-
   scene('wall', `${l.wall.length} playlists, sorted by color.`, '');
   $('wall-plate').innerHTML = `<div class="wall">${l.wall.map((p, i) => `<img class="in" style="--t:${((i * 37 % 100) / 100).toFixed(2)}" crossorigin="anonymous" src="${p.image}" alt="${esc(p.title)}" title="${esc(p.title)}">`).join('')}</div>`;
   const imgs = [...$('wall-plate').querySelectorAll('img')];
@@ -285,11 +430,6 @@ function drawLibrary(l) {
     } catch { /* keep the original order if the browser won't read the pixels */ }
   });
 
-  $('scene-diary').hidden = diary.length < 7;
-  if (diary.length >= 7) {
-    scene('diary', 'The page keeps its own diary.', `Each morning it records who has been on. ${diary.length} days so far.`);
-    $('diary-plate').innerHTML = diaryChart(diary.slice(-60));
-  }
 }
 
 // Scroll drives everything: each scene pins, and its charts draw as you move
@@ -302,7 +442,6 @@ scenes.forEach((el) => {
   pin.append(...el.childNodes);
   el.append(pin);
 });
-let scrub = {};
 let queued = false;
 function tick() {
   queued = false;
@@ -323,12 +462,8 @@ addEventListener('scroll', queue, { passive: true });
 addEventListener('resize', queue);
 
 const mine = JSON.parse($('history').textContent);
-const go = () => $('scene-open').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-const live = JSON.parse($('live').textContent);
-const canLive = live.windows?.length && live.tracks?.length;
-const own = () => (mine ? draw(mine, 'mine') : drawLive(live));
-if (mine || canLive) own(); else $('reset').hidden = true;
-if (library && canLive) $('demo').textContent = 'See it with my data';
+const go = () => $('scene-river').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+if (mine?.hours) draw(mine, 'mine'); else $('reset').hidden = true;
 tick();
 
 $('file').onchange = async (e) => {
@@ -343,25 +478,5 @@ $('file').onchange = async (e) => {
     $('drop-status').textContent = "That doesn't look like a Spotify history file. Unzip your export and choose the JSON files inside it.";
   }
 };
-// Stands in for the full streaming history until it arrives: real saved-song
-// weeks and real top artists, with play time estimated from those saves.
-function modeled() {
-  const years = library.adds, weeks = Object.entries(years);
-  const season = Array.from({ length: 12 }, (_, m) => weeks.reduce((n, [, w]) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
-  const clockOf = live.hours?.some(Boolean) ? live.hours : Array(24).fill(1);
-  const clock = season.map((v) => clockOf.map((h) => v * (h + 0.3)));
-  const months = weeks.flatMap(([y]) => Array.from({ length: 12 }, (_, m) => `${y}-${String(m + 1).padStart(2, '0')}`));
-  const top = live.windows[0].artists.slice(0, 5).map((name, i) => ({ name, by: Object.fromEntries(months.map((k, n) => [k, 1 + (hash(name + k) % 5) * (1 + Math.sin(n / 5 + i * 1.7))])) }));
-  const hours = Math.round(weeks.flatMap(([, w]) => w).reduce((a, b) => a + b, 0) * 3.5 / 60);
-  return { hours, years, clock, top, months };
-}
-$('demo').onclick = () => { draw(library && canLive ? modeled() : sample(), 'mine'); $('open-sub').textContent = 'An estimate, built from the songs I have saved.'; go(); };
-$('reset').onclick = () => { own(); go(); };
-$('save').onclick = () => {
-  const svg = $('fingerprint').innerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
-  a.download = 'listening-print.svg';
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
+$('demo').onclick = () => { draw(sample(), 'yours'); go(); };
+$('reset').onclick = () => { draw(mine, 'mine'); go(); };
