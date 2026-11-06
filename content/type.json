@@ -195,29 +195,24 @@
   }
  },
  "double-bass": {
-  "fill": "#e8ee7d",
+  "fill": "#f6d44f",
+  "under": "<polygon points=\"84,268 204,268 190,292 98,292\" fill=\"#e9c98f\"/><g fill=\"none\" stroke=\"#16100b\" stroke-width=\"9\" stroke-linecap=\"round\"><path d=\"M30 92C30 120 62 130 62 165S30 210 30 238\"/><path d=\"M258 92C258 120 226 130 226 165S258 210 258 238\"/></g><g fill=\"#16100b\"><circle cx=\"30\" cy=\"88\" r=\"11\"/><circle cx=\"30\" cy=\"242\" r=\"13\"/><circle cx=\"258\" cy=\"88\" r=\"11\"/><circle cx=\"258\" cy=\"242\" r=\"13\"/></g><g stroke=\"#f3ead6\" fill=\"none\"><path d=\"M124 0L100 268\" stroke-width=\"1.6\"/><path d=\"M138 0L126 268\" stroke-width=\"2\"/><path d=\"M150 0L162 268\" stroke-width=\"2.5\"/><path d=\"M164 0L188 268\" stroke-width=\"3.2\"/></g>",
   "t": [
    [
-    "DOUBLE",
-    12,
-    64,
-    264,
-    56,
-    "Archivo",
-    700,
-    "spacing"
-   ],
-   [
-    "BASS",
-    12,
-    122,
-    264,
-    56,
-    "Archivo",
-    700,
-    "spacing"
+    "DOUBLE BASS",
+    24,
+    366,
+    240,
+    62,
+    "Anton",
+    400
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 402,
+   "fill": "#fff"
+  }
  },
  "one-codebase": {
   "fill": "#fff27a",
