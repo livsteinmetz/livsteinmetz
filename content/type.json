@@ -103,16 +103,16 @@
    {
     "text": "Online",
     "x": 18,
-    "y": 56,
-    "size": 46,
+    "y": 330,
+    "size": 50,
     "font": "Marcellus",
     "wt": 400
    },
    {
     "text": "Collection",
     "x": 18,
-    "y": 102,
-    "size": 46,
+    "y": 380,
+    "size": 50,
     "font": "Marcellus",
     "wt": 400
    }
@@ -263,26 +263,26 @@
    {
     "text": "Scaling the",
     "x": 18,
-    "y": 56,
-    "size": 51.7,
-    "font": "Abril Fatface",
-    "wt": 400
+    "y": 46,
+    "size": 28,
+    "font": "Jost",
+    "wt": 700
    },
    {
     "text": "Visual Experience",
     "x": 18,
-    "y": 96,
-    "size": 31.8,
-    "font": "Abril Fatface",
-    "wt": 400
+    "y": 80,
+    "size": 28,
+    "font": "Jost",
+    "wt": 700
    },
    {
     "text": "Platform",
     "x": 18,
-    "y": 156,
-    "size": 63.4,
-    "font": "Abril Fatface",
-    "wt": 400
+    "y": 114,
+    "size": 28,
+    "font": "Jost",
+    "wt": 700
    }
   ]
  },

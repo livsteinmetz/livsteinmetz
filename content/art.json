@@ -315,5 +315,21 @@
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff"
+ },
+ "bathers": {
+  "barnes": 7004,
+  "w": 4092,
+  "h": 2474,
+  "title": "The Large Bathers",
+  "artist": "Paul Cézanne",
+  "crop": [
+   0.27,
+   0,
+   0.453,
+   1
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }

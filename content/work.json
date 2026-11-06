@@ -248,7 +248,7 @@
   "title": "Online Collection",
   "tag": "a way to browse",
   "date": "2021 to now",
-  "art": "gourds",
+  "art": "bathers",
   "font": "inscribed",
   "short": "Search the Barnes Collection by color, light, line, and space",
   "role": "Product and front-end development",
@@ -273,7 +273,7 @@
   ],
   "align": "center",
   "width": 0.78,
-  "mat": "#efa090"
+  "mat": "#c8d6ec"
  },
  {
   "slug": "tours",
