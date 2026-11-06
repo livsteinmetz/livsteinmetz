@@ -42,7 +42,7 @@
    [
     "Barnes",
     24,
-    300,
+    286,
     240,
     92,
     "Bodoni Moda",
@@ -162,29 +162,29 @@
  },
  "calder-gardens": {
   "fill": "#fff",
-  "under": "<polygon points=\"6,178 176,88 284,218 114,308\" fill=\"#000\"/>",
+  "under": "<polygon points=\"2,170 186,76 286,214 102,316\" fill=\"#000\"/>",
   "t": [
    [
     "Calder",
-    46,
-    182,
-    158,
+    70,
+    190,
+    150,
     58,
     "Archivo",
     700,
     "spacingAndGlyphs",
-    "transform=\"rotate(-14 46 182)\""
+    "transform=\"rotate(-14 70 190)\""
    ],
    [
     "Gardens",
-    96,
-    252,
-    172,
+    100,
+    254,
+    156,
     50,
     "Archivo",
     700,
     "spacingAndGlyphs",
-    "transform=\"rotate(-14 96 252)\""
+    "transform=\"rotate(-14 100 254)\""
    ]
   ],
   "tag": {
@@ -261,7 +261,7 @@
   ]
  },
  "commerce": {
-  "fill": "#f6d44f",
+  "fill": "#16246e",
   "t": [
    [
     "Commerce",

@@ -37,7 +37,7 @@ const barnes = async () => {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json(), hits = json.hits?.hits || json.body?.hits?.hits || json.hits || [];
   console.log('barnes sample', JSON.stringify(hits[0]?._source || hits[0] || json).slice(0, 400));
-  return hits.map((h) => h._source || h).filter((w) => [4, 7, 8, 10].includes(Number(w.objRightsTypeId))).map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://d2r83x5xt28klo.cloudfront.net/tiles/${w.id}/full/900,/0/color.jpg`, alts: [`https://d2r83x5xt28klo.cloudfront.net/tiles/${w.id}/full/!900,900/0/default.jpg`, `https://d2r83x5xt28klo.cloudfront.net/${w.id}_${w.imageSecret}_b.jpg`, `https://d2r83x5xt28klo.cloudfront.net/images/${w.id}_${w.imageSecret}_b.jpg`], w: 800, h: 1000 }));
+  return hits.map((h) => h._source || h).filter((w) => [4, 7, 8, 10].includes(Number(w.objRightsTypeId))).map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://d2r83x5xt28klo.cloudfront.net/${w.id}_${w.imageSecret}_b.jpg`, w: 800, h: 1000 }));
 };
 
 // Wikidata reaches collections with no open API of their own, and Wikimedia
@@ -67,7 +67,7 @@ if (pool.length >= COUNT) {
   rmSync('site/wall', { recursive: true, force: true });
   mkdirSync('site/wall', { recursive: true });
   const keep = async (w) => {
-    let r; for (const url of [w.web, ...(w.alts || [])]) { r = await fetch(url, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' }, signal: AbortSignal.timeout(30000) }); console.log('tried', r.status, url); if (r.ok) break; }
+    const r = await fetch(w.web, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' }, signal: AbortSignal.timeout(30000) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const bytes = Buffer.from(await r.arrayBuffer());
     const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8, png = bytes[0] === 0x89 && bytes[1] === 0x50;
