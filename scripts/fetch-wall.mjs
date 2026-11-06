@@ -59,7 +59,7 @@ for (const [name, source] of Object.entries({ barnes: async (a) => (a === ARTIST
 console.log(`${pool.length} works in the pool`, [...new Set(pool.map((w) => w.museum))].join('; '));
 if (pool.length >= COUNT) {
   const seed = (i) => { const x = Math.sin(day * 12.9898 + i * 78.233) * 43758.5453; return x - Math.floor(x); };
-  const picked = pool.map((w, i) => [seed(i), w]).sort((a, b) => a[0] - b[0]).map(([, w]) => w);
+  const picked = pool.filter((w) => !/ophelia/i.test(w.title)).map((w, i) => [seed(i), w]).sort((a, b) => a[0] - b[0]).map(([, w]) => w);
   // Take one museum at a time so no single collection fills the shelf.
   const museums = [...new Set(picked.map((w) => w.museum))];
   const wall = [], seen = {}, tried = new Set();
