@@ -1,6 +1,6 @@
 // Picks today's works at random from open access museum collections.
 // A failed request keeps the last saved wall, so this never stops a build.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 const ARTISTS = ['Odilon Redon', 'James McNeill Whistler', 'Joseph Mallord William Turner', 'Paul Gauguin', 'James Ensor', 'Vincent van Gogh', 'Claude Monet', 'Edmond François Aman-Jean', 'Pierre Puvis de Chavannes', 'Henri Fantin-Latour'];
 const COUNT = 12;
 const day = Math.floor(Date.now() / 864e5);
@@ -62,12 +62,29 @@ if (pool.length >= COUNT) {
   const picked = pool.map((w, i) => [seed(i), w]).sort((a, b) => a[0] - b[0]).map(([, w]) => w);
   // Take one museum at a time so no single collection fills the shelf.
   const museums = [...new Set(picked.map((w) => w.museum))];
-  const wall = [], seen = {};
+  const wall = [], seen = {}, tried = new Set();
+  // Keep a copy of each image with the site, so a slow or blocked museum server never leaves a blank frame.
+  rmSync('site/wall', { recursive: true, force: true });
+  mkdirSync('site/wall', { recursive: true });
+  const keep = async (w) => {
+    const r = await fetch(w.web, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' }, signal: AbortSignal.timeout(30000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const bytes = Buffer.from(await r.arrayBuffer());
+    const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8, png = bytes[0] === 0x89 && bytes[1] === 0x50;
+    if ((!jpeg && !png) || bytes.length < 8000) throw new Error(`not an image, ${bytes.length} bytes`);
+    const file = `${String(w.id).replace(/[^\w-]/g, '-')}.${jpeg ? 'jpg' : 'png'}`;
+    writeFileSync(`site/wall/${file}`, bytes);
+    return `/wall/${file}`;
+  };
   for (let i = 0; wall.length < COUNT && i < picked.length * 2; i++) {
     const museum = museums[i % museums.length];
-    const w = picked.find((p) => p.museum === museum && !wall.includes(p) && (seen[p.artist] || 0) < 1) || picked.find((p) => p.museum === museum && !wall.includes(p));
-    if (w) { seen[w.artist] = (seen[w.artist] || 0) + 1; wall.push(w); }
+    const open = picked.filter((p) => p.museum === museum && !tried.has(p));
+    const w = open.find((p) => !seen[p.artist]) || open[0];
+    if (!w) continue;
+    tried.add(w);
+    try { w.source = w.web; w.web = await keep(w); seen[w.artist] = 1; wall.push(w); } catch (e) { console.warn(`Skipped image ${museum} ${w.web}: ${e.message}`); }
+    await new Promise((done) => setTimeout(done, 400));
   }
   writeFileSync('content/wall.json', JSON.stringify(wall, null, 1));
-  wall.forEach((w) => console.log(' ', w.artist, '|', w.title, '|', w.web));
+  wall.forEach((w) => console.log(' ', w.museum, '|', w.artist, '|', w.title, '|', w.web));
 }

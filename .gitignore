@@ -8,3 +8,4 @@ build/
 service-account.json
 *.key.json
 *.pem
+site/wall/
