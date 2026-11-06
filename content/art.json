@@ -258,10 +258,10 @@
   "title": "Le Bonheur de vivre",
   "artist": "Henri Matisse",
   "crop": [
-   0.25,
+   0.42,
    0,
-   0.545,
-   1
+   0.33,
+   0.606
   ],
   "edge": "bottom",
   "ink": "#ffffff",
@@ -299,5 +299,21 @@
   "w": 1,
   "h": 1,
   "barnes": 0
+ },
+ "riffian": {
+  "barnes": 6969,
+  "w": 9717,
+  "h": 12151,
+  "title": "The Seated Riffian",
+  "artist": "Henri Matisse",
+  "crop": [
+   0.03,
+   0,
+   0.938,
+   1
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }

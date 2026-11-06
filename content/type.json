@@ -236,39 +236,23 @@
  },
  "one-visitor-one-record": {
   "vb": "0 0 300 400",
-  "fill": "#16246e",
+  "fill": "#fff",
   "t": [
    {
-    "text": "One",
+    "text": "One Visitor,",
     "x": 18,
-    "y": 90,
-    "size": 74,
+    "y": 344,
+    "size": 40,
     "font": "Fraunces",
-    "wt": 500
+    "wt": 600
    },
    {
-    "text": "Visitor,",
+    "text": "One Record",
     "x": 18,
-    "y": 166,
-    "size": 95.1,
+    "y": 386,
+    "size": 40,
     "font": "Fraunces",
-    "wt": 500
-   },
-   {
-    "text": "One",
-    "x": 18,
-    "y": 270,
-    "size": 74,
-    "font": "Fraunces",
-    "wt": 500
-   },
-   {
-    "text": "Record",
-    "x": 18,
-    "y": 346,
-    "size": 91.7,
-    "font": "Fraunces",
-    "wt": 500
+    "wt": 600
    }
   ]
  },
@@ -279,15 +263,15 @@
    {
     "text": "Scaling the",
     "x": 18,
-    "y": 48,
-    "size": 32,
+    "y": 56,
+    "size": 51.7,
     "font": "Abril Fatface",
     "wt": 400
    },
    {
     "text": "Visual Experience",
     "x": 18,
-    "y": 88,
+    "y": 96,
     "size": 31.8,
     "font": "Abril Fatface",
     "wt": 400
@@ -295,7 +279,7 @@
    {
     "text": "Platform",
     "x": 18,
-    "y": 150,
+    "y": 156,
     "size": 63.4,
     "font": "Abril Fatface",
     "wt": 400
