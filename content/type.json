@@ -23,23 +23,24 @@
  },
  "focus": {
   "vb": "0 0 300 400",
-  "fill": "#16246e",
+  "fill": "#f6d44f",
   "t": [
    {
     "text": "Barnes",
     "x": 18,
-    "y": 56,
-    "size": 46,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "y": 54,
+    "size": 42,
+    "font": "Abril Fatface",
+    "wt": 400,
+    "fill": "#fff"
    },
    {
     "text": "Focus",
     "x": 18,
-    "y": 382,
-    "size": 98.7,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "y": 386,
+    "size": 101.3,
+    "font": "Abril Fatface",
+    "wt": 400
    }
   ]
  },
@@ -97,21 +98,21 @@
  },
  "online-collection": {
   "vb": "0 0 300 400",
-  "fill": "#16246e",
+  "fill": "#fff",
   "t": [
    {
     "text": "Online",
     "x": 18,
-    "y": 326,
-    "size": 56,
+    "y": 56,
+    "size": 46,
     "font": "Marcellus",
     "wt": 400
    },
    {
     "text": "Collection",
     "x": 18,
-    "y": 384,
-    "size": 56,
+    "y": 102,
+    "size": 46,
     "font": "Marcellus",
     "wt": 400
    }
@@ -143,18 +144,25 @@
   "under": "<rect x=\"-10\" y=\"150\" width=\"340\" height=\"200\" fill=\"#000\" transform=\"skewY(-18)\"/>"
  },
  "double-bass": {
+  "vb": "0 0 300 400",
   "fill": "#f6d44f",
-  "under": "<polygon points=\"84,268 204,268 190,292 98,292\" fill=\"#e9c98f\"/><g fill=\"none\" stroke=\"#16100b\" stroke-width=\"9\" stroke-linecap=\"round\"><path d=\"M30 92C30 120 62 130 62 165S30 210 30 238\"/><path d=\"M258 92C258 120 226 130 226 165S258 210 258 238\"/></g><g fill=\"#16100b\"><circle cx=\"30\" cy=\"88\" r=\"11\"/><circle cx=\"30\" cy=\"242\" r=\"13\"/><circle cx=\"258\" cy=\"88\" r=\"11\"/><circle cx=\"258\" cy=\"242\" r=\"13\"/></g><g stroke=\"#f3ead6\" fill=\"none\"><path d=\"M124 0L100 268\" stroke-width=\"1.6\"/><path d=\"M138 0L126 268\" stroke-width=\"2\"/><path d=\"M150 0L162 268\" stroke-width=\"2.5\"/><path d=\"M164 0L188 268\" stroke-width=\"3.2\"/></g>",
   "t": [
-   [
-    "DOUBLE BASS",
-    24,
-    366,
-    240,
-    62,
-    "Anton",
-    400
-   ]
+   {
+    "text": "Double",
+    "x": 18,
+    "y": 58,
+    "size": 52,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Bass",
+    "x": 18,
+    "y": 110,
+    "size": 52,
+    "font": "Bodoni Moda",
+    "wt": 500
+   }
   ]
  },
  "one-codebase": {
@@ -205,7 +213,7 @@
    {
     "text": "Commerce",
     "x": 18,
-    "y": 300,
+    "y": 384,
     "size": 52.8,
     "font": "Abril Fatface",
     "wt": 400
@@ -266,31 +274,31 @@
  },
  "scaling-the-visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#16246e",
   "t": [
    {
     "text": "Scaling the",
     "x": 18,
-    "y": 274,
-    "size": 34,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "y": 48,
+    "size": 32,
+    "font": "Abril Fatface",
+    "wt": 400
    },
    {
     "text": "Visual Experience",
     "x": 18,
-    "y": 314,
-    "size": 31.6,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "y": 88,
+    "size": 31.8,
+    "font": "Abril Fatface",
+    "wt": 400
    },
    {
     "text": "Platform",
     "x": 18,
-    "y": 380,
-    "size": 64.7,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "y": 150,
+    "size": 63.4,
+    "font": "Abril Fatface",
+    "wt": 400
    }
   ]
  },
@@ -300,33 +308,33 @@
   "t": [
    {
     "text": "Designing and",
-    "x": 18,
-    "y": 264,
-    "size": 36,
+    "x": 108,
+    "y": 120,
+    "size": 29,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Building a",
-    "x": 18,
-    "y": 304,
-    "size": 36,
+    "x": 108,
+    "y": 154,
+    "size": 29,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Platform for",
-    "x": 18,
-    "y": 344,
-    "size": 36,
+    "x": 108,
+    "y": 188,
+    "size": 29,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Close Looking",
-    "x": 18,
-    "y": 384,
-    "size": 36,
+    "x": 108,
+    "y": 222,
+    "size": 29,
     "font": "Bodoni Moda",
     "wt": 500
    }

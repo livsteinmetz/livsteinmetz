@@ -186,23 +186,6 @@
   "ink": "#ffffff",
   "tagInk": "#ffffff"
  },
- "coat": {
-  "title": "The Postman (Joseph-Étienne Roulin)",
-  "artist": "Vincent van Gogh",
-  "barnes": 4720,
-  "w": 4613,
-  "h": 5556,
-  "crop": [
-   0.52,
-   0.66,
-   0.28,
-   0.31
-  ],
-  "rights": "BF37, public domain",
-  "edge": "top",
-  "ink": "#ffffff",
-  "tagInk": "#ffffff"
- },
  "eyes": {
   "title": "Boy in Sailor Suit",
   "artist": "Amedeo Modigliani",
@@ -219,5 +202,102 @@
   "edge": "bottom",
   "ink": "#ffe36b",
   "tagInk": "#ffffff"
+ },
+ "models": {
+  "barnes": 6994,
+  "w": 6223,
+  "h": 5010,
+  "title": "Models (Poseuses)",
+  "artist": "Georges Seurat",
+  "crop": [
+   0.02,
+   0.27,
+   0.44,
+   0.729
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "cards": {
+  "barnes": 6992,
+  "w": 13422,
+  "h": 9922,
+  "title": "The Card Players",
+  "artist": "Paul Cézanne",
+  "crop": [
+   0.34,
+   0.42,
+   0.3,
+   0.541
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "gourds": {
+  "barnes": 5435,
+  "w": 4708,
+  "h": 5848,
+  "title": "Still Life with Gourds",
+  "artist": "Henri Matisse",
+  "crop": [
+   0.07,
+   0,
+   0.93,
+   1
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "joy": {
+  "barnes": 7199,
+  "w": 5100,
+  "h": 3704,
+  "title": "Le Bonheur de vivre",
+  "artist": "Henri Matisse",
+  "crop": [
+   0.25,
+   0,
+   0.545,
+   1
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "boat": {
+  "barnes": 5652,
+  "w": 5852,
+  "h": 4802,
+  "title": "Tarring the Boat",
+  "artist": "Édouard Manet",
+  "crop": [
+   0.07,
+   0.28,
+   0.36,
+   0.585
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "bassist": {
+  "image": "/media/bassist.jpg",
+  "title": "Landscape with the Flight into Egypt",
+  "artist": "David Teniers the Elder",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff",
+  "crop": [
+   0,
+   0,
+   1,
+   1
+  ],
+  "w": 1,
+  "h": 1,
+  "barnes": 0
  }
 }

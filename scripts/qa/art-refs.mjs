@@ -13,6 +13,7 @@ for (const [k, a] of Object.entries(art)) {
   const g = await b.newPage({ viewport: { width: W, height: H } }); await g.setContent(html, { waitUntil: 'networkidle' }); await g.screenshot({ path: `shots/refs/${k}.jpg`, type: 'jpeg', quality: 80 }); await g.close();
 }
 await b.close();
+await (async () => { const r = await fetch('https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent('Landscape_with_the_flight_into_Egypt_(David_Teniers_d.ä.)_-_Nationalmuseum_-_23919FXD.jpg') + '?width=3840', { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' } }); if (r.ok) fs.writeFileSync('shots/refs/teniers.jpg', Buffer.from(await r.arrayBuffer())); })();
 // Candidates for covers, composed from tiles at a quarter of full size.
 const ids = [6994, 6992, 5435, 7199, 5652, 5526, 4712, 5677];
 const b2 = await chromium.launch(); const sizes = {};

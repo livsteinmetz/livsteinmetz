@@ -22,14 +22,14 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 const day = Math.floor(Date.now() / 864e5);
 const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
-const noteArt = { 'scaling-the-visual-experience-platform': 'flower', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'sailor', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
+const noteArt = { 'scaling-the-visual-experience-platform': 'joy', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'boat', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
 
 const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'left'], ['didone', '#66c4ff', 'left'], ['geo', '#efa090', 'center']];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
     ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', flat: '#8c3a14', color: '#f6d44f', font: 'grotesk', mat: '#c8d6ec', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'bassist', font: 'grotesk', mat: '#c8d6ec', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
     { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Listening'], color: '#000000', flat: '#ffb3d9', href: '/listening' },
   ],
 };
@@ -40,6 +40,7 @@ for (const c of covers.filter((x) => x.flat)) if (contrast(c.color, c.flat) < 3)
 
 function cropEl(key, alt) {
   const a = art[key];
+  if (a.image) return `<div class="crop fill"><img src="${a.image}" alt="${esc(alt)}" width="600" height="800"></div>`;
   return `<div class="crop" role="img" aria-label="${esc(alt)}" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></div>`;
 }
 function cover(c0, tag = 'a') {
