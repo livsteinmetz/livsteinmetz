@@ -29,7 +29,7 @@ const renderPlaylists = (settings) => {
     box.checked = chosen.has(p.id);
     box.setAttribute('aria-label', `Show ${p.title}`);
     if (p.image) img.src = p.image;
-    name.textContent = p.isPublic === false ? `${p.title} (private)` : p.title;
+    name.textContent = p.title;
     return row;
   }));
 };

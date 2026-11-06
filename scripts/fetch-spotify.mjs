@@ -9,6 +9,25 @@ const today = () => new Date().toISOString().slice(0, 10);
 const kind = (code, high) => (code >= 71 && code <= 86 && code !== 80 && code !== 81 && code !== 82 ? 'snow' : code >= 51 ? 'rain' : high < 7 ? 'cold' : high > 28 ? 'hot' : 'mild');
 if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
+// Spotify rate limits a full scan, so each deploy publishes its results and the
+// next build starts from them. A scan runs only when they are a day old, or when
+// a newly chosen playlist needs a preview. A failed scan keeps what was published.
+const FILES = ['my-playlists', 'trends', 'library', 'previews'];
+const snapshots = [];
+for (const url of ['https://livsteinmetz.web.app/data/spotify.json', 'https://livsteinmetz--preview-y8pj65y4.web.app/data/spotify.json']) {
+  try { const res = await fetch(url); if (res.ok) snapshots.push(await res.json()); } catch { /* none yet */ }
+}
+const snapshot = snapshots.sort((a, b) => (b.at || '').localeCompare(a.at || ''))[0];
+if (snapshot) {
+  for (const f of FILES) if (snapshot[f]) writeFileSync(`content/${f}.json`, JSON.stringify(snapshot[f]));
+  const chosen = JSON.parse(readFileSync('content/settings.json', 'utf8')).playlists.map((p) => p.id || p);
+  const fresh = Date.now() - new Date(snapshot.at) < 20 * 36e5;
+  if (fresh && snapshot.library?.moods && chosen.every((c) => (snapshot.previews || {})[c] || (snapshot.skipped || []).includes(c))) {
+    console.log(`Using the Spotify snapshot from ${snapshot.at}`);
+    process.exit(0);
+  }
+}
+
 try {
   const auth = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
@@ -23,13 +42,14 @@ try {
   const mine = [], raw = [];
   for (let next = 'https://api.spotify.com/v1/me/playlists?limit=50'; next;) {
     const res = await fetch(next, { headers });
-    if (!res.ok) throw new Error(`playlists ${res.status}`);
+    if (!res.ok) throw new Error(`playlists ${res.status}, retry after ${res.headers.get('retry-after')}s`);
     const page = await res.json();
     raw.push(...page.items.filter(Boolean));
     mine.push(...page.items.filter(Boolean).map((p) => ({ id: p.id, title: p.name, image: p.images?.at(-1)?.url || '', cover: p.images?.[0]?.url || '', isPublic: p.public })));
     next = page.next;
   }
-  writeFileSync('content/my-playlists.json', `${JSON.stringify(mine, null, 1)}\n`);
+  const writePlaylists = () => writeFileSync('content/my-playlists.json', `${JSON.stringify(mine, null, 1)}\n`);
+  writePlaylists();
   console.log(`Saved ${mine.length} playlists`);
 
   // Spotify no longer gives apps audio previews, so each chosen playlist gets a
@@ -165,7 +185,7 @@ try {
   if (!diary.some((d) => d.d === today()) && windows[0].artists.length) diary.push({ d: today(), artists: windows[0].artists.slice(0, 5) });
   writeFileSync('content/diary.json', `${JSON.stringify(diary)}\n`);
 
-  writeFileSync('content/trends.json', `${JSON.stringify({ windows, tracks, hours }, null, 1)}\n`);
+  writeFileSync('content/trends.json', `${JSON.stringify({ windows, tracks, hours, at: new Date().toISOString() }, null, 1)}\n`);
   console.log(`Saved top artists for ${windows.length} windows`);
 } catch (err) {
   console.warn(`Spotify skipped: ${err.message}`);
