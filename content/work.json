@@ -74,7 +74,7 @@
   "title": "Barnes Focus",
   "tag": "a guide with no labels",
   "date": "2021 to now",
-  "art": "jeanne",
+  "art": "shepherd",
   "font": "didone",
   "short": "In-gallery interpretation, no wall labels",
   "role": "Product and front-end development",
@@ -112,8 +112,8 @@
   "tag": "a new institution",
   "date": "2025",
   "font": "compressed",
-  "color": "#8f1259",
-  "flat": "#a9c4a4",
+  "color": "#000000",
+  "flat": "#dcdcdc",
   "short": "A whole digital ecosystem for a brand-new institution",
   "role": "Product and front-end development",
   "org": "Calder Gardens",
@@ -137,7 +137,7 @@
   ],
   "align": "center",
   "width": 0.86,
-  "mat": "#66c4ff",
+  "mat": "#c9321a",
   "reads": [
    {
     "title": "One Codebase, Two Brands",

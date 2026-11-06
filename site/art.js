@@ -158,13 +158,14 @@ if (typeof document !== 'undefined') {
     });
   }
 
-  // Scrolling plays the record, and drifts the shelves.
+  document.querySelectorAll('[data-mail]').forEach((a) => { const [u, d] = a.dataset.mail.split('|'); a.href = `mailto:${u}@${d}${a.dataset.subject ? `?subject=${encodeURIComponent(a.dataset.subject)}` : ''}`; });
+
+  // Scrolling drifts the shelves.
   if (!still) {
-    const vinyl = document.querySelector('.vinyl'), shelves = [...document.querySelectorAll('.shelf')];
+    const shelves = [...document.querySelectorAll('.shelf')];
     let queued = false;
     const onScroll = () => {
       queued = false;
-      vinyl.style.transform = `rotate(${scrollY * 0.4}deg)`;
       shelves.forEach((s, i) => { const r = s.getBoundingClientRect(); s.style.transform = `translateX(${((r.top - innerHeight / 2) / innerHeight) * (i ? 28 : -28)}px)`; });
     };
     addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(onScroll); } }, { passive: true });

@@ -26,6 +26,8 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
       - run: node scripts/build.mjs
+        env:
+          PREVIEW: '1'
       - run: node scripts/check-art.mjs
       - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/screens.mjs
         continue-on-error: true
@@ -45,3 +47,6 @@ jobs:
           expires: 30d
           projectId: livsteinmetz-bb868
           target: livsteinmetz
+      - name: Check security headers and rules on the preview
+        continue-on-error: true
+        run: node scripts/qa/live.mjs https://livsteinmetz--preview-y8pj65y4.web.app

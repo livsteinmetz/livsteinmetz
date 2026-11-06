@@ -9,7 +9,9 @@ const work = read('work'), music = read('music'), myPlaylists = read('my-playlis
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-const SITE = 'https://livsteinmetz.web.app', EMAIL = 'olivia@example.com';
+const SITE = 'https://livsteinmetz.web.app';
+// The address is put together in the browser, so scrapers reading the HTML don't get it.
+const mail = (label, subject = '') => `<a href="/about" data-mail="olivia.r.steinmetz|gmail.com"${subject ? ` data-subject="${subject}"` : ''}>${label}</a>`;
 const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural organizations, designing and building at the intersection of the arts and tech. Also a double bassist.";
@@ -47,7 +49,7 @@ function cover(c0, tag = 'a') {
   const heading = `<h3 class="ctitle f-${c.font} a-${c.align || 'left'}${c.long ? ' long' : ''}" style="color:${c.color}"${c.width ? ` data-width="${c.width}"` : ''}>${c.lines.map((t) => `<span class="ln">${c.align === 'spread' ? esc(t).replace(' ', '<i></i>') : esc(t)}</span>`).join('')}</h3>`;
   const tagline = `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
   const t = type[c.slug] || (c.slug.startsWith('one-codebase') && type['one-codebase']);
-  const drawn = t && `<h3 class="drawn"><svg viewBox="0 0 288 420" fill="${t.fill}" role="img" aria-label="${esc(c.title)}">${t.t.map(([text, x, y, w, size, font, weight, adjust = 'spacingAndGlyphs']) => `<text x="${x}" y="${y}" textLength="${w}" lengthAdjust="${adjust}" font-family="${font}" font-weight="${weight}" font-size="${size}">${text}</text>`).join('')}</svg></h3>`;
+  const drawn = t && `<h3 class="drawn"><svg viewBox="0 0 288 420" fill="${t.fill}" role="img" aria-label="${esc(c.title)}">${t.under || ''}${t.t.map(([text, x, y, w, size, font, weight, adjust = 'spacingAndGlyphs', extra = '']) => `<text x="${x}" y="${y}" textLength="${w}" lengthAdjust="${adjust}" font-family="${font}" font-weight="${weight}" font-size="${size}" ${extra}>${text}</text>`).join('')}${t.tag && c.tag ? `<text x="${t.tag.x}" y="${t.tag.y}" text-anchor="${t.tag.anchor || 'middle'}" fill="${t.tag.fill}" font-family="Instrument Serif" font-style="italic" font-size="25">${esc(c.tag)}</text>` : ''}</svg></h3>`;
   const body = drawn ? `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption>${drawn}</figcaption></figure>` : `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption><div class="words ${c.edge}">${heading}${below ? tagline : ''}</div>${below ? '' : `<div class="${a ? 'tag-strip' : 'tag-bottom'}">${tagline}</div>`}</figcaption></figure>`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs}>${body}</a>` : `<div ${attrs} data-slug="${c.slug}">${body}</div>`;
@@ -60,15 +62,15 @@ function shell({ path, title, description, body, canonical, ld = [], type = 'web
   const full = title ? `${title} | Olivia Steinmetz` : 'Olivia Steinmetz | Digital product, experience, and strategy';
   const nav = [['/#working', 'Work'], ['/#writing', 'Writing'], ['/about', 'About']].map(([h, t]) => `<a href="${h}"${path === h ? ' aria-current="page"' : ''}>${t}</a>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(full)}</title><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#fff27a">
-${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${type}">${meta}<meta property="og:url" content="${SITE}${path}"><meta property="og:image" content="${SITE}/media/og.jpg"><meta name="twitter:card" content="summary_large_image">
+<title>${esc(full)}</title><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#ffffff">
+${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/icon-180.png"><link rel="manifest" href="/site.webmanifest">${process.env.PREVIEW || path === '/404' ? '<meta name="robots" content="noindex">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}
+<meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${type}">${meta}<meta property="og:url" content="${SITE}${path}"><meta property="og:site_name" content="Olivia Steinmetz"><meta property="og:image" content="${SITE}/media/og.jpg"><meta property="og:image:alt" content="Olivia Steinmetz"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS.replace(/&/g, '&amp;')}"><link rel="stylesheet" href="/styles.css?v=${V}">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-WZM6YLSHQY');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script src="/gtag.js?v=${V}"></script>
 </head><body><a class="skip" href="#site-content">Skip to content</a>
 <header class="masthead"><a class="mark" href="/">Olivia Steinmetz</a><nav aria-label="Main">${nav}</nav></header>
-<div class="vinyl" aria-hidden="true"><i></i></div><main id="site-content">${body}</main>
-<footer class="credit"><p><a href="mailto:${EMAIL}">Email</a><a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
+<main id="site-content">${body}</main>
+<footer class="credit"><p>${mail('Email')}<a href="https://www.linkedin.com/in/livsteinmetz/">LinkedIn</a><a href="https://github.com/livsteinmetz">GitHub</a><a href="https://medium.com/@osteinmetz">Medium</a></p>
 <p style="margin-top:8px">Paintings courtesy of open access museum collections. All public domain, served over <a href="/colophon" style="margin:0">IIIF</a>. Opinions are my own.</p></footer>
 <script type="module" src="/art.js?v=${V}"></script></body></html>`;
 }
@@ -85,7 +87,7 @@ const listeningShelf = playlists.length || trendsCard ? `<section class="side" i
 
 const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading</h2><ol class="shelf">${reading.filter((b) => shown(`reading:${b.url}`)).map((b, i) => `<li ${mat(i + 2)} data-item="reading:${b.url}"><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket">${b.blurb ? `<p class="blurb">${esc(b.blurb)}</p>` : ''}<img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>${b.author ? `, ${esc(b.author)}` : ''}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
-pages['index.html'] = shell({ path: '/', description: STATEMENT, body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf(side.a, 'Working', 'working')}${shelf(side.b.filter((c) => !isMusic(c)), 'Writing', 'writing')}${readingShelf}${wallShelf}${listeningShelf}${shelf(side.b.filter((c) => c.slug === 'double-bass'), 'Playing', 'playing')}</article>` });
+pages['index.html'] = shell({ path: '/', description: STATEMENT, ld: [{ '@type': 'WebSite', name: 'Olivia Steinmetz', url: SITE, author: { '@id': `${SITE}/#person` } }], body: `<article id="story"><header><h1 class="statement">${STATEMENT}</h1></header>${shelf(side.a, 'Working', 'working')}${shelf(side.b.filter((c) => !isMusic(c)), 'Writing', 'writing')}${readingShelf}${wallShelf}${listeningShelf}${shelf(side.b.filter((c) => c.slug === 'double-bass'), 'Playing', 'playing')}</article>` });
 
 function record(current, sideKey) {
   const list = side[sideKey].filter((c) => c.slug === current.slug || shown(`${sideKey === 'a' ? 'working' : isMusic(c) ? 'playing' : 'writing'}:${c.slug}`));
@@ -114,7 +116,7 @@ feed.forEach((n) => {
 
 const list = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 pages['bass.html'] = shell({ path: '/bass', title: 'Double bass', description: 'Olivia Steinmetz is a freelance double bassist around Philadelphia.',
-  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">A classical musician for over two decades, I've been performing professionally since 2015 in ensembles around the country.</p><a class="btn" href="mailto:${EMAIL}?subject=Bass%20gig">Email me about a gig</a><div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
+  body: `${record(sideB.find((c) => c.slug === 'double-bass'), 'b')}<div class="page" style="padding-top:0"><p style="max-width:34em">A classical musician for over two decades, I've been performing professionally since 2015 in ensembles around the country.</p>${mail('Email me about a gig', 'Bass gig').replace('<a ', '<a class="btn" ')}<div class="cols"><section><h2>Ensembles</h2>${list(music.ensembles)}</section><section><h2>Teaching and coaching</h2>${list(music.teaching)}</section></div></div>` });
 pages['listening.html'] = shell({ path: '/listening', title: 'Listening', description: "What Olivia Steinmetz is listening to.",
   body: `${record(sideB.find((c) => c.slug === 'playlists'), 'b')}<div class="page" style="padding-top:0">${trends.windows.length ? '<p><a href="/listening/trends">See my listening trends</a></p>' : ''}${playlists.length ? `<div class="play">${playlists.map((p) => `<iframe id="${esc(p.id)}" title="${esc(p.title)}" loading="lazy" allow="encrypted-media" src="https://open.spotify.com/embed/playlist/${esc(p.id)}"></iframe>`).join('')}</div>` : ''}</div>` });
 
@@ -136,7 +138,7 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <p>I joined the Barnes in 2021 as a front-end engineer on a small team, where everyone did a little of everything (still true!). Today I work across engineering, UI/UX design, and product strategy to turn our educational mission into durable systems and mature our digital product portfolio.</p>
 <p>I studied both Engineering Design and Double Bass Performance at Vanderbilt University, and led innovation and entrepreneurship programming and curriculum development at the Wond'ry Center for Innovation and Entrepreneurship in its first years on campus. I worked in Emerging Tech consulting and the Operations Design Thinking studio at Accenture, where I picked up an interest in emerging technologies and my first web development skills, and applied and shared design thinking methods I still use today. At Capital One, I completed a six-month software engineering program and moved into a full-stack developer role, the foundation I brought with me to the Barnes.</p>
 <p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. Orchestra taught me most of what I know about product work. You listen, you create a solid foundation, and you show up prepared because everybody else is counting on you. It's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
-<h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. <a href="mailto:${EMAIL}">${EMAIL}</a></p></div></div>` });
+<h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. ${mail('Email me')}.</p></div></div>` });
 pages['colophon.html'] = shell({ path: '/colophon', title: 'Colophon', description: 'How the paintings on this site are served.', body: `<div class="page"><div class="prose"><h1>Colophon</h1><p>Every painting here is public domain. The covers are assembled in your browser from IIIF image tiles, the same standard behind the Barnes online collection and the Visual Experience Platform. Each work has a IIIF manifest, so you can open it in any IIIF viewer.</p><ul>${Object.entries(art).map(([k, a]) => `<li><a href="/iiif/${k}.json">${esc(a.title)}</a>, ${esc(a.artist)} (${esc(a.rights)})</li>`).join('')}</ul></div></div>` });
 pages['404.html'] = shell({ path: '/404', title: 'Page not found', description: 'This page has moved.', body: `<div class="page"><h1>Oops looks like we got lost.</h1><p><a href="/">Go to the home page</a></p></div>` });
 
@@ -167,5 +169,8 @@ writeFileSync('build/admin.html', `<!doctype html><html lang="en"><head><meta ch
 mkdirSync('build/data', { recursive: true });
 writeFileSync('build/data/diary.json', JSON.stringify(diary));
 writeFileSync('build/data/spotify.json', JSON.stringify({ at: trends.at || '', 'my-playlists': myPlaylists.filter((p) => p.isPublic !== false), trends, library, previews }));
-writeFileSync('build/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
+writeFileSync('build/robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /data/\nSitemap: ${SITE}/sitemap.xml\n`);
+writeFileSync('build/site.webmanifest', JSON.stringify({ name: 'Olivia Steinmetz', short_name: 'Olivia', start_url: '/', display: 'browser', background_color: '#ffffff', theme_color: '#16246e', icons: [{ src: '/icon-180.png', sizes: '180x180', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] }));
+mkdirSync('build/.well-known', { recursive: true });
+writeFileSync('build/.well-known/security.txt', `Contact: https://www.linkedin.com/in/livsteinmetz/\nExpires: ${new Date(Date.now() + 300 * 864e5).toISOString()}\nPreferred-Languages: en\n`);
 console.log(`Built ${Object.keys(pages).length} pages`);

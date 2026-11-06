@@ -7,6 +7,9 @@ on:
     - cron: '17 11 * * *' # daily, picks up new Medium posts and listening
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

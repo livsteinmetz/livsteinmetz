@@ -29,30 +29,40 @@
     "Anton",
     400
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 404,
+   "fill": "#fff"
+  }
  },
  "focus": {
-  "fill": "#16246e",
+  "fill": "#f6d44f",
   "t": [
    [
     "Barnes",
-    12,
-    306,
-    190,
-    84,
+    24,
+    300,
+    240,
+    92,
     "Bodoni Moda",
     500
    ],
    [
     "Focus",
-    12,
-    392,
-    190,
-    84,
+    24,
+    372,
+    240,
+    92,
     "Bodoni Moda",
     500
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 404,
+   "fill": "#fff"
+  }
  },
  "deep-zoom": {
   "fill": "#fff27a",
@@ -75,15 +85,20 @@
     "Jost",
     700
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 200,
+   "fill": "#fff"
+  }
  },
  "membership": {
   "fill": "#8dff72",
   "t": [
    [
     "MEM",
-    12,
-    322,
+    24,
+    290,
     150,
     46,
     "Archivo",
@@ -91,8 +106,8 @@
    ],
    [
     "BER",
-    12,
-    360,
+    24,
+    328,
     150,
     46,
     "Archivo",
@@ -100,14 +115,20 @@
    ],
    [
     "SHIP",
-    12,
-    398,
+    24,
+    366,
     150,
     46,
     "Archivo",
     700
    ]
-  ]
+  ],
+  "tag": {
+   "x": 24,
+   "y": 404,
+   "anchor": "start",
+   "fill": "#fff"
+  }
  },
  "online-collection": {
   "fill": "#16246e",
@@ -132,30 +153,46 @@
     400,
     "spacing"
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 352,
+   "fill": "#16246e"
+  }
  },
  "calder-gardens": {
-  "fill": "#8f1259",
+  "fill": "#fff",
+  "under": "<polygon points=\"6,178 176,88 284,218 114,308\" fill=\"#000\"/>",
   "t": [
    [
-    "CALDER",
-    12,
-    92,
-    264,
-    84,
-    "Anton",
-    400
+    "Calder",
+    46,
+    182,
+    158,
+    58,
+    "Archivo",
+    700,
+    "spacingAndGlyphs",
+    "transform=\"rotate(-14 46 182)\""
    ],
    [
-    "GARDENS",
-    12,
+    "Gardens",
+    96,
+    252,
     172,
-    264,
-    84,
-    "Anton",
-    400
+    50,
+    "Archivo",
+    700,
+    "spacingAndGlyphs",
+    "transform=\"rotate(-14 96 252)\""
    ]
-  ]
+  ],
+  "tag": {
+   "x": 24,
+   "y": 398,
+   "anchor": "start",
+   "fill": "#000"
+  }
  },
  "double-bass": {
   "fill": "#e8ee7d",
@@ -224,18 +261,26 @@
   ]
  },
  "commerce": {
-  "fill": "#16246e",
+  "fill": "#f6d44f",
   "t": [
    [
     "Commerce",
-    12,
-    72,
-    264,
-    78,
-    "Bodoni Moda",
-    500
+    0,
+    0,
+    392,
+    132,
+    "Anton",
+    400,
+    "spacingAndGlyphs",
+    "transform=\"translate(112 406) rotate(-90)\""
    ]
-  ]
+  ],
+  "tag": {
+   "x": 276,
+   "y": 404,
+   "anchor": "end",
+   "fill": "#fff"
+  }
  },
  "tours": {
   "fill": "#16246e",
@@ -258,7 +303,12 @@
     "Archivo",
     700
    ]
-  ]
+  ],
+  "tag": {
+   "x": 144,
+   "y": 404,
+   "fill": "#16246e"
+  }
  },
  "one-visitor-one-record": {
   "fill": "#16246e",
@@ -266,7 +316,7 @@
    [
     "ONE VISITOR",
     12,
-    352,
+    322,
     200,
     34,
     "Fraunces",
@@ -275,12 +325,18 @@
    [
     "ONE RECORD",
     12,
-    396,
+    366,
     264,
     42,
     "Fraunces",
     500
    ]
-  ]
+  ],
+  "tag": {
+   "x": 24,
+   "y": 404,
+   "anchor": "start",
+   "fill": "#16246e"
+  }
  }
 }
