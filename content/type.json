@@ -150,16 +150,16 @@
    {
     "text": "Double",
     "x": 18,
-    "y": 58,
-    "size": 52,
+    "y": 54,
+    "size": 44,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Bass",
     "x": 18,
-    "y": 110,
-    "size": 52,
+    "y": 98,
+    "size": 44,
     "font": "Bodoni Moda",
     "wt": 500
    }
@@ -308,33 +308,33 @@
   "t": [
    {
     "text": "Designing and",
-    "x": 108,
-    "y": 120,
-    "size": 29,
+    "x": 104,
+    "y": 124,
+    "size": 26,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Building a",
-    "x": 108,
-    "y": 154,
-    "size": 29,
+    "x": 104,
+    "y": 155,
+    "size": 26,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Platform for",
-    "x": 108,
-    "y": 188,
-    "size": 29,
+    "x": 104,
+    "y": 186,
+    "size": 26,
     "font": "Bodoni Moda",
     "wt": 500
    },
    {
     "text": "Close Looking",
-    "x": 108,
-    "y": 222,
-    "size": 29,
+    "x": 104,
+    "y": 217,
+    "size": 26,
     "font": "Bodoni Moda",
     "wt": 500
    }
