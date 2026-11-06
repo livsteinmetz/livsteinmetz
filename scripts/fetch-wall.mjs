@@ -37,19 +37,19 @@ const barnes = async () => {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json(), hits = json.hits?.hits || json.body?.hits?.hits || json.hits || [];
   console.log('barnes sample', JSON.stringify(hits[0]?._source || hits[0] || json).slice(0, 400));
-  return hits.map((h) => h._source || h).filter((w) => [4, 7, 8, 10].includes(Number(w.objRightsTypeId))).map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://s3.amazonaws.com/barnes-image-repository/images/${w.id}_${w.imageSecret}_n.jpg`, w: 800, h: 1000 }));
+  return hits.map((h) => h._source || h).filter((w) => [4, 7, 8, 10].includes(Number(w.objRightsTypeId))).map((w) => ({ id: `barnes-${w.id}`, museum: 'Barnes Foundation', title: w.title, artist: w.people || '', date: '', web: `https://d2r83x5xt28klo.cloudfront.net/images/${w.id}_${w.imageSecret}_n.jpg`, w: 800, h: 1000 }));
 };
 
 // Wikidata reaches collections with no open API of their own, and Wikimedia
 // Commons hosts their public domain paintings.
-const COLLECTIONS = ['Q160236', 'Q214867', 'Q190804', 'Q23402', 'Q180788', 'Q842858', 'Q221092', 'Q49133', 'Q163804', 'Q132783', 'Q1568434'];
+const COLLECTIONS = ['Q160236', 'Q214867', 'Q190804', 'Q23402', 'Q180788', 'Q842858', 'Q221092', 'Q49133', 'Q163804', 'Q132783', 'Q1568434', 'Q239303'];
 const wikidata = async () => {
   const q = `SELECT ?item ?title ?name ?museum ?img WHERE { VALUES ?coll { ${COLLECTIONS.map((c) => `wd:${c}`).join(' ')} } VALUES ?name { ${ARTISTS.map((a) => `"${a}"@en`).join(' ')} } ?creator rdfs:label ?name . ?item wdt:P170 ?creator ; wdt:P31 wd:Q3305213 ; wdt:P195 ?coll ; wdt:P18 ?img ; rdfs:label ?title . FILTER(LANG(?title) = "en") ?coll rdfs:label ?museum . FILTER(LANG(?museum) = "en") } LIMIT 600`;
   const json = await get(`https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(q)}`);
   return json.results.bindings.map((b) => ({ id: `wd-${b.item.value.split('/').pop()}`, museum: b.museum.value, title: b.title.value, artist: b.name.value, date: '', web: `${b.img.value.replace('http://', 'https://')}?width=900`, w: 800, h: 1000 }));
 };
 
-for (const [name, source] of Object.entries({ barnes: async (a) => (a === ARTISTS[0] ? barnes() : []), wikidata: async (a) => (a === ARTISTS[0] ? wikidata() : []), smk, cleveland, chicago, met })) {
+for (const [name, source] of Object.entries({ barnes: async (a) => (a === ARTISTS[0] ? barnes() : []), wikidata: async (a) => (a === ARTISTS[0] ? wikidata() : []), smk, cleveland, met })) {
   let n = 0;
   for (const a of ARTISTS) {
     try { const works = await source(a); pool.push(...works); n += works.length; } catch (e) { console.warn(`Skipped ${name} ${a}: ${e.message}`); if (name === 'met') break; }
