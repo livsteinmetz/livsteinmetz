@@ -16,7 +16,7 @@ await b.close();
 const IMG = 'https://d2r83x5xt28klo.cloudfront.net';
 const ua = { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' } };
 const save = async (url, file) => { const r = await fetch(url, ua); console.log('save', r.status, url.slice(0, 120)); if (r.ok) fs.writeFileSync(file, Buffer.from(await r.arrayBuffer())); return r.ok; };
-await save('https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent('Landscape_with_the_flight_into_Egypt_(David_Teniers_d.ä.)_-_Nationalmuseum_-_23919FXD.jpg'), 'shots/refs/teniers.jpg');
+await save('https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent('Landscape_with_the_flight_into_Egypt_(David_Teniers_d.ä.)_-_Nationalmuseum_-_23919FXD.jpg') + '?width=3840', 'shots/refs/teniers.jpg');
 const res = await fetch('https://collection.barnesfoundation.org/api/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body: { from: 0, size: 3000, _source: ['id', 'title', 'people', 'imageSecret', 'objRightsTypeId'], query: { term: { classification: 'Paintings' } } } }) });
 const hits = ((await res.json()).hits?.hits || []).map((h) => h._source);
 console.log('barnes paintings', hits.length);
@@ -25,6 +25,6 @@ const names = /Paul C|Cézanne|Manet|Matisse|Seurat|Renoir|Degas|Gauguin|Toulous
 const count = {}, list = [];
 for (const w of hits) { if (!names.test(w.people || '')) continue; list.push(w); console.log('hit', w.id, w.people, '|', w.title, '|', w.objRightsTypeId); }
 fs.writeFileSync('shots/hits/list.json', JSON.stringify(list));
-const famous = /card players|bathers|bathing|sainte-victoire|sainte victoire|models|poseuses|bonheur|joy of life|dance|laundry|linge|conservatory|music|still life|apples|skulls|mme|madame|woman|boy|red|blue|haere/i;
-for (const w of list) { const a = (w.people.match(names) || ['x'])[0].toLowerCase(); count[a] = count[a] || 0; if (![4, 7, 8, 10].includes(Number(w.objRightsTypeId)) || !famous.test(w.title) || count[a] >= 16) continue; count[a]++; await save(`${IMG}/${w.id}_${w.imageSecret}_n.jpg`, `shots/hits/${w.id}.jpg`); }
+const famous = /seated riffian|moorish|music lesson|blue still|gourds|domino|three sisters|/.source ? /seated riffian|moorish|music lesson|blue still|gourds|domino|three sisters|card players|bathers|bathing|sainte-victoire|sainte victoire|models|poseuses|bonheur|joy of life|dance|laundry|linge|conservatory|music|still life|apples|skulls|mme|madame|woman|boy|red|blue|haere/i;
+for (const w of list) { const a = (w.people.match(names) || ['x'])[0].toLowerCase(); count[a] = count[a] || 0; if (![4, 7, 8, 10].includes(Number(w.objRightsTypeId)) || !famous.test(w.title) || count[a] >= 14) continue; count[a]++; await save(`${IMG}/${w.id}_${w.imageSecret}_n.jpg`, `shots/hits/${w.id}.jpg`); }
 const info = await fetch(`${IMG}/tiles/${list[0]?.id}/info.json`); console.log('info', info.status, (await info.text()).slice(0, 300));
