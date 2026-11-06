@@ -5,6 +5,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
+const today = () => new Date().toISOString().slice(0, 10);
+const kind = (code, high) => (code >= 71 && code <= 86 && code !== 80 && code !== 81 && code !== 82 ? 'snow' : code >= 51 ? 'rain' : high < 7 ? 'cold' : high > 28 ? 'hot' : 'mild');
 if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); process.exit(0); }
 
 try {
@@ -60,6 +62,7 @@ try {
   const count = (o, k) => { o[k] = (o[k] || 0) + 1; };
   const weekOf = (d) => Math.min(51, Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 6048e5));
   const own = raw.filter((p) => p.owner?.id === profile.id);
+  const saves = [];
   let read = 0;
   scan: for (const p of own) {
     const gig = GIG.test(p.name);
@@ -83,6 +86,7 @@ try {
         (adds[when.getUTCFullYear()] ||= Array(52).fill(0))[weekOf(when)] += 1;
         const year = Number(t.album?.release_date?.slice(0, 4));
         if (year) { const k = Math.floor(year / 10) * 10; (decades[k] ||= { count: 0, artists: {} }).count += 1; count(decades[k].artists, artist); }
+        saves.push({ day: row.added_at.slice(0, 10), month: when.getUTCMonth(), artist, title: t.name, url: t.external_urls?.spotify });
         const known = seen.get(artist);
         if (!known) seen.set(artist, { when, n: 1 }); else { known.n += 1; if (when < known.when) known.when = when; }
       }
@@ -93,11 +97,47 @@ try {
   const leaders = (o, n) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, n).map(([k]) => k);
   const firsts = {};
   for (const [artist, a] of seen) { const y = a.when.getUTCFullYear(); (firsts[y] ||= { count: 0, all: {} }).count += 1; firsts[y].all[artist] = a.n; }
+  // What I reach for by season and weather: each save is matched to that day's
+  // Philadelphia weather, and artists get genre words from MusicBrainz.
+  const moods = { seasons: {}, weather: {} };
+  try {
+    const seasonOf = (m) => ['winter', 'winter', 'spring', 'spring', 'spring', 'summer', 'summer', 'summer', 'fall', 'fall', 'fall', 'winter'][m];
+    const start = saves.reduce((a, r) => (r.day < a ? r.day : a), today());
+    const archive = await (await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=39.95&longitude=-75.17&start_date=${start}&end_date=${today()}&daily=weather_code,temperature_2m_max&timezone=America%2FNew_York`)).json();
+    const sky = {};
+    archive.daily.time.forEach((d, i) => { sky[d] = kind(archive.daily.weather_code[i], archive.daily.temperature_2m_max[i]); });
+    const groups = { seasons: {}, weather: {} };
+    for (const r of saves) {
+      (groups.seasons[seasonOf(r.month)] ||= []).push(r);
+      if (sky[r.day]) (groups.weather[sky[r.day]] ||= []).push(r);
+    }
+    const tally = (rows) => { const o = {}; rows.forEach((r) => count(o, r.artist)); return o; };
+    const wanted = new Set(Object.values(groups).flatMap((g) => Object.values(g)).flatMap((rows) => leaders(tally(rows), 25)));
+    const tags = {};
+    for (const artist of [...wanted].slice(0, 150)) {
+      await new Promise((r) => setTimeout(r, 1100));
+      const res = await fetch(`https://musicbrainz.org/ws/2/artist?fmt=json&limit=1&query=${encodeURIComponent(`artist:"${artist}"`)}`, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' } });
+      if (res.ok) tags[artist] = ((await res.json()).artists?.[0]?.tags || []).filter((t) => t.count > 0 && /^[a-z&' -]{3,24}$/.test(t.name) && !/^(seen live|american|british|english|canadian|usa|uk|female|male|singer|songwriter|\d)/.test(t.name)).slice(0, 4).map((t) => t.name);
+    }
+    const shares = (rows) => { const o = {}; let n = 0; for (const r of rows) for (const t of tags[r.artist] || []) { count(o, t); n += 1; } return { o, n: n || 1 }; };
+    const base = shares(saves);
+    for (const [group, sets] of Object.entries(groups)) {
+      for (const [key, rows] of Object.entries(sets)) {
+        const { o, n } = shares(rows);
+        const words = Object.entries(o).filter(([, c]) => c >= 3).map(([t, c]) => [t, (c / n) ** 2 / (base.o[t] / base.n)]).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([t]) => t);
+        const top = leaders(tally(rows), 6);
+        const songs = top.map((a) => rows.find((r) => r.artist === a)).filter((r) => r?.url).map(({ title, artist, url }) => ({ title, artist, url }));
+        moods[group][key] = { words, songs, n: rows.length };
+      }
+    }
+    console.log(`Moods: ${Object.keys(tags).length} artists tagged`, JSON.stringify(Object.fromEntries(Object.entries(moods.weather).map(([k, v]) => [k, v.words]))));
+  } catch (e) { console.warn(`Moods skipped: ${e.message}`); }
   const pub = mine.filter((p) => p.isPublic !== false);
   const library = {
     adds,
     decades: Object.fromEntries(Object.entries(decades).map(([k, d]) => [k, { count: d.count, artists: leaders(d.artists, 4) }])),
     firsts: Object.fromEntries(Object.entries(firsts).map(([y, f]) => [y, { count: f.count, artists: leaders(f.all, 8) }])),
+    moods,
     gigs: gigs.sort((a, b) => b.date.localeCompare(a.date)),
     titles: pub.map((p) => p.title).filter((t) => t.trim().split(/\s+/).length >= 4),
     wall: pub.filter((p) => p.image).map((p) => ({ image: p.image, title: p.title })),
@@ -122,8 +162,7 @@ try {
   // A diary of top artists. Each build adds today to what the live site already has.
   let diary = [];
   try { const res = await fetch('https://livsteinmetz.web.app/data/diary.json'); if (res.ok) diary = await res.json(); } catch { /* start fresh */ }
-  const today = new Date().toISOString().slice(0, 10);
-  if (!diary.some((d) => d.d === today) && windows[0].artists.length) diary.push({ d: today, artists: windows[0].artists.slice(0, 5) });
+  if (!diary.some((d) => d.d === today()) && windows[0].artists.length) diary.push({ d: today(), artists: windows[0].artists.slice(0, 5) });
   writeFileSync('content/diary.json', `${JSON.stringify(diary)}\n`);
 
   writeFileSync('content/trends.json', `${JSON.stringify({ windows, tracks, hours }, null, 1)}\n`);

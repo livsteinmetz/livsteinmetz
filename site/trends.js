@@ -199,8 +199,37 @@ function hueOf(img) {
   return ((max === r ? (g - b) / d : max === g ? 2 + (b - r) / d : 4 + (r - g) / d) * 60 + 360) % 360;
 }
 
+const list = (w) => (w.length > 2 ? `${w.slice(0, -1).join(', ')} and ${w.at(-1)}` : w.join(' and '));
+const SKY = { snow: 'snowing', rain: 'raining', cold: 'cold', hot: 'hot', mild: 'mild' };
+const kindOf = (code, high) => (code >= 71 && code <= 86 && ![80, 81, 82].includes(code) ? 'snow' : code >= 51 ? 'rain' : high < 7 ? 'cold' : high > 28 ? 'hot' : 'mild');
+
+async function drawToday(l) {
+  const m = new Date().getMonth(), season = ['winter', 'winter', 'spring', 'spring', 'spring', 'summer', 'summer', 'summer', 'fall', 'fall', 'fall', 'winter'][m];
+  const showSeason = () => {
+    const s = l.moods?.seasons?.[season];
+    if (s?.words.length) $('today-words').textContent = `This time of year, I tend to save ${list(s.words)}.`;
+    return s;
+  };
+  $('today-sky').textContent = `It's ${season}.`;
+  let pick = showSeason();
+  try {
+    const f = await (await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.17&daily=weather_code,temperature_2m_max&temperature_unit=celsius&forecast_days=1&timezone=America%2FNew_York')).json();
+    const high = f.daily.temperature_2m_max[0], k = kindOf(f.daily.weather_code[0], high);
+    $('today-sky').textContent = `${Math.round(high * 9 / 5 + 32)} degrees and ${SKY[k]}.`;
+    const w = l.moods?.weather?.[k];
+    if (w?.words.length) { $('today-words').textContent = `On days like this, I tend to save ${list(w.words)}.`; pick = w; }
+  } catch { /* the season line stands in */ }
+  const songs = pick?.songs || [];
+  if (songs.length) {
+    const song = songs[Math.floor(Date.now() / 864e5) % songs.length];
+    $('today-song').innerHTML = `Try <a href="${song.url}">${esc(song.title)}</a> by ${esc(song.artist)}.`;
+  }
+}
+
 function drawLibrary(l) {
   document.querySelectorAll('.lib').forEach((el) => { el.hidden = false; });
+  $('scene-today').hidden = !l.moods?.seasons;
+  if (l.moods?.seasons) drawToday(l);
   const adds = Object.values(l.adds).flat(), totalAdds = adds.reduce((a, b) => a + b, 0);
   const byMonth = Array.from({ length: 12 }, (_, m) => Object.values(l.adds).reduce((n, w) => n + w.slice(Math.floor(m * 4.33), Math.floor((m + 1) * 4.33)).reduce((a, b) => a + b, 0), 0));
   const sum = (ms) => ms.reduce((n, m) => n + byMonth[m], 0), g = { winter: [11, 0, 1], spring: [2, 3, 4], summer: [5, 6, 7], fall: [8, 9, 10] };
