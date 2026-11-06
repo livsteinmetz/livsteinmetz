@@ -1,198 +1,146 @@
 {
  "visual-experience-platform": {
+  "vb": "0 0 300 400",
   "fill": "#e64aa6",
   "t": [
-   [
-    "VISUAL",
-    12,
-    38,
-    264,
-    34,
-    "Anton",
-    400
-   ],
-   [
-    "EXPERIENCE",
-    12,
-    92,
-    264,
-    50,
-    "Anton",
-    400
-   ],
-   [
-    "PLATFORM",
-    12,
-    170,
-    264,
-    76,
-    "Anton",
-    400
-   ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 404,
-   "fill": "#fff"
-  }
+   {
+    "text": "VISUAL EXPERIENCE",
+    "x": 18,
+    "y": 52,
+    "size": 37.6,
+    "font": "Anton",
+    "wt": 400
+   },
+   {
+    "text": "PLATFORM",
+    "x": 18,
+    "y": 122,
+    "size": 68.6,
+    "font": "Anton",
+    "wt": 400
+   }
+  ]
  },
  "focus": {
-  "fill": "#f6d44f",
-  "t": [
-   [
-    "Barnes",
-    24,
-    286,
-    240,
-    92,
-    "Bodoni Moda",
-    500
-   ],
-   [
-    "Focus",
-    24,
-    372,
-    240,
-    92,
-    "Bodoni Moda",
-    500
-   ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 404,
-   "fill": "#fff"
-  }
- },
- "deep-zoom": {
-  "fill": "#fff27a",
-  "t": [
-   [
-    "DEEP",
-    64,
-    92,
-    160,
-    84,
-    "Jost",
-    700
-   ],
-   [
-    "ZOOM",
-    64,
-    166,
-    160,
-    84,
-    "Jost",
-    700
-   ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 200,
-   "fill": "#fff"
-  }
- },
- "membership": {
-  "fill": "#8dff72",
-  "t": [
-   [
-    "MEM",
-    24,
-    290,
-    150,
-    46,
-    "Archivo",
-    700
-   ],
-   [
-    "BER",
-    24,
-    328,
-    150,
-    46,
-    "Archivo",
-    700
-   ],
-   [
-    "SHIP",
-    24,
-    366,
-    150,
-    46,
-    "Archivo",
-    700
-   ]
-  ],
-  "tag": {
-   "x": 24,
-   "y": 404,
-   "anchor": "start",
-   "fill": "#fff"
-  }
- },
- "online-collection": {
+  "vb": "0 0 300 400",
   "fill": "#16246e",
   "t": [
-   [
-    "ONLINE",
-    14,
-    62,
-    260,
-    52,
-    "Marcellus",
-    400,
-    "spacing"
-   ],
-   [
-    "COLLECTION",
-    14,
-    392,
-    260,
-    34,
-    "Marcellus",
-    400,
-    "spacing"
-   ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 352,
-   "fill": "#16246e"
-  }
+   {
+    "text": "Barnes",
+    "x": 18,
+    "y": 56,
+    "size": 46,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Focus",
+    "x": 18,
+    "y": 382,
+    "size": 98.7,
+    "font": "Bodoni Moda",
+    "wt": 500
+   }
+  ]
+ },
+ "deep-zoom": {
+  "vb": "0 0 300 400",
+  "fill": "#f6d44f",
+  "t": [
+   {
+    "text": "DEEP",
+    "x": 18,
+    "y": 98,
+    "size": 103.0,
+    "font": "Jost",
+    "wt": 700
+   },
+   {
+    "text": "ZOOM",
+    "x": 18,
+    "y": 182,
+    "size": 85.1,
+    "font": "Jost",
+    "wt": 700
+   }
+  ]
+ },
+ "membership": {
+  "vb": "0 0 300 400",
+  "fill": "#8dff72",
+  "t": [
+   {
+    "text": "MEM",
+    "x": 18,
+    "y": 300,
+    "size": 46,
+    "font": "Archivo",
+    "wt": 700
+   },
+   {
+    "text": "BER",
+    "x": 18,
+    "y": 340,
+    "size": 46,
+    "font": "Archivo",
+    "wt": 700
+   },
+   {
+    "text": "SHIP",
+    "x": 18,
+    "y": 380,
+    "size": 46,
+    "font": "Archivo",
+    "wt": 700
+   }
+  ]
+ },
+ "online-collection": {
+  "vb": "0 0 300 400",
+  "fill": "#16246e",
+  "t": [
+   {
+    "text": "Online",
+    "x": 18,
+    "y": 326,
+    "size": 56,
+    "font": "Marcellus",
+    "wt": 400
+   },
+   {
+    "text": "Collection",
+    "x": 18,
+    "y": 384,
+    "size": 56,
+    "font": "Marcellus",
+    "wt": 400
+   }
+  ]
  },
  "calder-gardens": {
+  "vb": "0 0 300 400",
   "fill": "#fff",
-  "under": "<polygon points=\"2,170 186,76 286,214 102,316\" fill=\"#000\"/>",
   "t": [
-   [
-    "Calder",
-    70,
-    190,
-    150,
-    58,
-    "Archivo",
-    700,
-    "spacingAndGlyphs",
-    "transform=\"rotate(-14 70 190)\""
-   ],
-   [
-    "Gardens",
-    100,
-    254,
-    156,
-    50,
-    "Archivo",
-    700,
-    "spacingAndGlyphs",
-    "transform=\"rotate(-14 100 254)\""
-   ]
+   {
+    "text": "Calder",
+    "x": 24,
+    "y": 232,
+    "size": 55.8,
+    "font": "Archivo",
+    "wt": 700,
+    "extra": "transform=\"skewY(-18)\""
+   },
+   {
+    "text": "Gardens",
+    "x": 62,
+    "y": 318,
+    "size": 52.2,
+    "font": "Archivo",
+    "wt": 700,
+    "extra": "transform=\"skewY(-18)\""
+   }
   ],
-  "tag": {
-   "x": 24,
-   "y": 398,
-   "anchor": "start",
-   "fill": "#000"
-  }
+  "under": "<rect x=\"-10\" y=\"150\" width=\"340\" height=\"200\" fill=\"#000\" transform=\"skewY(-18)\"/>"
  },
  "double-bass": {
   "fill": "#f6d44f",
@@ -207,12 +155,7 @@
     "Anton",
     400
    ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 402,
-   "fill": "#fff"
-  }
+  ]
  },
  "one-codebase": {
   "fill": "#fff27a",
@@ -256,82 +199,175 @@
   ]
  },
  "commerce": {
+  "vb": "0 0 300 400",
   "fill": "#f6d44f",
   "t": [
-   [
-    "Commerce",
-    0,
-    0,
-    392,
-    132,
-    "Anton",
-    400,
-    "spacingAndGlyphs",
-    "transform=\"translate(112 406) rotate(-90)\""
-   ]
-  ],
-  "tag": {
-   "x": 276,
-   "y": 404,
-   "anchor": "end",
-   "fill": "#fff"
-  }
+   {
+    "text": "Commerce",
+    "x": 18,
+    "y": 300,
+    "size": 52.8,
+    "font": "Abril Fatface",
+    "wt": 400
+   }
+  ]
  },
  "tours": {
-  "fill": "#16246e",
+  "vb": "0 0 300 400",
+  "fill": "#fff",
   "t": [
-   [
-    "TOURS",
-    12,
-    110,
-    264,
-    120,
-    "Archivo",
-    700
-   ],
-   [
-    "EYE SPY",
-    12,
-    186,
-    264,
-    84,
-    "Archivo",
-    700
-   ]
-  ],
-  "tag": {
-   "x": 144,
-   "y": 404,
-   "fill": "#16246e"
-  }
+   {
+    "text": "TOURS &amp; EYE SPY",
+    "x": 18,
+    "y": 382,
+    "size": 42.8,
+    "font": "Anton",
+    "wt": 400
+   }
+  ]
  },
  "one-visitor-one-record": {
+  "vb": "0 0 300 400",
   "fill": "#16246e",
   "t": [
-   [
-    "ONE VISITOR",
-    12,
-    322,
-    200,
-    34,
-    "Fraunces",
-    500
-   ],
-   [
-    "ONE RECORD",
-    12,
-    366,
-    264,
-    42,
-    "Fraunces",
-    500
-   ]
-  ],
-  "tag": {
-   "x": 24,
-   "y": 404,
-   "anchor": "start",
-   "fill": "#16246e"
-  }
+   {
+    "text": "One",
+    "x": 18,
+    "y": 90,
+    "size": 74,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "Visitor,",
+    "x": 18,
+    "y": 166,
+    "size": 95.1,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "One",
+    "x": 18,
+    "y": 270,
+    "size": 74,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "Record",
+    "x": 18,
+    "y": 346,
+    "size": 91.7,
+    "font": "Fraunces",
+    "wt": 500
+   }
+  ]
+ },
+ "scaling-the-visual-experience-platform": {
+  "vb": "0 0 300 400",
+  "fill": "#fff",
+  "t": [
+   {
+    "text": "Scaling the",
+    "x": 18,
+    "y": 274,
+    "size": 34,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Visual Experience",
+    "x": 18,
+    "y": 314,
+    "size": 31.6,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Platform",
+    "x": 18,
+    "y": 380,
+    "size": 64.7,
+    "font": "Bodoni Moda",
+    "wt": 500
+   }
+  ]
+ },
+ "designing-and-building-a-platform-for-close-looking": {
+  "vb": "0 0 300 400",
+  "fill": "#f6d44f",
+  "t": [
+   {
+    "text": "Designing and",
+    "x": 18,
+    "y": 264,
+    "size": 36,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Building a",
+    "x": 18,
+    "y": 304,
+    "size": 36,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Platform for",
+    "x": 18,
+    "y": 344,
+    "size": 36,
+    "font": "Bodoni Moda",
+    "wt": 500
+   },
+   {
+    "text": "Close Looking",
+    "x": 18,
+    "y": 384,
+    "size": 36,
+    "font": "Bodoni Moda",
+    "wt": 500
+   }
+  ]
+ },
+ "why-were-writing-about-digital-work-again-at-the-barnes": {
+  "vb": "0 0 300 400",
+  "fill": "#fff",
+  "t": [
+   {
+    "text": "Digital Product",
+    "x": 18,
+    "y": 264,
+    "size": 30,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "as Institutional",
+    "x": 18,
+    "y": 304,
+    "size": 30,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "Practice at the",
+    "x": 18,
+    "y": 344,
+    "size": 30,
+    "font": "Fraunces",
+    "wt": 500
+   },
+   {
+    "text": "Barnes Foundation",
+    "x": 18,
+    "y": 384,
+    "size": 30,
+    "font": "Fraunces",
+    "wt": 500
+   }
+  ]
  }
 }

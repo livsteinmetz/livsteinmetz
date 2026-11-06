@@ -6,10 +6,10 @@
   "w": 4613,
   "h": 5556,
   "crop": [
-   0.2,
-   0.03,
-   0.6,
-   0.6642
+   0.13,
+   0,
+   0.74,
+   0.82
   ],
   "rights": "BF37, public domain",
   "edge": "top",
@@ -23,10 +23,10 @@
   "w": 4418,
   "h": 6889,
   "crop": [
-   0.22,
-   0.305,
-   0.34,
-   0.2907
+   0.08,
+   0,
+   0.62,
+   0.53
   ],
   "rights": "BF285, public domain",
   "edge": "bottom",
@@ -40,10 +40,10 @@
   "w": 4533,
   "h": 5474,
   "crop": [
-   0.216,
-   0.119,
-   0.34,
-   0.3754
+   0.31,
+   0.55,
+   0.3,
+   0.331
   ],
   "rights": "BF397, public domain",
   "edge": "bottom",
@@ -91,10 +91,10 @@
   "w": 4296,
   "h": 6917,
   "crop": [
-   0.18,
-   0.578,
-   0.34,
-   0.2816
+   0.2,
+   0.1,
+   0.6,
+   0.497
   ],
   "rights": "BF180, public domain",
   "edge": "top",
@@ -184,6 +184,40 @@
   "rights": "BF37, public domain",
   "edge": "bottom",
   "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "coat": {
+  "title": "The Postman (Joseph-Étienne Roulin)",
+  "artist": "Vincent van Gogh",
+  "barnes": 4720,
+  "w": 4613,
+  "h": 5556,
+  "crop": [
+   0.52,
+   0.66,
+   0.28,
+   0.31
+  ],
+  "rights": "BF37, public domain",
+  "edge": "top",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "eyes": {
+  "title": "Boy in Sailor Suit",
+  "artist": "Amedeo Modigliani",
+  "barnes": 5704,
+  "w": 4506,
+  "h": 7018,
+  "crop": [
+   0.26,
+   0.09,
+   0.34,
+   0.291
+  ],
+  "rights": "BF369, public domain",
+  "edge": "bottom",
+  "ink": "#ffe36b",
   "tagInk": "#ffffff"
  }
 }

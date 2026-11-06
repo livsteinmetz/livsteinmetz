@@ -13,3 +13,6 @@ for (const [k, a] of Object.entries(art)) {
   const g = await b.newPage({ viewport: { width: W, height: H } }); await g.setContent(html, { waitUntil: 'networkidle' }); await g.screenshot({ path: `shots/refs/${k}.jpg`, type: 'jpeg', quality: 80 }); await g.close();
 }
 await b.close();
+const res = await fetch('https://collection.barnesfoundation.org/api/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body: { from: 0, size: 3000, _source: ['id', 'title', 'people', 'imageSecret', 'objRightsTypeId'], query: { term: { classification: 'Paintings' } } } }) });
+const hits = (await res.json()).hits?.hits || [];
+for (const h of hits) if (/flight|holy family|madonna|virgin|angel|concert|landscape with/i.test(h._source.title || '')) console.log('barnes match', h._source.id, h._source.title, '|', h._source.people, '|', h._source.imageSecret, h._source.objRightsTypeId);

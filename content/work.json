@@ -74,7 +74,7 @@
   "title": "Barnes Focus",
   "tag": "a guide with no labels",
   "date": "2021 to now",
-  "art": "shepherd",
+  "art": "jeanne",
   "font": "didone",
   "short": "In-gallery interpretation, no wall labels",
   "role": "Product and front-end development",
@@ -137,7 +137,7 @@
   ],
   "align": "center",
   "width": 0.86,
-  "mat": "#c9321a",
+  "mat": "#f6d44f",
   "reads": [
    {
     "title": "One Codebase, Two Brands",
@@ -182,7 +182,7 @@
   "title": "Commerce",
   "tag": "a way in the door",
   "date": "2021 to now",
-  "art": "roulin",
+  "art": "coat",
   "font": "didone",
   "short": "Tickets, memberships, and gifts on one stack",
   "role": "Product, UX/UI design, and front-end development",
@@ -298,7 +298,8 @@
    "EYE SPY"
   ],
   "align": "left",
-  "mat": "#efa090"
+  "mat": "#efa090",
+  "art": "eyes"
  },
  {
   "slug": "one-visitor-one-record",
@@ -311,7 +312,7 @@
   "org": "Barnes Foundation",
   "stack": "Salesforce, ACME",
   "color": "#16246e",
-  "flat": "#efb4f7",
+  "flat": "#f6d44f",
   "body": [
    "In 2024 I managed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of three. That's what lets us recognize a member at checkout and see who's calling as the call connects, and it lets staff ask and answer questions through MCP connectors and AI-assisted reporting."
   ],
@@ -320,6 +321,6 @@
    "ONE RECORD"
   ],
   "align": "left",
-  "mat": "#ef8f35"
+  "mat": "#c9321a"
  }
 ]

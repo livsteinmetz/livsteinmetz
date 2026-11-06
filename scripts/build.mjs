@@ -12,7 +12,7 @@ const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url)
 const SITE = 'https://livsteinmetz.web.app';
 // The address is put together in the browser, so scrapers reading the HTML don't get it.
 const mail = (label, subject = '') => `<a href="/about" data-mail="olivia.r.steinmetz|gmail.com"${subject ? ` data-subject="${subject}"` : ''}>${label}</a>`;
-const FONTS = 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural organizations, designing and building at the intersection of the arts and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -22,12 +22,13 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 const day = Math.floor(Date.now() / 864e5);
 const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
+const noteArt = { 'scaling-the-visual-experience-platform': 'flower', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'sailor', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
 
 const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'left'], ['didone', '#66c4ff', 'left'], ['geo', '#efa090', 'center']];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
+    ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
     { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', flat: '#8c3a14', color: '#f6d44f', font: 'grotesk', mat: '#c8d6ec', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
     { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', font: 'gothic', mat: '#fff27a', align: 'center', width: .7, lines: ['Listening'], color: '#000000', flat: '#ffb3d9', href: '/listening' },
   ],
@@ -47,9 +48,13 @@ function cover(c0, tag = 'a') {
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
   const below = c.edge === 'bottom';
   const heading = `<h3 class="ctitle f-${c.font} a-${c.align || 'left'}${c.long ? ' long' : ''}" style="color:${c.color}"${c.width ? ` data-width="${c.width}"` : ''}>${c.lines.map((t) => `<span class="ln">${c.align === 'spread' ? esc(t).replace(' ', '<i></i>') : esc(t)}</span>`).join('')}</h3>`;
-  const tagline = `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
+  const tagline = c.tag === 'a field note' ? '' : `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
   const t = type[c.slug] || (c.slug.startsWith('one-codebase') && type['one-codebase']);
-  const drawn = t && `<h3 class="drawn"><svg viewBox="0 0 288 420" fill="${t.fill}" role="img" aria-label="${esc(c.title)}">${t.under || ''}${t.t.map(([text, x, y, w, size, font, weight, adjust = 'spacingAndGlyphs', extra = '']) => `<text x="${x}" y="${y}" textLength="${w}" lengthAdjust="${adjust}" font-family="${font}" font-weight="${weight}" font-size="${size}" ${extra}>${text}</text>`).join('')}${t.tag && c.tag ? `<text x="${t.tag.x}" y="${t.tag.y}" text-anchor="${t.tag.anchor || 'middle'}" fill="${t.tag.fill}" font-family="Instrument Serif" font-style="italic" font-weight="400" font-size="25">${esc(c.tag)}</text>` : ''}</svg></h3>`;
+  // Lines in the 300 by 400 layouts keep their real letter widths. Sizes come from measuring each font.
+  const line = (e) => Array.isArray(e)
+    ? `<text x="${e[1]}" y="${e[2]}" textLength="${e[3]}" lengthAdjust="${e[7] || 'spacingAndGlyphs'}" font-family="${e[5]}" font-weight="${e[6]}" font-size="${e[4]}">${e[0]}</text>`
+    : `<text x="${e.x}" y="${e.y}" font-family="${e.font}" font-weight="${e.wt}" font-size="${e.size}" ${e.extra || ''}>${e.text}</text>`;
+  const drawn = t && `<h3 class="drawn"><svg viewBox="${t.vb || '0 0 288 420'}" fill="${t.fill}" role="img" aria-label="${esc(c.title)}">${t.under || ''}${t.t.map(line).join('')}</svg></h3>`;
   const body = drawn ? `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption>${drawn}</figcaption></figure>` : `<figure role="group" aria-label="media">${a ? cropEl(c.art, alt) : ''}<figcaption><div class="words ${c.edge}">${heading}${below ? tagline : ''}</div>${below ? '' : `<div class="${a ? 'tag-strip' : 'tag-bottom'}">${tagline}</div>`}</figcaption></figure>`;
   const attrs = `class="cover ${a ? 'has-art' : 'flat'}" style="${c.flat ? `--flat:${c.flat};` : ''}view-transition-name:cover-${c.slug}"`;
   return tag === 'a' ? `<a href="${c.href}" ${attrs}>${body}</a>` : `<div ${attrs} data-slug="${c.slug}">${body}</div>`;
