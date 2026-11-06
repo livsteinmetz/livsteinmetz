@@ -15,3 +15,8 @@ await b.close();
 // The existence precondition means this can never change the settings document, even if the rules were open.
 const w = await fetch('https://firestore.googleapis.com/v1/projects/livsteinmetz-bb868/databases/(default)/documents/site/settings?updateMask.fieldPaths=probe&currentDocument.exists=false', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { probe: { booleanValue: true } } }) });
 console.log('anonymous write to settings:', w.status, w.status === 403 ? 'refused, good' : 'CHECK THE FIRESTORE RULES');
+if (base.endsWith('livsteinmetz.com')) {
+  const b2 = await chromium.launch(); const g = await b2.newPage();
+  await g.goto('https://livsteinmetz.web.app/about', { waitUntil: 'load' }).catch(() => {}); await g.waitForTimeout(1500);
+  console.log('old address lands on', g.url()); await b2.close();
+}

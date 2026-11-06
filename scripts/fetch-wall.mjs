@@ -67,7 +67,7 @@ if (pool.length >= COUNT) {
   rmSync('site/wall', { recursive: true, force: true });
   mkdirSync('site/wall', { recursive: true });
   const keep = async (w) => {
-    const r = await fetch(w.web, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' }, signal: AbortSignal.timeout(30000) });
+    const r = await fetch(w.web, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' }, signal: AbortSignal.timeout(30000) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const bytes = Buffer.from(await r.arrayBuffer());
     const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8, png = bytes[0] === 0x89 && bytes[1] === 0x50;

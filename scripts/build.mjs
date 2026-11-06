@@ -9,7 +9,7 @@ const work = read('work'), music = read('music'), myPlaylists = read('my-playlis
 const feed = read('notes.feed'), seed = read('notes');
 const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url))].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-const SITE = 'https://livsteinmetz.web.app';
+const SITE = 'https://livsteinmetz.com';
 // The address is put together in the browser, so scrapers reading the HTML don't get it.
 const mail = (label, subject = '') => `<a href="/about" data-mail="olivia.r.steinmetz|gmail.com"${subject ? ` data-subject="${subject}"` : ''}>${label}</a>`;
 const FONTS = 'https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
@@ -69,7 +69,7 @@ function shell({ path, title, description, body, canonical, ld = [], type = 'web
   const nav = [['/#working', 'Work'], ['/#writing', 'Writing'], ['/about', 'About']].map(([h, t]) => `<a href="${h}"${path === h ? ' aria-current="page"' : ''}>${t}</a>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#ffffff">
-${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical || SITE + path}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/icon-180.png"><link rel="manifest" href="/site.webmanifest">${process.env.PREVIEW || path === '/404' ? '<meta name="robots" content="noindex">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}
+${[PERSON, ...ld].map(jsonLd).join('')}<link rel="canonical" href="${canonical || SITE + path}"><script src="/go.js?v=${V}"></script><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/icon-180.png"><link rel="manifest" href="/site.webmanifest">${process.env.PREVIEW || path === '/404' ? '<meta name="robots" content="noindex">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}
 <meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${type}">${meta}<meta property="og:url" content="${SITE}${path}"><meta property="og:site_name" content="Olivia Steinmetz"><meta property="og:image" content="${SITE}/media/og.jpg"><meta property="og:image:alt" content="Olivia Steinmetz"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS.replace(/&/g, '&amp;')}"><link rel="stylesheet" href="/styles.css?v=${V}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZM6YLSHQY"></script><script src="/gtag.js?v=${V}"></script>

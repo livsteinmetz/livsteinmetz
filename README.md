@@ -1,4 +1,4 @@
-# livsteinmetz.web.app
+# livsteinmetz.com
 
 Olivia Steinmetz's site. A static build in plain Node, with no runtime dependencies.
 

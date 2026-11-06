@@ -14,7 +14,7 @@ if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); p
 // a newly chosen playlist needs a preview. A failed scan keeps what was published.
 const FILES = ['my-playlists', 'trends', 'library', 'previews'];
 const snapshots = [];
-for (const url of ['https://livsteinmetz.web.app/data/spotify.json', 'https://livsteinmetz--preview-y8pj65y4.web.app/data/spotify.json']) {
+for (const url of ['https://livsteinmetz.com/data/spotify.json', 'https://livsteinmetz.web.app/data/spotify.json', 'https://livsteinmetz--preview-y8pj65y4.web.app/data/spotify.json']) {
   try { const res = await fetch(url); if (res.ok) snapshots.push(await res.json()); } catch { /* none yet */ }
 }
 const snapshot = snapshots.sort((a, b) => (b.at || '').localeCompare(a.at || ''))[0];
@@ -136,7 +136,7 @@ try {
     const tags = {};
     for (const artist of [...wanted].slice(0, 150)) {
       await new Promise((r) => setTimeout(r, 1100));
-      const res = await fetch(`https://musicbrainz.org/ws/2/artist?fmt=json&limit=1&query=${encodeURIComponent(`artist:"${artist}"`)}`, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.web.app)' } });
+      const res = await fetch(`https://musicbrainz.org/ws/2/artist?fmt=json&limit=1&query=${encodeURIComponent(`artist:"${artist}"`)}`, { headers: { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' } });
       if (res.ok) tags[artist] = ((await res.json()).artists?.[0]?.tags || []).filter((t) => t.count > 0 && /^[a-z&' -]{3,24}$/.test(t.name) && !/^(seen live|american|british|english|canadian|usa|uk|female|male|singer|songwriter|\d)/.test(t.name)).slice(0, 4).map((t) => t.name);
     }
     const shares = (rows) => { const o = {}; let n = 0; for (const r of rows) for (const t of tags[r.artist] || []) { count(o, t); n += 1; } return { o, n: n || 1 }; };
@@ -181,7 +181,7 @@ try {
   }
   // A diary of top artists. Each build adds today to what the live site already has.
   let diary = [];
-  try { const res = await fetch('https://livsteinmetz.web.app/data/diary.json'); if (res.ok) diary = await res.json(); } catch { /* start fresh */ }
+  for (const host of ['https://livsteinmetz.com', 'https://livsteinmetz.web.app']) { try { const res = await fetch(`${host}/data/diary.json`); if (res.ok) { diary = await res.json(); break; } } catch { /* try the next address */ } }
   if (!diary.some((d) => d.d === today()) && windows[0].artists.length) diary.push({ d: today(), artists: windows[0].artists.slice(0, 5) });
   writeFileSync('content/diary.json', `${JSON.stringify(diary)}\n`);
 

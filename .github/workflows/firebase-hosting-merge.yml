@@ -37,4 +37,4 @@ jobs:
           projectId: livsteinmetz-bb868
           target: livsteinmetz
       - name: Confirm the live site updated
-        run: sleep 20 && curl -fsS "https://livsteinmetz.web.app/?deploy=$GITHUB_SHA" | grep -o "intersection of the arts and tech"
+        run: sleep 20 && curl -fsS "https://livsteinmetz.com/?deploy=$GITHUB_SHA" | grep -o "intersection of the arts and tech"

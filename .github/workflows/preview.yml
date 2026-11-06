@@ -49,4 +49,4 @@ jobs:
           target: livsteinmetz
       - name: Check security headers and rules on the preview
         continue-on-error: true
-        run: node scripts/qa/live.mjs https://livsteinmetz--preview-y8pj65y4.web.app
+        run: node scripts/qa/live.mjs https://livsteinmetz--preview-y8pj65y4.web.app && node scripts/qa/live.mjs https://livsteinmetz.com
