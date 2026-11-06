@@ -7,6 +7,16 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const USER = '187582052-liv';
 const YEAR = 365 * 24 * 60 * 60 * 1000;
 
+// Books Olivia has placed by hand: title pattern and position, counting from 1.
+const PLACE = [[/chronology of water/i, 3]];
+const place = (books) => {
+  for (const [re, pos] of PLACE) {
+    const i = books.findIndex((b) => re.test(b.title));
+    if (i >= 0) books.splice(Math.min(pos - 1, books.length - 1), 0, ...books.splice(i, 1));
+  }
+  return books;
+};
+
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"');
 
 const first = (html, re) => html.match(re)?.[1]?.trim() || '';
@@ -56,7 +66,7 @@ const profile = async () => {
 
 try {
   const books = await profile();
-  writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
+  writeFileSync('content/reading.json', `${JSON.stringify(place(books), null, 1)}\n`);
   console.log(`Saved ${books.length} books`);
 } catch (err) { try {
   const now = Date.now();
@@ -65,7 +75,7 @@ try {
     .filter((b) => b.finished && now - new Date(b.finished) < YEAR)
     .sort((a, b) => new Date(b.finished) - new Date(a.finished));
   const books = [...current, ...read].filter((b) => b.cover).map(({ finished, ...b }) => b);
-  writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
+  writeFileSync('content/reading.json', `${JSON.stringify(place(books), null, 1)}\n`);
   console.log(`Saved ${current.length} current and ${read.length} finished books`);
 } catch (e) {
   console.warn(`Goodreads skipped: ${e.message}`);
@@ -77,6 +87,6 @@ try {
       if (docs[0]?.cover_i) books.push({ ...b, url: `https://www.goodreads.com/search?q=${encodeURIComponent(b.title)}`, cover: `https://covers.openlibrary.org/b/id/${docs[0].cover_i}-L.jpg` });
     } catch { /* leave this book out */ }
   }
-  if (books.length) writeFileSync('content/reading.json', `${JSON.stringify(books, null, 1)}\n`);
+  if (books.length) writeFileSync('content/reading.json', `${JSON.stringify(place(books), null, 1)}\n`);
   console.log(`Saved ${books.length} books from the seed list`);
 } }
