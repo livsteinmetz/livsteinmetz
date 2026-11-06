@@ -145,13 +145,13 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <p>I studied both Engineering Design and Double Bass Performance at Vanderbilt University, and led innovation and entrepreneurship programming and curriculum development at the Wond'ry Center for Innovation and Entrepreneurship in its first years on campus. I worked in Emerging Tech consulting and the Operations Design Thinking studio at Accenture, where I picked up an interest in emerging technologies and my first web development skills, and applied and shared design thinking methods I still use today. At Capital One, I completed a six-month software engineering program and moved into a full-stack developer role, the foundation I brought with me to the Barnes.</p>
 <p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. Orchestra taught me most of what I know about product work. You listen, you create a solid foundation, and you show up prepared because everybody else is counting on you. It's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
 <h2>Things I like</h2><ul class="likes">
-<li>Used bookstores. I keep a running list on my phone of books to look for in them.</li>
-<li>Board games, right now Dominion expansions.</li>
-<li>Cards. I always have a deck on me.</li>
-<li>Ceramics, mostly tiny espresso mugs.</li>
-<li>Walking, never driving if I can help it.</li>
-<li>Fall, my favorite season.</li>
-<li>Making <a href="/listening">playlists</a> for very specific scenarios.</li>
+<li>making my own espresso mugs</li>
+<li>reading books small enough to fit in my bag</li>
+<li>hunting used bookstores for the books on my running list</li>
+<li>curating overly specific <a href="/listening">playlists</a></li>
+<li>working my way through Dominion expansions</li>
+<li>always having a deck of cards on me</li>
+<li>going for a walk and calling a friend</li>
 </ul>
 <h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. ${mail('Email me')}.</p></div></div>` });
 pages['colophon.html'] = shell({ path: '/colophon', title: 'Colophon', description: 'How the paintings on this site are served.', body: `<div class="page"><div class="prose"><h1>Colophon</h1><p>Every painting here is public domain. The covers are assembled in your browser from IIIF image tiles, the same standard behind the Barnes online collection and the Visual Experience Platform. Each work has a IIIF manifest, so you can open it in any IIIF viewer.</p><ul>${Object.entries(art).map(([k, a]) => `<li><a href="/iiif/${k}.json">${esc(a.title)}</a>, ${esc(a.artist)} (${esc(a.rights)})</li>`).join('')}</ul></div></div>` });
