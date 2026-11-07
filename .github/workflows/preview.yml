@@ -2,7 +2,7 @@ name: Preview branch
 
 on:
   push:
-    branches-ignore: [main]
+    branches-ignore: [main, spotify-backup, preview-shots]
   workflow_dispatch:
 
 permissions:
@@ -47,6 +47,7 @@ jobs:
           git add -A
           git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "preview screenshots"
           git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" preview-shots
+      - run: rm -f build/.spotify-backup.json
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
