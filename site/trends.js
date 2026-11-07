@@ -29,9 +29,11 @@ const nice = (d) => `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
 function sample() {
   let seed = 7;
   const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  // Olivia's picks: real artists and the song she played most by each.
   const ERAS = [
-    ['Fleetwood Mac', 2019.6, 1.2], ['Nina Simone', 2020.4, 1.0], ['Bach', 2021.0, 2.5], ['Frank Ocean', 2021.5, 1.0], ['ABBA', 2022.2, 0.8],
-    ['Kendrick Lamar', 2022.8, 0.9], ['Joni Mitchell', 2023.3, 1.1], ['Bad Bunny', 2023.9, 0.7], ['Radiohead', 2024.4, 1.3], ['Chappell Roan', 2025.0, 0.6], ['Debussy', 2025.6, 2.0], ['Arooj Aftab', 2026.2, 0.7],
+    ['Talking Heads', 2019.5, 1.0, 'This Must Be the Place (Naive Melody)'], ['Vampire Weekend', 2019.9, 0.8, 'Harmony Hall'], ['Bach', 2020.6, 2.4, 'Brandenburg Concerto No. 5: I. Allegro'],
+    ['Noname', 2021.1, 0.9, 'Self'], ['Thundercat', 2021.8, 0.8, 'Them Changes'], ['Mitski', 2022.5, 1.0, 'Working for the Knife'], ['Japanese Breakfast', 2023.1, 0.8, 'Be Sweet'],
+    ['Caroline Polachek', 2023.8, 0.9, 'Pretty In Possible'], ['Cocteau Twins', 2024.6, 1.0, 'Cherry-coloured Funk'], ['Handel', 2025.4, 1.8, 'Messiah: He was despised'], ['Noname', 2026.2, 0.6, 'Self'],
   ];
   const TRIPS = [['MX', '2020-02-10', '2020-02-17'], ['JP', '2021-04-02', '2021-04-12'], ['IS', '2022-01-20', '2022-01-27'], ['PT', '2023-06-05', '2023-06-15'], ['MA', '2024-03-08', '2024-03-15'], ['GR', '2025-08-18', '2025-08-25'], ['NO', '2026-02-01', '2026-02-06']];
   const LAT = { US: 41.9, MX: 19.4, JP: 35.7, IS: 64.1, PT: 38.7, MA: 31.6, GR: 37.98, NO: 59.9 };
@@ -58,10 +60,10 @@ function sample() {
       const weights = ERAS.map(([, at, width]) => Math.exp(-((yr - at) ** 2) / (2 * width * width)));
       let pick = rnd() * weights.reduce((a, b) => a + b, 0), n = 0;
       while ((pick -= weights[n]) > 0 && n < ERAS.length - 1) n++;
-      rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: `${ERAS[n][0]} song`, conn_country: cc });
+      rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: ERAS[n][3], conn_country: cc });
     }
   }
-  weather.lift = { rain: ['Radiohead', 'Debussy'], snow: ['Bach'], hot: ['Bad Bunny'], cold: ['Joni Mitchell'] };
+  weather.lift = { rain: ['Cocteau Twins', 'Bach'], snow: ['Handel'], hot: ['Thundercat'], cold: ['Mitski'] };
   return { ...summarize(rows), sampleWeather: weather };
 }
 
