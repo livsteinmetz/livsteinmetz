@@ -230,6 +230,23 @@ function drawWeather(s, me) {
     steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))}.` : `${brings[k]} brings out ${list3(who)}.`, diff && who.length ? `${brings[k]} brings out ${list3(who)}.` : '']);
   }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
+  // A pick for the visitor's own weather. Their location goes only to Open-Meteo,
+  // rounded to about 10 km, and is never stored.
+  const SKYWORD = (c) => (c === 0 ? 'clear' : c <= 3 ? 'cloudy' : c <= 48 ? 'foggy' : c <= 67 || (c >= 80 && c <= 82) ? 'raining' : c <= 86 ? 'snowing' : 'stormy');
+  $('weather-you').onclick = () => {
+    const out = $('weather-pick');
+    if (!navigator.geolocation) { out.textContent = "Your browser can't share a location."; return; }
+    out.textContent = 'Checking the sky where you are…';
+    navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+      try {
+        const q = new URLSearchParams({ latitude: coords.latitude.toFixed(1), longitude: coords.longitude.toFixed(1), current: 'temperature_2m,weather_code', daily: 'temperature_2m_max', temperature_unit: 'fahrenheit', forecast_days: '1', timezone: 'auto' });
+        const w = await (await fetch(`https://api.open-meteo.com/v1/forecast?${q}`)).json();
+        const code = w.current.weather_code, f = w.current.temperature_2m, kind = kindF(code, (w.daily.temperature_2m_max[0] - 32) * 5 / 9);
+        const picks = (lift(kind).length ? lift(kind) : s.allTop.map((a) => a.name)).slice(0, 3);
+        out.textContent = `Where you are, it's ${Math.round(f)}°F and ${SKYWORD(code)}. On days like this, I'd put on ${list3(picks)}.`;
+      } catch { out.textContent = "I couldn't reach the weather just now. Try again in a minute."; }
+    }, () => { out.textContent = 'No problem. Your location stays with you.'; }, { maximumAge: 6e5, timeout: 10000 });
+  };
   const svg = $('weather-plate').firstChild;
   let shown = -1;
   scrub['scene-weather'] = (p) => {
