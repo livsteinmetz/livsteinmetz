@@ -78,6 +78,19 @@
             "value": "noindex"
           }
         ]
+      },
+      {
+        "source": "/l/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "private, max-age=300"
+          }
+        ]
       }
     ]
   }

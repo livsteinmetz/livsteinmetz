@@ -2,7 +2,7 @@
 // Firestore rules decide who can save, so nothing here is a secret.
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { doc, getDoc, getFirestore, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const app = initializeApp({
   apiKey: 'AIzaSyAuAgrSYSQl90t335zyZAWSAHY7FyqYPZs',
@@ -11,7 +11,7 @@ const app = initializeApp({
   appId: '1:823349684883:web:7057865e07bc2fb0cebb66',
 });
 const auth = getAuth(app);
-const ref = doc(getFirestore(app), 'site', 'settings');
+const db = getFirestore(app), ref = doc(db, 'site', 'settings');
 const $ = (id) => document.getElementById(id);
 const sections = JSON.parse($('items').textContent);
 const status = (text) => { $('status').textContent = text; };
@@ -82,4 +82,8 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) return;
   const snap = await getDoc(ref).catch(() => null);
   render({ hidden: [], listening: '', playlists: [], ...(snap?.exists() ? JSON.parse(snap.data().json) : {}) });
+  try {
+    const seen = await getDocs(query(collection(db, 'views'), orderBy('at', 'desc'), limit(200)));
+    $('views').innerHTML = seen.docs.map((d) => { const v = d.data(); const li = document.createElement('li'); li.textContent = `${v.email}, ${v.at?.toDate?.().toLocaleString() || ''}`; return li.outerHTML; }).join('') || '<li>No one yet.</li>';
+  } catch (e) { $('views').innerHTML = `<li>Couldn't load the list (${e.code}). Check the Firestore rule for views.</li>`; }
 });

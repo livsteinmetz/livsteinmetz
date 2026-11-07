@@ -32,6 +32,8 @@ jobs:
       - run: node scripts/fetch-world.mjs
         continue-on-error: true
       - run: node scripts/build.mjs
+        env:
+          LISTENING_PASSCODE: ${{ secrets.LISTENING_PASSCODE }}
       - run: node scripts/check-art.mjs
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

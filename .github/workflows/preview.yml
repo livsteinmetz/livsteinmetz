@@ -31,6 +31,7 @@ jobs:
         continue-on-error: true
       - run: node scripts/build.mjs
         env:
+          LISTENING_PASSCODE: ${{ secrets.LISTENING_PASSCODE }}
           PREVIEW: '1'
       - run: node scripts/check-art.mjs
       - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/story.mjs && (node scripts/qa/screens.mjs || true)
