@@ -215,7 +215,7 @@ function drawWeather(s, me) {
   $('weather-plate').innerHTML = `<svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Each day of listening, by that day's high temperature" data-focus="all">${hours}${axis}${dots}</svg>`;
   const by = (k) => days.filter((d) => d.kind === k), mean = (a) => avg(a.map((d) => d.m));
   const all = mean(days), dry = mean(days.filter((d) => d.kind !== 'rain' && d.kind !== 'snow'));
-  const lift = (k) => weather?.lift?.[k] || [];
+  const lift = (k) => PICKS[k] || weather?.lift?.[k] || [];
   const bands = {}; days.forEach((d) => { const b = Math.floor(d.f / 10) * 10; (bands[b] ||= []).push(d.m); });
   const sweet = Object.entries(bands).filter(([, v]) => v.length >= 20).sort((p, q) => avg(q[1]) - avg(p[1]))[0];
   // A difference counts only if it is large and unlikely to be chance (Welch's t above 2).

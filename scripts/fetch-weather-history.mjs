@@ -35,10 +35,11 @@ minutes.forEach((m, i) => {
   g.days++; counted++;
   (tops[i] || []).forEach((a) => { g.c[a] = (g.c[a] || 0) + 1; base[a] = (base[a] || 0) + 1; });
 });
+const NEVER = new Set([]); // artists Olivia keeps off the site
 const lift = {};
 for (const [k, g] of Object.entries(groups)) {
   // Only artists who clearly show up more: at least 8 such days and half again their usual rate.
-  lift[k] = Object.entries(g.c).filter(([, v]) => v >= Math.max(8, g.days * 0.03)).map(([a, v]) => [names[a], (v / g.days) / (base[a] / counted)]).filter(([, r]) => r >= 1.5).sort((p, q) => q[1] - p[1]).slice(0, 3).map(([a]) => a);
+  lift[k] = Object.entries(g.c).filter(([, v]) => v >= Math.max(8, g.days * 0.03)).map(([a, v]) => [names[a], (v / g.days) / (base[a] / counted)]).filter(([a, r]) => r >= 1.5 && !NEVER.has(a)).sort((p, q) => q[1] - p[1]).slice(0, 3).map(([a]) => a);
 }
 for (const k of ['rain', 'cold']) { const g = groups[k]; if (g) console.log('Weather candidates', k, JSON.stringify(Object.entries(g.c).filter(([, v]) => v >= 5).map(([a, v]) => [names[a], +((v / g.days) / (base[a] / counted)).toFixed(2), v]).sort((p, q) => q[1] - p[1]).slice(0, 10))); }
 if (Object.keys(out).length) out.lift = lift;
