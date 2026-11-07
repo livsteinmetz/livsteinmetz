@@ -7,13 +7,14 @@ const COLORS = ['#ffffff', '#f6d44f', '#fff27a', '#16246e', '#000000', '#c9321a'
 const b = await chromium.launch(); const g = await b.newPage({ viewport: { width: 1200, height: 900 } });
 g.on('pageerror', (e) => console.log('study ERR', e.message));
 await g.goto('http://localhost:4179/study'); await g.waitForFunction(() => document.documentElement.dataset.ready === '1', null, { timeout: 30000 });
+await g.addStyleTag({ content: '.pickbar{display:none !important}' });
 const ids = await g.$$eval('.study .cover', (l) => l.map((c) => c.dataset.id));
 const result = {};
 for (const id of ids) {
   const cv = g.locator(`.cover[data-id="${id}"]`);
   await cv.scrollIntoViewIfNeeded();
-  await g.waitForFunction((i) => [...document.querySelector(`.cover[data-id="${i}"]`).querySelectorAll('img')].every((m) => m.complete), id, { timeout: 20000 }).catch(() => console.log('study slow tiles', id));
-  await g.waitForTimeout(400);
+  await g.waitForFunction((i) => [...document.querySelector(`.cover[data-id="${i}"]`).querySelectorAll('img')].filter((m, _, l) => l.length).every((m) => m.complete && m.naturalWidth) && document.querySelector(`.cover[data-id="${i}"]`).querySelectorAll('img').length + (document.querySelector(`.cover[data-id="${i}"]`).classList.contains('flat') ? 1 : 0) > 0, id, { timeout: 20000 }).catch(() => console.log('study slow tiles', id));
+  await g.waitForTimeout(700);
   let best = null;
   for (const place of ['top', 'bottom']) {
     const box = await g.evaluate(([i, p]) => { const c = document.querySelector(`.cover[data-id="${i}"]`); window.studyLayout(c, p); const svg = c.querySelector('svg'); svg.style.visibility = 'hidden'; const cr = c.getBoundingClientRect(); const rs = [...svg.querySelectorAll('text')].map((t) => t.getBoundingClientRect()); return { rs: rs.map((r) => [r.left - cr.left, r.top - cr.top, r.width, r.height]) }; }, [id, place]);
@@ -37,5 +38,6 @@ fs.writeFileSync('build/study.json', JSON.stringify(result));
 fs.mkdirSync('shots/study', { recursive: true });
 await g.evaluate((m) => { for (const [i, r] of Object.entries(m)) { const c = document.querySelector(`.cover[data-id="${i}"]`); c.closest('.pick').querySelector('.score').textContent = `Contrast ${r.score.toFixed(1)} to 1`; } }, result);
 const rows = await g.$$('.srow');
+await g.addStyleTag({ content: '.pickbar{display:none !important}' });
 for (let i = 0; i < rows.length; i++) await rows[i].screenshot({ path: `shots/study/row${String(i).padStart(2, '0')}.png` });
 await b.close(); srv.close(); process.exit(0);
