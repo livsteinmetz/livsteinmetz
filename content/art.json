@@ -331,5 +331,39 @@
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff"
+ },
+ "magdalen": {
+  "image": "/media/magdalen.jpg",
+  "title": "The Magdalen Reading",
+  "artist": "Rogier van der Weyden",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff",
+  "crop": [
+   0,
+   0,
+   1,
+   1
+  ],
+  "w": 1,
+  "h": 1,
+  "barnes": 0
+ },
+ "feminine": {
+  "image": "/media/feminine.jpg",
+  "title": "The Eternal Feminine",
+  "artist": "Paul Cézanne",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff",
+  "crop": [
+   0,
+   0,
+   1,
+   1
+  ],
+  "w": 1,
+  "h": 1,
+  "barnes": 0
  }
 }
