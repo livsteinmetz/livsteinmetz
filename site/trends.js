@@ -571,6 +571,9 @@ else {
     $('gate-status').textContent = '';
     open(data);
   };
+  // Olivia's sign-in only appears at /listening/trends#olivia.
+  const showMe = () => { $('gate-me-row').hidden = location.hash !== '#olivia'; };
+  showMe(); addEventListener('hashchange', showMe);
   // Olivia signs in with Google and the page fetches her passcode from Firestore.
   $('gate-me').onclick = async () => {
     $('gate-status').textContent = 'Signing in…';
