@@ -82,6 +82,9 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) return;
   const snap = await getDoc(ref).catch(() => null);
   render({ hidden: [], listening: '', playlists: [], ...(snap?.exists() ? JSON.parse(snap.data().json) : {}) });
+  const secret = await getDoc(doc(db, 'secret', 'listening')).catch(() => null);
+  $('passcode').value = secret?.exists() ? secret.data().code || '' : '';
+  $('save-code').onclick = async () => { try { await setDoc(doc(db, 'secret', 'listening'), { code: $('passcode').value.trim() }); status('Passcode saved for your sign-in. Keep it the same as the LISTENING_PASSCODE secret in GitHub.'); } catch (e) { status(`Couldn't save the passcode: ${e.code}`); } };
   try {
     const seen = await getDocs(query(collection(db, 'views'), orderBy('at', 'desc'), limit(200)));
     $('views').innerHTML = seen.docs.map((d) => { const v = d.data(); const li = document.createElement('li'); li.textContent = `${v.email}, ${v.at?.toDate?.().toLocaleString() || ''}`; return li.outerHTML; }).join('') || '<li>No one yet.</li>';

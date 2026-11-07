@@ -3,6 +3,12 @@
 import { summarize } from './summarize.js';
 const library = JSON.parse(document.getElementById('library').textContent);
 // Weather picks Olivia chose, by kind of day, plus one set for after dark.
+const CONFIG = {
+  apiKey: 'AIzaSyAuAgrSYSQl90t335zyZAWSAHY7FyqYPZs',
+  authDomain: 'livsteinmetz-bb868.firebaseapp.com',
+  projectId: 'livsteinmetz-bb868',
+  appId: '1:823349684883:web:7057865e07bc2fb0cebb66',
+}; // Firebase web config, public by design
 const PICKS = JSON.parse(document.getElementById('picks').textContent) || {};
 
 const $ = (id) => document.getElementById(id);
@@ -529,6 +535,22 @@ else {
     logView(email);
     $('gate-status').textContent = '';
     open(data);
+  };
+  // Olivia signs in with Google and the page fetches her passcode from Firestore.
+  $('gate-me').onclick = async () => {
+    $('gate-status').textContent = 'Signing in…';
+    try {
+      const v = 'https://www.gstatic.com/firebasejs/10.12.2/';
+      const [{ initializeApp }, { getAuth, GoogleAuthProvider, signInWithPopup }, { doc, getDoc, getFirestore }] = await Promise.all([import(`${v}firebase-app.js`), import(`${v}firebase-auth.js`), import(`${v}firebase-firestore.js`)]);
+      const app = initializeApp(CONFIG, 'listening');
+      await signInWithPopup(getAuth(app), new GoogleAuthProvider());
+      const snap = await getDoc(doc(getFirestore(app), 'secret', 'listening'));
+      const data = snap.exists() ? await load(snap.data().code) : null;
+      if (!data) { $('gate-status').textContent = 'Signed in, but no matching passcode is saved. Add it in /admin.'; return; }
+      store.set('listening-code', snap.data().code);
+      $('gate-status').textContent = '';
+      open(data);
+    } catch (e) { $('gate-status').textContent = e.code === 'permission-denied' ? 'This page only opens this way for Olivia.' : `Couldn't sign in (${e.code || e.message}).`; }
   };
 }
 tick();
