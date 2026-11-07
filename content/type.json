@@ -143,28 +143,6 @@
    }
   ]
  },
- "double-bass": {
-  "vb": "0 0 300 400",
-  "fill": "#f6d44f",
-  "t": [
-   {
-    "text": "Double",
-    "x": 18,
-    "y": 54,
-    "size": 44,
-    "font": "Bodoni Moda",
-    "wt": 500
-   },
-   {
-    "text": "Bass",
-    "x": 18,
-    "y": 98,
-    "size": 44,
-    "font": "Bodoni Moda",
-    "wt": 500
-   }
-  ]
- },
  "commerce": {
   "vb": "0 0 300 400",
   "fill": "#66c4ff",

@@ -33,9 +33,9 @@ const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
     ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteMat[n.slug] || noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'bassist', font: 'grotesk', mat: '#c8d6ec', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
-    { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', art: 'feminine', font: 'gothic', mat: '#c9321a', align: 'center', width: .7, lines: ['Listening'], color: '#ffffff', href: '/listening' },
-    { slug: 'reading', title: 'Reading', tag: 'on my nightstand', date: 'Goodreads', art: 'magdalen', font: 'gothic', mat: '#c8d6ec', align: 'center', width: .7, lines: ['Reading'], color: '#ffffff', href: '/#reading' },
+    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'bassist', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Double', 'Bass'], color: '#ffffff', href: '/bass' },
+    { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', art: 'feminine', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Listening'], color: '#ffffff', href: '/listening' },
+    { slug: 'reading', title: 'Reading', tag: 'on my nightstand', date: 'Goodreads', art: 'magdalen', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Reading'], color: '#ffffff', href: '/#reading' },
   ],
 };
 const covers = [...side.a, ...side.b];
