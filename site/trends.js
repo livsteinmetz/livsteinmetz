@@ -307,6 +307,8 @@ function drawGlobe(s, me) {
   const order = [home, ...places.filter((p) => p !== home)];
   const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.transit ? 'Always on my way somewhere else.' : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
   steps.push({ at: [-30, 45], line: `${order.length - 1} countries away from home, and the music came along.`, sub: '' });
+  // Give each stop about a screen and a quarter of scroll, so the turns read as smooth.
+  sceneEl.style.height = `${steps.length * 125 + 60}svh`;
   const project = (lon, lat, l0, p0, R, cx, cy) => {
     const L = (lon - l0) * rad, P = lat * rad, P0 = p0 * rad, cosc = Math.sin(P0) * Math.sin(P) + Math.cos(P0) * Math.cos(P) * Math.cos(L);
     let x = Math.cos(P) * Math.sin(L), y = Math.cos(P0) * Math.sin(P) - Math.sin(P0) * Math.cos(P) * Math.cos(L);
@@ -350,8 +352,8 @@ function drawGlobe(s, me) {
   };
   let last = [PLACES[home.cc][0], PLACES[home.cc][1] * 0.7, 0, 0];
   scrub['scene-places'] = (p) => {
-    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999)), local = Math.min(1, (p * steps.length - k) / 0.5);
-    const from = steps[Math.max(0, k - 1)].at, to = steps[k].at, e = k ? (1 - Math.cos(Math.PI * local)) / 2 : 1;
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999)), local = Math.min(1, (p * steps.length - k) / 0.6);
+    const from = steps[Math.max(0, k - 1)].at, to = steps[k].at, e = k ? (1 - Math.cos(Math.PI * Math.min(1, local / 1.2))) / 2 : 1;
     let dl = to[0] - from[0]; if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
     last = [from[0] + dl * e, (from[1] + (to[1] - from[1]) * e) * 0.7, k, local];
     render(...last);
