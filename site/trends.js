@@ -553,8 +553,11 @@ const load = async (code) => { const r = await fetch(`/l/${await keyFor(code)}.j
 const logView = (email) => fetch('https://firestore.googleapis.com/v1/projects/livsteinmetz-bb868/databases/(default)/documents/views', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { email: { stringValue: email.slice(0, 200) }, at: { timestampValue: new Date().toISOString() } } }) }).catch(() => {});
 const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* fine */ } } };
 let mine = null;
-const go = () => $('scene-river').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+const go = () => ($('sample-note').hidden ? $('deck') : $('sample-note')).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 const open = (data) => { weather = data.weather; world = data.world; mine = data.history; $('gate').hidden = true; draw(mine, 'mine'); $('reset').hidden = false; };
+// Always open at the top, even if the browser remembers an old scroll spot.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (!location.hash) scrollTo(0, 0);
 const saved = store.get('listening-code');
 const first = saved ? await load(saved) : null;
 if (first) open(first);
