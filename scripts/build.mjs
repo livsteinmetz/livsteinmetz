@@ -183,7 +183,14 @@ for (const [k, a] of Object.entries(art)) {
 }
 wall.forEach((a) => { const id = `${SITE}/iiif/wall-${a.id}.json`; writeFileSync(`build/iiif/wall-${a.id}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: [`${a.museum}, public domain`] } }, rights: 'https://creativecommons.org/publicdomain/mark/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body: { id: a.web.startsWith('/') ? `${SITE}${a.web}` : a.web, type: 'Image', format: 'image/jpeg' } }] }] }] }, null, 1)); });
 const urls = Object.keys(pages).filter((f) => f !== '404.html' && !f.startsWith('listening/send/')).map((f) => `${SITE}/${f.replace(/(index)?\.html$/, '')}`);
-writeFileSync('build/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${u}</loc></url>`).join('')}</urlset>`);
+// The last commit date, so the sitemap only changes when the site does.
+let TODAY = new Date().toISOString().slice(0, 10);
+try { TODAY = (await import('node:child_process')).execSync('git log -1 --format=%cs').toString().trim() || TODAY; } catch (e) { /* outside git, today will do */ }
+writeFileSync('build/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('')}</urlset>`);
+// IndexNow lets Bing and others pick up new pages right after a deploy.
+const INDEXNOW = 'eafeefb65a95ca4d68c00bd6ded45f5c';
+writeFileSync(`build/${INDEXNOW}.txt`, INDEXNOW);
+writeFileSync('build/indexnow.json', JSON.stringify({ host: 'livsteinmetz.com', key: INDEXNOW, keyLocation: `${SITE}/${INDEXNOW}.txt`, urlList: urls }));
 
 // Admin lives outside the sitemap and asks search engines to skip it.
 const adminItems = [
