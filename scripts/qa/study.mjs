@@ -51,6 +51,8 @@ fs.writeFileSync('build/study.json', JSON.stringify(result));
 fs.mkdirSync('shots/study', { recursive: true });
 await g.evaluate((m) => window.studyApply(m), result);
 await g.addStyleTag({ content: '.pick[hidden]{display:none !important}' });
+const layout = await g.$$eval('.study .cover', (cs) => cs.map((c) => ({ id: c.dataset.id, fill: c.querySelector('text.h').getAttribute('fill'), place: c.dataset.place, t: [...c.querySelectorAll('text.h')].map((t) => ({ text: t.textContent, x: +t.getAttribute('x'), y: +t.getAttribute('y'), size: +t.getAttribute('font-size'), font: t.getAttribute('font-family'), wt: +t.getAttribute('font-weight'), stretch: t.getAttribute('font-stretch'), ls: t.getAttribute('letter-spacing') })) })));
+fs.mkdirSync('shots/study', { recursive: true }); fs.writeFileSync('shots/study/layout.json', JSON.stringify(layout, null, 1));
 const rows = await g.$$('.srow');
 await g.addStyleTag({ content: '.pickbar{display:none !important}' });
 for (let i = 0; i < rows.length; i++) await rows[i].screenshot({ path: `shots/study/row${String(i).padStart(2, '0')}.png` });

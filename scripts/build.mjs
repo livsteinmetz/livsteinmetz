@@ -283,9 +283,21 @@ if (process.env.PREVIEW) {
   const ks = 'ABCDEFGHIJKLMN';
   const tours = [['goldfish'], ['goldfish2', ', another crop'], ['peaches2'], ['figs2'], ['tulips2', ', another crop'], ['walk2', ', left side'], ['walk3', ', right side'], ['cassatt'], ['eggs2']];
   const ovor = [['cassatt2', ', close crop'], ['conf2', ', left side'], ['conf3', ', right side'], ['dej2', ', top'], ['dej3', ', bottom'], ['figs'], ['eggs'], ['peaches'], ['fieldflowers']];
+  const fin = (slug, title, label, key, hex, lines, o) => [slug, title, [v('A', label, key, [`fix:${hex}`], lines, o)]];
   const ROWS = [
-    ['tours', 'Tours and Eye Spy', [v('A', 'Colored type on Girl with a Polka-Dot Blouse', 'polkadot', ['color'], L.tours), ...tours.map(([key, n = ''], i) => pref(ks[i + 1], key, L.tours, undefined, n))]],
-    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Colored type on Jeanne Hébuterne', 'jeanne', ['color'], L.ovor, CO), ...ovor.map(([key, n = ''], i) => pref(ks[i + 1], key, L.ovor, CO, n))]],
+    fin('visual-experience-platform', 'Visual Experience Platform', 'Green on The Postman', 'postman', '#8dff72', L.vxp),
+    fin('focus', 'Barnes Focus', 'White on Models', 'models', '#ffffff', L.focus),
+    fin('calder-gardens', 'Calder Gardens', 'Black on butter', null, '#000000', L.calder),
+    fin('membership', 'Membership', 'Yellow on Chinese Casket', 's-casket', '#fff27a', L.mem),
+    fin('commerce', 'Commerce', 'Sky on The Card Players', 'cards', '#66c4ff', L.com),
+    fin('deep-zoom', 'Deep Zoom', 'Lilac on Monkeys and Parrot', 'jungle', '#efb4f7', L.dz),
+    fin('online-collection', 'Online Collection', 'White on The Large Bathers', 'bathers', '#ffffff', L.oc),
+    fin('tours', 'Tours and Eye Spy', 'Yellow on Studio with Goldfish', 's-goldfish2', '#fff27a', L.tours),
+    fin('one-visitor-one-record', 'One Visitor, One Record', 'White on Pomegranate and Figs', 's-figs', '#ffffff', L.ovor, CO),
+    fin('scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', 'Orange on Sleeping Shepherd', 'shepherd', '#ef8f35', SC, CO),
+    fin('one-codebase-two-brands', 'One Codebase, Two Brands', 'White on Beatrice', 'beatrice', '#ffffff', L.ocb),
+    fin('designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', 'White on Tarring the Boat', 'boat', '#ffffff', L.cl),
+    fin('why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', 'White on Annunciation', 'annunciation', '#ffffff', L.dp),
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -294,7 +306,7 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Cover study, round six</h1><p>The eleven other cards are set. These two rows try colored type on the Modigliani, then works from your desktop and by women that aren't already on another card, some with new crops. Frames match the type, and only covers that read at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Final covers</h1><p>All thirteen picks together.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
