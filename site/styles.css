@@ -90,7 +90,7 @@ h3.ctitle{margin:0;font-weight:inherit}
 
 .lookbox{border:0;padding:0;background:#fff;max-width:min(92vw,1100px)}.lookbox::backdrop{background:#fff}.lookbox img{display:block;max-width:100%;max-height:82vh;margin:auto}.lookbox p{margin:10px 0 0;font-size:.9375rem}
 
-.still.trends-card{aspect-ratio:1;position:relative;background:#16246e}.trends-card img{width:100%;height:100%;object-fit:cover;object-position:50% 75%}.trends-card span{position:absolute;right:.35em;bottom:.45em;color:#f6d44f;font:700 clamp(40px,6vw,64px)/1 Archivo,Arial,sans-serif}
+.still.trends-card{aspect-ratio:1;position:relative;background:#16246e}.trends-card img{width:100%;height:100%;object-fit:cover;object-position:50% 75%}.trends-card span{position:absolute;right:.3em;bottom:.3em;color:#f6d44f;font:400 clamp(52px,8vw,84px)/1 "Pirata One",Georgia,serif}
 .play iframe{scroll-margin-top:24px}
 
 .scroll{overflow-x:auto}.scroll svg{min-width:720px}.plate figure{margin:0}
