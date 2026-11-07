@@ -170,3 +170,5 @@ h3.ctitle{margin:0;font-weight:inherit}
 .globe-play{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}.globe-play button{font:inherit;font-size:.9375rem;border:1px solid #000;background:#fff;padding:6px 14px;cursor:pointer}.globe-play button[aria-pressed="true"]{background:#16246e;color:#fff}
 #weather-pick{max-width:34em;margin:8px auto 0}
 .scene.static.how{height:auto;padding:12vh 16px}.how-inner{max-width:36em;margin:0 auto}.how-inner h2{font-size:clamp(28px,4vw,48px);margin:0 0 .5em}.how-inner ul{padding-left:1.1em}.how-inner li{margin:.5em 0}.how-inner li::marker{color:#c9321a}
+#globe-plate{position:relative}.globe-sound{position:absolute;right:16px;bottom:16px;z-index:2;font:inherit;font-size:.8125rem;line-height:1;border:1px solid #16246e;border-radius:999px;background:#fff;color:#16246e;padding:7px 12px;cursor:pointer}.globe-sound[aria-pressed="true"]{background:#16246e;color:#fff}.globe-sound:focus-visible{outline:2px solid #c9321a;outline-offset:2px}
+#globe-song{font-size:.875rem;color:#555}

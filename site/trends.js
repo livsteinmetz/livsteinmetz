@@ -303,7 +303,7 @@ function drawGlobe(s, me) {
   const canvas = $('globe'), ctx = canvas.getContext('2d'), audio = new Audio(), btn = $('globe-sound');
   audio.volume = 0.5;
   let sound = false, playing = '';
-  btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Play the music'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
+  btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Sound off'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
   const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.artists.length ? `On repeat: ${list3(p.artists)}.` : 'Spotify stayed quiet on this trip.' }));
