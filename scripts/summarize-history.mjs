@@ -13,8 +13,9 @@ for (const t of trips) {
   const inTrip = rows.filter((r) => r.ts && r.ts.slice(0, 10) >= t.from && r.ts.slice(0, 10) <= t.to);
   const sub = summarize(inTrip.map((r) => ({ ...r, conn_country: t.cc })));
   const place = sub.places?.find((p) => p.cc === t.cc);
-  if (!place) { console.warn(`No plays between ${t.from} and ${t.to} for ${t.cc}`); continue; }
-  s.places = s.places.filter((p) => p.cc !== t.cc).concat(place).sort((a, b) => (a.first < b.first ? -1 : 1));
+  // A trip with no Spotify still gets its dot.
+  const keep = place || { cc: t.cc, first: t.from, last: t.to, artists: [], song: null };
+  s.places = s.places.filter((p) => p.cc !== t.cc).concat(keep).sort((a, b) => (a.first < b.first ? -1 : 1));
 }
 writeFileSync('content/listening-history.json', `${JSON.stringify(s)}\n`);
 console.log(`${rows.length} plays, ${s.hours} hours, ${s.playedDays} days, streak ${s.streak.len}, river: ${s.river.map((a) => a.name).join(', ')}`);

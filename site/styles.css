@@ -169,3 +169,4 @@ h3.ctitle{margin:0;font-weight:inherit}
 #globe-plate{width:100%}#globe{display:block;max-width:100%;max-height:100%}
 .globe-play{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}.globe-play button{font:inherit;font-size:.9375rem;border:1px solid #000;background:#fff;padding:6px 14px;cursor:pointer}.globe-play button[aria-pressed="true"]{background:#16246e;color:#fff}
 #weather-pick{max-width:34em;margin:8px auto 0}
+.scene.static.how{height:auto;padding:12vh 16px}.how-inner{max-width:36em;margin:0 auto}.how-inner h2{font-size:clamp(28px,4vw,48px);margin:0 0 .5em}.how-inner ul{padding-left:1.1em}.how-inner li{margin:.5em 0}.how-inner li::marker{color:#c9321a}

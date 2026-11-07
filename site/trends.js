@@ -306,7 +306,7 @@ function drawGlobe(s, me) {
   btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Play the music'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
-  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: `On repeat: ${list3(p.artists)}.` }));
+  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.artists.length ? `On repeat: ${list3(p.artists)}.` : 'Spotify stayed quiet on this trip.' }));
   steps.push({ at: [-30, 45], line: `${order.length - 1} countries away from home, and the music came along.`, sub: '' });
   const project = (lon, lat, l0, p0, R, cx, cy) => {
     const L = (lon - l0) * rad, P = lat * rad, P0 = p0 * rad, cosc = Math.sin(P0) * Math.sin(P) + Math.cos(P0) * Math.cos(P) * Math.cos(L);
