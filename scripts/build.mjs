@@ -15,7 +15,7 @@ const notes = [...feed, ...seed.filter((s) => !feed.some((f) => f.url === s.url)
 const SITE = 'https://livsteinmetz.com';
 // The address is put together in the browser, so scrapers reading the HTML don't get it.
 const mail = (label, subject = '') => `<a href="/about" data-mail="olivia.r.steinmetz|gmail.com"${subject ? ` data-subject="${subject}"` : ''}>${label}</a>`;
-const FONTS = 'https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wdth,wght@62..100,700..800&family=Libre+Franklin:wght@800&family=Bodoni+Moda:opsz,wght@6..96,500&family=Fraunces:opsz,wght@144,500&family=Instrument+Serif:ital@1&family=Jost:wght@700&family=Marcellus&family=Pirata+One&family=Schibsted+Grotesk:wght@400;500&display=swap';
 const V = Date.now().toString(36);
 const STATEMENT = "I lead digital product, experience, and strategy for cultural organizations, designing and building at the intersection of the arts and tech. Also a double bassist.";
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -25,13 +25,14 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 const day = Math.floor(Date.now() / 864e5);
 const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
-const noteArt = { 'scaling-the-visual-experience-platform': 'joy', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'boat', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
+const noteArt = { 'scaling-the-visual-experience-platform': 'shepherd', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'boat', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
 
+const noteMat = { 'scaling-the-visual-experience-platform': '#ef8f35', 'one-codebase-two-brands': '#ffffff', 'designing-and-building-a-platform-for-close-looking': '#ffffff', 'why-were-writing-about-digital-work-again-at-the-barnes': '#ffffff' };
 const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'left'], ['didone', '#66c4ff', 'left'], ['geo', '#efa090', 'center']];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
-    ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
+    ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteMat[n.slug] || noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
     { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'bassist', font: 'grotesk', mat: '#c8d6ec', align: 'spread', lines: ['DOU BLE', 'BA SS'], href: '/bass' },
     { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', art: 'feminine', font: 'gothic', mat: '#c9321a', align: 'center', width: .7, lines: ['Listening'], color: '#ffffff', href: '/listening' },
     { slug: 'reading', title: 'Reading', tag: 'on my nightstand', date: 'Goodreads', art: 'magdalen', font: 'gothic', mat: '#c8d6ec', align: 'center', width: .7, lines: ['Reading'], color: '#ffffff', href: '/#reading' },

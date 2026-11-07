@@ -57,7 +57,7 @@
   ],
   "align": "center",
   "width": 0.74,
-  "mat": "#fff27a",
+  "mat": "#8dff72",
   "reads": [
    {
     "title": "Designing and Building a Platform for Close Looking",
@@ -98,7 +98,7 @@
   ],
   "align": "left",
   "width": 0.8,
-  "mat": "#ef8f35",
+  "mat": "#ffffff",
   "reads": [
    {
     "title": "Digital Product as Institutional Practice at the Barnes Foundation",
@@ -113,7 +113,7 @@
   "date": "2025",
   "font": "compressed",
   "color": "#000000",
-  "flat": "#dcdcdc",
+  "flat": "#f6d44f",
   "short": "A whole digital ecosystem for a brand-new institution",
   "role": "Product and front-end development",
   "org": "Calder Gardens",
@@ -137,7 +137,7 @@
   ],
   "align": "center",
   "width": 0.86,
-  "mat": "#f6d44f",
+  "mat": "#000000",
   "reads": [
    {
     "title": "One Codebase, Two Brands",
@@ -150,7 +150,7 @@
   "title": "Membership",
   "tag": "a renewal flow",
   "date": "2021 to now",
-  "art": "bouquet",
+  "art": "casket",
   "font": "soft",
   "short": "A portal, digital cards, and renewals people finish",
   "role": "Product, UX/UI design, and front-end development",
@@ -169,7 +169,7 @@
   ],
   "align": "center",
   "width": 0.8,
-  "mat": "#b15e8f",
+  "mat": "#fff27a",
   "reads": [
    {
     "title": "Digital Product as Institutional Practice at the Barnes Foundation",
@@ -235,7 +235,7 @@
   ],
   "align": "center",
   "width": 0.62,
-  "mat": "#fff27a",
+  "mat": "#efb4f7",
   "reads": [
    {
     "title": "Designing and Building a Platform for Close Looking",
@@ -273,7 +273,7 @@
   ],
   "align": "center",
   "width": 0.78,
-  "mat": "#c8d6ec"
+  "mat": "#ffffff"
  },
  {
   "slug": "tours",
@@ -298,8 +298,8 @@
    "EYE SPY"
   ],
   "align": "left",
-  "mat": "#efa090",
-  "art": "eyes"
+  "mat": "#fff27a",
+  "art": "goldfish"
  },
  {
   "slug": "one-visitor-one-record",
@@ -319,7 +319,7 @@
    "ONE RECORD"
   ],
   "align": "left",
-  "mat": "#c9321a",
-  "art": "riffian"
+  "mat": "#ffffff",
+  "art": "figs"
  }
 ]

@@ -1,147 +1,147 @@
 {
  "visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#e64aa6",
+  "fill": "#8dff72",
   "t": [
    {
-    "text": "VISUAL EXPERIENCE",
+    "text": "Visual",
     "x": 18,
-    "y": 52,
-    "size": 37.6,
-    "font": "Anton",
-    "wt": 400
+    "y": 278.2,
+    "size": 49.9,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "PLATFORM",
+    "text": "Experience",
     "x": 18,
-    "y": 122,
-    "size": 68.6,
-    "font": "Anton",
-    "wt": 400
+    "y": 327.1,
+    "size": 49.9,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
+   },
+   {
+    "text": "Platform",
+    "x": 18,
+    "y": 376,
+    "size": 49.9,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "focus": {
   "vb": "0 0 300 400",
-  "fill": "#f6d44f",
+  "fill": "#ffffff",
   "t": [
    {
     "text": "Barnes",
     "x": 18,
-    "y": 54,
-    "size": 42,
-    "font": "Abril Fatface",
-    "wt": 400,
-    "fill": "#fff"
+    "y": 78.2,
+    "size": 78.7,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Focus",
     "x": 18,
-    "y": 386,
-    "size": 101.3,
-    "font": "Abril Fatface",
-    "wt": 400
+    "y": 155.3,
+    "size": 78.7,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "deep-zoom": {
   "vb": "0 0 300 400",
-  "fill": "#f6d44f",
+  "fill": "#efb4f7",
   "t": [
    {
-    "text": "DEEP",
+    "text": "Deep",
     "x": 18,
-    "y": 98,
-    "size": 103.0,
-    "font": "Jost",
-    "wt": 700
+    "y": 88.1,
+    "size": 92,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "ZOOM",
+    "text": "Zoom",
     "x": 18,
-    "y": 182,
-    "size": 85.1,
-    "font": "Jost",
-    "wt": 700
+    "y": 178.2,
+    "size": 92,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "membership": {
   "vb": "0 0 300 400",
-  "fill": "#8dff72",
+  "fill": "#fff27a",
   "t": [
    {
-    "text": "MEM",
+    "text": "Membership",
     "x": 18,
-    "y": 300,
-    "size": 46,
-    "font": "Archivo",
-    "wt": 700
-   },
-   {
-    "text": "BER",
-    "x": 18,
-    "y": 340,
-    "size": 46,
-    "font": "Archivo",
-    "wt": 700
-   },
-   {
-    "text": "SHIP",
-    "x": 18,
-    "y": 380,
-    "size": 46,
-    "font": "Archivo",
-    "wt": 700
+    "y": 376,
+    "size": 44.6,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "online-collection": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#ffffff",
   "t": [
    {
     "text": "Online",
     "x": 18,
-    "y": 330,
-    "size": 50,
-    "font": "Marcellus",
-    "wt": 400
+    "y": 321.4,
+    "size": 55.8,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Collection",
     "x": 18,
-    "y": 380,
-    "size": 50,
-    "font": "Marcellus",
-    "wt": 400
+    "y": 376,
+    "size": 55.8,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "calder-gardens": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#000000",
   "t": [
    {
     "text": "Calder",
-    "x": 24,
-    "y": 232,
-    "size": 55.8,
-    "font": "Archivo",
-    "wt": 700,
-    "extra": "transform=\"skewY(-18)\""
+    "x": 18,
+    "y": 69.4,
+    "size": 66.8,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Gardens",
-    "x": 62,
-    "y": 318,
-    "size": 52.2,
-    "font": "Archivo",
-    "wt": 700,
-    "extra": "transform=\"skewY(-18)\""
+    "x": 18,
+    "y": 134.9,
+    "size": 66.8,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
-  ],
-  "under": "<rect x=\"-10\" y=\"150\" width=\"340\" height=\"200\" fill=\"#000\" transform=\"skewY(-18)\"/>"
+  ]
  },
  "double-bass": {
   "vb": "0 0 300 400",
@@ -165,208 +165,216 @@
    }
   ]
  },
- "one-codebase": {
-  "fill": "#fff27a",
-  "t": [
-   [
-    "ONE",
-    12,
-    54,
-    74,
-    46,
-    "Fraunces",
-    500
-   ],
-   [
-    "CODEBASE",
-    12,
-    94,
-    200,
-    38,
-    "Fraunces",
-    500
-   ],
-   [
-    "TWO",
-    202,
-    346,
-    74,
-    46,
-    "Fraunces",
-    500
-   ],
-   [
-    "BRANDS",
-    76,
-    392,
-    200,
-    38,
-    "Fraunces",
-    500
-   ]
-  ]
- },
  "commerce": {
   "vb": "0 0 300 400",
-  "fill": "#f6d44f",
+  "fill": "#66c4ff",
   "t": [
    {
     "text": "Commerce",
     "x": 18,
-    "y": 384,
-    "size": 52.8,
-    "font": "Abril Fatface",
-    "wt": 400
+    "y": 376,
+    "size": 51.1,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "tours": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#fff27a",
   "t": [
    {
-    "text": "TOURS &amp; EYE SPY",
+    "text": "Tours and",
     "x": 18,
-    "y": 382,
-    "size": 42.8,
-    "font": "Anton",
-    "wt": 400
+    "y": 319.1,
+    "size": 58.1,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
+   },
+   {
+    "text": "Eye Spy",
+    "x": 18,
+    "y": 376,
+    "size": 58.1,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "one-visitor-one-record": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#ffffff",
   "t": [
    {
-    "text": "One Visitor,",
+    "text": "ONE VISITOR,",
     "x": 18,
-    "y": 344,
-    "size": 40,
-    "font": "Fraunces",
-    "wt": 600
+    "y": 61.8,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "One Record",
+    "text": "ONE RECORD",
     "x": 18,
-    "y": 386,
-    "size": 40,
-    "font": "Fraunces",
-    "wt": 600
+    "y": 113.7,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    }
   ]
  },
  "scaling-the-visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#16246e",
+  "fill": "#ef8f35",
   "t": [
    {
-    "text": "Scaling the",
+    "text": "SCALING THE",
     "x": 18,
-    "y": 50,
-    "size": 42,
-    "font": "Jost",
-    "wt": 700
+    "y": 220.3,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Visual",
+    "text": "VISUAL",
     "x": 18,
-    "y": 92,
-    "size": 42,
-    "font": "Jost",
-    "wt": 700
+    "y": 272.2,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Experience",
+    "text": "EXPERIENCE",
     "x": 18,
-    "y": 134,
-    "size": 42,
-    "font": "Jost",
-    "wt": 700
+    "y": 324.1,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Platform",
+    "text": "PLATFORM",
     "x": 18,
-    "y": 176,
-    "size": 42,
-    "font": "Jost",
-    "wt": 700
+    "y": 376,
+    "size": 56.4,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    }
   ]
  },
  "designing-and-building-a-platform-for-close-looking": {
   "vb": "0 0 300 400",
-  "fill": "#f6d44f",
+  "fill": "#ffffff",
   "t": [
    {
     "text": "Designing and",
-    "x": 104,
-    "y": 124,
-    "size": 26,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "x": 18,
+    "y": 49.3,
+    "size": 39.6,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Building a",
-    "x": 104,
-    "y": 155,
-    "size": 26,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "x": 18,
+    "y": 88.2,
+    "size": 39.6,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Platform for",
-    "x": 104,
-    "y": 186,
-    "size": 26,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "x": 18,
+    "y": 127,
+    "size": 39.6,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Close Looking",
-    "x": 104,
-    "y": 217,
-    "size": 26,
-    "font": "Bodoni Moda",
-    "wt": 500
+    "x": 18,
+    "y": 165.9,
+    "size": 39.6,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "why-were-writing-about-digital-work-again-at-the-barnes": {
   "vb": "0 0 300 400",
-  "fill": "#fff",
+  "fill": "#ffffff",
   "t": [
    {
     "text": "Digital Product",
     "x": 18,
-    "y": 264,
+    "y": 287.7,
     "size": 30,
-    "font": "Fraunces",
-    "wt": 500
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "as Institutional",
     "x": 18,
-    "y": 304,
+    "y": 317.1,
     "size": 30,
-    "font": "Fraunces",
-    "wt": 500
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Practice at the",
     "x": 18,
-    "y": 344,
+    "y": 346.6,
     "size": 30,
-    "font": "Fraunces",
-    "wt": 500
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
     "text": "Barnes Foundation",
     "x": 18,
-    "y": 384,
+    "y": 376,
     "size": 30,
-    "font": "Fraunces",
-    "wt": 500
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
+   }
+  ]
+ },
+ "one-codebase-two-brands": {
+  "vb": "0 0 300 400",
+  "fill": "#ffffff",
+  "t": [
+   {
+    "text": "One Codebase,",
+    "x": 18,
+    "y": 339.2,
+    "size": 37.5,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
+   },
+   {
+    "text": "Two Brands",
+    "x": 18,
+    "y": 376,
+    "size": 37.5,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  }

@@ -365,5 +365,56 @@
   "w": 1,
   "h": 1,
   "barnes": 0
+ },
+ "casket": {
+  "title": "Chinese Casket (Le Coffret chinois)",
+  "artist": "Henri Matisse",
+  "barnes": 5119,
+  "w": 5844,
+  "h": 4756,
+  "crop": [
+   0.264,
+   0.136,
+   0.471,
+   0.772
+  ],
+  "rights": "public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "goldfish": {
+  "title": "Studio with Goldfish (L'Atelier aux poissons rouges)",
+  "artist": "Henri Matisse",
+  "barnes": 5780,
+  "w": 5173,
+  "h": 6044,
+  "crop": [
+   0.037,
+   0.3,
+   0.526,
+   0.6
+  ],
+  "rights": "public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
+ },
+ "figs": {
+  "title": "Pomegranate and Figs (Grenade et figues)",
+  "artist": "Pierre-Auguste Renoir",
+  "barnes": 4721,
+  "w": 6086,
+  "h": 3472,
+  "crop": [
+   0.286,
+   0.0,
+   0.428,
+   1.0
+  ],
+  "rights": "public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }
