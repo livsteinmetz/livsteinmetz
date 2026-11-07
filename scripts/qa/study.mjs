@@ -17,13 +17,13 @@ for (const id of ids) {
   await g.waitForFunction((i) => [...document.querySelector(`.cover[data-id="${i}"]`).querySelectorAll('img')].filter((m, _, l) => l.length).every((m) => m.complete && m.naturalWidth) && document.querySelector(`.cover[data-id="${i}"]`).querySelectorAll('img').length + (document.querySelector(`.cover[data-id="${i}"]`).classList.contains('flat') ? 1 : 0) > 0, id, { timeout: 20000 }).catch(() => console.log('study slow tiles', id));
   await g.waitForTimeout(700);
   let best = null;
-  const modes = await cv.evaluate((c) => c.dataset.modes.split(','));
+  const modes = await cv.evaluate((c) => c.dataset.modes.split(',')); const mat = await cv.evaluate((c) => c.dataset.mat);
   for (const place of ['top', 'bottom']) {
     const groups = await g.evaluate(([i, p]) => { const c = document.querySelector(`.cover[data-id="${i}"]`); window.studyLayout(c, p); const svg = c.querySelector('svg'); svg.style.visibility = 'hidden'; const cr = c.getBoundingClientRect(); const out = []; svg.querySelectorAll('text.h').forEach((t) => { const r = t.getBoundingClientRect(); (out[+t.dataset.g] ||= []).push([r.left - cr.left, r.top - cr.top, r.width, r.height]); }); return out; }, [id, place]);
     const png = (await cv.screenshot()).toString('base64');
     const fills = [], scores = [];
     for (let gi = 0; gi < groups.length; gi++) {
-      const colors = SETS[modes[gi] || modes[0]];
+      const mode = modes[gi] || modes[0]; const colors = mode === 'color' ? [...new Set([mat, ...COLOR])] : SETS[mode];
       const sc = await g.evaluate(async ([src, rs, colors]) => {
         const im = new Image(); im.src = `data:image/png;base64,${src}`; await im.decode();
         const k = im.naturalWidth / document.querySelector('.study .cover').getBoundingClientRect().width;
@@ -35,7 +35,10 @@ for (const id of ids) {
         return colors.map((hex) => { const n = parseInt(hex.slice(1), 16); const lt = L(n >> 16, (n >> 8) & 255, n & 255); const cs = ls.map((lb) => (Math.max(lt, lb) + 0.05) / (Math.min(lt, lb) + 0.05)).sort((p, q) => p - q); return [hex, cs[Math.floor(cs.length * 0.1)]]; });
       }, [png, groups[gi], colors]);
       // A second group takes a different color from the first, so the two voices read apart.
-      const ok = sc.filter(([hex]) => !gi || hex !== fills[0]).sort((p, q) => q[1] - p[1]);
+      const YEL = ['#f6d44f', '#fff27a'];
+      // Colored type matches the frame when it reads, then tries the other colors before falling back to yellow.
+      const rank = ([hex, c]) => mode !== 'color' ? c : (c < 3 ? c - 100 : hex === mat ? 1000 + c : YEL.includes(hex) ? c : 100 + c);
+      const ok = sc.filter(([hex]) => !gi || hex !== fills[0]).sort((p, q) => rank(q) - rank(p));
       fills.push(ok[0][0]); scores.push(ok[0][1]);
     }
     const score = +Math.min(...scores).toFixed(2);
