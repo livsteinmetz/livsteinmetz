@@ -273,20 +273,19 @@ if (process.env.PREVIEW) {
     vxp: VXP, focus: [F('Barnes'), F('Focus')], calder: [F('Calder'), F('Gardens')], mem: [F('Membership')], com: [F('Commerce')], dz: [F('Deep'), F('Zoom')], oc: [F('Online'), F('Collection')], tours: [F('Tours and'), F('Eye Spy')],
     ovor: [C('ONE VISITOR,'), C('ONE RECORD')], sc: SC, ocb: [F('One Codebase,'), F('Two Brands')], cl: [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')], dp: [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')],
   };
+  // Extra crops: a center point and a height, as fractions of the whole painting.
+  const crop2 = (name, base, cx, cy, hf) => { const a = art[`s-${base}`], W = a.w, H = a.h; let ph = hf * H, pw = ph * 0.75; if (pw > W) { pw = W; ph = pw / 0.75; } const x = Math.min(Math.max(0, cx * W - pw / 2), W - pw) / W, y = Math.min(Math.max(0, cy * H - ph / 2), H - ph) / H; art[`s-${name}`] = { ...a, crop: [+x.toFixed(3), +y.toFixed(3), +(pw / W).toFixed(3), +(ph / H).toFixed(3)] }; };
+  crop2('tulips2', 'tulips', 0.5, 0.75, 0.55); crop2('walk2', 'sundaywalk', 0.25, 0.5, 1); crop2('walk3', 'sundaywalk', 0.75, 0.5, 1);
+  crop2('dej2', 'dejeuner', 0.5, 0.35, 0.6); crop2('dej3', 'dejeuner', 0.5, 0.7, 0.6); crop2('goldfish2', 'goldfish', 0.3, 0.6, 0.6);
+  crop2('figs2', 'figs', 0.75, 0.5, 1); crop2('cassatt2', 'cassatt', 0.5, 0.35, 0.6); crop2('conf2', 'confidantes', 0.3, 0.5, 1); crop2('conf3', 'confidantes', 0.7, 0.5, 1);
+  crop2('peaches2', 'peaches', 0.7, 0.5, 1); crop2('eggs2', 'eggs', 0.3, 0.5, 1);
+  const pref = (k, key, lines, o, note = '') => { const a = art[`s-${key}`]; return v(k, `${WOMEN.has(a.artist) ? 'By a woman: ' : 'From your desktop: '}${a.title}, ${a.artist}${note}`, `s-${key}`, ['pref'], lines, o); };
+  const ks = 'ABCDEFGHIJKLMN';
+  const tours = [['goldfish'], ['goldfish2', ', another crop'], ['peaches2'], ['figs2'], ['tulips2', ', another crop'], ['walk2', ', left side'], ['walk3', ', right side'], ['cassatt'], ['eggs2']];
+  const ovor = [['cassatt2', ', close crop'], ['conf2', ', left side'], ['conf3', ', right side'], ['dej2', ', top'], ['dej3', ', bottom'], ['figs'], ['eggs'], ['peaches'], ['fieldflowers']];
   const ROWS = [
-    ['visual-experience-platform', 'Visual Experience Platform', [v('A', 'Your pick: green on The Postman', 'postman', ['fix:#8dff72'], L.vxp), opt('B', 'goldfish', L.vxp), opt('C', 'dejeuner', L.vxp)]],
-    ['focus', 'Barnes Focus', [v('A', 'Your pick: Franklin on Models', 'models', ['mono'], L.focus), opt('B', 'peaches', L.focus), opt('C', 'fieldflowers', L.focus)]],
-    ['calder-gardens', 'Calder Gardens', [v('A', 'Your pick: Franklin on butter', null, ['mono'], L.calder), opt('B', 'yellowrose', L.calder)]],
-    ['membership', 'Membership', [v('A', 'Your pick: green on Bouquet of Flowers', 'bouquet', ['fix:#8dff72'], L.mem), opt('B', 'casket', L.mem), opt('C', 'cassatt', L.mem)]],
-    ['commerce', 'Commerce', [v('A', 'Your pick: sky on The Card Players', 'cards', ['fix:#66c4ff'], L.com), opt('B', 'preserves', L.com), opt('C', 'acoma', L.com)]],
-    ['deep-zoom', 'Deep Zoom', [v('A', 'Your pick: lilac on Monkeys and Parrot', 'jungle', ['fix:#efb4f7'], L.dz), opt('B', 'bluestill', L.dz), opt('C', 'olla', L.dz)]],
-    ['online-collection', 'Online Collection', [v('A', 'Your pick: Franklin on The Large Bathers', 'bathers', ['mono'], L.oc), opt('B', 'figs', L.oc), opt('C', 'liel', L.oc)]],
-    ['tours', 'Tours and Eye Spy', [v('A', 'Your pick: Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], L.tours), opt('B', 'tulips', L.tours), opt('C', 'sundaywalk', L.tours)]],
-    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Your pick: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], L.ovor, CO), opt('B', 'confidantes', L.ovor, CO)]],
-    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'Your pick: orange on Sleeping Shepherd', 'shepherd', ['fix:#ef8f35'], SC, CO), opt('B', 'vase', SC, CO), opt('C', 'burkholder', SC, CO)]],
-    ['one-codebase-two-brands', 'One Codebase, Two Brands', [v('A', 'Your pick: Franklin on Beatrice', 'beatrice', ['mono'], L.ocb), opt('B', 'cutout', L.ocb)]],
-    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [v('A', 'Your pick: Franklin on Tarring the Boat', 'boat', ['mono'], L.cl), opt('B', 'asters', L.cl), opt('C', 'eggs', L.cl)]],
-    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [v('A', 'Your pick: Franklin on Annunciation', 'annunciation', ['mono'], L.dp), opt('B', 'necklace', L.dp)]],
+    ['tours', 'Tours and Eye Spy', [v('A', 'Colored type on Girl with a Polka-Dot Blouse', 'polkadot', ['color'], L.tours), ...tours.map(([key, n = ''], i) => pref(ks[i + 1], key, L.tours, undefined, n))]],
+    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Colored type on Jeanne Hébuterne', 'jeanne', ['color'], L.ovor, CO), ...ovor.map(([key, n = ''], i) => pref(ks[i + 1], key, L.ovor, CO, n))]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -295,7 +294,7 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Cover study, round five</h1><p>Your pick is first in each row. Next to it are paintings from your desktop and public domain works by women in the Barnes collection, each one used once. Frames match the type, and only covers that read at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Cover study, round six</h1><p>The eleven other cards are set. These two rows try colored type on the Modigliani, then works from your desktop and by women that aren't already on another card, some with new crops. Frames match the type, and only covers that read at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
