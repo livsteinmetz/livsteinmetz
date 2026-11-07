@@ -21,11 +21,21 @@ export function summarize(rows) {
   for (const r of rows) {
     const when = r.ts || (r.endTime && `${r.endTime.replace(' ', 'T')}:00Z`);
     const ms = r.ms_played ?? r.msPlayed;
-    const artist = r.master_metadata_album_artist_name ?? r.artistName;
-    if (!when || !(ms >= 30000) || !artist) continue; // Spotify counts a stream at 30 seconds
+    const artist = r.master_metadata_album_artist_name ?? r.artistName ?? r.episode_show_name;
+    if (!when || !ms || !artist) continue;
     const utc = new Date(when);
     if (Number.isNaN(+utc)) continue;
     const cc = r.conn_country || '', d = local(utc, cc);
+    // Places count every play, even short ones: a skipped song still says where you were.
+    if (cc && cc !== 'ZZ') {
+      const k0 = dayKey(d), pl = (abroad[cc] ||= { first: k0, last: k0, artists: {}, shows: {}, songs: {} });
+      if (k0 < pl.first) pl.first = k0;
+      if (k0 > pl.last) pl.last = k0;
+      const bucket = r.episode_show_name ? pl.shows : pl.artists;
+      bucket[artist] = (bucket[artist] || 0) + ms;
+      if (!r.episode_show_name) { const song = `${r.master_metadata_track_name}\u0000${artist}`; pl.songs[song] = (pl.songs[song] || 0) + ms; }
+    }
+    if (!(ms >= 30000) || r.episode_show_name) continue; // music only from here; Spotify counts a stream at 30 seconds
     const h = ms / 36e5, y = d.getFullYear(), month = `${y}-${pad(d.getMonth() + 1)}`;
     hours += h;
     (years[y] ||= Array(52).fill(0))[weekOf(d)] += h;
@@ -37,14 +47,6 @@ export function summarize(rows) {
     const a = (artists[artist] ||= { total: 0, month: {}, year: {} });
     a.total += h; a.month[month] = (a.month[month] || 0) + h; a.year[y] = (a.year[y] || 0) + h;
     perYear[y] = (perYear[y] || 0) + h;
-    if (cc && cc !== 'ZZ') {
-      const pl = (abroad[cc] ||= { first: k, last: k, artists: {}, songs: {} });
-      if (k < pl.first) pl.first = k;
-      if (k > pl.last) pl.last = k;
-      pl.artists[artist] = (pl.artists[artist] || 0) + 1;
-      const song = `${r.master_metadata_track_name}\u0000${artist}`;
-      pl.songs[song] = (pl.songs[song] || 0) + 1;
-    }
   }
   const keys = Object.keys(day).sort();
   if (!keys.length) return { hours: 0 };
@@ -79,8 +81,8 @@ export function summarize(rows) {
   // Where the music was played, by country: when, and what. No amounts.
   const places = Object.entries(abroad).map(([cc, pl]) => ({
     cc, first: pl.first, last: pl.last,
-    artists: Object.entries(pl.artists).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([a]) => a),
-    song: Object.entries(pl.songs).sort((a, b) => b[1] - a[1])[0][0].split('\u0000'),
+    artists: Object.entries(Object.keys(pl.artists).length ? pl.artists : pl.shows).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([a]) => a),
+    song: Object.entries(pl.songs).sort((a, b) => b[1] - a[1])[0]?.[0].split('\u0000') || null,
   })).sort((a, b) => (a.first < b.first ? -1 : 1));
 
   return {

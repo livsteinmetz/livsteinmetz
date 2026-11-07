@@ -185,7 +185,7 @@ function drawSeasons(s, me) {
   const fallShare = avg(full.map((y) => per[y].slice(9).reduce((a, b) => a + b, 0) / per[y].slice(5, 8).reduce((a, b) => a + b, 0))) - 1;
   $('scene-season').hidden = full.length < 3 || fallWins.length < full.length * 0.8;
   const steps = ys.map(() => ['Each line is a year of listening, January to December.', 'Watch the right-hand side.', -1]);
-  steps.push([fallWins.length === full.length ? `Every year, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.` : `Most years, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.`, `In ${fallWins.length === full.length ? 'all' : fallWins.length} of ${full.length} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
+  steps.push([fallWins.length === full.length ? `Every year, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.` : `Most years, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.`, `In ${fallWins.length === full.length ? `all ${full.length}` : `${fallWins.length} of ${full.length}`} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
   const ridgesEls = [...$('rings').querySelectorAll('.ridge')], band = $('season-band');
   let shown = -1;
   scrub['scene-season'] = (p) => {
@@ -270,7 +270,7 @@ function drawLight(s, me) {
 
 // A globe that turns to each place the music was played, as you scroll.
 const world = JSON.parse($('world').textContent);
-const PLACES = { US: [-75.17, 39.95, 'Home, in Philadelphia'], SE: [11.97, 57.71, 'Sweden'], IE: [-6.26, 53.35, 'Ireland'], MX: [-99.13, 19.43, 'Mexico'], FI: [24.94, 60.17, 'Finland'], IT: [12.5, 41.9, 'Italy'], AT: [16.37, 48.21, 'Austria'], DK: [12.57, 55.68, 'Denmark'], GB: [-0.13, 51.5, 'England'], FR: [2.35, 48.86, 'France'], DE: [13.4, 52.52, 'Germany'], ES: [-3.7, 40.42, 'Spain'], NL: [4.9, 52.37, 'the Netherlands'], NO: [10.75, 59.91, 'Norway'], CA: [-79.38, 43.65, 'Canada'], PT: [-9.14, 38.72, 'Portugal'], GR: [23.73, 37.98, 'Greece'], JP: [139.69, 35.69, 'Japan'], IS: [-21.9, 64.15, 'Iceland'], CH: [8.54, 47.37, 'Switzerland'], BE: [4.35, 50.85, 'Belgium'], CZ: [14.42, 50.08, 'Czechia'] };
+const PLACES = { US: [-75.17, 39.95, 'Home, in Philadelphia'], SE: [11.97, 57.71, 'Sweden'], IE: [-6.26, 53.35, 'Ireland'], MX: [-99.13, 19.43, 'Mexico'], FI: [24.94, 60.17, 'Finland'], IT: [12.5, 41.9, 'Italy'], AT: [16.37, 48.21, 'Austria'], DK: [12.57, 55.68, 'Denmark'], GB: [-0.13, 51.5, 'England'], FR: [2.35, 48.86, 'France'], DE: [13.4, 52.52, 'Germany'], ES: [-3.7, 40.42, 'Spain'], NL: [4.9, 52.37, 'the Netherlands'], NO: [10.75, 59.91, 'Norway'], CA: [-79.38, 43.65, 'Canada'], PT: [-9.14, 38.72, 'Portugal'], GR: [23.73, 37.98, 'Greece'], JP: [139.69, 35.69, 'Japan'], IS: [-21.9, 64.15, 'Iceland'], CH: [8.54, 47.37, 'Switzerland'], BE: [4.35, 50.85, 'Belgium'], CZ: [14.42, 50.08, 'Czechia'], RO: [26.1, 44.43, 'Romania'], EE: [24.75, 59.44, 'Estonia'] };
 const rad = Math.PI / 180;
 const span = (a, b) => {
   const A = new Date(`${a}T12:00:00`), B = new Date(`${b}T12:00:00`);
