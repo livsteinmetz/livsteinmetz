@@ -220,9 +220,12 @@ function drawWeather(s, me) {
   const sweet = Object.entries(bands).filter(([, v]) => v.length >= 20).sort((p, q) => avg(q[1]) - avg(p[1]))[0];
   // A difference counts only if it is large and unlikely to be chance (Welch's t above 2).
   const real = (a, b) => { const ma = avg(a), mb = avg(b), va = avg(a.map((v) => (v - ma) ** 2)), vb = avg(b.map((v) => (v - mb) ** 2)); return a.length >= 15 && Math.abs(ma / mb - 1) >= 0.1 && Math.abs(ma - mb) / Math.sqrt(va / a.length + vb / b.length) > 2; };
-  const vs = (k) => real(by(k).map((d) => d.m), days.filter((d) => d.kind !== k).map((d) => d.m));
+  // Compare like with like: a hot day against other days in the same months, so summer's
+  // usual lull doesn't pass for a heat effect (and winter's for a snow one).
+  const sameMonths = (k) => { const ms = new Set(by(k).map((d) => d.d.getMonth())); return days.filter((d) => d.kind !== k && ms.has(d.d.getMonth())); };
+  const vs = (k) => real(by(k).map((d) => d.m), sameMonths(k).map((d) => d.m));
   const pct = (a, b) => { const r = Math.round((a / b - 1) * 100); return r >= 0 ? `${r}% more` : `${-r}% less`; };
-  const others = (k) => mean(days.filter((d) => d.kind !== k));
+  const others = (k) => mean(sameMonths(k));
   const sweetReal = sweet && real(sweet[1], days.filter((d) => Math.floor(d.f / 10) * 10 !== +sweet[0]).map((d) => d.m));
   const say = { rain: 'rainy days', snow: 'snow days', hot: 'days above 85°F', cold: 'days below 40°F' }, brings = { rain: 'Rain', snow: 'Snow', hot: 'Heat', cold: 'Cold' };
   const steps = [['all', `Every dot is a day ${me.I === 'I' ? 'I' : 'you'} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
@@ -230,8 +233,8 @@ function drawWeather(s, me) {
     const who = lift(k), diff = vs(k);
     if (!diff && !who.length) continue;
     // Heat cuts listening, so say it the other way round: cooler days bring more music.
-    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.I === 'I' ? 'I' : 'you'} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter ones.${who.length ? ` Heat brings out ${list3(who)}.` : ''}`]); continue; }
-    steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))}.` : `${brings[k]} brings out ${list3(who)}.`, diff && who.length ? `${brings[k]} brings out ${list3(who)}.` : '']);
+    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.I === 'I' ? 'I' : 'you'} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, I'd put on ${list3(who)}.` : ''}`]); continue; }
+    steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, I'd put on ${list3(who)}.`, diff && who.length ? `My picks for them: ${list3(who)}.` : '']);
   }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
   const svg = $('weather-plate').firstChild;
@@ -254,12 +257,21 @@ function drawLight(s, me) {
   const X = (h) => 60 + h * 22, Y = (m) => 60 + m * 40;
   const line = (a, c) => `<polyline points="${a.map((h, m) => `${X(h).toFixed(1)},${Y(m)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="3.5" stroke-linejoin="round"/>`;
   $('clock').innerHTML = clock(s).replace('</svg>', `<g id="sun" style="opacity:0">${have ? line(rise, '#ef8f35') + line(set, RED) + `<text x="${X(rise[11]) - 8}" y="${Y(11) + 34}" font-size="14" text-anchor="end" fill="#ef8f35">sunrise</text><text x="${X(set[11]) + 8}" y="${Y(11) + 34}" font-size="14" fill="${RED}">sunset</text>` : ''}</g></svg>`);
-  const dark = (m) => { const r = s.clock[m], t = r.reduce((a, b) => a + b, 0) || 1; return r.reduce((a, v, h) => a + (h + 0.5 < rise[m] || h + 0.5 > set[m] ? v : 0), 0) / t; };
   const steps = [[`The peak comes around ${ap(peakHour(s)).replace(/\.$/, '')}.`, 'Every month, hour by hour. The darker the square, the more music.', 0]];
   if (have) {
     steps.push(['The orange line is sunrise. The red line is sunset.', 'Averaged across the days I was listening, wherever I was.', 1]);
-    const dec = dark(11), jun = dark(5);
-    steps.push([`In December, ${Math.round(dec * 100)}% of ${me.my} listening happens in the dark.`, `In June, ${Math.round(jun * 100)}%.`, 1]);
+    // Winter has more dark hours, so a bigger dark share proves nothing. The fair test: the same
+    // evening hour, in months when it's already dark versus months when it's still light,
+    // each month's listening scaled to its own total so busy fall months don't tip it.
+    const share = s.clock.map((r) => { const t = r.reduce((a, b) => a + b, 0) || 1; return r.map((v) => v / t); });
+    const ratios = [16, 17, 18, 19].map((h) => {
+      const d = [], l = [];
+      share.forEach((r, m) => (h + 0.5 > set[m] ? d : l).push(r[h]));
+      return d.length >= 2 && l.length >= 2 ? avg(d) / avg(l) : 1;
+    });
+    const lift = avg(ratios);
+    if (ratios.filter((r) => r > 1.15).length >= 3) steps.push(['When the sun sets early, my evenings get more music.', `Between 4 and 8 p.m., I listen about ${Math.round((lift - 1) * 100)}% more once it's dark than at the same hour in lighter months.`, 1]);
+    else if (ratios.filter((r) => r < 0.87).length >= 3) steps.push(['Darkness doesn\'t pull me toward music.', `Between 4 and 8 p.m., I listen about ${Math.round((1 - lift) * 100)}% less once it's dark than at the same hour in lighter months.`, 1]);
   }
   let shown = -1;
   scrub['scene-clock'] = (p) => {
