@@ -236,10 +236,18 @@ if (process.env.PREVIEW) {
   const VXP = [F('Visual'), F('Experience'), F('Platform')], SC = [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], CO = { max: 120, lh: 0.92 };
   const ROWS = [
     ['visual-experience-platform', 'Visual Experience Platform', [v('A', 'Your pick: yellow on The Postman', 'postman', ['color'], VXP), ...fun('postman', VXP, 'The Postman', [])]],
+    ['focus', 'Barnes Focus', [v('A', 'Set: Franklin on Models', 'models', ['mono'], [F('Barnes'), F('Focus')])]],
+    ['calder-gardens', 'Calder Gardens', [v('A', 'Set: Franklin on butter', null, ['mono'], [F('Calder'), F('Gardens')])]],
     ['membership', 'Membership', [v('A', 'Your pick: green on Bouquet of Flowers', 'bouquet', ['color'], [F('Membership')]), ...fun('bouquet', [F('Membership')], 'Bouquet of Flowers', ['green'])]],
     ['commerce', 'Commerce', [v('A', 'Your pick: sky on The Card Players', 'cards', ['color'], [F('Commerce')]), ...fun('cards', [F('Commerce')], 'The Card Players', ['sky'])]],
     ['deep-zoom', 'Deep Zoom', [v('A', 'Your pick: yellow on Monkeys and Parrot', 'jungle', ['color'], [F('Deep'), F('Zoom')]), ...fun('jungle', [F('Deep'), F('Zoom')], 'Monkeys and Parrot', [])]],
+    ['online-collection', 'Online Collection', [v('A', 'Set: Franklin on The Large Bathers', 'bathers', ['mono'], [F('Online'), F('Collection')])]],
+    ['tours', 'Tours and Eye Spy', [v('A', 'Set: Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], [F('Tours and'), F('Eye Spy')])]],
+    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Set: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], [C('ONE VISITOR,'), C('ONE RECORD')], CO)]],
     ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'Your pick: white on Sleeping Shepherd', 'shepherd', ['any'], SC, CO), ...fun('shepherd', SC, 'Sleeping Shepherd', [], CO)]],
+    ['one-codebase-two-brands', 'One Codebase, Two Brands', [v('A', 'Set: Franklin on Beatrice', 'beatrice', ['mono'], [F('One Codebase,'), F('Two Brands')])]],
+    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [v('A', 'Set: Franklin on Tarring the Boat', 'boat', ['mono'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')])]],
+    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [v('A', 'Set: Franklin on Annunciation', 'annunciation', ['mono'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')])]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -248,11 +256,11 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Cover study, round three</h1><p>These are the five cards where you picked colored or new type. Your pick is first, then the same cover in pink, green, lilac, orange, sky and red. Anything under 3 to 1 is hard to read at a glance. The other eight cards are set.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Cover study, round four</h1><p>Every card now, in shelf order, with each frame matching its type. Only colors that read at 3 to 1 or better are shown. Cards marked Set are your earlier picks.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
-.pick{display:block;text-align:left;border:0;background:none;padding:6px;font:inherit;cursor:pointer;border-radius:2px;outline-offset:2px}.pick[aria-pressed=true]{outline:4px solid #16246e}.pick .mat{display:block}.pick .cover{display:block}.plabel{display:block;margin-top:.5rem;font-size:.9rem}.score{display:block;font-size:.8rem;color:#555}
+.pick{display:block;text-align:left;border:0;background:none;padding:6px;font:inherit;cursor:pointer;border-radius:2px;outline-offset:2px}.pick[aria-pressed=true]{outline:4px solid #16246e}.pick[hidden]{display:none}.pick .mat{display:block}.pick .cover{display:block}.plabel{display:block;margin-top:.5rem;font-size:.9rem}.score{display:block;font-size:.8rem;color:#555}
 .pickbar{position:sticky;bottom:0;background:#fff;border-top:2px solid #16246e;padding:.7rem 0;display:flex;gap:1rem;align-items:center;justify-content:space-between}.pickbar p{margin:0;font-size:.9rem}#copy{font:inherit;border:2px solid #16246e;background:#fff;color:#16246e;padding:.4rem .8rem;cursor:pointer}</style>
 <script src="/study.js?v=${V}" defer></script>`;
   writeFileSync('build/study.html', shell({ path: '/study', title: 'Cover study', description: 'Cover study', body }).replace('<head>', '<head><meta name="robots" content="noindex">'));

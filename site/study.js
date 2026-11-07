@@ -20,15 +20,22 @@ const covers = [...document.querySelectorAll('.study .cover')];
 const apply = (m) => covers.forEach((cv) => {
   const r = m[cv.dataset.id];
   layout(cv, r ? r.place : 'bottom');
-  if (r) { paint(cv, r.fills); cv.closest('.pick').querySelector('.score').textContent = `Contrast ${r.score.toFixed(1)} to 1${r.score < 3 ? ', too low' : ''}`; }
+  if (!r) return;
+  paint(cv, r.fills);
+  const b = cv.closest('.pick');
+  // The frame takes the color of the type, and anything under 3 to 1 stays off the page.
+  b.querySelector('.mat').style.setProperty('--mat', r.fills[0]);
+  b.querySelector('.score').textContent = `Contrast ${r.score.toFixed(1)} to 1`;
+  b.hidden = r.score < 3;
 });
+window.studyApply = apply;
 document.fonts.ready.then(async () => {
   apply({});
   try { const r = await fetch('/study.json', { cache: 'no-store' }); if (r.ok) apply(await r.json()); } catch (e) { /* the measured colors come with the preview build */ }
   document.documentElement.dataset.ready = '1';
 });
 let picks = {};
-try { picks = JSON.parse(localStorage.getItem('study-picks-3') || '{}'); } catch (e) { picks = {}; }
+try { picks = JSON.parse(localStorage.getItem('study-picks-4') || '{}'); } catch (e) { picks = {}; }
 const out = document.getElementById('picks');
 const show = () => {
   document.querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-pressed', String(picks[b.dataset.card] === b.dataset.opt)));
@@ -37,7 +44,7 @@ const show = () => {
 };
 document.querySelectorAll('.pick').forEach((b) => b.addEventListener('click', () => {
   picks[b.dataset.card] = picks[b.dataset.card] === b.dataset.opt ? undefined : b.dataset.opt;
-  try { localStorage.setItem('study-picks-3', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
+  try { localStorage.setItem('study-picks-4', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
   show();
 }));
 document.getElementById('copy').addEventListener('click', async () => {

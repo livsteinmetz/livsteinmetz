@@ -49,7 +49,8 @@ for (const id of ids) {
 }
 fs.writeFileSync('build/study.json', JSON.stringify(result));
 fs.mkdirSync('shots/study', { recursive: true });
-await g.evaluate((m) => { for (const [i, r] of Object.entries(m)) { const c = document.querySelector(`.cover[data-id="${i}"]`); c.closest('.pick').querySelector('.score').textContent = `Contrast ${r.score.toFixed(1)} to 1`; } }, result);
+await g.evaluate((m) => window.studyApply(m), result);
+await g.addStyleTag({ content: '.pick[hidden]{display:none !important}' });
 const rows = await g.$$('.srow');
 await g.addStyleTag({ content: '.pickbar{display:none !important}' });
 for (let i = 0; i < rows.length; i++) await rows[i].screenshot({ path: `shots/study/row${String(i).padStart(2, '0')}.png` });
