@@ -165,16 +165,28 @@ if (typeof document !== 'undefined') {
   document.querySelectorAll('[data-copy]').forEach((b) => { b.onclick = () => copied(b, b.dataset.copy); });
   document.querySelectorAll('[data-copy-list]').forEach((b) => { b.onclick = () => copied(b, [...document.querySelectorAll('.tracks li')].map((li) => `${li.querySelector('.song').textContent} - ${li.querySelector('.by').textContent}`).join('\n')); });
 
-  // Scrolling drifts the shelves.
+  // Scrolling drifts the shelves, alternating direction, and eases toward where the page is so it glides.
   if (!still) {
     const shelves = [...document.querySelectorAll('.shelf')];
-    let queued = false;
-    const onScroll = () => {
-      queued = false;
-      shelves.forEach((s, i) => { const r = s.getBoundingClientRect(); s.style.transform = `translateX(${((r.top - innerHeight / 2) / innerHeight) * (i ? 28 : -28)}px)`; });
+    const at = shelves.map(() => null);
+    const reach = () => Math.min(140, innerWidth * 0.22);
+    let running = false;
+    const target = (s, i) => { const r = s.getBoundingClientRect(); const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - innerHeight / 2) / innerHeight)); return p * reach() * (i % 2 ? 1 : -1); };
+    const step = () => {
+      let moving = false;
+      shelves.forEach((s, i) => {
+        const t = target(s, i);
+        const x = at[i] === null ? t : at[i] + (t - at[i]) * 0.12;
+        if (Math.abs(t - x) > 0.3) moving = true;
+        at[i] = x;
+        s.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
+      });
+      running = moving;
+      if (moving) requestAnimationFrame(step);
     };
-    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(onScroll); } }, { passive: true });
-    onScroll();
+    addEventListener('scroll', () => { if (!running) { running = true; requestAnimationFrame(step); } }, { passive: true });
+    addEventListener('resize', () => { if (!running) { running = true; requestAnimationFrame(step); } });
+    step();
   }
 
   // Flip the record: hovering a track shows its cover.
