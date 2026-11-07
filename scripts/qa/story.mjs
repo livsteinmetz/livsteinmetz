@@ -8,6 +8,7 @@ for (const [n, w, h] of [['d', 1280, 800], ['m', 390, 844]]) {
   const g = await b.newPage({ viewport: { width: w, height: h } });
   g.on('pageerror', (e) => console.log('story ERR', e.message));
   await g.goto('http://localhost:4178/listening/trends'); await g.waitForTimeout(2000);
+  if (await g.isVisible('#gate-sample')) { await g.click('#gate-sample'); await g.waitForTimeout(2500); console.log('story', n, 'showing the sample listener'); }
   for (const [id, fr] of [['scene-season', [0.05, 0.97]], ['scene-weather', [0.05, 0.25, 0.45, 0.97]], ['scene-clock', [0.1, 0.5, 0.97]], ['scene-places', [0.05, 0.3, 0.6, 0.97]], ['scene-river', [0.5, 0.97]], ['scene-days', [0.9]]]) {
     const el = await g.$(`#${id}`); if (!el || await el.isHidden()) { console.log('story', n, id, 'hidden'); continue; }
     const top = await el.evaluate((e) => e.getBoundingClientRect().top + scrollY), H = await el.evaluate((e) => e.offsetHeight);
@@ -17,4 +18,7 @@ for (const [n, w, h] of [['d', 1280, 800], ['m', 390, 844]]) {
 { const ctx = await b.newContext({ geolocation: { latitude: 41.88, longitude: -87.63 }, permissions: ['geolocation'] }); const g = await ctx.newPage();
   await g.goto('http://localhost:4178/listening/trends'); await g.waitForTimeout(1500);
   const btn = await g.$('#weather-you'); if (btn) { await btn.scrollIntoViewIfNeeded(); await btn.click(); await g.waitForTimeout(4000); console.log('story pick', await g.$eval('#weather-pick', (e) => e.textContent)); } }
+{ const g = await b.newPage({ viewport: { width: 1280, height: 900 } }); const files = fs.existsSync('build/listening/send') ? fs.readdirSync('build/listening/send') : [];
+  console.log('story send pages', files.length);
+  if (files[0]) { await g.goto(`http://localhost:4178/listening/send/${files[0]}`); await g.screenshot({ path: 'shots/story/send.png', fullPage: false }); console.log('story send', await g.$$eval('.tracks li', (l) => l.length), 'songs', await g.$$eval('.tracks a[href*="music.apple.com/us/album"], .tracks a[href*="deezer.com/track"]', (l) => l.length), 'exact links'); } }
 await b.close(); srv.close(); process.exit(0);
