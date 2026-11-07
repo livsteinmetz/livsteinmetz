@@ -227,38 +227,69 @@ mkdirSync('build/.well-known', { recursive: true });
 writeFileSync('build/.well-known/security.txt', `Contact: https://www.linkedin.com/in/livsteinmetz/\nExpires: ${new Date(Date.now() + 300 * 864e5).toISOString()}\nPreferred-Languages: en\n`);
 // A study page for the cover type and paintings, only on the preview channel.
 if (process.env.PREVIEW) {
-  const STUDY = [
-    ['visual-experience-platform', 'Visual Experience Platform', 'a classroom', 'postman', 'joy', ['Visual', 'Experience', 'Platform']],
-    ['focus', 'Barnes Focus', 'a guide with no labels', 'models', 'cards', ['Barnes', 'Focus']],
-    ['calder-gardens', 'Calder Gardens', 'a new institution', null, null, ['Calder', 'Gardens']],
-    ['membership', 'Membership', 'a renewal flow', 'bouquet', 'gourds', ['Membership']],
-    ['commerce', 'Commerce', 'a way in the door', 'cards', 'polkadot', ['Commerce']],
-    ['deep-zoom', 'Deep Zoom', 'a close look', 'jungle', 'boat', ['Deep', 'Zoom']],
-    ['online-collection', 'Online Collection', 'a way to browse', 'bathers', 'joy', ['Online', 'Collection']],
-    ['tours', 'Tours and Eye Spy', 'a walk through the rooms', 'eyes', 'shepherd', ['Tours and', 'Eye Spy']],
-    ['one-visitor-one-record', 'One Visitor, One Record', 'a shared record', 'riffian', 'jeanne', ['One Visitor,', 'One Record']],
-    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', '', 'joy', 'postman', ['Scaling the', 'Visual', 'Experience', 'Platform']],
-    ['one-codebase-two-brands', 'One Codebase, Two Brands', '', 'beatrice', 'polkadot', ['One Codebase,', 'Two Brands']],
-    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', '', 'boat', 'jungle', ['Designing and', 'Building a', 'Platform for', 'Close Looking']],
-    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', '', 'annunciation', 'models', ['Digital Product', 'as Institutional', 'Practice at the', 'Barnes Foundation']],
+  // F is Libre Franklin, C is Archivo Condensed, S is Pinyon Script. Each line belongs to a color group.
+  const FONT = { F: ['Libre Franklin', 800, '100%', '-0.02em', 1], C: ['Archivo', 800, '62%', '0', 1], S: ['Pinyon Script', 400, '100%', '0', 1.45] };
+  const v = (k, label, art, modes, lines, o = {}) => ({ k, label, art, modes, lines, max: 92, lh: 0.98, ...o });
+  const F = (t, g = 0) => ['F', t, g], C = (t, g = 0) => ['C', t, g], Sc = (t, g = 0) => ['S', t, g];
+  const ROWS = [
+    ['visual-experience-platform', 'Visual Experience Platform', [
+      v('A', 'Your pick: Franklin on The Postman', 'postman', ['mono'], [F('Visual'), F('Experience'), F('Platform')]),
+      v('B', 'Franklin in color on The Postman', 'postman', ['color'], [F('Visual'), F('Experience'), F('Platform')])]],
+    ['focus', 'Barnes Focus', [
+      v('A', 'Your pick: Franklin on Models', 'models', ['mono'], [F('Barnes'), F('Focus')]),
+      v('B', 'Franklin in color on Models', 'models', ['color'], [F('Barnes'), F('Focus')]),
+      v('C', 'Script and Franklin on Models', 'models', ['color', 'mono'], [Sc('Barnes'), F('Focus', 1)])]],
+    ['calder-gardens', 'Calder Gardens', [
+      v('A', 'Your pick: Franklin on butter', null, ['mono'], [F('Calder'), F('Gardens')]),
+      v('B', 'Franklin in color on butter', null, ['color'], [F('Calder'), F('Gardens')])]],
+    ['membership', 'Membership', [
+      v('A', 'Your pick: Franklin on Bouquet of Flowers', 'bouquet', ['mono'], [F('Membership')]),
+      v('B', 'Franklin in color on Bouquet of Flowers', 'bouquet', ['color'], [F('Membership')]),
+      v('C', 'Script on Bouquet of Flowers', 'bouquet', ['any'], [Sc('Membership')])]],
+    ['commerce', 'Commerce', [
+      v('A', 'Your pick: Franklin on The Card Players', 'cards', ['mono'], [F('Commerce')]),
+      v('B', 'Franklin in color on The Card Players', 'cards', ['color'], [F('Commerce')])]],
+    ['deep-zoom', 'Deep Zoom', [
+      v('A', 'Your pick: Franklin on Monkeys and Parrot', 'jungle', ['mono'], [F('Deep'), F('Zoom')]),
+      v('B', 'Franklin in color on Monkeys and Parrot', 'jungle', ['color'], [F('Deep'), F('Zoom')])]],
+    ['online-collection', 'Online Collection', [
+      v('A', 'Your pick: Franklin on The Large Bathers', 'bathers', ['mono'], [F('Online'), F('Collection')]),
+      v('B', 'Franklin in color on The Large Bathers', 'bathers', ['color'], [F('Online'), F('Collection')]),
+      v('C', 'Script and Franklin on The Large Bathers', 'bathers', ['color', 'mono'], [Sc('Online'), F('Collection', 1)])]],
+    ['tours', 'Tours and Eye Spy', [
+      v('A', 'Your pick: Franklin on Boy in Sailor Suit', 'eyes', ['mono'], [F('Tours and'), F('Eye Spy')]),
+      v('B', 'Franklin in color on Boy in Sailor Suit', 'eyes', ['color'], [F('Tours and'), F('Eye Spy')]),
+      v('C', 'Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], [F('Tours and'), F('Eye Spy')])]],
+    ['one-visitor-one-record', 'One Visitor, One Record', [
+      v('A', 'Your pick: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], [C('ONE VISITOR,'), C('ONE RECORD')], { max: 120, lh: 0.92 }),
+      v('B', 'Condensed in color on Jeanne Hébuterne', 'jeanne', ['color'], [C('ONE VISITOR,'), C('ONE RECORD')], { max: 120, lh: 0.92 }),
+      v('C', 'Script and Condensed on Jeanne Hébuterne', 'jeanne', ['color', 'mono'], [Sc('One Visitor,'), C('ONE RECORD', 1)], { max: 120, lh: 0.92 })]],
+    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [
+      v('A', 'Your pick: Condensed on The Postman (also on VXP)', 'postman', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
+      v('B', 'Condensed on Sleeping Shepherd, Titian', 'shepherd', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
+      v('C', 'Condensed on Still Life with Gourds, Matisse', 'gourds', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
+      v('D', 'Condensed on Le Bonheur de vivre, Matisse', 'joy', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 })]],
+    ['one-codebase-two-brands', 'One Codebase, Two Brands', [
+      v('A', 'Your pick: Franklin on Beatrice', 'beatrice', ['mono'], [F('One Codebase,'), F('Two Brands')]),
+      v('B', 'Franklin in color on Beatrice', 'beatrice', ['color'], [F('One Codebase,'), F('Two Brands')]),
+      v('C', 'Franklin and script on Beatrice, one voice per brand', 'beatrice', ['mono', 'color'], [F('One Codebase,'), Sc('Two Brands', 1)])]],
+    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [
+      v('A', 'Your pick: Franklin on Tarring the Boat', 'boat', ['mono'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')]),
+      v('B', 'Franklin in color on Tarring the Boat', 'boat', ['color'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')])]],
+    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [
+      v('A', 'Your pick: Franklin on Annunciation', 'annunciation', ['mono'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')]),
+      v('B', 'Franklin in color on Annunciation', 'annunciation', ['color'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')])]],
   ];
-  const STY = {
-    A: { name: 'Libre Franklin', font: 'Libre Franklin', wt: 800, stretch: '100%', ls: '-0.02em', lh: 0.98, max: 92 },
-    B: { name: 'Newsreader with a Franklin tag', font: 'Newsreader', wt: 500, stretch: '100%', ls: '-0.01em', lh: 1.02, max: 92, tag: true },
-    C: { name: 'Archivo Condensed', font: 'Archivo', wt: 800, stretch: '62%', ls: '0', lh: 0.92, max: 120, caps: true, alt: true },
-  };
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
-  const cv = ([slug, title, tag, base, alt, lines], k) => {
-    const s = STY[k], key = s.alt ? alt : base, a = key && art[key];
-    const ls = (s.caps ? lines.map((l) => l.toUpperCase()) : lines);
-    const texts = ls.map((l) => `<text class="h" font-family="${s.font}" font-weight="${s.wt}" font-stretch="${s.stretch}" letter-spacing="${s.ls}">${esc(l)}</text>`).join('') + (s.tag && tag ? `<text class="t" font-family="Libre Franklin" font-weight="600" font-size="15">${esc(tag)}</text>` : '');
-    const label = `${k}. ${s.name}${a ? ` on ${a.title}, ${a.artist}` : ', flat butter'}`;
-    return `<button class="pick" type="button" data-card="${slug}" data-opt="${k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${k}">${a ? cropEl(key, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${s.max}" data-lh="${s.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${esc(label)}</span><span class="score"></span></button>`;
+  const cv = (slug, x) => {
+    const a = x.art && art[x.art];
+    const texts = x.lines.map(([f, t, g]) => { const [fam, wt, st, ls, sc] = FONT[f]; return `<text class="h" data-g="${g}" data-s="${sc}" font-family="${fam}" font-weight="${wt}" font-stretch="${st}" letter-spacing="${ls}">${esc(t)}</text>`; }).join('');
+    return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
-  const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;800&family=Newsreader:opsz,wght@6..72,500&family=Archivo:wdth,wght@62..100,800&display=swap';
-  const body = `<div class="page study"><h1>Cover study</h1><p>Each row is one card in three versions. A and B keep the painting it has now. C tries another painting. Type colors and placement are picked from the painting's own pixels. Tap the one you like in each row, then copy your picks. Mixing is fine too, like "B type on the C painting".</p>${STUDY.map((c) => `<section class="srow"><h2>${esc(c[1])}</h2><div class="opts">${['A', 'B', 'C'].map((k) => cv(c, k)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
+  const body = `<div class="page study"><h1>Cover study, round two</h1><p>Your picks are first in each row. The others try your pick with colored type, a script where it fits, and new paintings so no work shows up twice. Colors and placement come from each painting's own pixels.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
-<style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+<style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
 .pick{display:block;text-align:left;border:0;background:none;padding:6px;font:inherit;cursor:pointer;border-radius:2px;outline-offset:2px}.pick[aria-pressed=true]{outline:4px solid #16246e}.pick .mat{display:block}.pick .cover{display:block}.plabel{display:block;margin-top:.5rem;font-size:.9rem}.score{display:block;font-size:.8rem;color:#555}
 .pickbar{position:sticky;bottom:0;background:#fff;border-top:2px solid #16246e;padding:.7rem 0;display:flex;gap:1rem;align-items:center;justify-content:space-between}.pickbar p{margin:0;font-size:.9rem}#copy{font:inherit;border:2px solid #16246e;background:#fff;color:#16246e;padding:.4rem .8rem;cursor:pointer}</style>
