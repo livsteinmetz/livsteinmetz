@@ -114,36 +114,38 @@ function drawRiver(s, me) {
   };
 }
 
-// Every day as a thin bar, one row per year. The darker the bar, the longer the day.
+// The past year, day by day: one row per month, one square per day.
 function drawDays(s, me) {
-  const { start, minutes } = s.days, W = 1000, L = 52, row = 52, first = dateOf(start, 0).getFullYear();
-  const yrs = dateOf(start, minutes.length - 1).getFullYear() - first + 1, scale = [...minutes].sort((a, b) => a - b)[Math.floor(minutes.length * 0.97)] || 1;
-  const pos = (i) => { const d = dateOf(start, i), doy = (d - new Date(d.getFullYear(), 0, 1)) / 864e5; return [L + (doy / 366) * (W - L), (d.getFullYear() - first) * row]; };
-  let bars = '', rows = '';
-  for (let r = 0; r < yrs; r++) rows += `<rect x="${L}" y="${r * row}" width="${W - L}" height="${row - 14}" fill="#f1f1f1"/><text x="0" y="${r * row + 26}" font-size="15">${first + r}</text>`;
-  minutes.forEach((m, i) => { if (!m) return; const [bx, by] = pos(i); bars += `<rect class="day" x="${bx.toFixed(1)}" y="${by}" width="2.4" height="${row - 14}" fill="${INK}" fill-opacity="${Math.min(1, 0.12 + m / scale).toFixed(2)}" style="--t:${(i / minutes.length).toFixed(4)}"/>`; });
-  const st = s.streak; let streak = '';
-  for (let i = st.start; i < st.start + st.len; i++) { const [bx, by] = pos(i); streak += `<rect x="${bx.toFixed(1)}" y="${by - 4}" width="2.8" height="${row - 6}" fill="${RED}"/>`; }
-  const [px, py] = pos(s.peakDay.i);
-  const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'].map((c, m) => `<text x="${L + (m / 12) * (W - L)}" y="-8" font-size="13" fill="#666">${c}</text>`).join('');
-  $('days-plate').innerHTML = `<svg viewBox="0 -24 ${W} ${yrs * row + 30}" role="img" aria-label="Minutes of music each day since ${start}">${months}${rows}${bars}<g id="days-streak">${streak}</g><g id="days-peak"><circle cx="${px + 1}" cy="${py - 8}" r="5" fill="${RED}"/></g></svg>`;
-  const a = nice(dateOf(start, st.start)), b = nice(dateOf(start, st.start + st.len - 1)), peakDay = nice(dateOf(start, s.peakDay.i));
+  const all = s.days.minutes, from = Math.max(0, all.length - 365), minutes = all.slice(from), start = dateOf(s.days.start, from);
+  const W = 1000, L = 80, cell = (W - L) / 31, rowsOf = {}, scale = [...minutes].sort((a, b) => a - b)[Math.floor(minutes.length * 0.97)] || 1;
+  let cells = '', rows = '';
+  minutes.forEach((m, i) => {
+    const d = dateOf(s.days.start, from + i), key = `${d.getFullYear()}-${d.getMonth()}`;
+    if (!(key in rowsOf)) { rowsOf[key] = Object.keys(rowsOf).length; rows += `<text x="0" y="${rowsOf[key] * cell + cell * 0.68}" font-size="15">${SHORT[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</text>`; }
+    const x = L + (d.getDate() - 1) * cell, y = rowsOf[key] * cell;
+    cells += `<rect class="day" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(cell - 3).toFixed(1)}" height="${(cell - 3).toFixed(1)}" fill="${m ? INK : '#eee'}" fill-opacity="${m ? Math.min(1, 0.15 + m / scale).toFixed(2) : 1}" style="--t:${(i / minutes.length).toFixed(4)}" data-i="${i}"/>`;
+  });
+  let run = 0, best = { start: 0, len: 0 };
+  minutes.forEach((m, i) => { run = m >= 1 ? run + 1 : 0; if (run > best.len) best = { start: i - run + 1, len: run }; });
+  const peak = minutes.indexOf(Math.max(...minutes)), played = minutes.filter((m) => m >= 1).length;
+  const H = Object.keys(rowsOf).length * cell;
+  $('days-plate').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Minutes of music each day for the past year">${rows}${cells}</svg>`;
+  const rects = [...$('days-plate').querySelectorAll('.day')];
+  const mark = (test) => rects.forEach((r) => { const i = +r.dataset.i; r.style.outline = ''; r.setAttribute('stroke', test(i) ? RED : 'none'); r.setAttribute('stroke-width', test(i) ? 3 : 0); });
   const steps = [
-    [`Every day since ${nice(dateOf(start, 0))}.`, 'One thin bar per day. The darker the bar, the more music.'],
-    [`Music on ${n(s.playedDays)} of ${n(minutes.length)} days.`, `${me.My} biggest single day was ${peakDay}: ${n(s.peakDay.minutes / 60)} hours.`],
-    [`The longest run: ${st.len} days in a row.`, `From ${a} to ${b}.`],
+    ['The past year, day by day.', 'One square per day. The darker the square, the more music.', () => false],
+    [`Music on ${played} of the past ${minutes.length} days.`, `${me.My} biggest day was ${nice(dateOf(s.days.start, from + peak))}: ${n(minutes[peak] / 60)} hours.`, (i) => i === peak],
   ];
+  if (best.len >= 14) steps.push([`The longest run: ${best.len} days in a row.`, `From ${nice(dateOf(s.days.start, from + best.start))} to ${nice(dateOf(s.days.start, from + best.start + best.len - 1))}.`, (i) => i >= best.start && i < best.start + best.len]);
   let shown = -1;
   scrub['scene-days'] = (p) => {
-    const k = p < 0.55 ? 0 : p < 0.8 ? 1 : 2;
+    const k = Math.min(steps.length - 1, p < 0.55 ? 0 : Math.floor(1 + ((p - 0.55) / 0.45) * (steps.length - 1)));
     if (k === shown) return;
     shown = k;
-    scene('days', ...steps[k]);
-    $('days-peak').style.opacity = k === 1 ? 1 : 0;
-    $('days-streak').style.opacity = k === 2 ? 1 : 0;
+    scene('days', steps[k][0], steps[k][1]);
+    mark(steps[k][2]);
   };
 }
-
 
 // --- Listening and its surroundings ---------------------------------------
 const weather = JSON.parse($('weather').textContent);
@@ -178,12 +180,12 @@ function drawSeasons(s, me) {
   }).join('');
   const marks = SHORT.map((m, i) => `<text x="${x(i)}" y="${H - 6}" font-size="13" fill="#666" text-anchor="middle">${m}</text>`).join('');
   $('rings').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hours of music by month, one line per year">${ridges}${marks}<rect id="season-band" y="0" height="${H - 24}" fill="${RED}" fill-opacity=".08"/></svg>`;
-  const full = ys.filter((y) => per[y].every((v) => v > 0)), share = Array(12).fill(0);
-  full.forEach((y) => { const t = per[y].reduce((a, b) => a + b, 0) || 1; per[y].forEach((v, m) => { share[m] += v / t; }); });
-  const best = share.indexOf(Math.max(...share)), worst = share.indexOf(Math.min(...share));
-  const fall = (share[9] + share[10] + share[11]) / (full.length || 1), summer = (share[5] + share[6] + share[7]) / (full.length || 1);
-  const steps = ys.map((y) => { const m = per[y].indexOf(Math.max(...per[y])); return [`${y}: the loudest month was ${MONTHS[m]}.`, `${n(per[y][m])} hours that month.`, m]; });
-  steps.push([`Across the years, ${MONTHS[best]} is ${me.my} biggest month, and ${MONTHS[worst]} ${me.my} quietest.`, `October through December carries ${Math.round(fall * 100)}% of a year's listening. June through August, ${Math.round(summer * 100)}%.`, best]);
+  const full = ys.filter((y) => per[y].every((v) => v > 0));
+  const fallWins = full.filter((y) => per[y].slice(9).reduce((a, b) => a + b, 0) > per[y].slice(5, 8).reduce((a, b) => a + b, 0));
+  const fallShare = avg(full.map((y) => per[y].slice(9).reduce((a, b) => a + b, 0) / per[y].slice(5, 8).reduce((a, b) => a + b, 0))) - 1;
+  $('scene-season').hidden = full.length < 3 || fallWins.length < full.length * 0.8;
+  const steps = ys.map(() => ['Each line is a year of listening, January to December.', 'Watch the right-hand side.', -1]);
+  steps.push([fallWins.length === full.length ? `Every year, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.` : `Most years, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.`, `In ${fallWins.length === full.length ? 'all' : fallWins.length} of ${full.length} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
   const ridgesEls = [...$('rings').querySelectorAll('.ridge')], band = $('season-band');
   let shown = -1;
   scrub['scene-season'] = (p) => {
@@ -192,7 +194,7 @@ function drawSeasons(s, me) {
     shown = k;
     scene('season', steps[k][0], steps[k][1]);
     ridgesEls.forEach((g, j) => { g.style.opacity = j <= k ? (j === k || k === steps.length - 1 ? 1 : 0.35) : 0; });
-    const m = steps[k][2]; band.setAttribute('x', x(m) - 26); band.setAttribute('width', 52);
+    const m = steps[k][2]; band.style.opacity = m < 0 ? 0 : 1; band.setAttribute('x', x(9) - 20); band.setAttribute('width', x(11) - x(9) + 40);
   };
 }
 
@@ -214,15 +216,20 @@ function drawWeather(s, me) {
   const lift = (k) => weather?.lift?.[k] || [];
   const bands = {}; days.forEach((d) => { const b = Math.floor(d.f / 10) * 10; (bands[b] ||= []).push(d.m); });
   const sweet = Object.entries(bands).filter(([, v]) => v.length >= 20).sort((p, q) => avg(q[1]) - avg(p[1]))[0];
+  // A difference counts only if it is large and unlikely to be chance (Welch's t above 2).
+  const real = (a, b) => { const ma = avg(a), mb = avg(b), va = avg(a.map((v) => (v - ma) ** 2)), vb = avg(b.map((v) => (v - mb) ** 2)); return a.length >= 15 && Math.abs(ma / mb - 1) >= 0.1 && Math.abs(ma - mb) / Math.sqrt(va / a.length + vb / b.length) > 2; };
+  const vs = (k) => real(by(k).map((d) => d.m), days.filter((d) => d.kind !== k).map((d) => d.m));
   const pct = (a, b) => { const r = Math.round((a / b - 1) * 100); return r >= 0 ? `${r}% more` : `${-r}% less`; };
-  const steps = [
-    ['all', `Every dot is a day ${me.I === 'I' ? 'I' : 'you'} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`],
-    ['rain', `On rainy days, ${me.I.toLowerCase() === 'i' ? 'I' : 'you'} listen ${pct(mean(by('rain')), dry)}.`, `${n(mean(by('rain')))} minutes on an average rainy day, ${n(dry)} on a dry one. ${lift('rain').length ? `Rain brings out ${list3(lift('rain'))}.` : ''}`],
-    ['snow', by('snow').length >= 5 ? `Snow days: ${n(mean(by('snow')))} minutes on average.` : 'Hardly any snow days.', by('snow').length >= 5 ? `${by('snow').length} of them.${lift('snow').length ? ` Snow brings out ${list3(lift('snow'))}.` : ''}` : ''],
-    ['hot', `Above 85°F, ${pct(mean(by('hot')), all)}.`, lift('hot').length ? `Heat brings out ${list3(lift('hot'))}.` : ''],
-    ['cold', `Below 40°F, ${pct(mean(by('cold')), all)}.`, lift('cold').length ? `Cold brings out ${list3(lift('cold'))}.` : ''],
-    ['all', sweet ? `${me.My} sweet spot is the ${sweet[0]}s.` : 'Every kind of day.', sweet ? `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, the most of any range.` : ''],
-  ].filter((st) => st[0] === 'all' || by(st[0]).length >= 5);
+  const others = (k) => mean(days.filter((d) => d.kind !== k));
+  const sweetReal = sweet && real(sweet[1], days.filter((d) => Math.floor(d.f / 10) * 10 !== +sweet[0]).map((d) => d.m));
+  const say = { rain: 'rainy days', snow: 'snow days', hot: 'days above 85°F', cold: 'days below 40°F' }, brings = { rain: 'Rain', snow: 'Snow', hot: 'Heat', cold: 'Cold' };
+  const steps = [['all', `Every dot is a day ${me.I === 'I' ? 'I' : 'you'} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
+  for (const k of ['rain', 'snow', 'hot', 'cold']) {
+    const who = lift(k), diff = vs(k);
+    if (!diff && !who.length) continue;
+    steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))}.` : `${brings[k]} brings out ${list3(who)}.`, diff && who.length ? `${brings[k]} brings out ${list3(who)}.` : '']);
+  }
+  if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
   const svg = $('weather-plate').firstChild;
   let shown = -1;
   scrub['scene-weather'] = (p) => {
