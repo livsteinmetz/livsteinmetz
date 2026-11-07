@@ -236,6 +236,12 @@ function drawWeather(s, me) {
     if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.I === 'I' ? 'I' : 'you'} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, I'd put on ${list3(who)}.` : ''}`]); continue; }
     steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, I'd put on ${list3(who)}.`, diff && who.length ? `My picks for them: ${list3(who)}.` : '']);
   }
+  // If no kind of weather clearly changes how much I listen, say that plainly.
+  const shifts = ['rain', 'snow', 'hot', 'cold'].filter((k) => by(k).length >= 15);
+  if (!shifts.some(vs) && shifts.length) {
+    const spread = Math.max(...shifts.map((k) => Math.abs(mean(by(k)) / others(k) - 1)));
+    steps.splice(1, 0, ['all', `The weather barely changes how much ${me.I === 'I' ? 'I' : 'you'} listen.`, `Compared with other days in the same months, rainy, snowy, hot and cold days all land within ${Math.ceil(spread * 10) * 10}% of an ordinary day.`]);
+  }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
   const svg = $('weather-plate').firstChild;
   let shown = -1;
