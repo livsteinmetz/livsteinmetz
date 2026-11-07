@@ -234,20 +234,59 @@ if (process.env.PREVIEW) {
   const FUN = [['pink', '#e64aa6'], ['green', '#8dff72'], ['lilac', '#efb4f7'], ['orange', '#ef8f35'], ['sky', '#66c4ff'], ['red', '#c9321a']];
   const fun = (art2, lines, name, skip, o) => FUN.filter(([n]) => !skip.includes(n)).map(([n, hex], i) => v(String.fromCharCode(66 + i), `${n[0].toUpperCase() + n.slice(1)} on ${name}`, art2, [`fix:${hex}`], lines, o));
   const VXP = [F('Visual'), F('Experience'), F('Platform')], SC = [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], CO = { max: 120, lh: 0.92 };
+  // Works from Olivia's desktop and public domain works by women in the Barnes collection, cropped to a portrait detail.
+  const NEW = {
+    goldfish: [5780, 5173, 6044, [0, 0, 1, 1], 'Studio with Goldfish', 'Henri Matisse'],
+    peaches: [6945, 6486, 4256, [0.006, 0.024, 0.955, 0.915], 'Four Peaches on a Plate', 'Paul Cézanne'],
+    casket: [5119, 5844, 4756, [0, 0.136, 1, 0.772], 'Chinese Casket', 'Henri Matisse'],
+    preserves: [5229, 6126, 3372, [0, 0, 1, 1], 'Plate with Fruit and Pot of Preserves', 'Paul Cézanne'],
+    bluestill: [5526, 12215, 9271, [0.127, 0.181, 0.768, 0.635], 'Blue Still Life', 'Henri Matisse'],
+    figs: [4721, 6086, 3472, [0, 0, 1, 1], 'Pomegranate and Figs', 'Pierre-Auguste Renoir'],
+    tulips: [5147, 5945, 7294, [0.084, 0, 0.862, 0.44], 'Tulips in a Green Vase', 'Alfred Maurer'],
+    vase: [5075, 4284, 5250, [0.067, 0.511, 0.861, 0.441], 'The Flowered Vase', 'Paul Cézanne'],
+    asters: [5530, 4318, 5226, [0.172, 0.166, 0.59, 0.306], 'Bouquet of Flowers with China Asters', 'Henri Rousseau'],
+    dejeuner: [6813, 2380, 2848, [0, 0, 1, 1], 'Déjeuner', 'May Preston'],
+    fieldflowers: [7047, 4558, 5802, [0, 0, 1, 1], 'Field Flowers', 'Melanie Marc'],
+    yellowrose: [6455, 4450, 5734, [0, 0, 1, 1], 'Flowers with Yellow Rose', 'Melanie Marc'],
+    cassatt: [6385, 5832, 8422, [0, 0, 1, 1], 'Woman with Nude Boy at Her Left', 'Mary Cassatt'],
+    acoma: [4510, 4180, 3648, [0, 0, 1, 1], 'Storage Jar', 'Acoma Mary'],
+    olla: [4598, 5334, 4968, [0, 0, 1, 1], 'Olla (Water Jar)', 'Rosalia Toribio'],
+    liel: [5812, 5426, 3175, [0, 0, 1, 1], 'Sampler', 'Mary Liel'],
+    sundaywalk: [6274, 6850, 5917, [0, 0, 1, 1], 'The Sunday Walk', 'Edith Dimock'],
+    confidantes: [7024, 8134, 5304, [0, 0, 1, 1], 'The Confidantes', 'May Preston'],
+    burkholder: [4980, 4136, 3419, [0, 0, 1, 1], 'Lonesome Ridge Sampler', 'Nancy Burkholder'],
+    cutout: [5168, 6586, 4806, [0, 0, 1, 1], 'New Jersey Cut-Out', 'Susan Cray'],
+    eggs: [6941, 7999, 5845, [0, 0, 1, 1], 'Women with Eggs', 'Edith Dimock'],
+    necklace: [5508, 6468, 3683, [0, 0, 1, 1], 'A Necklace of Boats', 'Violette de Mazia'],
+  };
+  for (const [k, [id, W, H, [bx, by, bw, bh], title, artist]] of Object.entries(NEW)) {
+    // A 3:4 portrait slice from the middle of the detail she likes.
+    let ph = bh * H, pw = ph * 0.75;
+    if (pw > bw * W) { pw = bw * W; ph = pw / 0.75; }
+    const cx = (bx + bw / 2) * W, cy = (by + bh / 2) * H;
+    const x = Math.min(Math.max(0, cx - pw / 2), W - pw) / W, y = Math.min(Math.max(0, cy - ph / 2), H - ph) / H;
+    art[`s-${k}`] = { barnes: id, w: W, h: H, title, artist, crop: [+x.toFixed(3), +y.toFixed(3), +(pw / W).toFixed(3), +(ph / H).toFixed(3)], edge: 'bottom', ink: '#ffffff', tagInk: '#ffffff' };
+  }
+  const WOMEN = new Set(['May Preston', 'Melanie Marc', 'Mary Cassatt', 'Acoma Mary', 'Rosalia Toribio', 'Mary Liel', 'Edith Dimock', 'Nancy Burkholder', 'Susan Cray', 'Violette de Mazia']);
+  const opt = (k, key, lines, o) => { const a = art[`s-${key}`]; return v(k, `${WOMEN.has(a.artist) ? 'By a woman: ' : 'From your desktop: '}${a.title}, ${a.artist}`, `s-${key}`, ['pref'], lines, o); };
+  const L = {
+    vxp: VXP, focus: [F('Barnes'), F('Focus')], calder: [F('Calder'), F('Gardens')], mem: [F('Membership')], com: [F('Commerce')], dz: [F('Deep'), F('Zoom')], oc: [F('Online'), F('Collection')], tours: [F('Tours and'), F('Eye Spy')],
+    ovor: [C('ONE VISITOR,'), C('ONE RECORD')], sc: SC, ocb: [F('One Codebase,'), F('Two Brands')], cl: [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')], dp: [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')],
+  };
   const ROWS = [
-    ['visual-experience-platform', 'Visual Experience Platform', [v('A', 'Your pick: yellow on The Postman', 'postman', ['color'], VXP), ...fun('postman', VXP, 'The Postman', [])]],
-    ['focus', 'Barnes Focus', [v('A', 'Set: Franklin on Models', 'models', ['mono'], [F('Barnes'), F('Focus')])]],
-    ['calder-gardens', 'Calder Gardens', [v('A', 'Set: Franklin on butter', null, ['mono'], [F('Calder'), F('Gardens')])]],
-    ['membership', 'Membership', [v('A', 'Your pick: green on Bouquet of Flowers', 'bouquet', ['color'], [F('Membership')]), ...fun('bouquet', [F('Membership')], 'Bouquet of Flowers', ['green'])]],
-    ['commerce', 'Commerce', [v('A', 'Your pick: sky on The Card Players', 'cards', ['color'], [F('Commerce')]), ...fun('cards', [F('Commerce')], 'The Card Players', ['sky'])]],
-    ['deep-zoom', 'Deep Zoom', [v('A', 'Your pick: yellow on Monkeys and Parrot', 'jungle', ['color'], [F('Deep'), F('Zoom')]), ...fun('jungle', [F('Deep'), F('Zoom')], 'Monkeys and Parrot', [])]],
-    ['online-collection', 'Online Collection', [v('A', 'Set: Franklin on The Large Bathers', 'bathers', ['mono'], [F('Online'), F('Collection')])]],
-    ['tours', 'Tours and Eye Spy', [v('A', 'Set: Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], [F('Tours and'), F('Eye Spy')])]],
-    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Set: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], [C('ONE VISITOR,'), C('ONE RECORD')], CO)]],
-    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'Your pick: white on Sleeping Shepherd', 'shepherd', ['any'], SC, CO), ...fun('shepherd', SC, 'Sleeping Shepherd', [], CO)]],
-    ['one-codebase-two-brands', 'One Codebase, Two Brands', [v('A', 'Set: Franklin on Beatrice', 'beatrice', ['mono'], [F('One Codebase,'), F('Two Brands')])]],
-    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [v('A', 'Set: Franklin on Tarring the Boat', 'boat', ['mono'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')])]],
-    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [v('A', 'Set: Franklin on Annunciation', 'annunciation', ['mono'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')])]],
+    ['visual-experience-platform', 'Visual Experience Platform', [v('A', 'Your pick: green on The Postman', 'postman', ['fix:#8dff72'], L.vxp), opt('B', 'goldfish', L.vxp), opt('C', 'dejeuner', L.vxp)]],
+    ['focus', 'Barnes Focus', [v('A', 'Your pick: Franklin on Models', 'models', ['mono'], L.focus), opt('B', 'peaches', L.focus), opt('C', 'fieldflowers', L.focus)]],
+    ['calder-gardens', 'Calder Gardens', [v('A', 'Your pick: Franklin on butter', null, ['mono'], L.calder), opt('B', 'yellowrose', L.calder)]],
+    ['membership', 'Membership', [v('A', 'Your pick: green on Bouquet of Flowers', 'bouquet', ['fix:#8dff72'], L.mem), opt('B', 'casket', L.mem), opt('C', 'cassatt', L.mem)]],
+    ['commerce', 'Commerce', [v('A', 'Your pick: sky on The Card Players', 'cards', ['fix:#66c4ff'], L.com), opt('B', 'preserves', L.com), opt('C', 'acoma', L.com)]],
+    ['deep-zoom', 'Deep Zoom', [v('A', 'Your pick: lilac on Monkeys and Parrot', 'jungle', ['fix:#efb4f7'], L.dz), opt('B', 'bluestill', L.dz), opt('C', 'olla', L.dz)]],
+    ['online-collection', 'Online Collection', [v('A', 'Your pick: Franklin on The Large Bathers', 'bathers', ['mono'], L.oc), opt('B', 'figs', L.oc), opt('C', 'liel', L.oc)]],
+    ['tours', 'Tours and Eye Spy', [v('A', 'Your pick: Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], L.tours), opt('B', 'tulips', L.tours), opt('C', 'sundaywalk', L.tours)]],
+    ['one-visitor-one-record', 'One Visitor, One Record', [v('A', 'Your pick: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], L.ovor, CO), opt('B', 'confidantes', L.ovor, CO)]],
+    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'Your pick: orange on Sleeping Shepherd', 'shepherd', ['fix:#ef8f35'], SC, CO), opt('B', 'vase', SC, CO), opt('C', 'burkholder', SC, CO)]],
+    ['one-codebase-two-brands', 'One Codebase, Two Brands', [v('A', 'Your pick: Franklin on Beatrice', 'beatrice', ['mono'], L.ocb), opt('B', 'cutout', L.ocb)]],
+    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [v('A', 'Your pick: Franklin on Tarring the Boat', 'boat', ['mono'], L.cl), opt('B', 'asters', L.cl), opt('C', 'eggs', L.cl)]],
+    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [v('A', 'Your pick: Franklin on Annunciation', 'annunciation', ['mono'], L.dp), opt('B', 'necklace', L.dp)]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -256,7 +295,7 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Cover study, round four</h1><p>Every card now, in shelf order, with each frame matching its type. Only colors that read at 3 to 1 or better are shown. Cards marked Set are your earlier picks.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Cover study, round five</h1><p>Your pick is first in each row. Next to it are paintings from your desktop and public domain works by women in the Barnes collection, each one used once. Frames match the type, and only covers that read at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
