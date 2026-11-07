@@ -14,4 +14,7 @@ for (const [n, w, h] of [['d', 1280, 800], ['m', 390, 844]]) {
     for (const f of fr) { await g.evaluate(`window.scrollTo(0, ${top} + ${f} * (${H} - ${h}))`); await g.waitForTimeout(900); await g.screenshot({ path: `shots/story/${n}-${id}-${f}.png` }); console.log('story', n, id, f, await g.$eval(`#${id} h2`, (e) => e.textContent), '|', await g.$eval(`#${id} .scene-copy p`, (e) => e.textContent)); }
   }
 }
+{ const ctx = await b.newContext({ geolocation: { latitude: 41.88, longitude: -87.63 }, permissions: ['geolocation'] }); const g = await ctx.newPage();
+  await g.goto('http://localhost:4178/listening/trends'); await g.waitForTimeout(1500);
+  const btn = await g.$('#weather-you'); if (btn) { await btn.scrollIntoViewIfNeeded(); await btn.click(); await g.waitForTimeout(4000); console.log('story pick', await g.$eval('#weather-pick', (e) => e.textContent)); } }
 await b.close(); srv.close(); process.exit(0);
