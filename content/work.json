@@ -115,7 +115,7 @@
   "color": "#000000",
   "flat": "#f6d44f",
   "short": "A whole digital ecosystem for a brand-new institution",
-  "role": "Product and front-end development",
+  "role": "Product and design direction, front-end development",
   "org": "Calder Gardens",
   "link": "https://caldergardens.org/",
   "linkText": "Visit caldergardens.org",
@@ -184,7 +184,7 @@
   "date": "2021 to now",
   "art": "cards",
   "font": "didone",
-  "short": "Tickets, memberships, and gifts on one stack",
+  "short": "Tickets, membership, giving, and retail on one stack",
   "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation and Calder Gardens",
   "link": "https://github.com/BarnesFoundation/acme-ticketing-client",
@@ -312,7 +312,7 @@
   "org": "Barnes Foundation",
   "stack": "Salesforce, ACME",
   "body": [
-   "In 2024 I managed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of three. That's what lets us recognize a member at checkout and see who's calling as the call connects, and it lets staff ask and answer questions through MCP connectors and AI-assisted reporting."
+   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of three. That's what lets us recognize a member at checkout and see who's calling as the call connects, and it lets staff ask and answer questions through MCP connectors and AI-assisted reporting."
   ],
   "lines": [
    "ONE VISITOR",
