@@ -231,54 +231,15 @@ if (process.env.PREVIEW) {
   const FONT = { F: ['Libre Franklin', 800, '100%', '-0.02em', 1], C: ['Archivo', 800, '62%', '0', 1], S: ['Pinyon Script', 400, '100%', '0', 1.45] };
   const v = (k, label, art, modes, lines, o = {}) => ({ k, label, art, modes, lines, max: 92, lh: 0.98, ...o });
   const F = (t, g = 0) => ['F', t, g], C = (t, g = 0) => ['C', t, g], Sc = (t, g = 0) => ['S', t, g];
+  const FUN = [['pink', '#e64aa6'], ['green', '#8dff72'], ['lilac', '#efb4f7'], ['orange', '#ef8f35'], ['sky', '#66c4ff'], ['red', '#c9321a']];
+  const fun = (art2, lines, name, skip, o) => FUN.filter(([n]) => !skip.includes(n)).map(([n, hex], i) => v(String.fromCharCode(66 + i), `${n[0].toUpperCase() + n.slice(1)} on ${name}`, art2, [`fix:${hex}`], lines, o));
+  const VXP = [F('Visual'), F('Experience'), F('Platform')], SC = [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], CO = { max: 120, lh: 0.92 };
   const ROWS = [
-    ['visual-experience-platform', 'Visual Experience Platform', [
-      v('A', 'Your pick: Franklin on The Postman', 'postman', ['mono'], [F('Visual'), F('Experience'), F('Platform')]),
-      v('B', 'Franklin in color on The Postman', 'postman', ['color'], [F('Visual'), F('Experience'), F('Platform')])]],
-    ['focus', 'Barnes Focus', [
-      v('A', 'Your pick: Franklin on Models', 'models', ['mono'], [F('Barnes'), F('Focus')]),
-      v('B', 'Franklin in color on Models', 'models', ['color'], [F('Barnes'), F('Focus')]),
-      v('C', 'Script and Franklin on Models', 'models', ['color', 'mono'], [Sc('Barnes'), F('Focus', 1)])]],
-    ['calder-gardens', 'Calder Gardens', [
-      v('A', 'Your pick: Franklin on butter', null, ['mono'], [F('Calder'), F('Gardens')]),
-      v('B', 'Franklin in color on butter', null, ['color'], [F('Calder'), F('Gardens')])]],
-    ['membership', 'Membership', [
-      v('A', 'Your pick: Franklin on Bouquet of Flowers', 'bouquet', ['mono'], [F('Membership')]),
-      v('B', 'Franklin in color on Bouquet of Flowers', 'bouquet', ['color'], [F('Membership')]),
-      v('C', 'Script on Bouquet of Flowers', 'bouquet', ['any'], [Sc('Membership')])]],
-    ['commerce', 'Commerce', [
-      v('A', 'Your pick: Franklin on The Card Players', 'cards', ['mono'], [F('Commerce')]),
-      v('B', 'Franklin in color on The Card Players', 'cards', ['color'], [F('Commerce')])]],
-    ['deep-zoom', 'Deep Zoom', [
-      v('A', 'Your pick: Franklin on Monkeys and Parrot', 'jungle', ['mono'], [F('Deep'), F('Zoom')]),
-      v('B', 'Franklin in color on Monkeys and Parrot', 'jungle', ['color'], [F('Deep'), F('Zoom')])]],
-    ['online-collection', 'Online Collection', [
-      v('A', 'Your pick: Franklin on The Large Bathers', 'bathers', ['mono'], [F('Online'), F('Collection')]),
-      v('B', 'Franklin in color on The Large Bathers', 'bathers', ['color'], [F('Online'), F('Collection')]),
-      v('C', 'Script and Franklin on The Large Bathers', 'bathers', ['color', 'mono'], [Sc('Online'), F('Collection', 1)])]],
-    ['tours', 'Tours and Eye Spy', [
-      v('A', 'Your pick: Franklin on Boy in Sailor Suit', 'eyes', ['mono'], [F('Tours and'), F('Eye Spy')]),
-      v('B', 'Franklin in color on Boy in Sailor Suit', 'eyes', ['color'], [F('Tours and'), F('Eye Spy')]),
-      v('C', 'Franklin on Girl with a Polka-Dot Blouse', 'polkadot', ['any'], [F('Tours and'), F('Eye Spy')])]],
-    ['one-visitor-one-record', 'One Visitor, One Record', [
-      v('A', 'Your pick: Condensed on Jeanne Hébuterne', 'jeanne', ['mono'], [C('ONE VISITOR,'), C('ONE RECORD')], { max: 120, lh: 0.92 }),
-      v('B', 'Condensed in color on Jeanne Hébuterne', 'jeanne', ['color'], [C('ONE VISITOR,'), C('ONE RECORD')], { max: 120, lh: 0.92 }),
-      v('C', 'Script and Condensed on Jeanne Hébuterne', 'jeanne', ['color', 'mono'], [Sc('One Visitor,'), C('ONE RECORD', 1)], { max: 120, lh: 0.92 })]],
-    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [
-      v('A', 'Your pick: Condensed on The Postman (also on VXP)', 'postman', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
-      v('B', 'Condensed on Sleeping Shepherd, Titian', 'shepherd', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
-      v('C', 'Condensed on Still Life with Gourds, Matisse', 'gourds', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 }),
-      v('D', 'Condensed on Le Bonheur de vivre, Matisse', 'joy', ['any'], [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], { max: 120, lh: 0.92 })]],
-    ['one-codebase-two-brands', 'One Codebase, Two Brands', [
-      v('A', 'Your pick: Franklin on Beatrice', 'beatrice', ['mono'], [F('One Codebase,'), F('Two Brands')]),
-      v('B', 'Franklin in color on Beatrice', 'beatrice', ['color'], [F('One Codebase,'), F('Two Brands')]),
-      v('C', 'Franklin and script on Beatrice, one voice per brand', 'beatrice', ['mono', 'color'], [F('One Codebase,'), Sc('Two Brands', 1)])]],
-    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', [
-      v('A', 'Your pick: Franklin on Tarring the Boat', 'boat', ['mono'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')]),
-      v('B', 'Franklin in color on Tarring the Boat', 'boat', ['color'], [F('Designing and'), F('Building a'), F('Platform for'), F('Close Looking')])]],
-    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', [
-      v('A', 'Your pick: Franklin on Annunciation', 'annunciation', ['mono'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')]),
-      v('B', 'Franklin in color on Annunciation', 'annunciation', ['color'], [F('Digital Product'), F('as Institutional'), F('Practice at the'), F('Barnes Foundation')])]],
+    ['visual-experience-platform', 'Visual Experience Platform', [v('A', 'Your pick: yellow on The Postman', 'postman', ['color'], VXP), ...fun('postman', VXP, 'The Postman', [])]],
+    ['membership', 'Membership', [v('A', 'Your pick: green on Bouquet of Flowers', 'bouquet', ['color'], [F('Membership')]), ...fun('bouquet', [F('Membership')], 'Bouquet of Flowers', ['green'])]],
+    ['commerce', 'Commerce', [v('A', 'Your pick: sky on The Card Players', 'cards', ['color'], [F('Commerce')]), ...fun('cards', [F('Commerce')], 'The Card Players', ['sky'])]],
+    ['deep-zoom', 'Deep Zoom', [v('A', 'Your pick: yellow on Monkeys and Parrot', 'jungle', ['color'], [F('Deep'), F('Zoom')]), ...fun('jungle', [F('Deep'), F('Zoom')], 'Monkeys and Parrot', [])]],
+    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'Your pick: white on Sleeping Shepherd', 'shepherd', ['any'], SC, CO), ...fun('shepherd', SC, 'Sleeping Shepherd', [], CO)]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -287,7 +248,7 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Cover study, round two</h1><p>Your picks are first in each row. The others try your pick with colored type (matching the frame when the painting allows), a script where it fits, and new paintings so no work shows up twice. Colors and placement come from each painting's own pixels.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Cover study, round three</h1><p>These are the five cards where you picked colored or new type. Your pick is first, then the same cover in pink, green, lilac, orange, sky and red. Anything under 3 to 1 is hard to read at a glance. The other eight cards are set.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}

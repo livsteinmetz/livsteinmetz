@@ -23,7 +23,7 @@ for (const id of ids) {
     const png = (await cv.screenshot()).toString('base64');
     const fills = [], scores = [];
     for (let gi = 0; gi < groups.length; gi++) {
-      const mode = modes[gi] || modes[0]; const colors = mode === 'color' ? [...new Set([mat, ...COLOR])] : SETS[mode];
+      const mode = modes[gi] || modes[0]; const colors = mode.startsWith('fix:') ? [mode.slice(4)] : mode === 'color' ? [...new Set([mat, ...COLOR])] : SETS[mode];
       const sc = await g.evaluate(async ([src, rs, colors]) => {
         const im = new Image(); im.src = `data:image/png;base64,${src}`; await im.decode();
         const k = im.naturalWidth / document.querySelector('.study .cover').getBoundingClientRect().width;
