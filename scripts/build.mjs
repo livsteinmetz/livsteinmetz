@@ -201,7 +201,7 @@ mkdirSync('build/data', { recursive: true });
     const dir = `build/data/${createHash('sha256').update(`snapshot:${token}`).digest('hex').slice(0, 32)}`;
     mkdirSync(dir, { recursive: true });
     writeFileSync(`${dir}/diary.json`, JSON.stringify(diary));
-    writeFileSync('build/.spotify-backup.json', JSON.stringify({ at: trends.at || '', 'my-playlists': myPlaylists.filter((p) => p.isPublic !== false), trends, library, previews, 'playlist-tracks': sendLists, diary }));
+    if (myPlaylists.length) writeFileSync('build/.spotify-backup.json', JSON.stringify({ at: trends.at || '', 'my-playlists': myPlaylists.filter((p) => p.isPublic !== false), trends, library, previews, 'playlist-tracks': sendLists, diary }));
     writeFileSync(`${dir}/spotify.json`, JSON.stringify({ at: trends.at || '', 'my-playlists': myPlaylists.filter((p) => p.isPublic !== false), trends, library, previews, 'playlist-tracks': sendLists }));
   }
 }
