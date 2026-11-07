@@ -40,6 +40,7 @@ for (const [k, g] of Object.entries(groups)) {
   // Only artists who clearly show up more: at least 8 such days and half again their usual rate.
   lift[k] = Object.entries(g.c).filter(([, v]) => v >= Math.max(8, g.days * 0.03)).map(([a, v]) => [names[a], (v / g.days) / (base[a] / counted)]).filter(([, r]) => r >= 1.5).sort((p, q) => q[1] - p[1]).slice(0, 3).map(([a]) => a);
 }
+for (const k of ['rain', 'cold']) { const g = groups[k]; if (g) console.log('Weather candidates', k, JSON.stringify(Object.entries(g.c).filter(([, v]) => v >= 5).map(([a, v]) => [names[a], +((v / g.days) / (base[a] / counted)).toFixed(2), v]).sort((p, q) => q[1] - p[1]).slice(0, 10))); }
 if (Object.keys(out).length) out.lift = lift;
 console.log('Weather artists', JSON.stringify(lift));
 writeFileSync('content/weather-history.json', `${JSON.stringify(Object.keys(out).length ? out : null)}\n`);
