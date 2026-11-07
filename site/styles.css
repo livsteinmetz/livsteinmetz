@@ -181,3 +181,4 @@ h3.ctitle{margin:0;font-weight:inherit}
 .tracks{padding-left:1.4em}.tracks li{padding:10px 0;border-bottom:1px solid #e6e6e6}.tracks .song{font-weight:600}.tracks .by{color:#555}.tracks .go{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px;font-size:.875rem}
 .sample-note{position:sticky;top:0;z-index:20;margin:0;padding:6px 16px;background:#fff;color:#666;font-size:.75rem;font-style:italic;text-align:center}
 .textbtn{font:inherit;font-size:1rem;font-weight:600;background:none;border:0;padding:6px 0;color:#16246e;cursor:pointer}.textbtn:hover{text-decoration:underline;text-underline-offset:3px}.textbtn:focus-visible{outline:2px solid #c9321a;outline-offset:3px}
+.scene.static.how{padding:6vh 16px}.how-inner summary{cursor:pointer;font-size:.9375rem;color:#16246e;text-decoration:underline;text-underline-offset:3px;list-style:none;text-align:center}.how-inner summary::-webkit-details-marker{display:none}.how-inner[open] summary{margin-bottom:1em}
