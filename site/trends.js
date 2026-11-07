@@ -31,9 +31,10 @@ function sample() {
   const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
   // Olivia's picks: real artists and the song she played most by each.
   const ERAS = [
-    ['Talking Heads', 2019.5, 1.0, 'This Must Be the Place (Naive Melody)'], ['Vampire Weekend', 2019.9, 0.8, 'Harmony Hall'], ['Bach', 2020.6, 2.4, 'Brandenburg Concerto No. 5: I. Allegro'],
-    ['Noname', 2021.1, 0.9, 'Self'], ['Thundercat', 2021.8, 0.8, 'Them Changes'], ['Mitski', 2022.5, 1.0, 'Working for the Knife'], ['Japanese Breakfast', 2023.1, 0.8, 'Be Sweet'],
-    ['Caroline Polachek', 2023.8, 0.9, 'Pretty In Possible'], ['Cocteau Twins', 2024.6, 1.0, 'Cherry-coloured Funk'], ['Handel', 2025.4, 1.8, 'Messiah: He was despised'], ['Noname', 2026.2, 0.6, 'Self'],
+    ['Talking Heads', 2019.4, 0.9, 'This Must Be the Place (Naive Melody)'], ['ABBA', 2019.8, 0.9, 'As Good As New'], ['Vampire Weekend', 2020.1, 0.6, 'Harmony Hall'], ['Bach', 2020.6, 2.4, 'Brandenburg Concerto No. 5: I. Allegro'],
+    ['Kate Bush', 2020.9, 0.7, 'Wuthering Heights'], ['Noname', 2021.2, 0.9, 'Self'], ['Thundercat', 2021.8, 0.7, 'Them Changes'], ['Mitski', 2022.4, 0.9, 'Working for the Knife'],
+    ['Frou Frou', 2022.9, 0.6, 'Let Go'], ['Japanese Breakfast', 2023.2, 0.7, 'Be Sweet'], ['Caroline Polachek', 2023.8, 0.9, 'Pretty In Possible'], ['Björk', 2024.3, 0.7, "There's More to Life Than This"],
+    ['Cocteau Twins', 2024.8, 0.8, 'Cherry-coloured Funk'], ['Madonna', 2025.3, 0.6, 'Dress You Up'], ['Mahler', 2025.0, 0.7, 'Das Lied von der Erde: I. Das Trinklied vom Jammer der Erde'], ['Handel', 2025.7, 1.6, 'Messiah: He was despised'], ['Richard Strauss', 2026.0, 0.7, 'Also sprach Zarathustra: Von der großen Sehnsucht'], ['Noname', 2026.4, 0.6, 'Self'],
   ];
   const TRIPS = [['MX', '2020-02-10', '2020-02-17'], ['JP', '2021-04-02', '2021-04-12'], ['IS', '2022-01-20', '2022-01-27'], ['PT', '2023-06-05', '2023-06-15'], ['MA', '2024-03-08', '2024-03-15'], ['GR', '2025-08-18', '2025-08-25'], ['NO', '2026-02-01', '2026-02-06']];
   const LAT = { US: 41.9, MX: 19.4, JP: 35.7, IS: 64.1, PT: 38.7, MA: 31.6, GR: 37.98, NO: 59.9 };
@@ -63,7 +64,7 @@ function sample() {
       rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: ERAS[n][3], conn_country: cc });
     }
   }
-  weather.lift = { rain: ['Cocteau Twins', 'Bach'], snow: ['Handel'], hot: ['Thundercat'], cold: ['Mitski'] };
+  weather.lift = { rain: ['Kate Bush', 'Cocteau Twins'], snow: ['Handel', 'Björk', 'Mahler'], hot: ['ABBA', 'Madonna'], cold: ['Frou Frou', 'Mitski'] };
   return { ...summarize(rows), sampleWeather: weather };
 }
 
