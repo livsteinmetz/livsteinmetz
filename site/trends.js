@@ -419,6 +419,7 @@ function drawGlobe(s, me) {
 function draw(s, who) {
   const me = who === 'mine' ? { I: 'I', i: 'I', my: 'my', My: 'My' } : who === 'sample' ? { I: 'They', i: 'they', my: 'their', My: 'Their' } : { I: 'You', i: 'you', my: 'your', My: 'Your' };
   if (who === 'sample') weather = s.sampleWeather;
+  $('sample-note').hidden = who !== 'sample';
   if (!world && PUBLIC_WORLD) world = PUBLIC_WORLD;
   $('deck').hidden = false;
   scrub = {};

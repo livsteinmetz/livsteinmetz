@@ -3,6 +3,8 @@
 // Skips quietly until the SPOTIFY_ secrets are set, and a failed request never
 // blocks a deploy: the section just stays off the page.
 import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+const KEEP = createHash('sha256').update(`snapshot:${process.env.SPOTIFY_REFRESH_TOKEN || ''}`).digest('hex').slice(0, 32);
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret, SPOTIFY_REFRESH_TOKEN: refresh } = process.env;
 const today = () => new Date().toISOString().slice(0, 10);
@@ -14,7 +16,7 @@ if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); p
 // a newly chosen playlist needs a preview. A failed scan keeps what was published.
 const FILES = ['my-playlists', 'trends', 'library', 'previews', 'playlist-tracks'];
 const snapshots = [];
-for (const url of ['https://livsteinmetz.com/data/spotify.json', 'https://livsteinmetz.web.app/data/spotify.json', 'https://livsteinmetz--preview-y8pj65y4.web.app/data/spotify.json']) {
+for (const url of [`https://livsteinmetz.com/data/${KEEP}/spotify.json`, `https://livsteinmetz--preview-y8pj65y4.web.app/data/${KEEP}/spotify.json`, 'https://livsteinmetz.com/data/spotify.json', 'https://livsteinmetz.web.app/data/spotify.json']) {
   try { const res = await fetch(url); if (res.ok) snapshots.push(await res.json()); } catch { /* none yet */ }
 }
 const snapshot = snapshots.sort((a, b) => (b.at || '').localeCompare(a.at || ''))[0];
@@ -185,7 +187,7 @@ try {
   }
   // A diary of top artists. Each build adds today to what the live site already has.
   let diary = [];
-  for (const host of ['https://livsteinmetz.com', 'https://livsteinmetz.web.app']) { try { const res = await fetch(`${host}/data/diary.json`); if (res.ok) { diary = await res.json(); break; } } catch { /* try the next address */ } }
+  for (const host of ['https://livsteinmetz.com', 'https://livsteinmetz.web.app']) { try { const res = await fetch(`${host}/data/${KEEP}/diary.json`).then((r) => (r.ok ? r : fetch(`${host}/data/diary.json`))); if (res.ok) { diary = await res.json(); break; } } catch { /* try the next address */ } }
   if (!diary.some((d) => d.d === today()) && windows[0].artists.length) diary.push({ d: today(), artists: windows[0].artists.slice(0, 5) });
   writeFileSync('content/diary.json', `${JSON.stringify(diary)}\n`);
 
