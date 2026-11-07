@@ -306,7 +306,6 @@ function drawGlobe(s, me) {
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
   const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.transit ? 'Always on my way somewhere else.' : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
-  steps.push({ at: [-30, 45], line: `${order.length - 1} countries away from home, and the music came along.`, sub: '' });
   // Give each stop about a screen and a quarter of scroll, so the turns read as smooth.
   sceneEl.style.height = `${steps.length * 125 + 60}svh`;
   const project = (lon, lat, l0, p0, R, cx, cy) => {
