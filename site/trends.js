@@ -229,6 +229,8 @@ function drawWeather(s, me) {
   for (const k of ['rain', 'snow', 'hot', 'cold']) {
     const who = lift(k), diff = vs(k);
     if (!diff && !who.length) continue;
+    // Heat cuts listening, so say it the other way round: cooler days bring more music.
+    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.I === 'I' ? 'I' : 'you'} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter ones.${who.length ? ` Heat brings out ${list3(who)}.` : ''}`]); continue; }
     steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))}.` : `${brings[k]} brings out ${list3(who)}.`, diff && who.length ? `${brings[k]} brings out ${list3(who)}.` : '']);
   }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
