@@ -9,13 +9,19 @@ const s = summarize(rows);
 // what played between them becomes that place's music.
 let trips = [];
 try { trips = JSON.parse(readFileSync('content/trips.json', 'utf8')); } catch { /* none */ }
+const day = (iso, n) => new Date(Date.parse(`${iso}T12:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
 for (const t of trips) {
-  const inTrip = rows.filter((r) => r.ts && r.ts.slice(0, 10) >= t.from && r.ts.slice(0, 10) <= t.to);
-  const sub = summarize(inTrip.map((r) => ({ ...r, conn_country: t.cc })));
-  const place = sub.places?.find((p) => p.cc === t.cc);
-  // A trip with no Spotify still gets its dot.
-  const keep = place || { cc: t.cc, first: t.from, last: t.to, artists: [], song: null };
+  let place = null, guess = false;
+  if (!t.transit) {
+    const pick = (from, to) => summarize(rows.filter((r) => r.ts && r.ts.slice(0, 10) >= from && r.ts.slice(0, 10) <= to).map((r) => ({ ...r, conn_country: t.cc }))).places?.find((p) => p.cc === t.cc);
+    place = pick(t.from, t.to);
+    // No Spotify on the trip: guess from the same season, the two weeks either side.
+    if (!place) { place = pick(day(t.from, -14), day(t.to, 14)); guess = !!place; }
+    if (place) Object.assign(place, { first: t.from, last: t.to, guess });
+  }
+  const keep = place || { cc: t.cc, first: t.from || '9999', last: t.to || '9999', artists: [], song: null, transit: !!t.transit };
   s.places = s.places.filter((p) => p.cc !== t.cc).concat(keep).sort((a, b) => (a.first < b.first ? -1 : 1));
+  console.log(t.cc, guess ? 'guessed' : place ? 'matched' : 'dot only', keep.artists.join(', '));
 }
 writeFileSync('content/listening-history.json', `${JSON.stringify(s)}\n`);
 console.log(`${rows.length} plays, ${s.hours} hours, ${s.playedDays} days, streak ${s.streak.len}, river: ${s.river.map((a) => a.name).join(', ')}`);

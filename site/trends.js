@@ -2,6 +2,8 @@
 // here and goes nowhere: there is no upload, and closing the tab clears it.
 import { summarize } from './summarize.js';
 const library = JSON.parse(document.getElementById('library').textContent);
+// Weather picks Olivia chose, by kind of day, plus one set for after dark.
+const PICKS = JSON.parse(document.getElementById('picks').textContent) || {};
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -239,11 +241,11 @@ function drawWeather(s, me) {
     out.textContent = 'Checking the sky where you are…';
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
       try {
-        const q = new URLSearchParams({ latitude: coords.latitude.toFixed(1), longitude: coords.longitude.toFixed(1), current: 'temperature_2m,weather_code', daily: 'temperature_2m_max', temperature_unit: 'fahrenheit', forecast_days: '1', timezone: 'auto' });
+        const q = new URLSearchParams({ latitude: coords.latitude.toFixed(1), longitude: coords.longitude.toFixed(1), current: 'temperature_2m,weather_code', daily: 'temperature_2m_max,sunset', temperature_unit: 'fahrenheit', forecast_days: '1', timezone: 'auto' });
         const w = await (await fetch(`https://api.open-meteo.com/v1/forecast?${q}`)).json();
         const code = w.current.weather_code, f = w.current.temperature_2m, kind = kindF(code, (w.daily.temperature_2m_max[0] - 32) * 5 / 9);
-        const picks = (lift(kind).length ? lift(kind) : s.allTop.map((a) => a.name)).slice(0, 3);
-        out.textContent = `Where you are, it's ${Math.round(f)}°F and ${SKYWORD(code)}. On days like this, I'd put on ${list3(picks)}.`;
+        const dark = Date.now() > Date.parse(w.daily.sunset?.[0] || 0) && w.daily.sunset, picks = (dark && PICKS.night) || PICKS[kind] || PICKS.mild || [];
+        out.textContent = `Where you are, it's ${Math.round(f)}°F and ${SKYWORD(code)}. ${dark ? 'After dark' : 'On a day like this'}, I'd put on ${list3(picks)}.`;
       } catch { out.textContent = "I couldn't reach the weather just now. Try again in a minute."; }
     }, () => { out.textContent = 'No problem. Your location stays with you.'; }, { maximumAge: 6e5, timeout: 10000 });
   };
@@ -306,7 +308,7 @@ function drawGlobe(s, me) {
   btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Sound off'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
-  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.artists.length ? `On repeat: ${list3(p.artists)}.` : 'Spotify stayed quiet on this trip.' }));
+  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.transit ? 'Always on my way somewhere else.' : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
   steps.push({ at: [-30, 45], line: `${order.length - 1} countries away from home, and the music came along.`, sub: '' });
   const project = (lon, lat, l0, p0, R, cx, cy) => {
     const L = (lon - l0) * rad, P = lat * rad, P0 = p0 * rad, cosc = Math.sin(P0) * Math.sin(P) + Math.cos(P0) * Math.cos(P) * Math.cos(L);
@@ -418,11 +420,12 @@ async function drawToday(l) {
   $('today-sky').textContent = `It's ${season}.`;
   let pick = showSeason();
   try {
-    const f = await (await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.17&daily=weather_code,temperature_2m_max&temperature_unit=celsius&forecast_days=1&timezone=America%2FNew_York')).json();
+    const f = await (await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.17&daily=weather_code,temperature_2m_max,sunset&temperature_unit=celsius&forecast_days=1&timezone=America%2FNew_York')).json();
     const high = f.daily.temperature_2m_max[0], k = kindOf(f.daily.weather_code[0], high);
     $('today-sky').textContent = `${Math.round(high * 9 / 5 + 32)} degrees and ${SKY[k]}.`;
-    const w = l.moods?.weather?.[k];
-    if (w?.words.length) { $('today-words').textContent = `On days like this, I tend to save ${list(w.words)}.`; pick = w; }
+    const dark = new Date() > new Date(f.daily.sunset[0]), chosen = (dark && PICKS.night) || PICKS[k];
+    if (chosen?.length) { $('today-words').textContent = `${dark ? 'After dark' : 'On a day like this'}, I'd put on ${list3(chosen)}.`; pick = null; }
+    else { const w = l.moods?.weather?.[k]; if (w?.words.length) { $('today-words').textContent = `On days like this, I tend to save ${list(w.words)}.`; pick = w; } }
   } catch { /* the season line stands in */ }
   const songs = pick?.songs || [];
   if (songs.length) {
