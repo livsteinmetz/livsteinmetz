@@ -3,6 +3,7 @@
 import { summarize } from './summarize.js';
 const library = JSON.parse(document.getElementById('library').textContent);
 // Weather picks Olivia chose, by kind of day, plus one set for after dark.
+const PUBLIC_WORLD = JSON.parse(document.getElementById('world-public').textContent);
 const CONFIG = {
   apiKey: 'AIzaSyAuAgrSYSQl90t335zyZAWSAHY7FyqYPZs',
   authDomain: 'livsteinmetz-bb868.firebaseapp.com',
@@ -23,15 +24,45 @@ const dateOf = (start, i) => { const d = new Date(`${start}T12:00:00`); d.setDat
 const nice = (d) => `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 
 // Sample numbers for visitors who don't have an export yet. Never her listening.
+// A made-up listener, so visitors without the passcode still get the whole story:
+// eight years, eras that rise and fade, fall listening, trips, and weather to match.
 function sample() {
-  const rows = [], names = ['First Artist', 'Second Artist', 'Third Artist', 'Fourth Artist', 'Fifth Artist'];
-  for (let t = Date.UTC(2023, 0, 1); t < Date.UTC(2026, 0, 1); t += 36e5 * 5) {
-    const d = new Date(t), m = d.getUTCMonth(), h = d.getUTCHours();
-    if (Math.random() > 0.35 + 0.25 * Math.cos((m / 12) * 2 * Math.PI) + (h > 18 ? 0.3 : 0)) continue;
-    const i = Math.floor(((t / 864e5 / 60) + Math.random() * 2) % 5);
-    rows.push({ ts: d.toISOString(), ms_played: 1800000, master_metadata_album_artist_name: names[i] });
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  const ERAS = [
+    ['Fleetwood Mac', 2019.6, 1.2], ['Nina Simone', 2020.4, 1.0], ['Bach', 2021.0, 2.5], ['Frank Ocean', 2021.5, 1.0], ['ABBA', 2022.2, 0.8],
+    ['Kendrick Lamar', 2022.8, 0.9], ['Joni Mitchell', 2023.3, 1.1], ['Bad Bunny', 2023.9, 0.7], ['Radiohead', 2024.4, 1.3], ['Chappell Roan', 2025.0, 0.6], ['Debussy', 2025.6, 2.0], ['Arooj Aftab', 2026.2, 0.7],
+  ];
+  const TRIPS = [['MX', '2020-02-10', '2020-02-17'], ['JP', '2021-04-02', '2021-04-12'], ['IS', '2022-01-20', '2022-01-27'], ['PT', '2023-06-05', '2023-06-15'], ['MA', '2024-03-08', '2024-03-15'], ['GR', '2025-08-18', '2025-08-25'], ['NO', '2026-02-01', '2026-02-06']];
+  const LAT = { US: 41.9, MX: 19.4, JP: 35.7, IS: 64.1, PT: 38.7, MA: 31.6, GR: 37.98, NO: 59.9 };
+  const WARM = { US: [0, 28], MX: [24, 28], JP: [9, 30], IS: [1, 14], PT: [14, 28], MA: [18, 37], GR: [13, 32], NO: [-1, 22] };
+  const where = (iso) => (TRIPS.find(([, a, b]) => iso >= a && iso <= b) || ['US'])[0];
+  const rows = [], weather = {}, start = '2019-03-01', end = Date.UTC(2026, 9, 31);
+  for (const cc of Object.keys(LAT)) weather[cc] = { start, code: [], high: [], rain: [], sunrise: [], sunset: [] };
+  for (let t = Date.UTC(2019, 2, 1), i = 0; t <= end; t += 864e5, i++) {
+    const d = new Date(t), iso = d.toISOString().slice(0, 10), doy = (t - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5, yr = d.getUTCFullYear() + doy / 365;
+    for (const cc of Object.keys(LAT)) {
+      const [lo, hi] = WARM[cc], high = lo + (hi - lo) * (0.5 - 0.5 * Math.cos(((doy - 15) / 365) * 2 * Math.PI)) + (rnd() - 0.5) * 8;
+      const wet = rnd() < (cc === 'IS' || cc === 'NO' ? 0.4 : cc === 'MA' ? 0.08 : 0.28);
+      const decl = 23.44 * Math.sin(((doy - 81) / 365) * 2 * Math.PI) * Math.PI / 180, lat = LAT[cc] * Math.PI / 180;
+      const half = Math.acos(Math.max(-1, Math.min(1, -Math.tan(lat) * Math.tan(decl)))) * 12 / Math.PI;
+      const w = weather[cc];
+      w.code.push(wet ? (high < 1 ? 73 : 63) : rnd() < 0.5 ? 1 : 3); w.high.push(+high.toFixed(1)); w.rain.push(wet ? 4 : 0);
+      w.sunrise.push(+(12.5 - half).toFixed(2)); w.sunset.push(+(12.5 + half).toFixed(2));
+    }
+    const cc = where(iso), fall = 1 + 0.45 * Math.cos(((doy - 300) / 365) * 2 * Math.PI);
+    if (rnd() < 0.18) continue;
+    const plays = Math.round((2 + rnd() * 5) * fall);
+    for (let k = 0; k < plays; k++) {
+      const hour = Math.min(23, Math.max(6, Math.round(13 + (rnd() + rnd() + rnd() - 1.5) * 7)));
+      const weights = ERAS.map(([, at, width]) => Math.exp(-((yr - at) ** 2) / (2 * width * width)));
+      let pick = rnd() * weights.reduce((a, b) => a + b, 0), n = 0;
+      while ((pick -= weights[n]) > 0 && n < ERAS.length - 1) n++;
+      rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: `${ERAS[n][0]} song`, conn_country: cc });
+    }
   }
-  return summarize(rows);
+  weather.lift = { rain: ['Radiohead', 'Debussy'], snow: ['Bach'], hot: ['Bad Bunny'], cold: ['Joni Mitchell'] };
+  return { ...summarize(rows), sampleWeather: weather };
 }
 
 function rings(s) {
@@ -193,7 +224,7 @@ function drawSeasons(s, me) {
   const fallShare = avg(full.map((y) => per[y].slice(9).reduce((a, b) => a + b, 0) / per[y].slice(5, 8).reduce((a, b) => a + b, 0))) - 1;
   $('scene-season').hidden = full.length < 3 || fallWins.length < full.length * 0.8;
   const steps = ys.map(() => ['Each line is a year of listening, January to December.', 'Watch the right-hand side.', -1]);
-  steps.push([fallWins.length === full.length ? `Every year, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.` : `Most years, ${me.I === 'I' ? 'I' : 'you'} listen more in the fall.`, `In ${fallWins.length === full.length ? `all ${full.length}` : `${fallWins.length} of ${full.length}`} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
+  steps.push([fallWins.length === full.length ? `Every year, ${me.i} listen more in the fall.` : `Most years, ${me.i} listen more in the fall.`, `In ${fallWins.length === full.length ? `all ${full.length}` : `${fallWins.length} of ${full.length}`} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
   const ridgesEls = [...$('rings').querySelectorAll('.ridge')], band = $('season-band');
   let shown = -1;
   scrub['scene-season'] = (p) => {
@@ -221,7 +252,7 @@ function drawWeather(s, me) {
   $('weather-plate').innerHTML = `<svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Each day of listening, by that day's high temperature" data-focus="all">${hours}${axis}${dots}</svg>`;
   const by = (k) => days.filter((d) => d.kind === k), mean = (a) => avg(a.map((d) => d.m));
   const all = mean(days), dry = mean(days.filter((d) => d.kind !== 'rain' && d.kind !== 'snow'));
-  const lift = (k) => PICKS[k] || weather?.lift?.[k] || [];
+  const lift = (k) => (me.i === 'I' ? PICKS[k] : null) || weather?.lift?.[k] || [];
   const bands = {}; days.forEach((d) => { const b = Math.floor(d.f / 10) * 10; (bands[b] ||= []).push(d.m); });
   const sweet = Object.entries(bands).filter(([, v]) => v.length >= 20).sort((p, q) => avg(q[1]) - avg(p[1]))[0];
   // A difference counts only if it is large and unlikely to be chance (Welch's t above 2).
@@ -234,19 +265,19 @@ function drawWeather(s, me) {
   const others = (k) => mean(sameMonths(k));
   const sweetReal = sweet && real(sweet[1], days.filter((d) => Math.floor(d.f / 10) * 10 !== +sweet[0]).map((d) => d.m));
   const say = { rain: 'rainy days', snow: 'snow days', hot: 'days above 85°F', cold: 'days below 40°F' }, brings = { rain: 'Rain', snow: 'Snow', hot: 'Heat', cold: 'Cold' };
-  const steps = [['all', `Every dot is a day ${me.I === 'I' ? 'I' : 'you'} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
+  const steps = [['all', `Every dot is a day ${me.i} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
   for (const k of ['rain', 'snow', 'hot', 'cold']) {
     const who = lift(k), diff = vs(k);
     if (!diff && !who.length) continue;
     // Heat cuts listening, so say it the other way round: cooler days bring more music.
-    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.I === 'I' ? 'I' : 'you'} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, I'd put on ${list3(who)}.` : ''}`]); continue; }
-    steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, I'd put on ${list3(who)}.`, diff && who.length ? `My picks for them: ${list3(who)}.` : '']);
+    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.i} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.` : ''}`]); continue; }
+    steps.push([k, diff ? `On ${say[k]}, ${me.i} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.`, diff && who.length ? `${me.My} go-tos: ${list3(who)}.` : '']);
   }
   // If no kind of weather clearly changes how much I listen, say that plainly.
   const shifts = ['rain', 'snow', 'hot', 'cold'].filter((k) => by(k).length >= 15);
   if (!shifts.some(vs) && shifts.length) {
     const spread = Math.max(...shifts.map((k) => Math.abs(mean(by(k)) / others(k) - 1)));
-    steps.splice(1, 0, ['all', `The weather barely changes how much ${me.I === 'I' ? 'I' : 'you'} listen.`, `Compared with other days in the same months, rainy, snowy, hot and cold days all land within ${Math.ceil(spread * 10) * 10}% of an ordinary day.`]);
+    steps.splice(1, 0, ['all', `The weather barely changes how much ${me.i} listen.`, `Compared with other days in the same months, rainy, snowy, hot and cold days all land within ${Math.ceil(spread * 10) * 10}% of an ordinary day.`]);
   }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
   const svg = $('weather-plate').firstChild;
@@ -271,7 +302,7 @@ function drawLight(s, me) {
   $('clock').innerHTML = clock(s).replace('</svg>', `<g id="sun" style="opacity:0">${have ? line(rise, '#ef8f35') + line(set, RED) + `<text x="${X(rise[11]) - 8}" y="${Y(11) + 34}" font-size="14" text-anchor="end" fill="#ef8f35">sunrise</text><text x="${X(set[11]) + 8}" y="${Y(11) + 34}" font-size="14" fill="${RED}">sunset</text>` : ''}</g></svg>`);
   const steps = [[`The peak comes around ${ap(peakHour(s)).replace(/\.$/, '')}.`, 'Every month, hour by hour. The darker the square, the more music.', 0]];
   if (have) {
-    steps.push(['The orange line is sunrise. The red line is sunset.', 'Averaged across the days I was listening, wherever I was.', 1]);
+    steps.push(['The orange line is sunrise. The red line is sunset.', `Averaged across the days ${me.i} ${me.i === 'I' ? 'was' : 'were'} listening, wherever ${me.i} ${me.i === 'I' ? 'was' : 'were'}.`, 1]);
     // Winter has more dark hours, so a bigger dark share proves nothing. The fair test: the same
     // evening hour, in months when it's already dark versus months when it's still light,
     // each month's listening scaled to its own total so busy fall months don't tip it.
@@ -282,8 +313,8 @@ function drawLight(s, me) {
       return d.length >= 2 && l.length >= 2 ? avg(d) / avg(l) : 1;
     });
     const lift = avg(ratios);
-    if (ratios.filter((r) => r > 1.15).length >= 3) steps.push(['When the sun sets early, my evenings get more music.', `Between 4 and 8 p.m., I listen about ${Math.round((lift - 1) * 100)}% more once it's dark than at the same hour in lighter months.`, 1]);
-    else if (ratios.filter((r) => r < 0.87).length >= 3) steps.push(['Darkness doesn\'t pull me toward music.', `Between 4 and 8 p.m., I listen about ${Math.round((1 - lift) * 100)}% less once it's dark than at the same hour in lighter months.`, 1]);
+    if (ratios.filter((r) => r > 1.15).length >= 3) steps.push([`When the sun sets early, ${me.my} evenings get more music.`, `Between 4 and 8 p.m., ${me.i} listen about ${Math.round((lift - 1) * 100)}% more once it's dark than at the same hour in lighter months.`, 1]);
+    else if (ratios.filter((r) => r < 0.87).length >= 3) steps.push([`Darkness doesn't pull ${me.i === 'I' ? 'me' : me.i === 'they' ? 'them' : 'you'} toward music.`, `Between 4 and 8 p.m., ${me.i} listen about ${Math.round((1 - lift) * 100)}% less once it's dark than at the same hour in lighter months.`, 1]);
   }
   let shown = -1;
   scrub['scene-clock'] = (p) => {
@@ -298,7 +329,7 @@ function drawLight(s, me) {
 
 // A globe that turns to each place the music was played, as you scroll.
 let world = null;
-const PLACES = { US: [-75.17, 39.95, 'Home, in Philadelphia'], SE: [11.97, 57.71, 'Sweden'], IE: [-6.26, 53.35, 'Ireland'], MX: [-99.13, 19.43, 'Mexico'], FI: [24.94, 60.17, 'Finland'], IT: [12.5, 41.9, 'Italy'], AT: [16.37, 48.21, 'Austria'], DK: [12.57, 55.68, 'Denmark'], GB: [-0.13, 51.5, 'England'], FR: [2.35, 48.86, 'France'], DE: [13.4, 52.52, 'Germany'], ES: [-3.7, 40.42, 'Spain'], NL: [4.9, 52.37, 'the Netherlands'], NO: [10.75, 59.91, 'Norway'], CA: [-79.38, 43.65, 'Canada'], PT: [-9.14, 38.72, 'Portugal'], GR: [23.73, 37.98, 'Greece'], JP: [139.69, 35.69, 'Japan'], IS: [-21.9, 64.15, 'Iceland'], CH: [8.54, 47.37, 'Switzerland'], BE: [4.35, 50.85, 'Belgium'], CZ: [14.42, 50.08, 'Czechia'], RO: [26.1, 44.43, 'Romania'], EE: [24.75, 59.44, 'Estonia'] };
+const PLACES = { US: [-75.17, 39.95, 'Home, in Philadelphia'], SE: [11.97, 57.71, 'Sweden'], IE: [-6.26, 53.35, 'Ireland'], MX: [-99.13, 19.43, 'Mexico'], FI: [24.94, 60.17, 'Finland'], IT: [12.5, 41.9, 'Italy'], AT: [16.37, 48.21, 'Austria'], DK: [12.57, 55.68, 'Denmark'], GB: [-0.13, 51.5, 'England'], FR: [2.35, 48.86, 'France'], DE: [13.4, 52.52, 'Germany'], ES: [-3.7, 40.42, 'Spain'], NL: [4.9, 52.37, 'the Netherlands'], NO: [10.75, 59.91, 'Norway'], CA: [-123.12, 49.28, 'Vancouver'], PT: [-9.14, 38.72, 'Portugal'], GR: [23.73, 37.98, 'Greece'], JP: [139.69, 35.69, 'Japan'], IS: [-21.9, 64.15, 'Iceland'], CH: [8.54, 47.37, 'Switzerland'], BE: [4.35, 50.85, 'Belgium'], CZ: [14.42, 50.08, 'Czechia'], RO: [26.1, 44.43, 'Romania'], EE: [24.75, 59.44, 'Estonia'], MA: [-7.99, 31.63, 'Morocco'] };
 const rad = Math.PI / 180;
 const span = (a, b) => {
   const A = new Date(`${a}T12:00:00`), B = new Date(`${b}T12:00:00`);
@@ -315,9 +346,10 @@ function drawGlobe(s, me) {
   audio.volume = 0.5;
   let sound = false, playing = '';
   btn.onclick = () => { sound = !sound; btn.setAttribute('aria-pressed', sound); btn.textContent = sound ? 'Sound on' : 'Sound off'; if (!sound) { audio.pause(); playing = ''; } else shown = -1; };
+  const name = (cc) => (cc === 'US' && me.i !== 'I' ? 'Home' : PLACES[cc][2]);
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
-  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${PLACES[p.cc][2]}.`, sub: p.transit ? 'Always on my way somewhere else.' : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
+  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${name(p.cc)}.`, sub: p.transit ? `Always on ${me.my} way somewhere else.` : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
   // Give each stop about a screen and a quarter of scroll, so the turns read as smooth.
   sceneEl.style.height = `${steps.length * 125 + 60}svh`;
   const project = (lon, lat, l0, p0, R, cx, cy) => {
@@ -358,7 +390,7 @@ function drawGlobe(s, me) {
       const on = st.p === p || !st.p;
       ctx.beginPath(); ctx.arc(x, y, (on ? 7 : 4.5) * dpr, 0, 2 * Math.PI); ctx.fillStyle = on ? RED : INK; ctx.fill();
       if (on && st.p) { ctx.beginPath(); ctx.arc(x, y, (10 + 8 * ((Date.now() / 900) % 1)) * dpr, 0, 2 * Math.PI); ctx.strokeStyle = RED; ctx.lineWidth = 1.5 * dpr; ctx.stroke(); }
-      if (on && labels.every(([a, b]) => Math.hypot(a - x, b - y) > 34 * dpr)) { labels.push([x, y]); ctx.font = `600 ${15 * dpr}px ${getComputedStyle(document.body).fontFamily}`; ctx.fillStyle = INK; ctx.fillText(PLACES[p.cc][2].replace('Home, in ', ''), x + 12 * dpr, y - 10 * dpr); }
+      if (on && labels.every(([a, b]) => Math.hypot(a - x, b - y) > 34 * dpr)) { labels.push([x, y]); ctx.font = `600 ${15 * dpr}px ${getComputedStyle(document.body).fontFamily}`; ctx.fillStyle = INK; ctx.fillText(name(p.cc).replace('Home, in ', ''), x + 12 * dpr, y - 10 * dpr); }
     });
   };
   let last = [PLACES[home.cc][0], PLACES[home.cc][1] * 0.7, 0, 0];
@@ -385,15 +417,17 @@ function drawGlobe(s, me) {
 }
 
 function draw(s, who) {
-  const me = who === 'mine' ? { I: 'I', my: 'my', My: 'My' } : { I: 'You', my: 'your', My: 'Your' };
+  const me = who === 'mine' ? { I: 'I', i: 'I', my: 'my', My: 'My' } : who === 'sample' ? { I: 'They', i: 'they', my: 'their', My: 'Their' } : { I: 'You', i: 'you', my: 'your', My: 'Your' };
+  if (who === 'sample') weather = s.sampleWeather;
+  if (!world && PUBLIC_WORLD) world = PUBLIC_WORLD;
   $('deck').hidden = false;
   scrub = {};
   drawRiver(s, me);
   drawDays(s, me);
   drawSeasons(s, me);
-  if (who === 'mine') drawWeather(s, me); else $('scene-weather').hidden = true;
+  if (who === 'mine' || who === 'sample') drawWeather(s, me); else $('scene-weather').hidden = true;
   drawLight(s, me);
-  if (who === 'mine') drawGlobe(s, me); else $('scene-places').hidden = true;
+  drawGlobe(s, me);
   if (who === 'mine' && library) drawLibrary(library);
   document.querySelectorAll('.lib').forEach((el) => { el.hidden = who !== 'mine' || !library; });
   if (who === 'mine' && library) $('scene-today').hidden = !library.moods?.seasons;
@@ -567,5 +601,6 @@ $('file').onchange = async (e) => {
     $('drop-status').textContent = "That doesn't look like a Spotify history file. Unzip your export and choose the JSON files inside it.";
   }
 };
-$('demo').onclick = () => { draw(sample(), 'yours'); go(); };
+$('demo').onclick = () => { $('gate').hidden = true; draw(sample(), 'sample'); go(); };
+if ($('gate-sample')) $('gate-sample').onclick = () => { $('gate').hidden = true; draw(sample(), 'sample'); go(); };
 $('reset').onclick = () => { if (mine) { draw(mine, 'mine'); go(); } };

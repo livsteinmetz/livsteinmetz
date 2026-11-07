@@ -176,3 +176,6 @@ h3.ctitle{margin:0;font-weight:inherit}
 .gate[hidden]{display:none}
 .linkish{font:inherit;font-size:.9375rem;background:none;border:0;padding:0;color:#16246e;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.today-where{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:8px}.today-where[hidden]{display:none}.today-where input{font:inherit;padding:8px 10px;border:1px solid #16246e;width:12em}.today-where button[type=submit]{font:inherit;padding:8px 14px;border:0;background:#16246e;color:#fff;cursor:pointer}.today-where label{position:absolute;left:-9999px}#today-where-status{flex-basis:100%;margin:0}
 .gate-me{margin:0;font-size:.875rem}
+.pl{display:grid;gap:8px}.pl .send{font-size:.9375rem}
+.send h2{margin-top:2em}.send-actions{display:flex;flex-wrap:wrap;gap:10px}.send .btn{font:inherit;cursor:pointer}
+.tracks{padding-left:1.4em}.tracks li{padding:10px 0;border-bottom:1px solid #e6e6e6}.tracks .song{font-weight:600}.tracks .by{color:#555}.tracks .go{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px;font-size:.875rem}

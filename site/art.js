@@ -160,6 +160,11 @@ if (typeof document !== 'undefined') {
 
   document.querySelectorAll('[data-mail]').forEach((a) => { const [u, d] = a.dataset.mail.split('|'); a.href = `mailto:${u}@${d}${a.dataset.subject ? `?subject=${encodeURIComponent(a.dataset.subject)}` : ''}`; });
 
+  // Copy buttons on the send-a-playlist pages.
+  const copied = (b, text) => navigator.clipboard?.writeText(text).then(() => { const was = b.textContent; b.textContent = 'Copied'; setTimeout(() => { b.textContent = was; }, 1600); }).catch(() => {});
+  document.querySelectorAll('[data-copy]').forEach((b) => { b.onclick = () => copied(b, b.dataset.copy); });
+  document.querySelectorAll('[data-copy-list]').forEach((b) => { b.onclick = () => copied(b, [...document.querySelectorAll('.tracks li')].map((li) => `${li.querySelector('.song').textContent} - ${li.querySelector('.by').textContent}`).join('\n')); });
+
   // Scrolling drifts the shelves.
   if (!still) {
     const shelves = [...document.querySelectorAll('.shelf')];

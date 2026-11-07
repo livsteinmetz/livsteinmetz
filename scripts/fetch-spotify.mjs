@@ -12,7 +12,7 @@ if (!id || !secret || !refresh) { console.log('Spotify not set up, skipping'); p
 // Spotify rate limits a full scan, so each deploy publishes its results and the
 // next build starts from them. A scan runs only when they are a day old, or when
 // a newly chosen playlist needs a preview. A failed scan keeps what was published.
-const FILES = ['my-playlists', 'trends', 'library', 'previews'];
+const FILES = ['my-playlists', 'trends', 'library', 'previews', 'playlist-tracks'];
 const snapshots = [];
 for (const url of ['https://livsteinmetz.com/data/spotify.json', 'https://livsteinmetz.web.app/data/spotify.json', 'https://livsteinmetz--preview-y8pj65y4.web.app/data/spotify.json']) {
   try { const res = await fetch(url); if (res.ok) snapshots.push(await res.json()); } catch { /* none yet */ }
@@ -84,6 +84,8 @@ try {
   const own = raw.filter((p) => p.owner?.id === profile.id);
   const saves = [];
   let read = 0;
+  // Full track lists for the playlists Olivia shows, for the send-to-another-app pages.
+  const shown = new Set(JSON.parse(readFileSync('content/settings.json', 'utf8')).playlists.map((x) => x.id || x)), sendable = {};
   scan: for (const p of own) {
     const gig = GIG.test(p.name);
     if (p.public === false && !gig) continue;
@@ -98,6 +100,7 @@ try {
       for (const row of page.items) {
         const t = row.item || row.track, when = row.added_at && new Date(row.added_at);
         const artist = t?.artists?.[0]?.name;
+        if (shown.has(p.id) && t?.name && artist) (sendable[p.id] ||= []).push({ t: t.name, a: (t.artists || []).map((x) => x.name).join(', '), id: t.id, isrc: t.external_ids?.isrc || '' });
         if (!artist || !when) continue;
         tracks += 1;
         if (!first || when < first) first = when;
@@ -163,6 +166,7 @@ try {
     wall: pub.filter((p) => p.image).map((p) => ({ image: p.image, title: p.title })),
   };
   writeFileSync('content/library.json', `${JSON.stringify(library)}\n`);
+  writeFileSync('content/playlist-tracks.json', `${JSON.stringify(sendable)}\n`);
   console.log(`Library: ${read} pages from ${own.length} own playlists, ${seen.size} artists, ${gigs.length} gigs, ${library.titles.length} titles`);
 
   const windows = [];
