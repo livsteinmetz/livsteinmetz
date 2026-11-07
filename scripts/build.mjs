@@ -225,4 +225,44 @@ writeFileSync('build/site.webmanifest', JSON.stringify({ name: 'Olivia Steinmetz
 writeFileSync('build/llms.txt', `# Olivia Steinmetz\n\n> ${STATEMENT}\n\n## Work\n${work.map((w) => `- [${w.title}](${SITE}/work/${w.slug}): ${w.short}`).join('\n')}\n\n## Field notes\n${notes.map((n) => `- [${n.title}](${n.url})`).join('\n')}\n\n## More\n- [About](${SITE}/about)\n- [Double bass](${SITE}/bass)\n`);
 mkdirSync('build/.well-known', { recursive: true });
 writeFileSync('build/.well-known/security.txt', `Contact: https://www.linkedin.com/in/livsteinmetz/\nExpires: ${new Date(Date.now() + 300 * 864e5).toISOString()}\nPreferred-Languages: en\n`);
+// A study page for the cover type and paintings, only on the preview channel.
+if (process.env.PREVIEW) {
+  const STUDY = [
+    ['visual-experience-platform', 'Visual Experience Platform', 'a classroom', 'postman', 'joy', ['Visual', 'Experience', 'Platform']],
+    ['focus', 'Barnes Focus', 'a guide with no labels', 'models', 'cards', ['Barnes', 'Focus']],
+    ['calder-gardens', 'Calder Gardens', 'a new institution', null, null, ['Calder', 'Gardens']],
+    ['membership', 'Membership', 'a renewal flow', 'bouquet', 'gourds', ['Membership']],
+    ['commerce', 'Commerce', 'a way in the door', 'cards', 'polkadot', ['Commerce']],
+    ['deep-zoom', 'Deep Zoom', 'a close look', 'jungle', 'boat', ['Deep', 'Zoom']],
+    ['online-collection', 'Online Collection', 'a way to browse', 'bathers', 'joy', ['Online', 'Collection']],
+    ['tours', 'Tours and Eye Spy', 'a walk through the rooms', 'eyes', 'shepherd', ['Tours and', 'Eye Spy']],
+    ['one-visitor-one-record', 'One Visitor, One Record', 'a shared record', 'riffian', 'jeanne', ['One Visitor,', 'One Record']],
+    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', '', 'joy', 'postman', ['Scaling the', 'Visual', 'Experience', 'Platform']],
+    ['one-codebase-two-brands', 'One Codebase, Two Brands', '', 'beatrice', 'polkadot', ['One Codebase,', 'Two Brands']],
+    ['designing-and-building-a-platform-for-close-looking', 'Designing and Building a Platform for Close Looking', '', 'boat', 'jungle', ['Designing and', 'Building a', 'Platform for', 'Close Looking']],
+    ['why-were-writing-about-digital-work-again-at-the-barnes', 'Digital Product as Institutional Practice', '', 'annunciation', 'models', ['Digital Product', 'as Institutional', 'Practice at the', 'Barnes Foundation']],
+  ];
+  const STY = {
+    A: { name: 'Libre Franklin', font: 'Libre Franklin', wt: 800, stretch: '100%', ls: '-0.02em', lh: 0.98, max: 92 },
+    B: { name: 'Newsreader with a Franklin tag', font: 'Newsreader', wt: 500, stretch: '100%', ls: '-0.01em', lh: 1.02, max: 92, tag: true },
+    C: { name: 'Archivo Condensed', font: 'Archivo', wt: 800, stretch: '62%', ls: '0', lh: 0.92, max: 120, caps: true, alt: true },
+  };
+  const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
+  const cv = ([slug, title, tag, base, alt, lines], k) => {
+    const s = STY[k], key = s.alt ? alt : base, a = key && art[key];
+    const ls = (s.caps ? lines.map((l) => l.toUpperCase()) : lines);
+    const texts = ls.map((l) => `<text class="h" font-family="${s.font}" font-weight="${s.wt}" font-stretch="${s.stretch}" letter-spacing="${s.ls}">${esc(l)}</text>`).join('') + (s.tag && tag ? `<text class="t" font-family="Libre Franklin" font-weight="600" font-size="15">${esc(tag)}</text>` : '');
+    const label = `${k}. ${s.name}${a ? ` on ${a.title}, ${a.artist}` : ', flat butter'}`;
+    return `<button class="pick" type="button" data-card="${slug}" data-opt="${k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${k}">${a ? cropEl(key, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${s.max}" data-lh="${s.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${esc(label)}</span><span class="score"></span></button>`;
+  };
+  const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;800&family=Newsreader:opsz,wght@6..72,500&family=Archivo:wdth,wght@62..100,800&display=swap';
+  const body = `<div class="page study"><h1>Cover study</h1><p>Each row is one card in three versions. A and B keep the painting it has now. C tries another painting. Type colors and placement are picked from the painting's own pixels. Tap the one you like in each row, then copy your picks. Mixing is fine too, like "B type on the C painting".</p>${STUDY.map((c) => `<section class="srow"><h2>${esc(c[1])}</h2><div class="opts">${['A', 'B', 'C'].map((k) => cv(c, k)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+<link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
+<style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
+.pick{display:block;text-align:left;border:0;background:none;padding:6px;font:inherit;cursor:pointer;border-radius:2px;outline-offset:2px}.pick[aria-pressed=true]{outline:4px solid #16246e}.pick .mat{display:block}.pick .cover{display:block}.plabel{display:block;margin-top:.5rem;font-size:.9rem}.score{display:block;font-size:.8rem;color:#555}
+.pickbar{position:sticky;bottom:0;background:#fff;border-top:2px solid #16246e;padding:.7rem 0;display:flex;gap:1rem;align-items:center;justify-content:space-between}.pickbar p{margin:0;font-size:.9rem}#copy{font:inherit;border:2px solid #16246e;background:#fff;color:#16246e;padding:.4rem .8rem;cursor:pointer}</style>
+<script src="/study.js?v=${V}" defer></script>`;
+  writeFileSync('build/study.html', shell({ path: '/study', title: 'Cover study', description: 'Cover study', body }).replace('<head>', '<head><meta name="robots" content="noindex">'));
+}
 console.log(`Built ${Object.keys(pages).length} pages`);
