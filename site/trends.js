@@ -39,6 +39,13 @@ function sample() {
   const TRIPS = [['MX', '2020-02-10', '2020-02-17'], ['JP', '2021-04-02', '2021-04-12'], ['IS', '2022-01-20', '2022-01-27'], ['PT', '2023-06-05', '2023-06-15'], ['MA', '2024-03-08', '2024-03-15'], ['GR', '2025-08-18', '2025-08-25'], ['NO', '2026-02-01', '2026-02-06']];
   const LAT = { US: 41.9, MX: 19.4, JP: 35.7, IS: 64.1, PT: 38.7, MA: 31.6, GR: 37.98, NO: 59.9 };
   const WARM = { US: [0, 28], MX: [24, 28], JP: [9, 30], IS: [1, 14], PT: [14, 28], MA: [18, 37], GR: [13, 32], NO: [-1, 22] };
+  // Real listening is lumpy: artists come back for a week or a month, some months are
+  // obsessive and some are quiet. Each artist gets a main era, a few returns, and monthly noise.
+  const BUMPS = ERAS.map(([, at, width]) => [[at, width * 0.7, 1], ...Array.from({ length: 2 + Math.floor(rnd() * 3) }, () => [Math.min(2026.8, at + 0.3 + rnd() * 3), 0.05 + rnd() * 0.2, 0.2 + rnd() * 0.6])]);
+  const noiseCache = {};
+  const noise = (j, mk) => (noiseCache[`${j}:${mk}`] ??= Math.exp((rnd() + rnd() + rnd() - 1.5) * 1.2));
+  const moods = {};
+  const monthMood = (mk) => (moods[mk] ??= 0.45 + rnd() * 1.1);
   const where = (iso) => (TRIPS.find(([, a, b]) => iso >= a && iso <= b) || ['US'])[0];
   const rows = [], weather = {}, start = '2019-03-01', end = Date.UTC(2026, 9, 31);
   for (const cc of Object.keys(LAT)) weather[cc] = { start, code: [], high: [], rain: [], sunrise: [], sunset: [] };
@@ -55,10 +62,11 @@ function sample() {
     }
     const cc = where(iso), fall = 1 + 0.45 * Math.cos(((doy - 300) / 365) * 2 * Math.PI);
     if (rnd() < 0.18) continue;
-    const plays = Math.round((2 + rnd() * 5) * fall);
+    const plays = Math.round((2 + rnd() * 5) * fall * monthMood(Math.floor((d.getUTCFullYear() * 12) + d.getUTCMonth())));
     for (let k = 0; k < plays; k++) {
       const hour = Math.min(23, Math.max(6, Math.round(13 + (rnd() + rnd() + rnd() - 1.5) * 7)));
-      const weights = ERAS.map(([, at, width]) => Math.exp(-((yr - at) ** 2) / (2 * width * width)));
+      const mk = Math.floor(yr * 12);
+      const weights = ERAS.map((e, j) => BUMPS[j].reduce((w, [at, width, amp]) => w + amp * Math.exp(-((yr - at) ** 2) / (2 * width * width)), 0) * noise(j, mk));
       let pick = rnd() * weights.reduce((a, b) => a + b, 0), n = 0;
       while ((pick -= weights[n]) > 0 && n < ERAS.length - 1) n++;
       rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: ERAS[n][3], conn_country: cc });
@@ -125,7 +133,7 @@ function drawRiver(s, me) {
     base = top;
   });
   const ticks = s.yearsInfo.map(({ y: yr }) => { const i = s.months.indexOf(`${yr}-01`); const at = x(Math.max(0, i)); return `<line x1="${at}" x2="${at}" y1="0" y2="${H}" stroke="#000" stroke-opacity=".12"/><text x="${at + 6}" y="${H + 26}" font-size="16">${yr}</text>`; }).join('');
-  $('river-plate').innerHTML = `<svg viewBox="0 -10 ${W} ${H + 46}" role="img" aria-label="Top artists by month, ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}"><defs><clipPath id="river-clip"><rect id="river-reveal" x="0" y="-10" width="0" height="${H + 20}"/></clipPath></defs>${ticks}<g clip-path="url(#river-clip)">${bands}</g><line id="river-edge" y1="-10" y2="${H + 8}" stroke="${RED}" stroke-width="2"/><text id="river-label" font-size="18" font-weight="600" paint-order="stroke" stroke="#fff" stroke-width="5"></text></svg>`;
+  $('river-plate').innerHTML = `<svg viewBox="0 -56 ${W} ${H + 92}" role="img" aria-label="Top artists by month, ${s.months[0].slice(0, 4)} to ${s.months.at(-1).slice(0, 4)}"><defs><clipPath id="river-clip"><rect id="river-reveal" x="0" y="-10" width="0" height="${H + 20}"/></clipPath></defs>${ticks}<g clip-path="url(#river-clip)">${bands}</g><line id="river-edge" y1="-10" y2="${H + 8}" stroke="${RED}" stroke-width="2"/><text id="river-label" font-size="18" font-weight="600" paint-order="stroke" stroke="#fff" stroke-width="5"></text></svg>`;
   const reveal = $('river-reveal'), edge = $('river-edge'), label = $('river-label'), groups = [...$('river-plate').querySelectorAll('.band')];
   const endOf = (yr) => { const i = s.months.lastIndexOf(s.months.filter((m) => m.startsWith(`${yr}-`)).at(-1)); return i / (N - 1); };
   const most = s.yearsInfo.reduce((a, b) => (b.hours > a.hours ? b : a));
@@ -136,7 +144,16 @@ function drawRiver(s, me) {
       sub: `${Y.top} led the year, with ${n(Y.topHours)} hours.`, top: Y.top, from: k ? endOf(s.yearsInfo[k - 1].y) : 0, to: endOf(Y.y), yr: Y.y,
     };
   });
+  // How to read it, before the years start.
+  steps.unshift({ line: 'Each color is an artist.', sub: `The wider a band, the more ${me.i === 'I' ? 'I' : me.i} played them that month. The height of the whole river is how much ${me.i === 'I' ? 'I' : me.i} listened.`, top: null, from: 0, to: 0.004 });
   steps.push({ line: `${s.yearsInfo.length} years, ${n(s.hours)} hours.`, sub: `The biggest bands overall: ${s.allTop.slice(0, 3).map((a) => a.name).join(', ')}.`, from: 1, to: 1 });
+  // Mark the fullest and the thinnest month, skipping the partial first and last ones.
+  const inner = tot.map((t, i) => [t, i]).slice(1, -1), hi = inner.reduce((a, b) => (b[0] > a[0] ? b : a)), lo = inner.reduce((a, b) => (b[0] < a[0] ? b : a));
+  const monthName = (i) => { const [yy, mm] = s.months[i].split('-'); return `${MONTHS[mm - 1]} ${yy}`; };
+  const hours = (i) => Math.round(s.river.reduce((t, a) => t + a.by[i], 0));
+  const mark = (i, label, up) => { const edge = y(-tot[i] / 2) - 4, end = -30; return `<g><line x1="${x(i)}" x2="${x(i)}" y1="${edge}" y2="${end}" stroke="${INK}" stroke-dasharray="3 3"/><text x="${Math.min(W - 200, Math.max(4, x(i) - 90))}" y="-38" font-size="15" font-weight="600">${label}</text></g>`; };
+  $('river-plate').querySelector('svg').insertAdjacentHTML('beforeend', `<g id="river-marks" style="opacity:0;transition:opacity .4s">${mark(hi[1], `Fullest: ${monthName(hi[1])}`, true)}${mark(lo[1], `Thinnest: ${monthName(lo[1])}`, false)}</g>`);
+  steps[steps.length - 1].sub = `${monthName(hi[1])} was the fullest month, with about ${hours(hi[1])} hours from these artists. ${monthName(lo[1])} was the thinnest. Bulges are obsessions, and pinches are quieter stretches.`;
   let shown = -1;
   scrub['scene-river'] = (p) => {
     const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999)), st = steps[k];
@@ -146,6 +163,7 @@ function drawRiver(s, me) {
     if (k === shown) return;
     shown = k;
     scene('river', st.line, st.sub);
+    $('river-marks').style.opacity = k === steps.length - 1 ? 1 : 0;
     groups.forEach((g) => { g.style.opacity = !st.top || g.dataset.n === st.top ? 1 : 0.3; });
     const idx = s.river.findIndex((a) => a.name === st.top);
     if (idx < 0) { label.textContent = ''; return; }
