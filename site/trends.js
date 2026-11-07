@@ -232,23 +232,6 @@ function drawWeather(s, me) {
     steps.push([k, diff ? `On ${say[k]}, ${me.I === 'I' ? 'I' : 'you'} listen ${pct(mean(by(k)), others(k))}.` : `${brings[k]} brings out ${list3(who)}.`, diff && who.length ? `${brings[k]} brings out ${list3(who)}.` : '']);
   }
   if (sweetReal) steps.push(['all', `${me.My} sweet spot is the ${sweet[0]}s.`, `Days with a high in the ${sweet[0]}s average ${n(avg(sweet[1]))} minutes of music, more than any other range.`]);
-  // A pick for the visitor's own weather. Their location goes only to Open-Meteo,
-  // rounded to about 10 km, and is never stored.
-  const SKYWORD = (c) => (c === 0 ? 'clear' : c <= 3 ? 'cloudy' : c <= 48 ? 'foggy' : c <= 67 || (c >= 80 && c <= 82) ? 'raining' : c <= 86 ? 'snowing' : 'stormy');
-  $('weather-you').onclick = () => {
-    const out = $('weather-pick');
-    if (!navigator.geolocation) { out.textContent = "Your browser can't share a location."; return; }
-    out.textContent = 'Checking the sky where you are…';
-    navigator.geolocation.getCurrentPosition(async ({ coords }) => {
-      try {
-        const q = new URLSearchParams({ latitude: coords.latitude.toFixed(1), longitude: coords.longitude.toFixed(1), current: 'temperature_2m,weather_code', daily: 'temperature_2m_max,sunset', temperature_unit: 'fahrenheit', forecast_days: '1', timezone: 'auto' });
-        const w = await (await fetch(`https://api.open-meteo.com/v1/forecast?${q}`)).json();
-        const code = w.current.weather_code, f = w.current.temperature_2m, kind = kindF(code, (w.daily.temperature_2m_max[0] - 32) * 5 / 9);
-        const dark = Date.now() > Date.parse(w.daily.sunset?.[0] || 0) && w.daily.sunset, picks = (dark && PICKS.night) || PICKS[kind] || PICKS.mild || [];
-        out.textContent = `Where you are, it's ${Math.round(f)}°F and ${SKYWORD(code)}. ${dark ? 'After dark' : 'On a day like this'}, I'd put on ${list3(picks)}.`;
-      } catch { out.textContent = "I couldn't reach the weather just now. Try again in a minute."; }
-    }, () => { out.textContent = 'No problem. Your location stays with you.'; }, { maximumAge: 6e5, timeout: 10000 });
-  };
   const svg = $('weather-plate').firstChild;
   let shown = -1;
   scrub['scene-weather'] = (p) => {
@@ -410,28 +393,40 @@ const list = (w) => (w.length > 2 ? `${w.slice(0, -1).join(', ')} and ${w.at(-1)
 const SKY = { snow: 'snowing', rain: 'raining', cold: 'cold', hot: 'hot', mild: 'mild' };
 const kindOf = (code, high) => (code >= 71 && code <= 86 && ![80, 81, 82].includes(code) ? 'snow' : code >= 51 ? 'rain' : high < 7 ? 'cold' : high > 28 ? 'hot' : 'mild');
 
+// Today: the weather somewhere, and what I'd put on for it. Philadelphia by default;
+// a visitor can name their own city, or let the browser share where they are.
 async function drawToday(l) {
-  const m = new Date().getMonth(), season = ['winter', 'winter', 'spring', 'spring', 'spring', 'summer', 'summer', 'summer', 'fall', 'fall', 'fall', 'winter'][m];
-  const showSeason = () => {
-    const s = l.moods?.seasons?.[season];
-    if (s?.words.length) $('today-words').textContent = `This time of year, I tend to save ${list(s.words)}.`;
-    return s;
+  const show = async (lat, lon, place) => {
+    $('today-kicker').textContent = `Today in ${place}`;
+    try {
+      const q = new URLSearchParams({ latitude: (+lat).toFixed(2), longitude: (+lon).toFixed(2), daily: 'weather_code,temperature_2m_max,sunset', forecast_days: '1', timezone: 'auto' });
+      const f = await (await fetch(`https://api.open-meteo.com/v1/forecast?${q}`)).json();
+      const high = f.daily.temperature_2m_max[0], k = kindOf(f.daily.weather_code[0], high);
+      const dark = Date.now() > Date.parse(`${f.daily.sunset[0]}:00Z`) - f.utc_offset_seconds * 1000;
+      const chosen = (dark && PICKS.night) || PICKS[k] || PICKS.mild || [];
+      $('today-sky').textContent = `${Math.round(high * 9 / 5 + 32)} degrees and ${SKY[k]}.`;
+      $('today-words').textContent = chosen.length ? `${dark ? 'After dark' : 'Today'}, I'd put on ${list3(chosen)}.` : '';
+    } catch { $('today-sky').textContent = "I can't reach the weather right now."; $('today-words').textContent = ''; }
   };
-  $('today-sky').textContent = `It's ${season}.`;
-  let pick = showSeason();
-  try {
-    const f = await (await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.17&daily=weather_code,temperature_2m_max,sunset&temperature_unit=celsius&forecast_days=1&timezone=America%2FNew_York')).json();
-    const high = f.daily.temperature_2m_max[0], k = kindOf(f.daily.weather_code[0], high);
-    $('today-sky').textContent = `${Math.round(high * 9 / 5 + 32)} degrees and ${SKY[k]}.`;
-    const dark = new Date() > new Date(f.daily.sunset[0]), chosen = (dark && PICKS.night) || PICKS[k];
-    if (chosen?.length) { $('today-words').textContent = `${dark ? 'After dark' : 'On a day like this'}, I'd put on ${list3(chosen)}.`; pick = null; }
-    else { const w = l.moods?.weather?.[k]; if (w?.words.length) { $('today-words').textContent = `On days like this, I tend to save ${list(w.words)}.`; pick = w; } }
-  } catch { /* the season line stands in */ }
-  const songs = pick?.songs || [];
-  if (songs.length) {
-    const song = songs[Math.floor(Date.now() / 864e5) % songs.length];
-    $('today-song').innerHTML = `Try <a href="${song.url}">${esc(song.title)}</a> by ${esc(song.artist)}.`;
-  }
+  show(39.95, -75.17, 'Philadelphia');
+  $('today-change').hidden = false;
+  $('today-change').onclick = () => { $('today-where').hidden = !$('today-where').hidden; if (!$('today-where').hidden) $('today-city').focus(); };
+  $('today-where').onsubmit = async (e) => {
+    e.preventDefault();
+    const name = $('today-city').value.trim();
+    if (!name) return;
+    try {
+      const r = await (await fetch(`https://geocoding-api.open-meteo.com/v1/search?${new URLSearchParams({ name, count: '1', language: 'en' })}`)).json();
+      const hit = r.results?.[0];
+      if (!hit) { $('today-where-status').textContent = `I couldn't find ${name}. Try a nearby city.`; return; }
+      $('today-where-status').textContent = ''; $('today-where').hidden = true;
+      show(hit.latitude, hit.longitude, hit.name);
+    } catch { $('today-where-status').textContent = "I can't look that up right now."; }
+  };
+  $('today-here').onclick = () => {
+    if (!navigator.geolocation) { $('today-where-status').textContent = "Your browser can't share a location."; return; }
+    navigator.geolocation.getCurrentPosition(({ coords }) => { $('today-where').hidden = true; show(coords.latitude, coords.longitude, 'your corner of the world'); }, () => { $('today-where-status').textContent = 'No problem. Type a city instead.'; }, { maximumAge: 6e5, timeout: 10000 });
+  };
 }
 
 
