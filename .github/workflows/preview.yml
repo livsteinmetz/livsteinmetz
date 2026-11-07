@@ -37,7 +37,7 @@ jobs:
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
           PREVIEW: '1'
       - run: node scripts/check-art.mjs
-      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/story.mjs && (node scripts/qa/screens.mjs || true)
+      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/peek.mjs; node scripts/qa/story.mjs && (node scripts/qa/screens.mjs || true)
         continue-on-error: true
       - name: Publish screenshots to a scratch branch
         continue-on-error: true
