@@ -335,10 +335,10 @@ if (process.env.PREVIEW) {
   const nm = (key) => (key ? `${art[key].title}, ${art[key].artist}` : 'a flat color');
   const ROWS = [
     ...W.map(([slug, title, cur, lines, alts]) => [slug, title, [
-      ...(cur ? [v('A', `Now: Franklin on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => F(t))), v('B', `Blackletter on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => P(t)), { max: 110 })]
-        : [v('A', 'Black on white, as now', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#ffffff' }), v('B', 'Black on butter', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#f6d44f' }), v('C', 'White on red', null, ['fix:#ffffff'], lines.map((t) => F(t)), { flat: '#c9321a' }), v('D', 'Butter blackletter on black', null, ['fix:#f6d44f'], lines.map((t) => P(t)), { flat: '#000000', max: 110 })]),
+      ...(cur ? [v('A', `Now: Franklin on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => F(t))), v('B', `Blackletter on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => P(t)), { max: 110, lh: 0.8 })]
+        : [v('A', 'Black on white, as now', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#ffffff' }), v('B', 'Black on butter', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#f6d44f' }), v('C', 'White on red', null, ['fix:#ffffff'], lines.map((t) => F(t)), { flat: '#c9321a' }), v('D', 'Butter blackletter on black', null, ['fix:#f6d44f'], lines.map((t) => P(t)), { flat: '#000000', max: 110, lh: 0.8 })]),
       ...alts.map((k, i) => v('EFGH'[i], `Franklin on ${nm(k)}`, k, ['vivid'], lines.map((t) => F(t)))),
-      ...alts.slice(0, 1).map((k) => v('G', `Blackletter on ${nm(k)}`, k, ['vivid'], lines.map((t) => P(t)), { max: 110 })),
+      ...alts.slice(0, 1).map((k) => v('G', `Blackletter on ${nm(k)}`, k, ['vivid'], lines.map((t) => P(t)), { max: 110, lh: 0.8 })),
       ...(['visual-experience-platform', 'focus', 'online-collection', 'one-visitor-one-record', 'deep-zoom'].includes(slug) ? favKeys.flatMap((k) => [v('X', `Your pick: Franklin on ${nm(k)}`, k, ['vivid'], lines.map((t) => F(t))), v('X', `Your pick: white Franklin on ${nm(k)}`, k, ['mono'], lines.map((t) => F(t)))]) : []),
     ].map((x, i) => ({ ...x, k: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i] }))]),
     ['scaling-the-visual-experience-platform', 'Writing: Scaling the Visual Experience Platform', [v('A', 'White Franklin on Sleeping Shepherd, like the other writing covers', 'shepherd', ['fix:#ffffff'], SCF)]],
