@@ -214,7 +214,6 @@
   "date": "2025",
   "font": "compressed",
   "color": "#000000",
-  "flat": "#f6d44f",
   "short": "Self-serve tickets at the door of both museums",
   "role": "Design, front-end development, and hardware setup",
   "org": "Barnes Foundation and Calder Gardens",
@@ -251,7 +250,8 @@
   ],
   "align": "center",
   "width": 0.86,
-  "mat": "#f6d44f"
+  "mat": "#fff27a",
+  "art": "tulips"
  },
  {
   "slug": "deep-zoom",

@@ -355,5 +355,20 @@
     "extra": "letter-spacing=\"-0.02em\""
    }
   ]
+ },
+ "kiosks": {
+  "vb": "0 0 300 400",
+  "fill": "#fff27a",
+  "t": [
+   {
+    "text": "Kiosks",
+    "x": 18,
+    "y": 376,
+    "size": 83.5,
+    "font": "Libre Franklin",
+    "wt": 800,
+    "extra": "letter-spacing=\"-0.02em\""
+   }
+  ]
  }
 }

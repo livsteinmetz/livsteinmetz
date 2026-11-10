@@ -416,5 +416,22 @@
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff"
+ },
+ "tulips": {
+  "title": "Tulips in a Green Vase",
+  "artist": "Alfred Maurer",
+  "barnes": 5147,
+  "w": 5945,
+  "h": 7294,
+  "crop": [
+   0.247,
+   0.45,
+   0.506,
+   0.55
+  ],
+  "rights": "public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }
