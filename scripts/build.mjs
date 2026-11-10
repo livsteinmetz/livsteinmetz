@@ -245,7 +245,7 @@ writeFileSync('build/.well-known/security.txt', `Contact: https://www.linkedin.c
 // A study page for the cover type and paintings, only on the preview channel.
 if (process.env.PREVIEW) {
   // F is Libre Franklin, C is Archivo Condensed, S is Pinyon Script. Each line belongs to a color group.
-  const FONT = { F: ['Libre Franklin', 800, '100%', '-0.02em', 1], C: ['Archivo', 800, '62%', '0', 1], S: ['Pinyon Script', 400, '100%', '0', 1.45] };
+  const FONT = { P: ['Pirata One', 400, '100%', '0', 1], F: ['Libre Franklin', 800, '100%', '-0.02em', 1], C: ['Archivo', 800, '62%', '0', 1], S: ['Pinyon Script', 400, '100%', '0', 1.45] };
   const v = (k, label, art, modes, lines, o = {}) => ({ k, label, art, modes, lines, max: 92, lh: 0.98, ...o });
   const F = (t, g = 0) => ['F', t, g], C = (t, g = 0) => ['C', t, g], Sc = (t, g = 0) => ['S', t, g];
   const FUN = [['pink', '#e64aa6'], ['green', '#8dff72'], ['lilac', '#efb4f7'], ['orange', '#ef8f35'], ['sky', '#66c4ff'], ['red', '#c9321a']];
@@ -303,8 +303,29 @@ if (process.env.PREVIEW) {
   const fin = (slug, title, label, key, hex, lines, o) => [slug, title, [v('A', label, key, [`fix:${hex}`], lines, o)]];
   const pick = (slug, title, key, lines) => [slug, title, [v('A', 'Franklin in the color that reads best', key, ['pref'], lines), v('B', 'Franklin in white or black', key, ['mono'], lines)]];
   const SCF = [F('Scaling the'), F('Visual'), F('Experience'), F('Platform')];
+  const P = (t, g = 0) => ['P', t, g];
+  // Each working card: its current painting, then the same in blackletter, then two unused paintings. Type and frame share one color.
+  const W = [
+    ['visual-experience-platform', 'Visual Experience Platform', 'postman', ['Visual', 'Experience', 'Platform'], ['joy', 's-cassatt']],
+    ['focus', 'Barnes Focus', 'models', ['Barnes', 'Focus'], ['s-peaches', 's-fieldflowers']],
+    ['calder-gardens', 'Calder Gardens', null, ['Calder', 'Gardens'], ['s-asters', 's-yellowrose']],
+    ['membership', 'Membership', 's-casket', ['Membership'], ['bouquet', 's-conf2']],
+    ['commerce', 'Commerce', 'cards', ['Commerce'], ['s-preserves', 's-acoma']],
+    ['kiosks', 'Kiosks', 's-tulips2', ['Kiosks'], ['s-eggs', 's-dej2']],
+    ['deep-zoom', 'Deep Zoom', 'jungle', ['Deep', 'Zoom'], ['s-bluestill', 's-olla']],
+    ['online-collection', 'Online Collection', 'bathers', ['Online', 'Collection'], ['s-liel', 'gourds']],
+    ['tours', 'Tours and Eye Spy', 's-goldfish2', ['Tours and', 'Eye Spy'], ['polkadot', 's-burkholder']],
+    ['one-visitor-one-record', 'One Visitor, One Record', 's-figs', ['One Visitor,', 'One Record'], ['riffian', 's-cutout']],
+  ];
+  const nm = (key) => (key ? `${art[key].title}, ${art[key].artist}` : 'a flat color');
   const ROWS = [
-    ['scaling-the-visual-experience-platform', 'Scaling the Visual Experience Platform', [v('A', 'White Franklin on Sleeping Shepherd', 'shepherd', ['fix:#ffffff'], SCF)]],
+    ...W.map(([slug, title, cur, lines, alts]) => [slug, title, [
+      ...(cur ? [v('A', `Now: Franklin on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => F(t))), v('B', `Blackletter on ${nm(cur)}`, cur, ['vivid'], lines.map((t) => P(t)), { max: 110 })]
+        : [v('A', 'Black on white, as now', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#ffffff' }), v('B', 'Black on butter', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#f6d44f' }), v('C', 'White on red', null, ['fix:#ffffff'], lines.map((t) => F(t)), { flat: '#c9321a' }), v('D', 'Butter blackletter on black', null, ['fix:#f6d44f'], lines.map((t) => P(t)), { flat: '#000000', max: 110 })]),
+      ...alts.map((k, i) => v('EFGH'[i], `Franklin on ${nm(k)}`, k, ['vivid'], lines.map((t) => F(t)))),
+      ...alts.slice(0, 1).map((k) => v('G', `Blackletter on ${nm(k)}`, k, ['vivid'], lines.map((t) => P(t)), { max: 110 })),
+    ].map((x, i) => ({ ...x, k: 'ABCDEFGH'[i] }))]),
+    ['scaling-the-visual-experience-platform', 'Writing: Scaling the Visual Experience Platform', [v('A', 'White Franklin on Sleeping Shepherd, like the other writing covers', 'shepherd', ['fix:#ffffff'], SCF)]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
@@ -312,8 +333,8 @@ if (process.env.PREVIEW) {
     const texts = x.lines.map(([f, t, g]) => { const [fam, wt, st, ls, sc] = FONT[f]; return `<text class="h" data-g="${g}" data-s="${sc}" font-family="${fam}" font-weight="${wt}" font-stretch="${st}" letter-spacing="${ls}">${esc(t)}</text>`; }).join('');
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:${x.flat || '#f6d44f'}" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
-  const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Scaling cover</h1><p>Scaling in white Franklin, like the other writing covers.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&family=Pirata+One&display=swap';
+  const body = `<div class="page study"><h1>Working covers</h1><p>Every working card with its type and frame in one color, picked from colors that read on that painting. B is the same painting in blackletter. The rest are paintings not used anywhere else. Only covers at 3 to 1 or better are shown. The last row is Scaling in white Franklin, like the other writing covers.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
