@@ -9,3 +9,7 @@ service-account.json
 *.key.json
 *.pem
 site/wall/
+content/listening-history.json
+content/trips.json
+backup/
+CLAUDE.md

@@ -18,13 +18,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Open private data
+        run: node scripts/private.mjs open
+        env: { PRIVATE_SEED: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}" }
       - run: node scripts/fetch-settings.mjs
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/fetch-wall.mjs
       - run: node scripts/fetch-goodreads.mjs
       - name: Restore the Spotify backup
         continue-on-error: true
-        run: git fetch -q --depth 1 origin spotify-backup && git checkout origin/spotify-backup -- backup && ls backup
+        run: |
+          git fetch -q --depth 1 origin spotify-backup && git checkout origin/spotify-backup -- backup
+          if [ -f backup/spotify.enc ]; then node scripts/private.mjs open-file backup/spotify.enc; fi
+          ls backup
+        env: { PRIVATE_SEED: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}" }
       - run: node scripts/fetch-spotify.mjs
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
@@ -45,7 +52,7 @@ jobs:
         continue-on-error: true
         run: |
           [ -s build/.spotify-backup.json ] || exit 0
-          mkdir -p /tmp/backup/backup && cp build/.spotify-backup.json /tmp/backup/backup/spotify.json && rm build/.spotify-backup.json
+          mkdir -p /tmp/backup/backup && node scripts/private.mjs seal-to build/.spotify-backup.json /tmp/backup/backup/spotify.enc backup/spotify.json && rm build/.spotify-backup.json
           cd /tmp/backup && git init -q -b spotify-backup && git add -A
           git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "spotify backup"
           git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" spotify-backup

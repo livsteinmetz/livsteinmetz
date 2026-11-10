@@ -5,7 +5,7 @@ import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
-const settings = read('settings'), type = read('type'), wall = read('wall'), trends = read('trends'), library = read('library'), diary = read('diary'), previews = read('previews'), history = read('listening-history'), weatherHistory = read('weather-history'), world = read('world'), picks = read('weather-picks'), reading = read('reading');
+const settings = read('settings'), type = read('type'), wall = read('wall'), trends = read('trends'), library = read('library'), diary = read('diary'), previews = read('previews'), history = (() => { try { return read('listening-history'); } catch { return null; } })(), weatherHistory = read('weather-history'), world = read('world'), picks = read('weather-picks'), reading = read('reading');
 const work = read('work'), music = read('music'), myPlaylists = read('my-playlists'), playlists = [...read('playlists'), ...settings.playlists.map((p) => myPlaylists.find((m) => m.id === (p.id || p))).filter(Boolean)], art = read('art');
 let sendLists = {}, songLinks = {};
 try { sendLists = read('playlist-tracks'); songLinks = read('links'); } catch { /* none yet */ }

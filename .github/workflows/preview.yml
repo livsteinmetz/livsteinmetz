@@ -16,6 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Open private data
+        run: node scripts/private.mjs open
+        env: { PRIVATE_SEED: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}" }
       - run: node scripts/fetch-settings.mjs
       - run: node scripts/fetch-medium.mjs
       - run: node scripts/fetch-wall.mjs
