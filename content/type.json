@@ -1,34 +1,34 @@
 {
  "visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#ffe4f0",
+  "fill": "#0c13a9",
   "t": [
    {
-    "text": "Visual",
+    "text": "VISUAL",
     "x": 18,
-    "y": 69.4,
-    "size": 66.7,
-    "font": "Pirata One",
-    "wt": 400,
-    "extra": ""
+    "y": 165.8,
+    "size": 58.5,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Experience",
+    "text": "EXPERIENCE",
     "x": 18,
-    "y": 122.8,
-    "size": 66.7,
-    "font": "Pirata One",
-    "wt": 400,
-    "extra": ""
+    "y": 219.6,
+    "size": 58.5,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Platform",
+    "text": "PLATFORM",
     "x": 18,
-    "y": 176.1,
-    "size": 66.7,
-    "font": "Pirata One",
-    "wt": 400,
-    "extra": ""
+    "y": 273.5,
+    "size": 58.5,
+    "font": "Archivo",
+    "wt": 800,
+    "extra": "font-stretch=\"62%\""
    }
   ]
  },
