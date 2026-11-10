@@ -59,6 +59,7 @@ jobs:
       - name: Tell search engines about new pages
         if: github.event_name == 'push'
         continue-on-error: true
-        run: curl -sS -m 20 -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' --data @build/indexnow.json -o /dev/null -w 'IndexNow %{http_code}\n'
+        run: |
+          curl -sS -m 20 -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' --data @build/indexnow.json -o /dev/null -w 'IndexNow %{http_code}\n'
       - name: Confirm the live site updated
         run: sleep 20 && curl -fsS "https://livsteinmetz.com/?deploy=$GITHUB_SHA" | grep -o "intersection of the arts and tech"
