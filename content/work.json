@@ -208,6 +208,52 @@
   ]
  },
  {
+  "slug": "kiosks",
+  "title": "Kiosks",
+  "tag": "a ticket at the door",
+  "date": "2025",
+  "font": "compressed",
+  "color": "#000000",
+  "flat": "#f6d44f",
+  "short": "Self-serve tickets at the door of both museums",
+  "role": "Design, front-end development, and hardware setup",
+  "org": "Barnes Foundation and Calder Gardens",
+  "stack": "ACME, Zamok, Advanced Kiosks",
+  "body": [
+   "Visitors can buy a ticket on the spot at the Barnes and at Calder Gardens without waiting for someone at the desk. I designed and built the kiosks end to end, from the screens to the hardware on the floor.",
+   "A kiosk runs on the same codebase and ACME ticketing pipeline as our websites, just in a different shape: tall, touch-first, and made for someone standing up who has never seen it before. You pick a time, choose admission to one museum or Plus admission to both, and can upgrade to a membership with auto-renew before you pay. Each Advanced Kiosks unit runs Zamok, which locks it to that one flow.",
+   "The Barnes kiosks started in our member site codebase. When Calder Gardens opened in September 2025, they moved into the shared Barnes and Calder Gardens codebase, so both museums now run the same kiosk under their own brand."
+  ],
+  "lines": [
+   "KIOSKS"
+  ],
+  "gallery": [
+   {
+    "image": "kiosk-unit",
+    "alt": "A freestanding kiosk with a tall portrait touchscreen",
+    "cap": "The kiosk"
+   },
+   {
+    "image": "kiosk-calder",
+    "alt": "Calder Gardens kiosk screen for choosing ticket types, with Calder Gardens or Plus admission",
+    "cap": "Choosing tickets at Calder Gardens"
+   },
+   {
+    "image": "kiosk-barnes",
+    "alt": "Barnes kiosk screen for choosing ticket types",
+    "cap": "The same flow at the Barnes"
+   },
+   {
+    "image": "kiosk-upgrade",
+    "alt": "Kiosk screen offering an upgrade to membership with auto-renew",
+    "cap": "Upgrading to a membership before paying"
+   }
+  ],
+  "align": "center",
+  "width": 0.86,
+  "mat": "#f6d44f"
+ },
+ {
   "slug": "deep-zoom",
   "title": "Deep Zoom",
   "tag": "a close look",
