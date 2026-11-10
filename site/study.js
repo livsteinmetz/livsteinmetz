@@ -10,8 +10,12 @@ function layout(cv, place) {
   lines.forEach((t, i) => t.setAttribute('font-size', sizes[i].toFixed(1)));
   const ys = []; let y = 20 + sizes[0] * 0.74;
   sizes.forEach((sz, i) => { if (i) y += sz * lh; ys.push(y); });
-  const shift = place === 'top' ? 0 : 400 - 24 - ys[ys.length - 1];
-  lines.forEach((t, i) => { t.setAttribute('x', X); t.setAttribute('y', (ys[i] + shift).toFixed(1)); });
+  const pl = { top: 'tl', bottom: 'bl' }[place] || place;
+  const last = ys[ys.length - 1];
+  const shift = pl[0] === 't' ? 0 : pl[0] === 'b' ? 376 - last : (376 - last) / 2;
+  const side = pl === 'cc' ? 'middle' : pl[1] === 'r' ? 'end' : 'start';
+  const x = side === 'middle' ? 150 : side === 'end' ? 300 - X : X;
+  lines.forEach((t, i) => { t.setAttribute('x', x); t.setAttribute('text-anchor', side); t.setAttribute('y', (ys[i] + shift).toFixed(1)); });
   cv.dataset.place = place;
 }
 const paint = (cv, fills) => cv.querySelectorAll('text.h').forEach((t) => t.setAttribute('fill', fills[+t.dataset.g] || fills[0]));
@@ -19,7 +23,7 @@ window.studyLayout = layout; window.studyPaint = paint;
 const covers = [...document.querySelectorAll('.study .cover')];
 const apply = (m) => covers.forEach((cv) => {
   const r = m[cv.dataset.id];
-  layout(cv, r ? r.place : 'bottom');
+  layout(cv, r ? r.place : cv.dataset.places.split(',')[0]);
   if (!r) return;
   paint(cv, r.fills);
   const b = cv.closest('.pick');
@@ -35,7 +39,7 @@ document.fonts.ready.then(async () => {
   document.documentElement.dataset.ready = '1';
 });
 let picks = {};
-try { picks = JSON.parse(localStorage.getItem('study-picks-6') || '{}'); } catch (e) { picks = {}; }
+try { picks = JSON.parse(localStorage.getItem('study-picks-7') || '{}'); } catch (e) { picks = {}; }
 const out = document.getElementById('picks');
 const show = () => {
   document.querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-pressed', String(picks[b.dataset.card] === b.dataset.opt)));
@@ -52,7 +56,7 @@ const show = () => {
 };
 document.querySelectorAll('.pick').forEach((b) => b.addEventListener('click', () => {
   picks[b.dataset.card] = picks[b.dataset.card] === b.dataset.opt ? undefined : b.dataset.opt;
-  try { localStorage.setItem('study-picks-6', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
+  try { localStorage.setItem('study-picks-7', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
   show();
 }));
 document.getElementById('copy').addEventListener('click', async () => {
