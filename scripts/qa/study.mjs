@@ -49,6 +49,8 @@ for (const id of ids) {
             for (const dir of [1, -1]) {
               const Lk = L0 + dir * d; if (Lk < 0 || Lk > 1) continue;
               const h2 = hexOf(fit(Lk, a, b)), sc2 = score(lumHex(h2));
+              // A nudge that lands on near-white or near-black has lost the color, so it doesn't count.
+              const ch = fit(Lk, a, b).map((v) => toS(v) * 255); if (Math.min(...ch) > 232 || Math.max(...ch) < 30) break;
               if (sc2 >= 3) return [h2, sc2];
             }
           }

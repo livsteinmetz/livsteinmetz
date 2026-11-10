@@ -41,6 +41,14 @@ const show = () => {
   document.querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-pressed', String(picks[b.dataset.card] === b.dataset.opt)));
   const names = [...document.querySelectorAll('.srow')].map((r) => { const b = r.querySelector('.pick'); return picks[b.dataset.card] ? `${r.querySelector('h2').textContent} ${picks[b.dataset.card]}` : null; }).filter(Boolean);
   out.textContent = names.length ? names.join(', ') : 'No picks yet.';
+  const shelf = document.querySelector('.shelfprev');
+  if (shelf) {
+    shelf.replaceChildren(...[...document.querySelectorAll('.srow')].map((r) => {
+      const b = r.querySelector(`.pick[aria-pressed="true"]`);
+      if (!b) { const g = document.createElement('div'); g.className = 'gap'; g.textContent = r.querySelector('h2').textContent; return g; }
+      return b.querySelector('.mat').cloneNode(true);
+    }));
+  }
 };
 document.querySelectorAll('.pick').forEach((b) => b.addEventListener('click', () => {
   picks[b.dataset.card] = picks[b.dataset.card] === b.dataset.opt ? undefined : b.dataset.opt;
