@@ -57,7 +57,7 @@
   ],
   "align": "center",
   "width": 0.74,
-  "mat": "#8dff72",
+  "mat": "#ffe4f0",
   "reads": [
    {
     "title": "Designing and Building a Platform for Close Looking",
@@ -98,7 +98,7 @@
   ],
   "align": "left",
   "width": 0.8,
-  "mat": "#ffffff",
+  "mat": "#fef8b4",
   "reads": [
    {
     "title": "Digital Product as Institutional Practice at the Barnes Foundation",
@@ -171,7 +171,7 @@
   ],
   "align": "center",
   "width": 0.8,
-  "mat": "#fff27a",
+  "mat": "#f6c0fe",
   "reads": [
    {
     "title": "Digital Product as Institutional Practice at the Barnes Foundation",
@@ -261,7 +261,7 @@
   ],
   "align": "center",
   "width": 0.62,
-  "mat": "#efb4f7",
+  "mat": "#8dff72",
   "reads": [
    {
     "title": "Designing and Building a Platform for Close Looking",
@@ -274,7 +274,7 @@
   "title": "Online Collection",
   "tag": "a way to browse",
   "date": "2021 to now",
-  "art": "bathers",
+  "art": "dancers",
   "font": "inscribed",
   "short": "Search the Barnes Collection by color, light, line, and space",
   "role": "Product and front-end development",
@@ -299,7 +299,7 @@
   ],
   "align": "center",
   "width": 0.78,
-  "mat": "#ffffff"
+  "mat": "#f8caff"
  },
  {
   "slug": "tours",
@@ -324,7 +324,7 @@
    "EYE SPY"
   ],
   "align": "left",
-  "mat": "#fff27a",
+  "mat": "#66c4ff",
   "art": "goldfish"
  },
  {
@@ -345,7 +345,7 @@
    "ONE RECORD"
   ],
   "align": "left",
-  "mat": "#ffffff",
-  "art": "figs"
+  "mat": "#de4830",
+  "art": "redhead"
  }
 ]

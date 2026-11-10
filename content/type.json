@@ -1,40 +1,40 @@
 {
  "visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#8dff72",
+  "fill": "#ffe4f0",
   "t": [
    {
     "text": "Visual",
     "x": 18,
-    "y": 278.2,
-    "size": 49.9,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "y": 69.4,
+    "size": 66.7,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    },
    {
     "text": "Experience",
     "x": 18,
-    "y": 327.1,
-    "size": 49.9,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "y": 122.8,
+    "size": 66.7,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    },
    {
     "text": "Platform",
     "x": 18,
-    "y": 376,
-    "size": 49.9,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "y": 176.1,
+    "size": 66.7,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    }
   ]
  },
  "focus": {
   "vb": "0 0 300 400",
-  "fill": "#ffffff",
+  "fill": "#fef8b4",
   "t": [
    {
     "text": "Barnes",
@@ -58,64 +58,64 @@
  },
  "deep-zoom": {
   "vb": "0 0 300 400",
-  "fill": "#efb4f7",
+  "fill": "#8dff72",
   "t": [
    {
-    "text": "Deep",
+    "text": "DEEP",
     "x": 18,
-    "y": 88.1,
-    "size": 92,
-    "font": "Libre Franklin",
+    "y": 108.3,
+    "size": 119.4,
+    "font": "Archivo",
     "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "extra": "font-stretch=\"62%\""
    },
    {
-    "text": "Zoom",
+    "text": "ZOOM",
     "x": 18,
-    "y": 178.2,
-    "size": 92,
-    "font": "Libre Franklin",
+    "y": 218.2,
+    "size": 119.4,
+    "font": "Archivo",
     "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "extra": "font-stretch=\"62%\""
    }
   ]
  },
  "membership": {
   "vb": "0 0 300 400",
-  "fill": "#fff27a",
+  "fill": "#f6c0fe",
   "t": [
    {
-    "text": "Membership",
+    "text": "MEMBERSHIP",
     "x": 18,
     "y": 376,
-    "size": 44.6,
-    "font": "Libre Franklin",
+    "size": 53.8,
+    "font": "Archivo",
     "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "extra": "font-stretch=\"62%\""
    }
   ]
  },
  "online-collection": {
   "vb": "0 0 300 400",
-  "fill": "#ffffff",
+  "fill": "#f8caff",
   "t": [
    {
     "text": "Online",
     "x": 18,
-    "y": 321.4,
-    "size": 55.8,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "y": 313.9,
+    "size": 77.6,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    },
    {
     "text": "Collection",
     "x": 18,
     "y": 376,
-    "size": 55.8,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "size": 77.6,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    }
   ]
  },
@@ -151,16 +151,16 @@
     "text": "Commerce",
     "x": 18,
     "y": 376,
-    "size": 51.1,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "size": 71,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    }
   ]
  },
  "tours": {
   "vb": "0 0 300 400",
-  "fill": "#fff27a",
+  "fill": "#66c4ff",
   "t": [
    {
     "text": "Tours and",
@@ -184,67 +184,67 @@
  },
  "one-visitor-one-record": {
   "vb": "0 0 300 400",
-  "fill": "#ffffff",
+  "fill": "#de4830",
   "t": [
    {
-    "text": "ONE VISITOR,",
+    "text": "One Visitor,",
     "x": 18,
-    "y": 61.8,
-    "size": 56.4,
-    "font": "Archivo",
+    "y": 328.6,
+    "size": 48.4,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "ONE RECORD",
+    "text": "One Record",
     "x": 18,
-    "y": 113.7,
-    "size": 56.4,
-    "font": "Archivo",
+    "y": 376,
+    "size": 48.4,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
  "scaling-the-visual-experience-platform": {
   "vb": "0 0 300 400",
-  "fill": "#ef8f35",
+  "fill": "#ffffff",
   "t": [
    {
-    "text": "SCALING THE",
+    "text": "Scaling the",
     "x": 18,
-    "y": 220.3,
-    "size": 56.4,
-    "font": "Archivo",
+    "y": 229.3,
+    "size": 49.9,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "VISUAL",
+    "text": "Visual",
     "x": 18,
-    "y": 272.2,
-    "size": 56.4,
-    "font": "Archivo",
+    "y": 278.2,
+    "size": 49.9,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "EXPERIENCE",
+    "text": "Experience",
     "x": 18,
-    "y": 324.1,
-    "size": 56.4,
-    "font": "Archivo",
+    "y": 327.1,
+    "size": 49.9,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    },
    {
-    "text": "PLATFORM",
+    "text": "Platform",
     "x": 18,
     "y": 376,
-    "size": 56.4,
-    "font": "Archivo",
+    "size": 49.9,
+    "font": "Libre Franklin",
     "wt": 800,
-    "extra": "font-stretch=\"62%\""
+    "extra": "letter-spacing=\"-0.02em\""
    }
   ]
  },
@@ -364,10 +364,10 @@
     "text": "Kiosks",
     "x": 18,
     "y": 376,
-    "size": 83.5,
-    "font": "Libre Franklin",
-    "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "size": 110,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": ""
    }
   ]
  }

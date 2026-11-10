@@ -433,5 +433,39 @@
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff"
+ },
+ "dancers": {
+  "title": "Three Dancers with Hair in Braids (Trois danseuses les cheveux en tresses)",
+  "artist": "Edgar Degas",
+  "barnes": 4845,
+  "w": 4894,
+  "h": 6158,
+  "crop": [
+   0.028,
+   0.0,
+   0.944,
+   1.0
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff",
+  "rights": "public domain"
+ },
+ "redhead": {
+  "title": "Portrait of the Red-Headed Woman (Portrait de la femme rousse)",
+  "artist": "Amedeo Modigliani",
+  "barnes": 5108,
+  "w": 5960,
+  "h": 9381,
+  "crop": [
+   0.0,
+   0.076,
+   1.0,
+   0.847
+  ],
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff",
+  "rights": "public domain"
  }
 }

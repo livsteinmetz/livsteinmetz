@@ -27,7 +27,7 @@ const pool = ['beatrice', 'sailor', 'annunciation', 'flower'];
 const rotating = (i) => pool[(day + i) % pool.length];
 const noteArt = { 'scaling-the-visual-experience-platform': 'shepherd', 'one-codebase-two-brands': 'beatrice', 'designing-and-building-a-platform-for-close-looking': 'boat', 'why-were-writing-about-digital-work-again-at-the-barnes': 'annunciation' };
 
-const noteMat = { 'scaling-the-visual-experience-platform': '#ef8f35', 'one-codebase-two-brands': '#ffffff', 'designing-and-building-a-platform-for-close-looking': '#ffffff', 'why-were-writing-about-digital-work-again-at-the-barnes': '#ffffff' };
+const noteMat = { 'scaling-the-visual-experience-platform': '#ffffff', 'one-codebase-two-brands': '#ffffff', 'designing-and-building-a-platform-for-close-looking': '#ffffff', 'why-were-writing-about-digital-work-again-at-the-barnes': '#ffffff' };
 const noteStyles = [['soft', '#efb4f7', 'center'], ['compressed', '#d9534a', 'left'], ['didone', '#66c4ff', 'left'], ['geo', '#efa090', 'center']];
 const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
@@ -330,7 +330,13 @@ if (process.env.PREVIEW) {
       art[`f-${id}`] = { barnes: id, w: W2, h: H2, title: hit.title, artist: hit.people, crop: [+(((W2 - pw) / 2) / W2).toFixed(3), +(((H2 - ph) / 2) / H2).toFixed(3), +(pw / W2).toFixed(3), +(ph / H2).toFixed(3)], edge: 'bottom', ink: '#ffffff', tagInk: '#ffffff' };
       favKeys.push(`f-${id}`);
       console.log('study fav', id, hit.title, '|', hit.people, W2, H2);
-    } catch (e) { console.log('study fav lookup failed', id, e.message); }
+    } catch (e) {
+      const K = { 5809: [4644, 6348, 'Temptation of Saint Anthony', 'Hieronymus Bosch'], 5108: [5960, 9381, 'Portrait of the Red-Headed Woman (Portrait de la femme rousse)', 'Amedeo Modigliani'], 4845: [4894, 6158, 'Three Dancers with Hair in Braids (Trois danseuses les cheveux en tresses)', 'Edgar Degas'], 5221: [3388, 2720, 'Woman with White Stockings (La Femme aux bas blancs)', 'Gustave Courbet'], 5233: [4221, 5468, "Head of Baby (Tête d'enfant)", 'Gustave Courbet'], 5793: [5741, 4799, 'Domino Players (Les Joueuses de dominos)', 'Henri Matisse'], 5451: [5650, 4751, 'Young Woman before an Aquarium (Jeune fille devant un aquarium)', 'Henri Matisse'] }[id];
+      if (!K) { console.log('study fav lookup failed', id, e.message); continue; }
+      const [W2, H2, title, artist] = K; let ph = H2, pw = ph * 0.75; if (pw > W2) { pw = W2; ph = pw / 0.75; }
+      art[`f-${id}`] = { barnes: id, w: W2, h: H2, title, artist, crop: [+(((W2 - pw) / 2) / W2).toFixed(3), +(((H2 - ph) / 2) / H2).toFixed(3), +(pw / W2).toFixed(3), +(ph / H2).toFixed(3)], edge: 'bottom', ink: '#ffffff', tagInk: '#ffffff' };
+      favKeys.push(`f-${id}`);
+    }
   }
   const HUES = [['Sky', '#66c4ff'], ['Lilac', '#efb4f7'], ['Pink', '#e64aa6'], ['Orange', '#ef8f35'], ['Red', '#c9321a'], ['Green', '#8dff72'], ['Yellow', '#fff27a']];
   const TYPES = [['Franklin', (ls) => ls.map((t) => F(t)), undefined], ['Blackletter', (ls) => ls.map((t) => P(t)), { max: 110, lh: 0.8 }], ['Condensed', (ls) => ls.map((t) => C(t.toUpperCase())), { max: 120, lh: 0.92 }]];
