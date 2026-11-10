@@ -122,7 +122,8 @@
   "stack": "Next.js, Mantine, Sanity, AWS, ACME",
   "body": [
    "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
-   "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering. The site also has a multilingual, AI-powered search that answers visitors' questions from our own content."
+   "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering. The site also has a multilingual, AI-powered search that answers visitors' questions from our own content.",
+   "Building it also meant rebuilding the platform under it. Our team made a shared component library with themes that switch between Barnes and Calder Gardens styles, and we're moving our sites from Hygraph to Sanity as we go, so each Barnes site we touch comes back faster and more accessible."
   ],
   "lines": [
    "CALDER",
@@ -162,7 +163,8 @@
   "stack": "TypeScript, ACME, Salesforce",
   "body": [
    "The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.",
-   "Redesigning the join and renewal flows, with renewal upsells inside the portal, grew renewals and member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one."
+   "Redesigning the join and renewal flows, with renewal upsells inside the portal, grew renewals and member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one.",
+   "In 2025 we rebuilt the member portals for both museums on our shared codebase. Members carry a digital card in Apple Wallet or Google Wallet and sign in with a magic link by email or text, so there's no password to forget. We also launched Join sites on the same components, where a new member can use an offer code, add a donation, and turn on auto-renew and their wallet card in one flow."
   ],
   "lines": [
    "MEMBERSHIP"
