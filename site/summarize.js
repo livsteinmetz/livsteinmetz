@@ -1,5 +1,5 @@
 // Turns a Spotify streaming history into counts. Shared by the browser, for
-// visitors' own files, and by scripts/summarize-history.mjs, for Olivia's.
+// visitors' own files, and by scripts/summarize-history.mjs, for the site's own history.
 // It keeps totals only: no IP addresses, devices, or play-by-play log.
 const pad = (n) => String(n).padStart(2, '0');
 const dayKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

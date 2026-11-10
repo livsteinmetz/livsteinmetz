@@ -251,7 +251,7 @@ if (process.env.PREVIEW) {
   const FUN = [['pink', '#e64aa6'], ['green', '#8dff72'], ['lilac', '#efb4f7'], ['orange', '#ef8f35'], ['sky', '#66c4ff'], ['red', '#c9321a']];
   const fun = (art2, lines, name, skip, o) => FUN.filter(([n]) => !skip.includes(n)).map(([n, hex], i) => v(String.fromCharCode(66 + i), `${n[0].toUpperCase() + n.slice(1)} on ${name}`, art2, [`fix:${hex}`], lines, o));
   const VXP = [F('Visual'), F('Experience'), F('Platform')], SC = [C('SCALING THE'), C('VISUAL'), C('EXPERIENCE'), C('PLATFORM')], CO = { max: 120, lh: 0.92 };
-  // Works from Olivia's desktop and public domain works by women in the Barnes collection, cropped to a portrait detail.
+  // Candidate works, including public domain works by women in the Barnes collection, cropped to a portrait detail.
   const NEW = {
     goldfish: [5780, 5173, 6044, [0, 0, 1, 1], 'Studio with Goldfish', 'Henri Matisse'],
     peaches: [6945, 6486, 4256, [0.006, 0.024, 0.955, 0.915], 'Four Peaches on a Plate', 'Paul Cézanne'],
@@ -277,7 +277,7 @@ if (process.env.PREVIEW) {
     necklace: [5508, 6468, 3683, [0, 0, 1, 1], 'A Necklace of Boats', 'Violette de Mazia'],
   };
   for (const [k, [id, W, H, [bx, by, bw, bh], title, artist]] of Object.entries(NEW)) {
-    // A 3:4 portrait slice from the middle of the detail she likes.
+    // A 3:4 portrait slice from the middle of the chosen detail.
     let ph = bh * H, pw = ph * 0.75;
     if (pw > bw * W) { pw = bw * W; ph = pw / 0.75; }
     const cx = (bx + bw / 2) * W, cy = (by + bh / 2) * H;

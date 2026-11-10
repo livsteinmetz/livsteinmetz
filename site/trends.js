@@ -2,7 +2,7 @@
 // here and goes nowhere: there is no upload, and closing the tab clears it.
 import { summarize } from './summarize.js';
 const library = JSON.parse(document.getElementById('library').textContent);
-// Weather picks Olivia chose, by kind of day, plus one set for after dark.
+// Weather picks, by kind of day, plus one set for after dark.
 const PUBLIC_WORLD = JSON.parse(document.getElementById('world-public').textContent);
 const CONFIG = {
   apiKey: 'AIzaSyAuAgrSYSQl90t335zyZAWSAHY7FyqYPZs',
@@ -23,13 +23,13 @@ const n = (v) => Math.round(v).toLocaleString();
 const dateOf = (start, i) => { const d = new Date(`${start}T12:00:00`); d.setDate(d.getDate() + i); return d; };
 const nice = (d) => `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 
-// Sample numbers for visitors who don't have an export yet. Never her listening.
+// Sample numbers for visitors who don't have an export yet. Never real listening.
 // A made-up listener, so visitors without the passcode still get the whole story:
 // eight years, eras that rise and fade, fall listening, trips, and weather to match.
 function sample() {
   let seed = 7;
   const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-  // Olivia's picks: real artists and the song she played most by each.
+  // Picks: real artists and the most-played song by each.
   const ERAS = [
     ['Talking Heads', 2019.4, 0.9, 'This Must Be the Place (Naive Melody)'], ['ABBA', 2019.8, 0.9, 'As Good As New'], ['Vampire Weekend', 2020.1, 0.6, 'Harmony Hall'], ['Bach', 2020.6, 2.4, 'Brandenburg Concerto No. 5: I. Allegro'],
     ['Kate Bush', 2020.9, 0.7, 'Wuthering Heights'], ['Noname', 2021.2, 0.9, 'Self'], ['Thundercat', 2021.8, 0.7, 'Them Changes'], ['Mitski', 2022.4, 0.9, 'Working for the Knife'],
@@ -258,7 +258,7 @@ function drawSeasons(s, me) {
   };
 }
 
-// Weather: every day she listened, placed by that day's high temperature.
+// Weather: every day with listening, placed by that day's high temperature.
 function drawWeather(s, me) {
   const days = daysWithWeather(s).filter((d) => d.kind && d.m > 0);
   $('scene-weather').hidden = days.length < 60;
@@ -294,7 +294,7 @@ function drawWeather(s, me) {
     if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.i} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.` : ''}`]); continue; }
     steps.push([k, diff ? `On ${say[k]}, ${me.i} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.`, diff && who.length ? `${me.My} go-tos: ${list3(who)}.` : '']);
   }
-  // If no kind of weather clearly changes how much I listen, say that plainly.
+  // If no kind of weather clearly changes how much listening happens, say that plainly.
   const shifts = ['rain', 'snow', 'hot', 'cold'].filter((k) => by(k).length >= 15);
   if (!shifts.some(vs) && shifts.length) {
     const spread = Math.max(...shifts.map((k) => Math.abs(mean(by(k)) / others(k) - 1)));
@@ -476,7 +476,7 @@ const list = (w) => (w.length > 2 ? `${w.slice(0, -1).join(', ')} and ${w.at(-1)
 const SKY = { snow: 'snowing', rain: 'raining', cold: 'cold', hot: 'hot', mild: 'mild' };
 const kindOf = (code, high) => (code >= 71 && code <= 86 && ![80, 81, 82].includes(code) ? 'snow' : code >= 51 ? 'rain' : high < 7 ? 'cold' : high > 28 ? 'hot' : 'mild');
 
-// Today: the weather somewhere, and what I'd put on for it. Philadelphia by default;
+// Today: the weather somewhere, and what to put on for it. Philadelphia by default;
 // a visitor can name their own city, or let the browser share where they are.
 async function drawToday(l) {
   const show = async (lat, lon, place) => {
@@ -595,10 +595,10 @@ else {
     $('gate-status').textContent = '';
     open(data);
   };
-  // Olivia's sign-in only appears at /listening/trends#olivia.
+  // The owner sign-in only appears at /listening/trends#olivia.
   const showMe = () => { $('gate-me-row').hidden = location.hash !== '#olivia'; };
   showMe(); addEventListener('hashchange', showMe);
-  // Olivia signs in with Google and the page fetches her passcode from Firestore.
+  // Google sign-in fetches the passcode from Firestore.
   $('gate-me').onclick = async () => {
     $('gate-status').textContent = 'Signing in…';
     try {

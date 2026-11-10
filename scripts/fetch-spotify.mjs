@@ -1,5 +1,5 @@
-// Saves all of Olivia's playlists to content/my-playlists.json for /admin, and
-// her top artists to content/trends.json for the listening trends page.
+// Saves every playlist on the account to content/my-playlists.json for /admin, and
+// the account's top artists to content/trends.json for the listening trends page.
 // Skips quietly until the SPOTIFY_ secrets are set, and a failed request never
 // blocks a deploy: the section just stays off the page.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -78,7 +78,7 @@ try {
   writeFileSync('content/previews.json', `${JSON.stringify(previews, null, 1)}\n`);
   console.log(`Saved ${Object.keys(previews).length} song previews`);
 
-  // Reads her own playlists for the listening story. Only public playlists feed
+  // Reads the account's own playlists for the listening story. Only public playlists feed
   // anything named on the site; private gig lists contribute just their title and date.
   const profile = await (await fetch('https://api.spotify.com/v1/me', { headers })).json();
   const GIG = /^(PSO|CSO|TUSO|NJCO|YCO|SinC|Elgar|Curtis Rep)\b/i;
@@ -88,7 +88,7 @@ try {
   const own = raw.filter((p) => p.owner?.id === profile.id);
   const saves = [];
   let read = 0;
-  // Full track lists for the playlists Olivia shows, for the send-to-another-app pages.
+  // Full track lists for the playlists shown on the site, for the send-to-another-app pages.
   const shown = new Set(JSON.parse(readFileSync('content/settings.json', 'utf8')).playlists.map((x) => x.id || x)), sendable = {};
   scan: for (const p of own) {
     const gig = GIG.test(p.name);
@@ -124,7 +124,7 @@ try {
   const leaders = (o, n) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, n).map(([k]) => k);
   const firsts = {};
   for (const [artist, a] of seen) { const y = a.when.getUTCFullYear(); (firsts[y] ||= { count: 0, all: {} }).count += 1; firsts[y].all[artist] = a.n; }
-  // What I reach for by season and weather: each save is matched to that day's
+  // What gets played by season and weather: each save is matched to that day's
   // Philadelphia weather, and artists get genre words from MusicBrainz.
   const moods = { seasons: {}, weather: {} };
   try {
@@ -166,7 +166,7 @@ try {
     firsts: Object.fromEntries(Object.entries(firsts).map(([y, f]) => [y, { count: f.count, artists: leaders(f.all, 8) }])),
     moods,
     gigs: gigs.sort((a, b) => b.date.localeCompare(a.date)),
-    titles: [], // names can include friends, so this scene stays off until she picks them
+    titles: [], // names can include friends, so this scene stays off until they're picked in /admin
     wall: pub.filter((p) => p.image).map((p) => ({ image: p.image, title: p.title })),
   };
   writeFileSync('content/library.json', `${JSON.stringify(library)}\n`);

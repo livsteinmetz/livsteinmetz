@@ -1,5 +1,5 @@
-// Fetches the daily weather for every day in Olivia's listening history, for
-// wherever she was that day, so the trends page can set music against weather.
+// Fetches the daily weather for every day in the listening history, for
+// wherever the listener was that day, so the trends page can set music against weather.
 import { readFileSync, writeFileSync } from 'node:fs';
 const PLACES = { US: [39.95, -75.17], SE: [57.71, 11.97] };
 let h;
@@ -35,7 +35,9 @@ minutes.forEach((m, i) => {
   g.days++; counted++;
   (tops[i] || []).forEach((a) => { g.c[a] = (g.c[a] || 0) + 1; base[a] = (base[a] || 0) + 1; });
 });
-const NEVER = new Set([]); // artists Olivia keeps off the site
+// Artists kept off the site, listed in a sealed file.
+let NEVER = new Set();
+try { NEVER = new Set(JSON.parse(readFileSync('content/never.json', 'utf8'))); } catch { /* none listed */ }
 const lift = {};
 for (const [k, g] of Object.entries(groups)) {
   // Only artists who clearly show up more: at least 8 such days and half again their usual rate.

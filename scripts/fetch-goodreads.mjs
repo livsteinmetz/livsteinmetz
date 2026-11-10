@@ -1,5 +1,5 @@
-// Writes the books on Olivia's currently-reading shelf, then what she finished
-// in the past year, to content/reading.json from her public Goodreads shelves.
+// Writes the books on the currently-reading shelf, then what was finished
+// in the past year, to content/reading.json from public Goodreads shelves.
 // If Goodreads won't answer, it falls back to content/reading.seed.json with
 // covers from Open Library, so a failed request never blocks a deploy.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const USER = '187582052-liv';
 const YEAR = 365 * 24 * 60 * 60 * 1000;
 
-// Books Olivia has placed by hand: title pattern and position, counting from 1.
+// Books placed by hand: title pattern and position, counting from 1.
 const PLACE = [[/chronology of water/i, 3]];
 const place = (books) => {
   for (const [re, pos] of PLACE) {

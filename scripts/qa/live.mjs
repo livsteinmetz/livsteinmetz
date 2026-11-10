@@ -20,7 +20,7 @@ if (base.endsWith('livsteinmetz.com')) {
   await g.goto('https://livsteinmetz.web.app/about', { waitUntil: 'load' }).catch(() => {}); await g.waitForTimeout(1500);
   console.log('old address lands on', g.url()); await b2.close();
 }
-// Nothing of Olivia's listening should be reachable without the passcode.
+// No listening data should be reachable without the passcode.
 for (const u of ['/data/spotify.json', '/data/diary.json', '/listening/trends']) {
   const r = await fetch(base + u), t = await r.text();
   const leak = u === '/listening/trends' ? /"days"|"minutes"|"places"|"river"/.test(t) : r.ok && t.trim().startsWith('{');

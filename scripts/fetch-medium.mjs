@@ -1,4 +1,4 @@
-// Pulls Olivia's posts from Medium's RSS feeds into content/notes.feed.json.
+// Pulls posts from Medium's RSS feeds into content/notes.feed.json.
 // Medium can block automated requests, so a failure here never stops the build:
 // the site falls back to the hand-kept list in content/notes.json.
 import { writeFileSync } from 'node:fs';
