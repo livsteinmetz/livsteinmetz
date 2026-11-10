@@ -51,25 +51,29 @@ function sample() {
   for (const cc of Object.keys(LAT)) weather[cc] = { start, code: [], high: [], rain: [], sunrise: [], sunset: [] };
   for (let t = Date.UTC(2019, 2, 1), i = 0; t <= end; t += 864e5, i++) {
     const d = new Date(t), iso = d.toISOString().slice(0, 10), doy = (t - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5, yr = d.getUTCFullYear() + doy / 365;
+    const today = {};
     for (const cc of Object.keys(LAT)) {
       const [lo, hi] = WARM[cc], high = lo + (hi - lo) * (0.5 - 0.5 * Math.cos(((doy - 15) / 365) * 2 * Math.PI)) + (rnd() - 0.5) * 8;
       const wet = rnd() < (cc === 'IS' || cc === 'NO' ? 0.4 : cc === 'MA' ? 0.08 : 0.28);
       const decl = 23.44 * Math.sin(((doy - 81) / 365) * 2 * Math.PI) * Math.PI / 180, lat = LAT[cc] * Math.PI / 180;
       const half = Math.acos(Math.max(-1, Math.min(1, -Math.tan(lat) * Math.tan(decl)))) * 12 / Math.PI;
       const w = weather[cc];
+      today[cc] = wet ? (high < 1 ? 'snow' : 'rain') : high > 28 ? 'hot' : high < 7 ? 'cold' : 'mild';
       w.code.push(wet ? (high < 1 ? 73 : 63) : rnd() < 0.5 ? 1 : 3); w.high.push(+high.toFixed(1)); w.rain.push(wet ? 4 : 0);
       w.sunrise.push(+(12.5 - half).toFixed(2)); w.sunset.push(+(12.5 + half).toFixed(2));
     }
     const cc = where(iso), fall = 1 + 0.45 * Math.cos(((doy - 300) / 365) * 2 * Math.PI);
     if (rnd() < 0.18) continue;
-    const plays = Math.round((2 + rnd() * 5) * fall * monthMood(Math.floor((d.getUTCFullYear() * 12) + d.getUTCMonth())));
+    // About an hour a day, give or take. Rain and snow keep this listener inside with music on; heat sends them out.
+    const wx = { rain: 1.45, snow: 1.75, hot: 0.85, cold: 1.2, mild: 1 }[today[cc]];
+    const plays = Math.round((8 + rnd() * 16) * fall * wx * monthMood(Math.floor((d.getUTCFullYear() * 12) + d.getUTCMonth())));
     for (let k = 0; k < plays; k++) {
       const hour = Math.min(23, Math.max(6, Math.round(13 + (rnd() + rnd() + rnd() - 1.5) * 7)));
       const mk = Math.floor(yr * 12);
       const weights = ERAS.map((e, j) => BUMPS[j].reduce((w, [at, width, amp]) => w + amp * Math.exp(-((yr - at) ** 2) / (2 * width * width)), 0) * noise(j, mk));
       let pick = rnd() * weights.reduce((a, b) => a + b, 0), n = 0;
       while ((pick -= weights[n]) > 0 && n < ERAS.length - 1) n++;
-      rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 900000 + Math.floor(rnd() * 1800000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: ERAS[n][3], conn_country: cc });
+      rows.push({ ts: new Date(t + hour * 36e5).toISOString(), ms_played: 150000 + Math.floor(rnd() * 90000), master_metadata_album_artist_name: ERAS[n][0], master_metadata_track_name: ERAS[n][3], conn_country: cc });
     }
   }
   weather.lift = { rain: ['Kate Bush', 'Cocteau Twins'], snow: ['Handel', 'Björk', 'Mahler'], hot: ['ABBA', 'Madonna'], cold: ['Frou Frou', 'Mitski'] };
@@ -566,6 +570,17 @@ function tick() {
 }
 const queue = () => { if (!queued) { queued = true; requestAnimationFrame(tick); } };
 addEventListener('scroll', queue, { passive: true });
+// A nudge to keep scrolling: it shows after a pause inside the charts and leaves on the next scroll.
+let rest;
+const nudge = () => {
+  $('scroll-cue').classList.remove('on');
+  clearTimeout(rest);
+  rest = setTimeout(() => {
+    const d = $('deck').getBoundingClientRect();
+    if (!$('deck').hidden && d.top < innerHeight * 0.5 && d.bottom > innerHeight * 1.5) $('scroll-cue').classList.add('on');
+  }, 1600);
+};
+addEventListener('scroll', nudge, { passive: true });
 addEventListener('resize', queue);
 
 // The passcode turns into the address of the data file. A wrong one finds nothing.
@@ -574,7 +589,7 @@ const load = async (code) => { const r = await fetch(`/l/${await keyFor(code)}.j
 const logView = (email) => fetch('https://firestore.googleapis.com/v1/projects/livsteinmetz-bb868/databases/(default)/documents/views', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { email: { stringValue: email.slice(0, 200) }, at: { timestampValue: new Date().toISOString() } } }) }).catch(() => {});
 const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* fine */ } } };
 let mine = null;
-const go = () => ($('sample-note').hidden ? $('deck') : $('sample-note')).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+const go = () => (nudge(), $('sample-note').hidden ? $('deck') : $('sample-note')).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 const open = (data) => { weather = data.weather; world = data.world; mine = data.history; $('gate').hidden = true; draw(mine, 'mine'); $('reset').hidden = false; };
 // Always open at the top, even if the browser remembers an old scroll spot.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
