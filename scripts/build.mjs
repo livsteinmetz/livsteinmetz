@@ -302,18 +302,25 @@ if (process.env.PREVIEW) {
   const ovor = [['cassatt2', ', close crop'], ['conf2', ', left side'], ['conf3', ', right side'], ['dej2', ', top'], ['dej3', ', bottom'], ['figs'], ['eggs'], ['peaches'], ['fieldflowers']];
   const fin = (slug, title, label, key, hex, lines, o) => [slug, title, [v('A', label, key, [`fix:${hex}`], lines, o)]];
   const pick = (slug, title, key, lines) => [slug, title, [v('A', 'Franklin in the color that reads best', key, ['pref'], lines), v('B', 'Franklin in white or black', key, ['mono'], lines)]];
-  const KI = [F('Kiosks')];
+  const CG = [F('Calder'), F('Gardens')];
   const ROWS = [
-    ['kiosks', 'Kiosks', [['peaches'], ['preserves'], ['asters'], ['tulips2'], ['cassatt'], ['fieldflowers'], ['yellowrose'], ['conf2']].map(([key], i) => pref('ABCDEFGH'[i], key, KI))],
+    ['calder-gardens', 'Calder Gardens', [
+      v('A', 'Your pick: black on butter', null, ['fix:#000000'], CG),
+      v('B', 'White on black', null, ['fix:#ffffff'], CG, { flat: '#000000' }),
+      v('C', 'Black on white', null, ['fix:#000000'], CG, { flat: '#ffffff' }),
+      v('D', 'White on red', null, ['fix:#ffffff'], CG, { flat: '#c9321a' }),
+      v('E', 'Butter on black', null, ['fix:#f6d44f'], CG, { flat: '#000000' }),
+      pref('F', 'asters', CG), pref('G', 'fieldflowers', CG), pref('H', 'yellowrose', CG),
+    ]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
   const cv = (slug, x) => {
     const a = x.art && art[x.art];
     const texts = x.lines.map(([f, t, g]) => { const [fam, wt, st, ls, sc] = FONT[f]; return `<text class="h" data-g="${g}" data-s="${sc}" font-family="${fam}" font-weight="${wt}" font-stretch="${st}" letter-spacing="${ls}">${esc(t)}</text>`; }).join('');
-    return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:#f6d44f" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
+    return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:${x.flat || '#f6d44f'}" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&display=swap';
-  const body = `<div class="page study"><h1>Kiosks cover</h1><p>Paintings not used on any other card, with the type and frame in the color that reads best. Only covers at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Calder Gardens cover</h1><p>Flat colors that echo the Calder Gardens identity, then three garden pictures not used on any other card. Frames match the type, and only covers at 3 to 1 or better are shown.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
