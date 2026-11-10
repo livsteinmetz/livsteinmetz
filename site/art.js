@@ -205,10 +205,12 @@ if (typeof document !== 'undefined') {
       if (on) c.querySelectorAll('.crop[data-barnes]:not(:has(img))').forEach(paint);
     });
     document.querySelectorAll('[data-track]').forEach((a) => {
-      a.addEventListener('pointerenter', () => show(a.dataset.track));
+      // Only a real mouse previews covers; a finger scrolling past a track shouldn't swap the image.
+      a.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') show(a.dataset.track); });
       a.addEventListener('focus', () => show(a.dataset.track));
     });
-    document.querySelector('[data-tracks]')?.addEventListener('pointerleave', () => show(stage.dataset.current));
+    document.querySelector('[data-tracks]')?.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') show(stage.dataset.current); });
+    addEventListener('pageshow', () => show(stage.dataset.current));
   }
 
   // Look closer: the same tiles, in a real deep-zoom viewer.
