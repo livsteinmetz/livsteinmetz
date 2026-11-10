@@ -23,7 +23,7 @@ for (const id of ids) {
     const png = (await cv.screenshot()).toString('base64');
     const fills = [], scores = [];
     for (let gi = 0; gi < groups.length; gi++) {
-      const mode = modes[gi] || modes[0]; const colors = mode.startsWith('fix:') ? [mode.slice(4)] : mode === 'pref' ? SETS.any : mode === 'vivid' ? COLOR : mode === 'color' ? [...new Set([mat, ...COLOR])] : SETS[mode];
+      const mode = modes[gi] || modes[0]; const colors = mode.startsWith('fix:') ? [mode.slice(4)] : mode === 'pref' ? SETS.any : mode === 'vivid' || mode.startsWith('nth:') ? COLOR : mode === 'color' ? [...new Set([mat, ...COLOR])] : SETS[mode];
       const sc = await g.evaluate(async ([src, rs, colors]) => {
         const im = new Image(); im.src = `data:image/png;base64,${src}`; await im.decode();
         const k = im.naturalWidth / document.querySelector('.study .cover').getBoundingClientRect().width;
@@ -37,9 +37,10 @@ for (const id of ids) {
       // A second group takes a different color from the first, so the two voices read apart.
       const YEL = ['#f6d44f', '#fff27a'];
       // Colored type matches the frame when it reads, then tries the other colors before falling back to yellow.
-      const rank = ([hex, c]) => mode === 'vivid' ? (c < 3 ? c - 100 : YEL.includes(hex) ? c : 100 + c) : mode === 'pref' ? (c >= 3 && !MONO.includes(hex) ? 1000 + c : c) : mode !== 'color' ? c : (c < 3 ? c - 100 : hex === mat ? 1000 + c : YEL.includes(hex) ? c : 100 + c);
+      const rank = ([hex, c]) => mode.startsWith('nth:') ? c : mode === 'vivid' ? (c < 3 ? c - 100 : YEL.includes(hex) ? c : 100 + c) : mode === 'pref' ? (c >= 3 && !MONO.includes(hex) ? 1000 + c : c) : mode !== 'color' ? c : (c < 3 ? c - 100 : hex === mat ? 1000 + c : YEL.includes(hex) ? c : 100 + c);
       const ok = sc.filter(([hex]) => !gi || hex !== fills[0]).sort((p, q) => rank(q) - rank(p));
-      fills.push(ok[0][0]); scores.push(ok[0][1]);
+      const pickN = mode.startsWith('nth:') ? Math.min(+mode.slice(4) - 1, ok.length - 1) : 0;
+      fills.push(ok[pickN][0]); scores.push(ok[pickN][1]);
     }
     const score = +Math.min(...scores).toFixed(2);
     if (!best || score > best.score) best = { place, fills, score };
