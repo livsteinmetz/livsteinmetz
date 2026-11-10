@@ -226,28 +226,6 @@
   "lines": [
    "KIOSKS"
   ],
-  "gallery": [
-   {
-    "image": "kiosk-unit",
-    "alt": "A freestanding kiosk with a tall portrait touchscreen",
-    "cap": "The kiosk"
-   },
-   {
-    "image": "kiosk-calder",
-    "alt": "Calder Gardens kiosk screen for choosing ticket types, with Calder Gardens or Plus admission",
-    "cap": "Choosing tickets at Calder Gardens"
-   },
-   {
-    "image": "kiosk-barnes",
-    "alt": "Barnes kiosk screen for choosing ticket types",
-    "cap": "The same flow at the Barnes"
-   },
-   {
-    "image": "kiosk-upgrade",
-    "alt": "Kiosk screen offering an upgrade to membership with auto-renew",
-    "cap": "Upgrading to a membership before paying"
-   }
-  ],
   "align": "center",
   "width": 0.86,
   "mat": "#fff27a",
