@@ -138,17 +138,22 @@ if (typeof document !== 'undefined') {
         all.forEach((t, n) => {
           if (done.has(n) || t.left > px + rx || t.left + t.width < px - rx || t.top > py + ry || t.top + t.height < py - ry) return;
           done.add(n);
-          const i = new Image(); i.alt = ''; i.src = t.url;
+          const i = new Image(); i.alt = '';
           i.style.cssText = `left:${t.left}%;top:${t.top}%;width:${t.width + 0.08}%;height:${t.height + 0.08}%`;
-          z.append(i);
+          // Sharp tiles go in only once they've loaded, over the softer copy already showing.
+          i.onload = () => z.append(i);
+          i.src = t.url;
         });
       };
-      c.addEventListener('pointerenter', () => {
+      c.addEventListener('pointerenter', (e) => {
         if (lens) return;
         lens = document.createElement('span'); lens.className = 'loupe';
-        z = src.cloneNode(false); lens.append(z); src.after(lens);
+        // Start the lens with the tiles already on the cover, so it never opens on an empty patch.
+        z = src.cloneNode(true); lens.append(z); src.after(lens);
         const crop = z.dataset.crop.split(',').map(Number);
         all = tiles({ id: z.dataset.barnes, w: +z.dataset.w, h: +z.dataset.h, crop }, 1); done = new Set();
+        const r = c.getBoundingClientRect();
+        reveal(e.clientX - r.left, e.clientY - r.top);
       });
       c.addEventListener('pointermove', (e) => {
         const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;

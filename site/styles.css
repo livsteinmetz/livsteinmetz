@@ -47,7 +47,7 @@ h3.ctitle{margin:0;font-weight:inherit}
 .f-gothic{font-family:"Pirata One",Georgia,serif}
 .f-inscribed{font-family:Marcellus,Georgia,serif;letter-spacing:.14em}
 .f-soft{font-family:Fraunces,Georgia,serif;font-weight:500;letter-spacing:.1em}
-.loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;z-index:4;background:#1b1712;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
+.loupe{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;z-index:4;background:#c8d6ec;clip-path:circle(var(--r,96px) at var(--x,50%) var(--y,50%))}
 .loupe .crop{transform:scale(var(--z,5));transform-origin:var(--x,50%) var(--y,50%)}
 .magnify:hover .loupe{opacity:1}
 .loupe::after{content:"";position:absolute;inset:0;background:radial-gradient(circle var(--r,96px) at var(--x,50%) var(--y,50%),transparent 97%,#fff 98%)}
