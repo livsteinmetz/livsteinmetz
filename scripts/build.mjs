@@ -317,6 +317,21 @@ if (process.env.PREVIEW) {
     ['tours', 'Tours and Eye Spy', 's-goldfish2', ['Tours and', 'Eye Spy'], ['polkadot', 's-burkholder']],
     ['one-visitor-one-record', 'One Visitor, One Record', 's-figs', ['One Visitor,', 'One Record'], ['riffian', 's-cutout']],
   ];
+  // Works Olivia flagged in the collection. Rights and size come from the Barnes API at build; anything not public domain is left out.
+  const FAV = [5809, 5108, 4845, 5221, 5233];
+  const favKeys = [];
+  for (const id of FAV) {
+    try {
+      const body = { from: 0, size: 1, _source: ['id', 'title', 'people', 'objRightsTypeId'], query: { bool: { filter: [{ term: { id } }] } } };
+      const hit = (await (await fetch('https://collection.barnesfoundation.org/api/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) })).json()).hits.hits[0]._source;
+      if (!['4', '7', '8', '10'].includes(String(hit.objRightsTypeId))) { console.log('study skip, not public domain', id, hit.title); continue; }
+      const info = await (await fetch(`https://d2r83x5xt28klo.cloudfront.net/tiles/${id}/info.json`)).json();
+      const W2 = info.width, H2 = info.height; let ph = H2, pw = ph * 0.75; if (pw > W2) { pw = W2; ph = pw / 0.75; }
+      art[`f-${id}`] = { barnes: id, w: W2, h: H2, title: hit.title, artist: hit.people, crop: [+(((W2 - pw) / 2) / W2).toFixed(3), +(((H2 - ph) / 2) / H2).toFixed(3), +(pw / W2).toFixed(3), +(ph / H2).toFixed(3)], edge: 'bottom', ink: '#ffffff', tagInk: '#ffffff' };
+      favKeys.push(`f-${id}`);
+      console.log('study fav', id, hit.title, '|', hit.people, W2, H2);
+    } catch (e) { console.log('study fav lookup failed', id, e.message); }
+  }
   const nm = (key) => (key ? `${art[key].title}, ${art[key].artist}` : 'a flat color');
   const ROWS = [
     ...W.map(([slug, title, cur, lines, alts]) => [slug, title, [
@@ -324,7 +339,8 @@ if (process.env.PREVIEW) {
         : [v('A', 'Black on white, as now', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#ffffff' }), v('B', 'Black on butter', null, ['fix:#000000'], lines.map((t) => F(t)), { flat: '#f6d44f' }), v('C', 'White on red', null, ['fix:#ffffff'], lines.map((t) => F(t)), { flat: '#c9321a' }), v('D', 'Butter blackletter on black', null, ['fix:#f6d44f'], lines.map((t) => P(t)), { flat: '#000000', max: 110 })]),
       ...alts.map((k, i) => v('EFGH'[i], `Franklin on ${nm(k)}`, k, ['vivid'], lines.map((t) => F(t)))),
       ...alts.slice(0, 1).map((k) => v('G', `Blackletter on ${nm(k)}`, k, ['vivid'], lines.map((t) => P(t)), { max: 110 })),
-    ].map((x, i) => ({ ...x, k: 'ABCDEFGH'[i] }))]),
+      ...(['visual-experience-platform', 'focus', 'online-collection', 'one-visitor-one-record', 'deep-zoom'].includes(slug) ? favKeys.flatMap((k) => [v('X', `Your pick: Franklin on ${nm(k)}`, k, ['vivid'], lines.map((t) => F(t))), v('X', `Your pick: white Franklin on ${nm(k)}`, k, ['mono'], lines.map((t) => F(t)))]) : []),
+    ].map((x, i) => ({ ...x, k: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i] }))]),
     ['scaling-the-visual-experience-platform', 'Writing: Scaling the Visual Experience Platform', [v('A', 'White Franklin on Sleeping Shepherd, like the other writing covers', 'shepherd', ['fix:#ffffff'], SCF)]],
   ];
   const workMat = Object.fromEntries(work.map((w) => [w.slug, w.mat]));
@@ -334,7 +350,7 @@ if (process.env.PREVIEW) {
     return `<button class="pick" type="button" data-card="${slug}" data-opt="${x.k}" aria-pressed="false"><span class="mat" style="--mat:${workMat[slug] || '#c8d6ec'}"><span class="cover ${a ? 'has-art' : 'flat'}" style="--flat:${x.flat || '#f6d44f'}" data-id="${slug}:${x.k}" data-modes="${x.modes.join(',')}" data-mat="${workMat[slug] || '#c8d6ec'}">${a ? cropEl(x.art, '') : ''}<span class="drawn"><svg viewBox="0 0 300 400" fill="#ffffff" data-max="${x.max}" data-lh="${x.lh}" aria-hidden="true">${texts}</svg></span></span></span><span class="plabel">${x.k}. ${esc(x.label)}</span><span class="score"></span></button>`;
   };
   const F2 = 'https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=Archivo:wdth,wght@62..100,800&family=Pinyon+Script&family=Pirata+One&display=swap';
-  const body = `<div class="page study"><h1>Working covers</h1><p>Every working card with its type and frame in one color, picked from colors that read on that painting. B is the same painting in blackletter. The rest are paintings not used anywhere else. Only covers at 3 to 1 or better are shown. The last row is Scaling in white Franklin, like the other writing covers.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
+  const body = `<div class="page study"><h1>Working covers</h1><p>Round two adds the five works you sent to Focus, Online Collection, VXP, One Visitor, and Deep Zoom, in color and in white. Every working card with its type and frame in one color, picked from colors that read on that painting. B is the same painting in blackletter. The rest are paintings not used anywhere else. Only covers at 3 to 1 or better are shown. The last row is Scaling in white Franklin, like the other writing covers.</p>${ROWS.map(([slug, title, vs]) => `<section class="srow"><h2>${esc(title)}</h2><div class="opts">${vs.map((x) => cv(slug, x)).join('')}</div></section>`).join('')}<div class="pickbar"><p id="picks">No picks yet.</p><button id="copy" type="button">Copy my picks</button></div></div>
 <link rel="stylesheet" href="${F2.replace(/&/g, '&amp;')}">
 <style>.study h1{margin-bottom:.3em}.study>p{max-width:62ch}.srow{margin:2.5rem 0}.srow h2{font-size:1.1rem;margin:0 0 .8rem}.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.opts{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory}.pick{scroll-snap-align:start}}
