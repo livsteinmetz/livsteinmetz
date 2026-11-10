@@ -34,25 +34,25 @@
  },
  "focus": {
   "vb": "0 0 300 400",
-  "fill": "#fef8b4",
+  "fill": "#86fc9e",
   "t": [
    {
     "text": "Barnes",
-    "x": 18,
-    "y": 78.2,
+    "x": 150,
+    "y": 188.6,
     "size": 78.7,
     "font": "Libre Franklin",
     "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "extra": "letter-spacing=\"-0.02em\" text-anchor=\"middle\""
    },
    {
     "text": "Focus",
-    "x": 18,
-    "y": 155.3,
+    "x": 150,
+    "y": 265.7,
     "size": 78.7,
     "font": "Libre Franklin",
     "wt": 800,
-    "extra": "letter-spacing=\"-0.02em\""
+    "extra": "letter-spacing=\"-0.02em\" text-anchor=\"middle\""
    }
   ]
  },

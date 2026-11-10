@@ -74,7 +74,7 @@
   "title": "Barnes Focus",
   "tag": "a guide with no labels",
   "date": "2021 to now",
-  "art": "models",
+  "art": "postman",
   "font": "didone",
   "short": "In-gallery interpretation, no wall labels",
   "role": "Product and front-end development",
@@ -98,7 +98,7 @@
   ],
   "align": "left",
   "width": 0.8,
-  "mat": "#fef8b4",
+  "mat": "#86fc9e",
   "reads": [
    {
     "title": "Digital Product as Institutional Practice at the Barnes Foundation",
