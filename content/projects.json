@@ -1,0 +1,32 @@
+[
+ {
+  "slug": "listening-trends",
+  "title": "Listening Trends",
+  "card": ["Trends"],
+  "short": "Eight years of my listening, charted",
+  "date": "2026",
+  "role": "Data, design, and development",
+  "stack": "Spotify Web API, Open-Meteo, MusicBrainz, iTunes Search API, Natural Earth, SVG and canvas, Node, Firebase, GitHub Actions, Playwright",
+  "body": [
+   "I asked Spotify for my extended streaming history, every play since 2019, and turned it into a story you scroll through: which artists ran each year, where in the world I was listening, and how my listening moves with the seasons, the hour of day, and the weather.",
+   "Every play is matched to that day's weather and daylight wherever I was, so the page can test hunches like whether rainy days mean more music. It only calls something a pattern when it holds up against other days in the same months.",
+   "My raw history stays on my computer. The site only gets totals by artist and day, behind a passcode. Anyone can walk through it with a sample listener, or drop in their own Spotify export, which is read in the browser and never uploaded."
+  ],
+  "link": "/listening/trends",
+  "linkText": "Open Listening Trends"
+ },
+ {
+  "slug": "playlist-converter",
+  "title": "Playlist Converter",
+  "card": ["Playlist", "Converter"],
+  "short": "Sharing playlists with friends on any app",
+  "date": "2026",
+  "role": "Design and development",
+  "stack": "Spotify Web API, iTunes Search API, Deezer API, Node, Firebase, GitHub Actions",
+  "body": [
+   "I make a lot of playlists, and the people I make them for don't all use Spotify. My friends are spread across Apple Music, Tidal, Deezer, and YouTube Music for all kinds of reasons, so sending a Spotify link only worked for some of them.",
+   "I started from what a friend on another app would want to do: move the whole playlist in a couple of taps, or find one song and press play. Each playlist I share gets its own page with both paths. Copy the link into TuneMyMusic or Soundiiz to bring everything over at once, or go song by song, with each track linked straight to Apple Music and Deezer and searched on Tidal and YouTube Music.",
+   "Behind it, a script matches each song once, on Apple Music by title and artist and on Deezer by its ISRC code, and saves the matches so it never looks up the same song twice. The site rebuilds from Spotify every day, so the pages keep up as my playlists change."
+  ]
+ }
+]

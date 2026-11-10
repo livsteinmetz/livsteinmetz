@@ -7,6 +7,7 @@ import { contrast } from './contrast.mjs';
 const read = (f) => JSON.parse(readFileSync(`content/${f}.json`, 'utf8'));
 const settings = read('settings'), type = read('type'), wall = read('wall'), trends = read('trends'), library = read('library'), diary = read('diary'), previews = read('previews'), history = (() => { try { return read('listening-history'); } catch { return null; } })(), weatherHistory = read('weather-history'), world = read('world'), picks = read('weather-picks'), reading = read('reading');
 const work = read('work'), music = read('music'), myPlaylists = read('my-playlists'), playlists = [...read('playlists'), ...settings.playlists.map((p) => myPlaylists.find((m) => m.id === (p.id || p))).filter(Boolean)], art = read('art');
+const projects = read('projects');
 let sendLists = {}, songLinks = {};
 try { sendLists = read('playlist-tracks'); songLinks = read('links'); } catch { /* none yet */ }
 const feed = read('notes.feed'), seed = read('notes');
@@ -93,7 +94,9 @@ const wallShelf = wall.length ? `<section class="side" id="on-the-wall" aria-lab
 const pages = {};
 const MATS = ['#fff27a', '#66c4ff', '#efb4f7', '#ef8f35', '#efa090', '#d9534a'];
 const mat = (i) => `class="mat" style="--mat:${MATS[i % MATS.length]}"`;
-const trendsCard = trends.windows.length ? `<li class="mat" style="--mat:#f6d44f"><a class="hang" href="/listening/trends"><figure role="group" aria-label="media"><div class="still trends-card"><img src="/media/feminine.jpg" alt="Detail of The Eternal Feminine by Paul Cézanne" loading="lazy" decoding="async" width="900" height="1200"><span>Trends</span></div><figcaption class="cap">Eight years of my listening, charted</figcaption></figure></a></li>` : '';
+const sendable = playlists.filter((p) => sendLists[p.id]?.length);
+const projectCard = (p) => `<li class="mat" style="--mat:#f6d44f" data-item="listening:${p.slug}"><a class="hang" href="/projects/${p.slug}"><figure role="group" aria-label="media"><div class="still trends-card${p.slug === 'listening-trends' ? '' : ' flatcard'}">${p.slug === 'listening-trends' ? '<img src="/media/feminine.jpg" alt="Detail of The Eternal Feminine by Paul Cézanne" loading="lazy" decoding="async" width="900" height="1200">' : ''}<span>${p.card.map(esc).join('<br>')}</span></div><figcaption class="cap">${esc(p.short)}</figcaption></figure></a></li>`;
+const trendsCard = projects.filter((p) => (p.slug === 'listening-trends' ? trends.windows.length : sendable.length)).map(projectCard).join('');
 const listeningShelf = playlists.length || trendsCard ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening <button class="sound" type="button" aria-pressed="false">Sound off</button></h2><ol class="shelf">${trendsCard}${playlists.map((p, i) => `<li ${mat(i + 1)} data-item="listening:${p.id}"><a class="hang" href="/listening#${p.id}"><figure role="group" aria-label="media"><div class="still sleeve"${previews[p.id] ? ` data-preview="${previews[p.id].url}" data-song="${esc(previews[p.id].title)}, ${esc(previews[p.id].artist)}"` : ''}><span class="disc" style="background-image:url(${p.cover || p.image})"></span><img src="${p.cover || p.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap">${esc(p.title)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 
 const readingShelf = reading.length ? `<section class="side" id="reading" aria-labelledby="reading-title"><h2 id="reading-title">Reading</h2><ol class="shelf">${reading.filter((b) => shown(`reading:${b.url}`)).map((b, i) => `<li ${mat(i + 2)} data-item="reading:${b.url}"><a class="hang" href="${b.url}"><figure role="group" aria-label="media"><div class="still jacket">${b.blurb ? `<p class="blurb">${esc(b.blurb)}</p>` : ''}<img src="${b.cover}" alt="" loading="lazy" decoding="async"></div><figcaption class="cap"><i>${esc(b.title)}</i>${b.author ? `, ${esc(b.author)}` : ''}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
@@ -116,6 +119,12 @@ work.forEach((w) => {
   const shot = w.media ? `<div class="shot">${w.media.video ? `<video controls muted loop playsinline preload="none" poster="/media/${w.media.poster}.webp" aria-label="${esc(w.media.alt)}"><source src="/media/${w.media.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${w.media.image}.webp" alt="${esc(w.media.alt)}" loading="lazy">`}</div>` : '';
   pages[`work/${w.slug}.html`] = shell({ path: `/work/${w.slug}`, title: w.title, description: `${w.short}. ${w.role} for ${w.org}.`, ld: [{ '@type': 'CreativeWork', name: w.title, abstract: w.short, creator: { '@id': `${SITE}/#person` }, url: `${SITE}/work/${w.slug}` }],
     body: `${record({ ...w, href: `/work/${w.slug}` }, 'a')}<article class="detail" id="story"><header><h1>${esc(w.short)}</h1></header><section name="articleBody" class="prose">${w.body.map((p) => `<p>${esc(p)}</p>`).join('')}${w.reads ? `<p>Read more: ${w.reads.map((r) => `<a href="/notes/${r.slug}">${esc(r.title)}</a>`).join(', ')}</p>` : ''}${w.link ? `<p><a href="${w.link}">${esc(w.linkText)}</a></p>` : ''}</section><dl class="meta"><dt>For</dt><dd>${esc(w.org)}</dd><dt>When</dt><dd>${esc(w.date)}</dd><dt>My part</dt><dd>${esc(w.role)}</dd>${w.stack ? `<dt>Built with</dt><dd>${esc(w.stack)}</dd>` : ''}</dl>${shot}${gallery}</article>${viewer(w.art)}` });
+});
+
+projects.forEach((p) => {
+  const more = p.slug === 'playlist-converter' && sendable.length ? `<p>See it on <a href="/listening/send/${esc(sendable[0].id)}">${esc(sendable[0].title)}</a>, or pick any playlist on <a href="/listening">Listening</a>.</p>` : '';
+  pages[`projects/${p.slug}.html`] = shell({ path: `/projects/${p.slug}`, title: p.title, description: `${p.short}. A personal project by Olivia Steinmetz.`, ld: [{ '@type': 'CreativeWork', name: p.title, abstract: p.short, creator: { '@id': `${SITE}/#person` }, url: `${SITE}/projects/${p.slug}` }],
+    body: `<article class="detail project" id="story"><header><p class="back"><a href="/#listening">Listening</a></p><h1>${esc(p.short)}</h1></header><section name="articleBody" class="prose">${p.body.map((t) => `<p>${esc(t)}</p>`).join('')}${p.link ? `<p><a class="btn" href="${p.link}">${esc(p.linkText)}</a></p>` : ''}${more}</section><dl class="meta"><dt>What</dt><dd>${esc(p.title)}, a personal project</dd><dt>When</dt><dd>${esc(p.date)}</dd><dt>My part</dt><dd>${esc(p.role)}</dd><dt>Built with</dt><dd>${esc(p.stack)}</dd></dl></article>` });
 });
 
 const sideB = side.b;
@@ -148,6 +157,7 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <p>I lead digital product, design, experience, and strategy for the Barnes Foundation and Calder Gardens.</p>
 <p>I joined the Barnes in 2021 as a front-end engineer on a small team, where everyone did a little of everything (still true!). Today I work across engineering, UI/UX design, and product strategy to turn our educational mission into durable systems and mature our digital product portfolio.</p>
 <p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. That's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
+<p>On the side, I build things around music. <a href="/projects/listening-trends">Listening Trends</a> charts eight years of my Spotify history against the weather, and my <a href="/projects/playlist-converter">Playlist Converter</a> lets friends on any app hear the playlists I make.</p>
 <h2>Talks</h2><ul class="talks">
 <li>MuseumNext Digital Learning Summit, December 2026, on the Barnes digital learning platform, the VXP</li>
 <li>American Alliance of Museums, 2026, on launching Calder Gardens</li>
