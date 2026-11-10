@@ -2,7 +2,7 @@
 const W = 264, X = 18;
 function layout(cv, place) {
   const svg = cv.querySelector('svg'), lines = [...svg.querySelectorAll('text.h')];
-  const max = +svg.dataset.max, lh = +svg.dataset.lh;
+  const max = +svg.dataset.max, lh = +svg.dataset.lh, H = +(svg.dataset.h || 400);
   lines.forEach((t) => t.setAttribute('font-size', 100));
   const fits = lines.map((t) => (W * 100) / (t.getComputedTextLength() * +t.dataset.s));
   const base = Math.min(max, ...fits);
@@ -12,7 +12,7 @@ function layout(cv, place) {
   sizes.forEach((sz, i) => { if (i) y += sz * lh; ys.push(y); });
   const pl = { top: 'tl', bottom: 'bl' }[place] || place;
   const last = ys[ys.length - 1];
-  const shift = pl[0] === 't' ? 0 : pl[0] === 'b' ? 376 - last : (376 - last) / 2;
+  const shift = pl[0] === 't' ? 0 : pl[0] === 'b' ? H - 24 - last : (H - 24 - last) / 2;
   const side = pl === 'cc' ? 'middle' : pl[1] === 'r' ? 'end' : 'start';
   const x = side === 'middle' ? 150 : side === 'end' ? 300 - X : X;
   lines.forEach((t, i) => { t.setAttribute('x', x); t.setAttribute('text-anchor', side); t.setAttribute('y', (ys[i] + shift).toFixed(1)); });
@@ -39,7 +39,7 @@ document.fonts.ready.then(async () => {
   document.documentElement.dataset.ready = '1';
 });
 let picks = {};
-try { picks = JSON.parse(localStorage.getItem('study-picks-7') || '{}'); } catch (e) { picks = {}; }
+try { picks = JSON.parse(localStorage.getItem('study-picks-8') || '{}'); } catch (e) { picks = {}; }
 const out = document.getElementById('picks');
 const show = () => {
   document.querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-pressed', String(picks[b.dataset.card] === b.dataset.opt)));
@@ -47,7 +47,7 @@ const show = () => {
   out.textContent = names.length ? names.join(', ') : 'No picks yet.';
   const shelf = document.querySelector('.shelfprev');
   if (shelf) {
-    shelf.replaceChildren(...[...document.querySelectorAll('.srow')].map((r) => {
+    shelf.replaceChildren(...[...document.querySelectorAll('.srow:not(.noshelf)')].map((r) => {
       const b = r.querySelector(`.pick[aria-pressed="true"]`);
       if (!b) { const g = document.createElement('div'); g.className = 'gap'; g.textContent = r.querySelector('h2').textContent; return g; }
       return b.querySelector('.mat').cloneNode(true);
@@ -56,7 +56,7 @@ const show = () => {
 };
 document.querySelectorAll('.pick').forEach((b) => b.addEventListener('click', () => {
   picks[b.dataset.card] = picks[b.dataset.card] === b.dataset.opt ? undefined : b.dataset.opt;
-  try { localStorage.setItem('study-picks-7', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
+  try { localStorage.setItem('study-picks-8', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
   show();
 }));
 document.getElementById('copy').addEventListener('click', async () => {
