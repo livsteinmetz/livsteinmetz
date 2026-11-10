@@ -148,7 +148,7 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <p>I lead digital product, design, experience, and strategy for the Barnes Foundation and Calder Gardens.</p>
 <p>I joined the Barnes in 2021 as a front-end engineer on a small team, where everyone did a little of everything (still true!). Today I work across engineering, UI/UX design, and product strategy to turn our educational mission into durable systems and mature our digital product portfolio.</p>
 <p>I studied both Engineering Science and Double Bass Performance at Vanderbilt University, and led innovation and entrepreneurship programming and curriculum development at the Wond'ry Center for Innovation and Entrepreneurship in its first years on campus. I worked in Emerging Tech consulting and the Operations Design Thinking studio at Accenture, where I picked up an interest in emerging technologies and my first web development skills, and applied and shared design thinking methods I still use today. At Capital One, I completed a six-month software engineering program and moved into a full-stack developer role, the foundation I brought with me to the Barnes.</p>
-<p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. Orchestra taught me most of what I know about product work. You listen, you create a solid foundation, and you show up prepared because everybody else is counting on you. It's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
+<p>I freelance as a double bassist in the Philadelphia area, and being a musician is what connects me to this work. I've been at the intersection of the arts and tech for a long time, and I've sat on both sides of it: I know what it takes to make art, and what it takes to get it in front of people. That's also why the mission of cultural organizations matters so much to me, and how I found my niche here.</p>
 <h2>Talks</h2><ul class="talks">
 <li>MuseumNext Digital Learning Summit, December 2026, on our digital learning platform</li>
 <li>American Alliance of Museums, 2026, on launching Calder Gardens</li>
@@ -158,10 +158,8 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <h2>Things I like</h2><ul class="likes">
 <li>making my own espresso mugs</li>
 <li>reading books small enough to fit in my bag</li>
-<li>hunting used bookstores for the books on my running list</li>
 <li>curating overly specific <a href="/listening">playlists</a></li>
-<li>working my way through Dominion expansions</li>
-<li>always having a deck of cards on me</li>
+<li>playing my way through Dominion expansions (I love board games)</li>
 <li>going for a walk and calling a friend</li>
 </ul>
 <h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. ${mail('Email me')}.</p></div></div>` });
