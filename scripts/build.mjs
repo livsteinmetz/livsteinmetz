@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 // Builds the site into build/. Plain Node, no dependencies.
-import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, readdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { contrast } from './contrast.mjs';
 
@@ -162,11 +162,17 @@ pages['about.html'] = shell({ path: '/about', title: 'About', description: STATE
 <li>going for a walk and calling a friend</li>
 </ul>
 <h2>Say hello</h2><p>I'm happy to talk with anyone working on museum technology, or anyone who needs a bassist. ${mail('Email me')}.</p></div></div>` });
-pages['colophon.html'] = shell({ path: '/colophon', title: 'Colophon', description: 'How the paintings on this site are served.', body: `<div class="page"><div class="prose"><h1>Colophon</h1><p>Every painting here is public domain. The covers are assembled in your browser from IIIF image tiles, the same standard behind the Barnes online collection and the Visual Experience Platform. Each work has a IIIF manifest, so you can open it in any IIIF viewer.</p><ul>${Object.entries(art).map(([k, a]) => `<li><a href="/iiif/${k}.json">${esc(a.title)}</a>, ${esc(a.artist)} (${esc(a.rights)})</li>`).join('')}</ul></div></div>` });
+pages['colophon.html'] = shell({ path: '/colophon', title: 'Colophon', description: 'How the paintings on this site are served.', body: `<div class="page"><div class="prose"><h1>Colophon</h1><p>Every painting here is public domain. The covers are assembled in your browser from IIIF image tiles, the same standard behind the Barnes online collection and the Visual Experience Platform. Each work has a IIIF manifest, so you can open it in any IIIF viewer.</p><ul>${[...new Map(Object.entries(art).map(([k, a]) => [a.barnes || `${a.title}|${a.artist}`, [k, a]])).values()].map(([k, a]) => `<li><a href="/iiif/${k}.json">${esc(a.title)}</a>, ${esc(a.artist)} (${esc(/public domain/i.test(a.rights || '') ? a.rights : [a.rights, 'public domain'].filter(Boolean).join(', '))})</li>`).join('')}</ul></div></div>` });
 pages['404.html'] = shell({ path: '/404', title: 'Page not found', description: 'This page has moved.', body: `<div class="page"><h1>Oops looks like we got lost.</h1><p><a href="/">Go to the home page</a></p></div>` });
 
 rmSync('build', { recursive: true, force: true }); mkdirSync('build/iiif', { recursive: true });
 cpSync('site', 'build', { recursive: true });
+// The shipped JS and CSS go out without comments; the notes stay in the source.
+for (const f of readdirSync('build')) {
+  if (f.endsWith('.js')) writeFileSync(`build/${f}`, readFileSync(`build/${f}`, 'utf8').split('\n').filter((l) => !/^\s*\/\//.test(l)).map((l) => l.replace(/([;,){}])\s+\/\/ [^'"`]*$/, '$1').replace(/\{ \/\* [^*\n]* \*\/ \}/g, '{}')).join('\n'));
+  if (f.endsWith('.css')) writeFileSync(`build/${f}`, readFileSync(`build/${f}`, 'utf8').replace(/\/\*[\s\S]*?\*\//g, ''));
+}
+if (!process.env.PREVIEW) rmSync('build/study.js', { force: true });
 // One page per shared playlist, for friends on other apps.
 for (const p of playlists) {
   const tracks = sendLists[p.id];
