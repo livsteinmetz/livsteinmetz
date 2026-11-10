@@ -123,7 +123,7 @@
   "body": [
    "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
    "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering. The site also has a multilingual, AI-powered search that answers visitors' questions from our own content.",
-   "Building it also meant rebuilding the platform under it. Our team made a shared component library with themes that switch between Barnes and Calder Gardens styles, and we're moving our sites from Hygraph to Sanity as we go, so each Barnes site we touch comes back faster and more accessible."
+   "Building it also meant rebuilding the platform under it. Our team made a shared component library with themes that switch between Barnes and Calder Gardens styles, and we're moving our sites from Hygraph and Craft CMS to Sanity and modernizing as we go, so each Barnes site we touch comes back faster and more accessible."
   ],
   "lines": [
    "CALDER",
