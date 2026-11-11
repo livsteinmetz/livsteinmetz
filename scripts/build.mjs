@@ -95,7 +95,14 @@ const pages = {};
 const MATS = ['#fff27a', '#66c4ff', '#efb4f7', '#ef8f35', '#efa090', '#d9534a'];
 const mat = (i) => `class="mat" style="--mat:${MATS[i % MATS.length]}"`;
 const sendable = playlists.filter((p) => sendLists[p.id]?.length);
-const projectCard = (p) => `<li class="mat" style="--mat:#f6d44f" data-item="listening:${p.slug}"><a class="hang" href="/projects/${p.slug}"><figure role="group" aria-label="media"><div class="still trends-card${p.slug === 'listening-trends' ? '' : ' flatcard'}">${p.slug === 'listening-trends' ? '<img src="/media/feminine.jpg" alt="Detail of The Eternal Feminine by Paul Cézanne" loading="lazy" decoding="async" width="900" height="1200">' : ''}<span>${p.card.map(esc).join('<br>')}</span></div><figcaption class="cap">${esc(p.short)}</figcaption></figure></a></li>`;
+const typeLine = (e) => `<text x="${e.x}" y="${e.y}" font-family="${e.font}" font-weight="${e.wt}" font-size="${e.size}" ${e.extra || ''}>${e.text}</text>`;
+const projectCard = (p) => {
+  const t = type[p.slug], a = p.art && art[p.art];
+  const face = p.slug === 'listening-trends'
+    ? `<div class="still trends-card"><img src="/media/feminine.jpg" alt="Detail of The Eternal Feminine by Paul Cézanne" loading="lazy" decoding="async" width="900" height="1200"><span>${p.card.map(esc).join('<br>')}</span></div>`
+    : `<div class="still trends-card art-card">${a ? cropEl(p.art, `Detail of ${a.title} by ${a.artist}`) : ''}<span class="drawn"><svg viewBox="${t.vb}" fill="${t.fill}" role="img" aria-label="${esc(p.title)}">${t.t.map(typeLine).join('')}</svg></span></div>`;
+  return `<li class="mat" style="--mat:${t && p.slug !== 'listening-trends' ? t.fill : '#f6d44f'}" data-item="listening:${p.slug}"><a class="hang" href="/projects/${p.slug}"><figure role="group" aria-label="media">${face}<figcaption class="cap">${esc(p.short)}</figcaption></figure></a></li>`;
+};
 const trendsCard = projects.filter((p) => (p.slug === 'listening-trends' ? trends.windows.length : sendable.length)).map(projectCard).join('');
 const listeningShelf = playlists.length || trendsCard ? `<section class="side" id="listening" aria-labelledby="listening-title"><h2 id="listening-title">Listening <button class="sound" type="button" aria-pressed="false">Sound off</button></h2><ol class="shelf">${trendsCard}${playlists.map((p, i) => `<li ${mat(i + 1)} data-item="listening:${p.id}"><a class="hang" href="/listening#${p.id}"><figure role="group" aria-label="media"><div class="still sleeve"${previews[p.id] ? ` data-preview="${previews[p.id].url}" data-song="${esc(previews[p.id].title)}, ${esc(previews[p.id].artist)}"` : ''}><span class="disc" style="background-image:url(${p.cover || p.image})"></span><img src="${p.cover || p.image}" alt="" loading="lazy" decoding="async" width="300" height="300"></div><figcaption class="cap">${esc(p.title)}</figcaption></figure></a></li>`).join('')}</ol></section>` : '';
 

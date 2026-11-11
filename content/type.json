@@ -370,5 +370,29 @@
     "extra": ""
    }
   ]
+ },
+ "playlist-converter": {
+  "vb": "0 0 300 300",
+  "fill": "#55cd72",
+  "t": [
+   {
+    "text": "Playlist",
+    "x": 282,
+    "y": 215.5,
+    "size": 75.6,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": "text-anchor=\"end\""
+   },
+   {
+    "text": "Converter",
+    "x": 282,
+    "y": 276,
+    "size": 75.6,
+    "font": "Pirata One",
+    "wt": 400,
+    "extra": "text-anchor=\"end\""
+   }
+  ]
  }
 }

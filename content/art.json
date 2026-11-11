@@ -408,9 +408,9 @@
   "h": 3472,
   "crop": [
    0.286,
-   0.0,
+   0,
    0.428,
-   1.0
+   1
   ],
   "rights": "public domain",
   "edge": "bottom",
@@ -442,9 +442,9 @@
   "h": 6158,
   "crop": [
    0.028,
-   0.0,
+   0,
    0.944,
-   1.0
+   1
   ],
   "edge": "bottom",
   "ink": "#ffffff",
@@ -458,14 +458,31 @@
   "w": 5960,
   "h": 9381,
   "crop": [
-   0.0,
+   0,
    0.076,
-   1.0,
+   1,
    0.847
   ],
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff",
   "rights": "public domain"
+ },
+ "bosch": {
+  "title": "Temptation of Saint Anthony",
+  "artist": "Hieronymus Bosch",
+  "barnes": 5809,
+  "w": 4644,
+  "h": 6348,
+  "crop": [
+   0,
+   0.134,
+   1,
+   0.732
+  ],
+  "rights": "public domain",
+  "edge": "bottom",
+  "ink": "#ffffff",
+  "tagInk": "#ffffff"
  }
 }

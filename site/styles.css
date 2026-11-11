@@ -186,5 +186,5 @@ h3.ctitle{margin:0;font-weight:inherit}
 .wrapped-head .lede{max-width:40em;margin:8px 0 0;font-size:1rem;line-height:1.45;color:#444}
 .scroll-cue{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));z-index:30;margin:0;padding:8px 16px 8px 14px;background:#16246e;color:#fff;font-size:.875rem;border-radius:999px;opacity:0;transform:translate(-50%,8px);transition:opacity .3s,transform .3s;pointer-events:none}.scroll-cue::after{content:"";display:inline-block;width:7px;height:7px;margin-left:10px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-3px) rotate(45deg)}.scroll-cue.on{opacity:1;transform:translate(-50%,0)}
 @media(prefers-reduced-motion:reduce){.scroll-cue{transition:none}}
-.trends-card.flatcard span{left:.3em;right:auto;font-size:clamp(36px,5vw,56px);line-height:.82}
+.trends-card .drawn{inset:0}
 .detail.project header .back{margin:0 0 .5em;font-size:.9375rem}
