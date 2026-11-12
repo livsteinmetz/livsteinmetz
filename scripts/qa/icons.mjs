@@ -6,7 +6,7 @@ fs.mkdirSync(out, { recursive: true });
 const FONTS = 'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,800&family=Pirata+One&display=swap';
 const b64 = (f) => `data:image/jpeg;base64,${fs.readFileSync(f).toString('base64')}`;
 const page = (body) => `<!doctype html><html><head><link rel="stylesheet" href="${FONTS}"><style>html,body{margin:0}.f{position:relative;box-sizing:border-box}.f img{position:absolute;object-fit:cover}.f svg{position:absolute}</style></head><body>${body}</body></html>`;
-const ICON = { img: 'site/media/z/sq-t-bass.jpg', fill: '#8dff72' };
+const ICON = { img: 'site/media/z/sq-t-bass-icon.jpg', fill: '#8dff72' };
 const OG = { img: 'site/media/z/w-m-book.jpg', fill: '#ff3d8b' };
 const b = await chromium.launch();
 const p = await b.newPage({ deviceScaleFactor: 1 });
