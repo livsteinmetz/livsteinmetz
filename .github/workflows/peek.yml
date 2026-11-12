@@ -6,12 +6,14 @@ jobs:
   peek:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/icons.mjs refs
       - name: Fetch reference images to a scratch branch
         run: |
           mkdir -p refs && cd refs
-          curl -sSfL -A 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' -o feminine.jpg "https://commons.wikimedia.org/wiki/Special:FilePath/L%27%C3%89ternel_F%C3%A9minin%2C_par_Paul_C%C3%A9zanne.jpg"
-          curl -sSfL -A 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' -o magdalen.jpg "https://commons.wikimedia.org/wiki/Special:FilePath/The_Magdalen_Reading_Rogier_van_der_Weiden.jpg?width=3000"
-          curl -sSfL -A 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' -o teniers.jpg "https://commons.wikimedia.org/wiki/Special:FilePath/Landscape_with_the_flight_into_Egypt_%28David_Teniers_d.%C3%A4.%29_-_Nationalmuseum_-_23919FXD.jpg?width=3840"
           ls -la
           git init -q -b peek
           git add -A
