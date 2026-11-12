@@ -1,0 +1,17 @@
+name: Peek
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  peek:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch reference images to a scratch branch
+        run: |
+          mkdir -p refs && cd refs
+          curl -sSfL -A 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' -o feminine.jpg "https://commons.wikimedia.org/wiki/Special:FilePath/L%27%C3%89ternel_F%C3%A9minin%2C_par_Paul_C%C3%A9zanne.jpg"
+          ls -la
+          git init -q -b peek
+          git add -A
+          git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "reference images"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" peek
