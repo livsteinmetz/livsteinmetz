@@ -39,7 +39,7 @@ document.fonts.ready.then(async () => {
   document.documentElement.dataset.ready = '1';
 });
 let picks = {};
-try { picks = JSON.parse(localStorage.getItem('study-picks-11') || '{}'); } catch (e) { picks = {}; }
+try { picks = JSON.parse(localStorage.getItem('study-picks-12') || '{}'); } catch (e) { picks = {}; }
 const out = document.getElementById('picks');
 const show = () => {
   document.querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-pressed', String(picks[b.dataset.card] === b.dataset.opt)));
@@ -56,7 +56,7 @@ const show = () => {
 };
 document.querySelectorAll('.pick').forEach((b) => b.addEventListener('click', () => {
   picks[b.dataset.card] = picks[b.dataset.card] === b.dataset.opt ? undefined : b.dataset.opt;
-  try { localStorage.setItem('study-picks-11', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
+  try { localStorage.setItem('study-picks-12', JSON.stringify(picks)); } catch (e) { /* picks still show for this visit */ }
   show();
 }));
 document.getElementById('copy').addEventListener('click', async () => {
