@@ -13,10 +13,11 @@
   "linkText": "See the VXP at the Barnes",
   "stack": "React, GraphQL, AWS Chime, IIIF deep zoom",
   "body": [
-   "When the Barnes moved adult classes online in 2020, nothing off the shelf could carry the Barnes method. Zoom lets you show a painting. It doesn't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
-   "So we wrote down what the method requires and built to it: shared attention, instructor-led pacing, deep zoom that doesn't degrade, bounded exploration, accessibility from the start, and reliability. Those constraints produced Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes class instead.",
-   "As of 2026, since 2023 more than 7,000 students and event attendees have learned on the VXP, across 36,800 hours of online teaching and more than 110 classes. One in five users has been a scholarship recipient or an Art for All Community Pass holder. Research keeps shaping what we build. In 2023, course evaluations showed 42% of students watching flat recordings of live classes, so nineteen research sessions and an A/B test produced Replay, a recording that keeps the canvas explorable, and five learner types we still design for. Replay opened up on-demand courses. Students tell us it works: 80% report high or extremely high impact on critical thinking about art, and 91% say it inspired them to keep learning. This year we also built an AI pipeline that takes an educator's PowerPoint, finds higher-resolution images of the artworks, and turns it into a IIIF presentation they can teach from.",
-   "In 2025 the Penn Museum became the first institution to license the platform, and a graduate program with Saint Joseph's University runs on it too. A year of supporting another institution showed us where to scale, so fifteen interviews and an effort-by-impact matrix produced the roadmap for VXP 2.0, which shipped in September 2026 with a redesigned admin experience. One platform now supports live courses, on-demand courses, and licensing, and together they fund our mission and access. I built the pricing, onboarding, and support model behind that licensing."
+   "When the Barnes moved adult classes online in 2020, nothing off the shelf could support the Barnes method of teaching art history and appreciation. Standard video conferencing platforms let you screen-share a painting, but they don't let a student explore brushstrokes at their own pace while an instructor guides the group's attention across a composition.",
+   "So we wrote down what the method requires as a sort of design spec and built to it: shared attention, instructor-led pacing, deep zoom that doesn't degrade, bounded exploration, and accessibility from the start. Those constraints produced Focus and Explore: when an instructor focuses the group, everyone sees the same view of a work, and when they release control, students zoom around on their own at full resolution. We moved away from slides early and designed around the rhythm of a Barnes method class instead.",
+   "Since 2023, more than 7,000 students and event attendees have learned on the VXP, across 36,800 hours of online teaching and more than 110 classes. One in five users has been a scholarship recipient or an Art for All Community Pass holder.",
+   "Research continues to shape what we build. In 2023, course evaluations showed 42% of students watching flat recordings of live classes, so nineteen research sessions and an A/B test produced Replay, a recording that keeps the canvas explorable, and five learner types we still design for. Replay opened up on-demand courses. Students tell us it works: 80% report high or extremely high impact on critical thinking about art, and 91% say it inspired them to keep learning. In 2026, we also built a pipeline that takes an educator's PowerPoint, finds higher-resolution images of the artworks, and turns it into a IIIF presentation they can teach from.",
+   "In 2025 the Penn Museum became the first institution to license the platform, and a graduate program with Saint Joseph's University runs on it too. A year of supporting another institution showed us where to scale, so fifteen interviews and an effort-by-impact matrix produced the roadmap for VXP 2.0, which shipped in September 2026 with a redesigned admin experience. I built the onboarding and support model behind that licensing. One platform now supports live courses, on-demand courses, and licensing, and together they fund our mission and access."
   ],
   "lines": [
    "VISUAL",
@@ -82,7 +83,7 @@
   "stack": "Image recognition, React",
   "body": [
    "The Barnes hangs no wall labels. Dr. Barnes arranged the collection in ensembles so you'd look at relationships of color, light, line, and space instead of reading a placard and moving on.",
-   "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. In June 2026 we replaced the commercial engine behind it with our own, built in weeks rather than the year we would have scoped. The average scan now matches in 594 milliseconds, roughly five times faster, and 61% of first-time visitors have used Focus. That kind of project used to be out of reach for a small museum team, before AI tools came into our workflow."
+   "Focus is how a visitor can go deeper without putting text back on the wall. You point your phone at a work, it recognizes the work, and the interpretation lives on the device. In June 2026 we replaced the commercial engine behind it with our own, built in house. The average scan now matches in 594 milliseconds, roughly five times faster than before."
   ],
   "lines": [
    "Barnes",
@@ -113,7 +114,7 @@
   "date": "2021 to now",
   "art": "casket",
   "font": "soft",
-  "short": "A portal, digital cards, and renewals people finish",
+  "short": "A portal, digital cards, and renewals",
   "role": "Product, UX/UI design, and front-end development",
   "org": "Barnes Foundation",
   "media": {
@@ -122,9 +123,8 @@
   },
   "stack": "TypeScript, ACME, Salesforce",
   "body": [
-   "The member portal started as a contactless option after reopening: buy tickets, show your card, get updates. I redesigned it that fall and it became the groundwork for everything after.",
-   "Redesigning the join and renewal flows, with renewal upsells inside the portal, grew renewals and member engagement. Membership is a digital product with a lifecycle, and it works better when we treat it like one.",
-   "In 2025 we rebuilt the member portals for both museums on our shared codebase. Members carry a digital card in Apple Wallet or Google Wallet and sign in with a magic link by email or text, so there's no password to forget. We also launched Join sites on the same components, where a new member can use an offer code, add a donation, and turn on auto-renew and their wallet card in one flow."
+   "The member portal started as a contactless option when we reopened after the pandemic: buy tickets, show your card, see offerings, review benefits, and get updates.",
+   "Redesigning the join and renewal flows in 2021, with renewal upsells inside the portal, grew renewals and member engagement. In 2025 we rebuilt the member portals for both museums on our shared codebase. Members carry a digital card in Apple Wallet or Google Wallet and sign in with a magic link by email or text, so there's no password to remember (or forget, depending on how you look at it!). We also launched Join sites on the same components, where a new member can use an offer code, add a donation, and turn on auto-renew and their wallet card in one flow."
   ],
   "lines": [
    "MEMBERSHIP"
