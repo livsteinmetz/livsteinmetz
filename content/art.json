@@ -284,21 +284,22 @@
   "tagInk": "#ffffff"
  },
  "bassist": {
-  "image": "/media/bassist.jpg",
   "title": "Landscape with the Flight into Egypt",
   "artist": "David Teniers the Elder",
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff",
   "crop": [
-   0,
-   0,
-   1,
-   1
+   0.2888,
+   0.6469,
+   0.215,
+   0.3086
   ],
-  "w": 1,
-  "h": 1,
-  "barnes": 0
+  "w": 3162,
+  "h": 2933,
+  "tiles": "/tiles/bassist",
+  "credit": "Courtesy of Nationalmuseum, Stockholm",
+  "rights": "public domain"
  },
  "riffian": {
   "barnes": 6969,
@@ -333,38 +334,40 @@
   "tagInk": "#ffffff"
  },
  "magdalen": {
-  "image": "/media/magdalen.jpg",
   "title": "The Magdalen Reading",
   "artist": "Rogier van der Weyden",
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff",
   "crop": [
-   0,
-   0,
-   1,
-   1
+   0.245,
+   0.1755,
+   0.59,
+   0.6649
   ],
-  "w": 1,
-  "h": 1,
-  "barnes": 0
+  "w": 2705,
+  "h": 3200,
+  "tiles": "/tiles/magdalen",
+  "credit": "Courtesy of the National Gallery, London",
+  "rights": "public domain"
  },
  "feminine": {
-  "image": "/media/feminine.jpg",
   "title": "The Eternal Feminine",
   "artist": "Paul Cézanne",
   "edge": "bottom",
   "ink": "#ffffff",
   "tagInk": "#ffffff",
   "crop": [
-   0,
-   0,
-   1,
-   1
+   0.6225,
+   0.4473,
+   0.335,
+   0.545
   ],
-  "w": 1,
-  "h": 1,
-  "barnes": 0
+  "w": 3176,
+  "h": 2600,
+  "tiles": "/tiles/feminine",
+  "credit": "Courtesy of the J. Paul Getty Museum",
+  "rights": "public domain"
  },
  "casket": {
   "title": "Chinese Casket (Le Coffret chinois)",

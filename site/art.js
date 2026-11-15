@@ -3,6 +3,9 @@
 export const TILE = 256;
 export const BASE = 'https://d2r83x5xt28klo.cloudfront.net/tiles/';
 
+// Barnes works come from the Barnes tile server; a few others are tiled into /tiles on this site.
+export const tileBase = (id) => (String(id).startsWith('/') ? `${id}/` : `${BASE}${id}/`);
+
 export function tiles({ id, w, h, crop }, sf) {
   const [cx, cy, cw, ch] = crop;
   const left = cx * w, top = cy * h, rw = cw * w, rh = ch * h;
@@ -12,7 +15,7 @@ export function tiles({ id, w, h, crop }, sf) {
     for (let x = Math.floor(left / step) * step; x < left + rw && x < w; x += step) {
       const tw = Math.min(step, w - x), th = Math.min(step, h - y);
       out.push({
-        url: `${BASE}${id}/${x},${y},${tw},${th}/${Math.ceil(tw / sf)},/0/color.jpg`,
+        url: `${tileBase(id)}${x},${y},${tw},${th}/${Math.ceil(tw / sf)},/0/color.jpg`,
         left: ((x - left) / rw) * 100, top: ((y - top) / rh) * 100,
         width: (tw / rw) * 100, height: (th / rh) * 100,
       });
@@ -222,8 +225,10 @@ if (typeof document !== 'undefined') {
     const OSD = window.OpenSeadragon, id = v.dataset.viewer;
     const get = OSD.IIIFTileSource.prototype.getTileUrl;
     OSD.IIIFTileSource.prototype.getTileUrl = function (...a) { return get.call(this, ...a).replace('default', 'color'); };
-    const info = await (await fetch(`${BASE}${id}/info.json`)).json();
-    info['@id'] = BASE + id; info.profile[1].qualities = ['color']; info.sizes = [{ width: info.width, height: info.height }];
+    const own = id.startsWith('/');
+    const info = await (await fetch(`${tileBase(id)}info.json`)).json();
+    info['@id'] = own ? location.origin + id : BASE + id; info.profile[1].qualities = ['color'];
+    if (!own) info.sizes = [{ width: info.width, height: info.height }];
     info.tiles = [{ width: TILE, height: TILE, scaleFactors: [1, 2, 4] }];
     OSD({ element: v, tileSources: [info], showNavigationControl: false, gestureSettingsMouse: { scrollToZoom: false }, minZoomImageRatio: 0.9 });
   }).observe(v);

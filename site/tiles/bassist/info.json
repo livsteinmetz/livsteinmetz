@@ -1,0 +1,1 @@
+{"@context": "http://iiif.io/api/image/2/context.json", "@id": "https://livsteinmetz.com/tiles/bassist", "protocol": "http://iiif.io/api/image", "width": 3162, "height": 2933, "profile": ["http://iiif.io/api/image/2/level0.json", {"formats": ["jpg"], "qualities": ["color"]}], "tiles": [{"width": 256, "height": 256, "scaleFactors": [1, 2, 4]}]}

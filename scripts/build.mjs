@@ -44,10 +44,10 @@ const covers = [...side.a, ...side.b];
 // Flat covers are checked here. Covers on paintings are measured from real pixels in .ci/shots.mjs.
 for (const c of covers.filter((x) => x.flat)) if (contrast(c.color, c.flat) < 3) throw new Error(`Contrast on "${c.title}"`);
 
-function cropEl(key, alt) {
+function cropEl(key, alt, crop) {
   const a = art[key];
   if (a.image) return `<div class="crop fill"><img src="${a.image}" alt="${esc(alt)}" width="600" height="800"></div>`;
-  return `<div class="crop" role="img" aria-label="${esc(alt)}" data-barnes="${a.barnes}" data-w="${a.w}" data-h="${a.h}" data-crop="${a.crop}"></div>`;
+  return `<div class="crop" role="img" aria-label="${esc(alt)}" data-barnes="${a.barnes || a.tiles}" data-w="${a.w}" data-h="${a.h}" data-crop="${crop || a.crop}"></div>`;
 }
 function cover(c0, tag = 'a') {
   const a = c0.art && art[c0.art];
@@ -99,7 +99,7 @@ const typeLine = (e) => `<text x="${e.x}" y="${e.y}" font-family="${e.font}" fon
 const projectCard = (p) => {
   const t = type[p.slug], a = p.art && art[p.art];
   const face = p.slug === 'listening-trends'
-    ? `<div class="still trends-card"><img src="/media/feminine.jpg" alt="Detail of The Eternal Feminine by Paul Cézanne" loading="lazy" decoding="async" width="900" height="1200"><span>${p.card.map(esc).join('<br>')}</span></div>`
+    ? `<div class="still trends-card">${cropEl('feminine', 'Detail of The Eternal Feminine by Paul Cézanne', [0.6225, 0.5492, 0.335, 0.4092])}<span>${p.card.map(esc).join('<br>')}</span></div>`
     : `<div class="still trends-card art-card">${a ? cropEl(p.art, `Detail of ${a.title} by ${a.artist}`) : ''}<span class="drawn"><svg viewBox="${t.vb}" fill="${t.fill}" role="img" aria-label="${esc(p.title)}">${t.t.map(typeLine).join('')}</svg></span></div>`;
   return `<li class="mat" style="--mat:${t && p.slug !== 'listening-trends' ? t.fill : '#f6d44f'}" data-item="listening:${p.slug}"><a class="hang" href="/projects/${p.slug}"><figure role="group" aria-label="media">${face}<figcaption class="cap">${esc(p.short)}</figcaption></figure></a></li>`;
 };
@@ -118,7 +118,7 @@ function record(current, sideKey) {
   const stage = list.map((c) => cover(c, 'div').replace('class="cover', `${c.slug === current.slug ? '' : 'hidden '}class="cover`)).join('');
   return `<section class="record"><div class="tracks" data-tracks>${flip}${tracks}</div><div class="stage ${sideKey === 'b' ? 'notes-stage' : ''}" data-stage data-current="${current.slug}">${stage}</div></section>`;
 }
-const viewer = (key) => { const a = art[key]; return a?.barnes ? `<section class="closer"><p>Look closer: <i>${esc(a.title)}</i>, ${esc(a.artist)}. Drag and pinch to zoom. <a href="/iiif/${key}.json">IIIF manifest</a></p><div class="viewer" data-viewer="${a.barnes}" role="application" aria-label="Deep zoom viewer for ${esc(a.title)}"></div></section>` : ''; };
+const viewer = (key) => { const a = art[key]; return a?.barnes || a?.tiles ? `<section class="closer"><p>Look closer: <i>${esc(a.title)}</i>, ${esc(a.artist)}. Drag and pinch to zoom. <a href="/iiif/${key}.json">IIIF manifest</a></p><div class="viewer" data-viewer="${a.barnes || a.tiles}" role="application" aria-label="Deep zoom viewer for ${esc(a.title)}"></div></section>` : ''; };
 
 work.forEach((w) => {
   const item = (m) => `<figure class="${m.tall ? 'tall' : ''}" role="group" aria-label="media">${m.video ? `<video data-auto muted loop playsinline preload="none" aria-label="${esc(m.alt)}"><source src="/media/${m.video}.mp4" type="video/mp4"></video>` : `<img src="/media/${m.image}.webp" alt="${esc(m.alt)}" loading="lazy">`}<figcaption>${esc(m.cap)}</figcaption></figure>`;
@@ -203,9 +203,10 @@ for (const [f, html] of Object.entries(pages)) { mkdirSync(dirname(`build/${f}`)
 // IIIF Presentation 3 manifests, one per painting.
 for (const [k, a] of Object.entries(art)) {
   const id = `${SITE}/iiif/${k}.json`;
-  const service = a.barnes ? [{ '@id': `https://d2r83x5xt28klo.cloudfront.net/tiles/${a.barnes}`, '@type': 'ImageService2', profile: 'level1' }] : undefined;
-  const body = { id: a.barnes ? `https://d2r83x5xt28klo.cloudfront.net/tiles/${a.barnes}/0,0,1024,1024/256,/0/color.jpg` : a.image, type: 'Image', format: 'image/jpeg', width: a.w, height: a.h, ...(service && { service }) };
-  writeFileSync(`build/iiif/${k}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: [a.barnes ? 'Courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania' : a.rights] } }, rights: 'https://creativecommons.org/publicdomain/mark/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body }] }] }] }, null, 1));
+  const base = a.barnes ? `https://d2r83x5xt28klo.cloudfront.net/tiles/${a.barnes}` : a.tiles ? `${SITE}${a.tiles}` : null;
+  const service = base ? [{ '@id': base, '@type': 'ImageService2', profile: a.barnes ? 'level1' : 'level0' }] : undefined;
+  const body = { id: base ? `${base}/0,0,1024,1024/256,/0/color.jpg` : a.image, type: 'Image', format: 'image/jpeg', width: a.w, height: a.h, ...(service && { service }) };
+  writeFileSync(`build/iiif/${k}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: [a.barnes ? 'Courtesy of the Barnes Foundation, Merion and Philadelphia, Pennsylvania' : a.credit || a.rights] } }, rights: 'https://creativecommons.org/publicdomain/mark/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body }] }] }] }, null, 1));
 }
 wall.forEach((a) => { const id = `${SITE}/iiif/wall-${a.id}.json`; writeFileSync(`build/iiif/wall-${a.id}.json`, JSON.stringify({ '@context': 'http://iiif.io/api/presentation/3/context.json', id, type: 'Manifest', label: { en: [a.title] }, summary: { en: [a.artist] }, requiredStatement: { label: { en: ['Credit'] }, value: { en: [`${a.museum}, public domain`] } }, rights: 'https://creativecommons.org/publicdomain/mark/1.0/', items: [{ id: `${id}/canvas`, type: 'Canvas', width: a.w, height: a.h, items: [{ id: `${id}/page`, type: 'AnnotationPage', items: [{ id: `${id}/anno`, type: 'Annotation', motivation: 'painting', target: `${id}/canvas`, body: { id: a.web.startsWith('/') ? `${SITE}${a.web}` : a.web, type: 'Image', format: 'image/jpeg' } }] }] }] }, null, 1)); });
 const urls = Object.keys(pages).filter((f) => f !== '404.html' && !f.startsWith('listening/send/')).map((f) => `${SITE}/${f.replace(/(index)?\.html$/, '')}`);
