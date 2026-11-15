@@ -153,7 +153,7 @@
   "linkText": "The open source ACME client",
   "stack": "TypeScript, ACME, headless front ends",
   "body": [
-   "Almost everything a museum sells or asks for runs through the same few screens: a ticket, a membership, a donation, a class. My team builds and maintains those online flows on ACME for the Barnes and Calder Gardens.",
+   "Almost everything a museum sells or asks for runs through the same few screens: a ticket, a membership, a donation, a class. My team builds and maintains those online flows with custom sites for the Barnes and Calder Gardens.",
    "When Calder Gardens opened it needed all of that under its own brand, so one codebase deploys twice, with one ACME tenant and one customer data layer underneath. Two front doors, one back office. That's also what made Plus admission possible: one ticket to both institutions, composed at purchase and put back together at the gate.",
    "We keep our ACME client open source, so any museum on the platform can use it."
   ],
@@ -181,9 +181,9 @@
   "org": "Barnes Foundation and Calder Gardens",
   "stack": "ACME, Zamok, Advanced Kiosks",
   "body": [
-   "Visitors can buy a ticket on the spot at the Barnes and at Calder Gardens without waiting for someone at the desk. I designed and built the kiosks end to end, from the screens to the hardware on the floor.",
-   "A kiosk runs on the same codebase and ACME ticketing pipeline as our websites, just in a different shape: tall, touch-first, and made for someone standing up who has never seen it before. You pick a time, choose admission to one museum or Plus admission to both, and can upgrade to a membership with auto-renew before you pay. Each Advanced Kiosks unit runs Zamok, which locks it to that one flow.",
-   "The first Barnes kiosks hit the floor in 2022, built in our member site codebase. When Calder Gardens opened in September 2025, they moved into the shared Barnes and Calder Gardens codebase, so both museums now run the same kiosk under their own brand."
+   "Visitors can buy a ticket on the spot at the Barnes and at Calder Gardens without waiting for someone at the desk. We designed and built the kiosks in house, end to end, from the screens to the hardware on the floor.",
+   "A kiosk runs on the same codebase and ACME ticketing pipeline as our websites. You pick a time, choose admission to one museum or Plus admission to both, and can upgrade to a membership with auto-renew before you pay.",
+   "The first Barnes kiosks hit the floor in 2022, built in our member site codebase. When Calder Gardens opened in September 2025, they moved into the shared Barnes and Calder Gardens codebase, so both museums now run the same kiosk, with the same logic behind the scenes, under their own brand."
   ],
   "lines": [
    "KIOSKS"
@@ -212,8 +212,7 @@
   "linkText": "Learn about IIIF",
   "stack": "IIIF, AWS Lambda, S3, React",
   "body": [
-   "We built a custom IIIF deep-zoom pipeline that tiles artworks through an AWS Lambda and S3. It runs on the online collection and the VXP, where it keeps pan and zoom in sync during live classes so an instructor and a room full of students can look at the same few inches of paint.",
-   "Every painting on this site is served the same way. The covers are assembled from the Barnes's public IIIF tiles in your browser, so you're looking at that pipeline right now."
+   "We built a custom IIIF deep-zoom pipeline that tiles artworks through an AWS Lambda and S3. It runs on the online collection and the VXP, where it keeps pan and zoom in sync during live classes so an instructor and a room full of students can look at the same few inches of paint."
   ],
   "lines": [
    "DEEP",
@@ -243,8 +242,7 @@
   "linkText": "Explore the collection",
   "stack": "React, Node, AWS Lambda, CloudFront",
   "body": [
-   "The Barnes collection site lets you sort by color, light, line, and space, the four plastic means of the Barnes method. I've built on it since 2021, including the brand work, the 404 and tour pages, and the shared style guide that grew out of it.",
-   "This fall the team moved the whole site to Lambda and CloudFront with no downtime, and rebuilt measurement on GA4 so we can see what people do there."
+   "The Barnes collection site lets you sort by color, light, line, and space, the four plastic means of the Barnes method. My team has iterated on it since 2021."
   ],
   "lines": [
    "Online",
