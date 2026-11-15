@@ -265,7 +265,7 @@
   "tag": "a walk through the rooms",
   "date": "2021 to now",
   "font": "grotesk",
-  "short": "Room by room tours and scavenger hunts on the collection site",
+  "short": "Room-by-room tours and scavenger hunts on the collection site",
   "role": "Product and development",
   "org": "Barnes Foundation",
   "link": "https://collection.barnesfoundation.org",
@@ -296,7 +296,7 @@
   "org": "Barnes Foundation",
   "stack": "Salesforce, ACME",
   "body": [
-   "In 2024 I directed our CRM move from Raiser's Edge to Salesforce, and most of my time went to getting Advancement, Marketing, and Guest Services aligned on our data and on the customer journey they share. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of three. That's what lets us recognize a member at checkout and see who's calling as the call connects, and it lets staff ask and answer questions through MCP connectors and AI-assisted reporting."
+   "In 2024 I managed our CRM move from Raiser's Edge to Salesforce, aligning a cross-functional team on our data migration and on shared customer journey mapping. Now we're working toward a single integration layer. ACME handles tickets, membership, events, and classes, Salesforce holds donor and member relationships, and Brevo runs email, with a data lake connecting them so a visitor is one record instead of many."
   ],
   "lines": [
    "ONE VISITOR",
@@ -321,9 +321,9 @@
   "linkText": "Visit caldergardens.org",
   "stack": "Next.js, Mantine, Sanity, AWS, ACME",
   "body": [
-   "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and brought them to life. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from a striking, abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
+   "As operating partner to Calder Gardens, the Barnes team took designs from Karlsson Wilker and applied them to a web ecosystem. The brand guidelines covered the main site. Ticketing, membership, giving, and retail all still needed a design language, so extrapolating from an abstract identity to flows people could move through without thinking about them was my favorite part of the job.",
    "Underneath, it's two front doors and one back office: one codebase and one ticketing pipeline serve both institutions. We planned for multiple brands before the partnership was formalized, which is why a second institution didn't mean doubling the engineering. The site also has a multilingual, AI-powered search that answers visitors' questions from our own content.",
-   "Two museums on one campus meant rethinking the ticket. With Plus admission, one purchase covers both: we built timed entry that pairs a Calder Gardens time with the best open Barnes time, so a visit moves from one building to the next. Membership follows the same idea. Every level covers both institutions, with unlimited admission, 10–11 am member mornings, guest passes, discounted guest tickets, and 10% off at both shops and both dining spots. Members join once and get the same benefits at each building.",
+   "Two museums on one campus meant rethinking the ticket. With Plus admission, one purchase covers both: we built timed entry that pairs a Calder Gardens time with the best open Barnes time, so a visit moves from one building to the next. Membership follows the same idea. Every level covers both institutions, with unlimited admission, 10–11 a.m. member mornings, guest passes, discounted guest tickets, and 10% off at both shops and both dining spots. Members join once and get the same benefits at each building.",
    "Building it also meant rebuilding the platform under it. Our team made a shared component library with themes that switch between Barnes and Calder Gardens styles, and we're moving our sites from Hygraph and Craft CMS to Sanity and modernizing as we go, so each Barnes site we touch comes back faster and more accessible."
   ],
   "lines": [
