@@ -16,7 +16,7 @@ const local = (d, cc) => {
 const weekOf = (d) => Math.min(51, Math.floor((d - new Date(d.getFullYear(), 0, 1)) / 6048e5));
 
 export function summarize(rows) {
-  const years = {}, clock = Array.from({ length: 12 }, () => Array(24).fill(0)), artists = {}, perYear = {}, day = {}, where = {}, who = {}, abroad = {};
+  const albums = {}, lastPlays = [], years = {}, clock = Array.from({ length: 12 }, () => Array(24).fill(0)), artists = {}, perYear = {}, day = {}, where = {}, who = {}, abroad = {};
   let hours = 0;
   for (const r of rows) {
     const when = r.ts || (r.endTime && `${r.endTime.replace(' ', 'T')}:00Z`);
@@ -47,6 +47,17 @@ export function summarize(rows) {
     const a = (artists[artist] ||= { total: 0, month: {}, year: {} });
     a.total += h; a.month[month] = (a.month[month] || 0) + h; a.year[y] = (a.year[y] || 0) + h;
     perYear[y] = (perYear[y] || 0) + h;
+    // Albums for the shelf: totals, first and last day, and hours by month.
+    const album = r.master_metadata_album_album_name;
+    if (album) {
+      const al = (albums[`${album}\u0000${artist}`] ||= { n: album, a: artist, u: '', p: 0, h: 0, f: k, l: k, m: {} });
+      al.p += 1; al.h += h; al.m[month] = (al.m[month] || 0) + h;
+      if (k < al.f) al.f = k;
+      if (k > al.l) al.l = k;
+      if (!al.u && r.spotify_track_uri) al.u = r.spotify_track_uri.split(':').pop();
+      const iso = utc.toISOString();
+      if (lastPlays.length < 8 || iso > lastPlays[7].at) { lastPlays.push({ at: iso, t: r.master_metadata_track_name || '', a: artist, al: album }); lastPlays.sort((p, q) => (p.at < q.at ? 1 : -1)); lastPlays.length = Math.min(lastPlays.length, 8); }
+    }
   }
   const keys = Object.keys(day).sort();
   if (!keys.length) return { hours: 0 };
@@ -91,5 +102,8 @@ export function summarize(rows) {
     clock: clock.map((r) => r.map((v) => +v.toFixed(2))), months, river, yearsInfo, allTop,
     days: { start: keys[0], minutes, place, tops, names }, streak: best, peakDay: { i: peak, minutes: minutes[peak] },
     playedDays: minutes.filter((m) => m >= 1).length,
+    // The shelf keeps the 400 albums with the most hours. Counts cover everything.
+    albums: Object.values(albums).sort((p, q) => q.h - p.h).slice(0, 400).map((al) => ({ ...al, h: +al.h.toFixed(2), m: Object.fromEntries(Object.entries(al.m).map(([mk, v]) => [mk, +v.toFixed(2)])) })),
+    albumCount: Object.keys(albums).length, albumFirsts: Object.values(albums).reduce((o, al) => { const mk = al.f.slice(0, 7); o[mk] = (o[mk] || 0) + 1; return o; }, {}), artistCount: Object.keys(artists).length, recent: lastPlays,
   };
 }

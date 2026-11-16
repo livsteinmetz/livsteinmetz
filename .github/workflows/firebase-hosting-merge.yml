@@ -10,6 +10,11 @@ on:
 permissions:
   contents: write
 
+# Shares a queue with the plays workflow, so the two never push the plays log at once.
+concurrency:
+  group: plays-log
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -37,6 +42,18 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      - name: Restore the plays log
+        continue-on-error: true
+        run: |
+          git fetch -q --depth 1 origin plays-log && git checkout origin/plays-log -- backup/plays.enc
+          if [ -f backup/plays.enc ]; then node scripts/private.mjs open-file backup/plays.enc; fi
+        env: { PRIVATE_SEED: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}" }
+      - run: node scripts/fetch-plays.mjs
+        continue-on-error: true
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
       - run: node scripts/fetch-links.mjs
         continue-on-error: true
       - run: node scripts/fetch-weather-history.mjs
@@ -56,6 +73,14 @@ jobs:
           cd /tmp/backup && git init -q -b spotify-backup && git add -A
           git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "spotify backup"
           git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" spotify-backup
+      - name: Save the plays log
+        continue-on-error: true
+        run: |
+          [ -s backup/plays.json ] || exit 0
+          mkdir -p /tmp/plays/backup && node scripts/private.mjs seal-to backup/plays.json /tmp/plays/backup/plays.enc backup/plays.json
+          cd /tmp/plays && git init -q -b plays-log && git add -A
+          git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "plays log"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" plays-log
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
