@@ -1,0 +1,42 @@
+name: Plays log
+
+# Spotify only remembers the last 50 plays, so this checks every three hours
+# and adds new ones to the sealed log. The daily deploy puts them on the shelf.
+on:
+  schedule:
+    - cron: '41 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: plays-log
+  cancel-in-progress: false
+
+jobs:
+  plays:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Open private data and the plays log
+        run: |
+          node scripts/private.mjs open
+          git fetch -q --depth 1 origin plays-log && git checkout origin/plays-log -- backup/plays.enc || true
+          if [ -f backup/plays.enc ]; then node scripts/private.mjs open-file backup/plays.enc; fi
+        env: { PRIVATE_SEED: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIVSTEINMETZ_BB868 }}" }
+      - run: node scripts/fetch-plays.mjs
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      - name: Save the plays log
+        run: |
+          [ -s backup/plays.json ] || exit 0
+          mkdir -p /tmp/plays/backup && node scripts/private.mjs seal-to backup/plays.json /tmp/plays/backup/plays.enc backup/plays.json
+          cd /tmp/plays && git init -q -b plays-log && git add -A
+          git -c user.name="Olivia Steinmetz" -c user.email="46467923+livsteinmetz@users.noreply.github.com" commit -qm "plays log"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" plays-log

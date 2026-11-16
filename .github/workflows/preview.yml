@@ -2,7 +2,7 @@ name: Preview branch
 
 on:
   push:
-    branches-ignore: [main, spotify-backup, preview-shots]
+    branches-ignore: [main, spotify-backup, preview-shots, plays-log]
   workflow_dispatch:
 
 permissions:
