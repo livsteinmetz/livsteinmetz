@@ -249,7 +249,7 @@ function drawSeasons(s, me) {
   const fallShare = avg(full.map((y) => per[y].slice(9).reduce((a, b) => a + b, 0) / per[y].slice(5, 8).reduce((a, b) => a + b, 0))) - 1;
   $('scene-season').hidden = full.length < 3 || fallWins.length < full.length * 0.8;
   const steps = ys.map(() => ['Each line is a year of listening, January to December.', 'Watch the right-hand side.', -1]);
-  steps.push([fallWins.length === full.length ? `Every year, ${me.i} listen more in the fall.` : `Most years, ${me.i} listen more in the fall.`, `In ${fallWins.length === full.length ? `all ${full.length}` : `${fallWins.length} of ${full.length}`} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
+  steps.push([fallWins.length === full.length ? `Every year, ${me.i} tend to listen more in the fall.` : `Most years, ${me.i} listen more in the fall.`, `In ${fallWins.length === full.length ? `all ${full.length}` : `${fallWins.length} of ${full.length}`} full years, October through December beat June through August, by ${Math.round(fallShare * 100)}% on average.`, 10]);
   const ridgesEls = [...$('rings').querySelectorAll('.ridge')], band = $('season-band');
   let shown = -1;
   scrub['scene-season'] = (p) => {
@@ -290,12 +290,12 @@ function drawWeather(s, me) {
   const others = (k) => mean(sameMonths(k));
   const sweetReal = sweet && real(sweet[1], days.filter((d) => Math.floor(d.f / 10) * 10 !== +sweet[0]).map((d) => d.m));
   const say = { rain: 'rainy days', snow: 'snow days', hot: 'days above 85°F', cold: 'days below 40°F' }, brings = { rain: 'Rain', snow: 'Snow', hot: 'Heat', cold: 'Cold' };
-  const steps = [['all', `Every dot is a day ${me.i} listened, placed by how warm it got.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
+  const steps = [['all', `Every dot is a day ${me.i} listened, placed by how warm it got that day.`, `${n(days.length)} days, matched to that day's weather. Higher means more music.`]];
   for (const k of ['rain', 'snow', 'hot', 'cold']) {
     const who = lift(k), diff = vs(k);
     if (!diff && !who.length) continue;
     // Heat cuts listening, so say it the other way round: cooler days bring more music.
-    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.i} listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.` : ''}`]); continue; }
+    if (k === 'hot' && diff && mean(by(k)) < others(k)) { steps.push([k, `When it's cooler, ${me.i} tend to listen more.`, `${pct(others(k), mean(by(k))).replace('more', 'more music')} on days under 85°F than on hotter days in the same months.${who.length ? ` On a hot day, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.` : ''}`]); continue; }
     steps.push([k, diff ? `On ${say[k]}, ${me.i} listen ${pct(mean(by(k)), others(k))} than on other days that month.` : `On ${say[k]}, ${me.i === 'I' ? "I'd" : `${me.i}'d`} put on ${list3(who)}.`, diff && who.length ? `${me.My} go-tos: ${list3(who)}.` : '']);
   }
   // If no kind of weather clearly changes how much listening happens, say that plainly.
@@ -339,7 +339,7 @@ function drawLight(s, me) {
     });
     const lift = avg(ratios);
     if (ratios.filter((r) => r > 1.15).length >= 3) steps.push([`When the sun sets early, ${me.my} evenings get more music.`, `Between 4 and 8 p.m., ${me.i} listen about ${Math.round((lift - 1) * 100)}% more once it's dark than at the same hour in lighter months.`, 1]);
-    else if (ratios.filter((r) => r < 0.87).length >= 3) steps.push([`Darkness doesn't pull ${me.i === 'I' ? 'me' : me.i === 'they' ? 'them' : 'you'} toward music.`, `Between 4 and 8 p.m., ${me.i} listen about ${Math.round((1 - lift) * 100)}% less once it's dark than at the same hour in lighter months.`, 1]);
+    else if (ratios.filter((r) => r < 0.87).length >= 3) steps.push([`Darkness doesn't tend to pull ${me.i === 'I' ? 'me' : me.i === 'they' ? 'them' : 'you'} toward music.`, `Between 4 and 8 p.m., ${me.i} listen about ${Math.round((1 - lift) * 100)}% less once it's dark than at the same hour in lighter months.`, 1]);
   }
   let shown = -1;
   scrub['scene-clock'] = (p) => {
@@ -374,7 +374,7 @@ function drawGlobe(s, me) {
   const name = (cc) => (cc === 'US' && me.i !== 'I' ? 'Home' : PLACES[cc][2]);
   const home = places.find((p) => p.cc === 'US') || places[0];
   const order = [home, ...places.filter((p) => p !== home)];
-  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${name(p.cc)}.`, sub: p.transit ? `Always on ${me.my} way somewhere else.` : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
+  const steps = order.map((p) => ({ p, at: PLACES[p.cc], line: `${name(p.cc)}.`, sub: p.transit ? '' : !p.artists.length ? 'Spotify stayed quiet on this trip.' : p.guess ? `Spotify stayed quiet here, so this is my best guess from that ${MONTHS[+p.first.slice(5, 7) - 1]}: ${list3(p.artists)}.` : `On repeat: ${list3(p.artists)}.` }));
   // Give each stop about a screen and a quarter of scroll, so the turns read as smooth.
   sceneEl.style.height = `${steps.length * 125 + 60}svh`;
   const project = (lon, lat, l0, p0, R, cx, cy) => {
@@ -444,7 +444,6 @@ function drawGlobe(s, me) {
 function draw(s, who) {
   const me = who === 'mine' ? { I: 'I', i: 'I', my: 'my', My: 'My' } : who === 'sample' ? { I: 'They', i: 'they', my: 'their', My: 'Their' } : { I: 'You', i: 'you', my: 'your', My: 'Your' };
   if (who === 'sample') weather = s.sampleWeather;
-  $('sample-note').hidden = who !== 'sample';
   if (!world && PUBLIC_WORLD) world = PUBLIC_WORLD;
   $('deck').hidden = false;
   scrub = {};
@@ -589,7 +588,7 @@ const load = async (code) => { const r = await fetch(`/l/${await keyFor(code)}.j
 const logView = (email) => fetch('https://firestore.googleapis.com/v1/projects/livsteinmetz-bb868/databases/(default)/documents/views', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { email: { stringValue: email.slice(0, 200) }, at: { timestampValue: new Date().toISOString() } } }) }).catch(() => {});
 const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* fine */ } } };
 let mine = null;
-const go = () => (nudge(), $('sample-note').hidden ? $('deck') : $('sample-note')).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+const go = () => (nudge(), $('deck')).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 const open = (data) => { weather = data.weather; world = data.world; mine = data.history; $('gate').hidden = true; draw(mine, 'mine'); $('reset').hidden = false; };
 // Always open at the top, even if the browser remembers an old scroll spot.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
