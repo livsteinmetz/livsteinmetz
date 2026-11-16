@@ -194,7 +194,8 @@ function openCase(i) {
     ${curve(al)}
     ${al.pv ? `<button type="button" class="sw-play" data-src="${esc(al.pv.url)}" aria-pressed="false">▶ Hear a preview${al.pv.t ? `: ${esc(al.pv.t)}` : ''}</button>` : ''}
   </div>
-  <div class="sw-leaf sw-tray">${al.img ? `<img class="sw-cover" src="${esc(al.img)}" alt="Cover of ${esc(al.n)}">` : ''}${disc(al)}</div>`;
+  <div class="sw-leaf sw-tray">${al.img ? `<img class="sw-cover" src="${esc(al.img)}" alt="">` : ''}${al.art?.disc ? `<img class="sw-disc sw-discimg" src="${esc(al.art.disc)}" alt="The disc of ${esc(al.n)}">` : disc(al)}</div>
+  ${al.img || al.art?.pages?.length ? `<div class="sw-strip"><ol>${[al.img, ...(al.art?.pages || [])].filter(Boolean).map((src, j) => `<li><button type="button" class="sw-page" data-src="${esc(src)}" aria-label="${j === 0 ? 'Front cover' : `Booklet page ${j}`}"><img src="${esc(src)}" alt="" loading="lazy"></button></li>`).join('')}</ol>${al.art?.mbid ? `<p><a href="https://musicbrainz.org/release/${esc(al.art.mbid)}">Scans from the Cover Art Archive</a></p>` : ''}</div>` : ''}`;
   tint(al);
   if (!$('case').open) $('case').showModal();
 }
@@ -216,6 +217,16 @@ document.addEventListener('click', (e) => {
     audio.play().then(() => b.setAttribute('aria-pressed', 'true')).catch(() => {});
     return;
   }
+  const pg = e.target.closest('.sw-page');
+  if (pg) {
+    const leaf = document.querySelector('.sw-notes');
+    if (!leaf.dataset.notes) leaf.dataset.notes = leaf.innerHTML;
+    leaf.classList.add('sw-viewing');
+    leaf.innerHTML = `<img class="sw-big" src="${esc(pg.dataset.src)}" alt=""><button type="button" class="sw-play sw-back">Back to notes</button>`;
+    return;
+  }
+  const back = e.target.closest('.sw-back');
+  if (back) { const leaf = back.closest('.sw-notes'); leaf.innerHTML = leaf.dataset.notes; leaf.classList.remove('sw-viewing'); return; }
   const row = e.target.closest('[data-key]');
   if (row) openCase(S.albums.findIndex((al) => keyOf(al) === row.dataset.key));
 });

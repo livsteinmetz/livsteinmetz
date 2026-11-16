@@ -50,6 +50,32 @@ try {
   save();
 } catch (e) { console.warn(`Plays skipped: ${e.message}`); }
 
+// Disc and booklet scans from the Cover Art Archive, found through MusicBrainz.
+// MusicBrainz allows one request a second, so each run fills in a few dozen albums.
+try {
+  log.art ||= {};
+  const UA = { 'User-Agent': 'livsteinmetz-site-build/1.0 (https://livsteinmetz.com)' };
+  const key = (al) => `${al.n}\u0000${al.a}`;
+  const q = (s) => `"${String(s).replace(/["\\]/g, ' ')}"`;
+  const todo = (history?.albums || []).slice(0, 400).filter((al) => !(key(al) in log.art));
+  for (const al of todo.slice(0, 40)) {
+    await wait(1100);
+    const r = await fetch(`https://musicbrainz.org/ws/2/release?fmt=json&limit=10&query=${encodeURIComponent(`release:${q(al.n)} AND artist:${q(al.a)}`)}`, { headers: UA });
+    if (r.status === 503) { console.warn('MusicBrainz is busy, art continues next run'); break; }
+    if (!r.ok) continue;
+    // The release with the most scans uploaded usually has the disc and booklet.
+    const best = ((await r.json()).releases || []).filter((x) => x.score >= 90 && x['cover-art-archive']?.artwork).sort((x, y) => y['cover-art-archive'].count - x['cover-art-archive'].count)[0];
+    if (!best) { log.art[key(al)] = null; continue; }
+    const c = await fetch(`https://coverartarchive.org/release/${best.id}`, { headers: UA });
+    if (!c.ok) { log.art[key(al)] = null; continue; }
+    const images = (await c.json()).images || [];
+    const pick = (type) => images.filter((im) => im.types?.includes(type)).map((im) => (im.thumbnails?.['500'] || im.thumbnails?.large || im.image || '').replace('http://', 'https://'));
+    log.art[key(al)] = { mbid: best.id, front: pick('Front')[0] || '', disc: pick('Medium')[0] || '', pages: [...pick('Back'), ...pick('Booklet'), ...pick('Tray')].slice(0, 8) };
+  }
+  console.log(`Art: ${Object.values(log.art).filter((a) => a?.disc).length} discs, ${Object.values(log.art).filter((a) => a?.pages?.length).length} booklets, ${Math.max(0, todo.length - 40)} albums still to check`);
+  save();
+} catch (e) { console.warn(`Art skipped: ${e.message}`); }
+
 // Previews come from the iTunes Search API, since Spotify no longer gives apps audio.
 // It allows about 20 searches a minute, so each run takes the top albums still missing one.
 try {

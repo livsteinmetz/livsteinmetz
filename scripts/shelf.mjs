@@ -7,7 +7,7 @@ const keyOf = (n, a) => `${n}\u0000${a}`;
 
 export function shelfOf(history, log = {}, notes = {}) {
   if (!history?.albums?.length) return null;
-  const { plays = [], covers = {}, previews = {} } = log;
+  const { plays = [], covers = {}, previews = {}, art = {} } = log;
   const albums = history.albums.map((al) => ({ ...al, m: { ...al.m } }));
   const byKey = new Map(albums.map((al) => [keyOf(al.n, al.a), al]));
   const minutes = [...history.days.minutes];
@@ -42,6 +42,8 @@ export function shelfOf(history, log = {}, notes = {}) {
     if (!al.img && covers[al.u] && covers[al.u] !== 'none') al.img = covers[al.u];
     const pv = previews[keyOf(al.n, al.a)];
     if (pv) al.pv = pv;
+    const scans = art[keyOf(al.n, al.a)];
+    if (scans) { if (!al.img && scans.front) al.img = scans.front; if (scans.disc || scans.pages.length) al.art = { disc: scans.disc, pages: scans.pages, mbid: scans.mbid }; }
     const note = notes[`${al.n} — ${al.a}`];
     if (note) al.note = note;
     al.h = +al.h.toFixed(2);
