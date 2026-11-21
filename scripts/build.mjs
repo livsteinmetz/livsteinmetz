@@ -35,7 +35,7 @@ const side = {
   a: work.map((w) => ({ ...w, href: `/work/${w.slug}` })),
   b: [
     ...notes.map((n, i) => ({ slug: n.slug || `note-${i}`, title: n.title, tag: 'a field note', date: n.date ? fmt(n.date) : 'Note', art: noteArt[n.slug] || rotating(i), font: noteStyles[i % 4][0], mat: noteMat[n.slug] || noteStyles[i % 4][1], align: noteStyles[i % 4][2], long: true, lines: [n.title], href: n.html ? `/notes/${n.slug}` : n.url })),
-    { slug: 'double-bass', title: 'Double Bass', tag: 'since 2015', date: 'Available', art: 'bassist', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Double', 'Bass'], color: '#ffffff', href: '/bass' },
+    { slug: 'double-bass', title: 'Double Bass', tag: '', date: 'Available', art: 'bassist', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Double', 'Bass'], color: '#ffffff', href: '/bass' },
     { slug: 'playlists', title: 'Listening', tag: 'on repeat lately', date: 'Spotify', art: 'feminine', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Listening'], color: '#ffffff', href: '/listening' },
     { slug: 'reading', title: 'Reading', tag: 'on my nightstand', date: 'Goodreads', art: 'magdalen', font: 'gothic', mat: '#ffffff', align: 'center', width: .7, lines: ['Reading'], color: '#ffffff', href: '/#reading' },
   ],
@@ -56,7 +56,7 @@ function cover(c0, tag = 'a') {
   const alt = a ? `Close crop of ${a.title} by ${a.artist}` : '';
   const below = c.edge === 'bottom';
   const heading = `<h3 class="ctitle f-${c.font} a-${c.align || 'left'}${c.long ? ' long' : ''}" style="color:${c.color}"${c.width ? ` data-width="${c.width}"` : ''}>${c.lines.map((t) => `<span class="ln">${c.align === 'spread' ? esc(t).replace(' ', '<i></i>') : esc(t)}</span>`).join('')}</h3>`;
-  const tagline = c.tag === 'a field note' ? '' : `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
+  const tagline = !c.tag || c.tag === 'a field note' ? '' : `<p class="ctag a-${c.align === 'spread' ? 'left' : c.align || 'left'}" style="color:${c.tagColor || '#000'}">${esc(c.tag)}</p>`;
   const t = type[c.slug] || (c.slug.startsWith('one-codebase') && type['one-codebase']);
   // Lines in the 300 by 400 layouts keep their real letter widths. Sizes come from measuring each font.
   const line = (e) => Array.isArray(e)
