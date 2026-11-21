@@ -85,6 +85,7 @@ addEventListener('pointermove', (e) => {
   if (!drag) return;
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   if (!drag.axis && Math.hypot(dx, dy) > 6) { drag.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'; dragged = true; }
+  if (drag.axis === 'x') $('hint').classList.add('gone');
   if (drag.axis === 'x') turn = drag.turn + (dx / innerWidth) * Math.PI;
   if (drag.axis === 'y') offset = drag.offset - dy;
   if (drag.axis) draw();
