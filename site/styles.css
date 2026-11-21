@@ -238,3 +238,6 @@ h3.ctitle{margin:0;font-weight:inherit}
 .wall img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}
 .wall span{display:block;margin-top:8px;font-size:1rem;line-height:1.25}
 .wall a:hover span,.wall a:focus-visible span{text-decoration:underline}
+.menu .menu-head{margin:6px 0 0;font-weight:600;font-size:17px}
+.menu .apps{list-style:none;margin:0 0 8px;padding:0 0 0 12px;display:flex;flex-direction:column;gap:2px}
+.menu .apps a{font-weight:500}
