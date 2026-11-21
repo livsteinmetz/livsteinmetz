@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/icons.mjs refs
+      - run: npm i --no-save playwright@1.64.0 && npx playwright install --with-deps chromium && node scripts/qa/refs.mjs 5830
       - name: Fetch reference images to a scratch branch
         run: |
           mkdir -p refs && cd refs
