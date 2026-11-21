@@ -191,7 +191,7 @@ h3.ctitle{margin:0;font-weight:inherit}
 
 /* Playlist pages: song titles placed in open space over a slowly changing color.
    Every background color in the cycle keeps black type above 4.5 to 1. */
-.room{position:fixed;inset:0;z-index:60;overflow-x:hidden;overflow-y:auto;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-overflow-scrolling:touch;color:#000;background:#e6c8ef;animation:room-color 90s linear infinite;animation-delay:var(--start,0s)}
+.room{position:fixed;inset:0;z-index:60;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-overflow-scrolling:touch;color:#000;background:#e6c8ef;animation:room-color 90s linear infinite;animation-delay:var(--start,0s)}
 @keyframes room-color{0%,100%{background:#e6c8ef}17%{background:#f4a9c8}34%{background:#ea5fae}50%{background:#e8452c}67%{background:#f47a1f}84%{background:#f6d44f}}
 .room.paused{animation-play-state:paused}
 .room-title{position:relative;margin:0;padding:0 8px;text-align:center;font-family:"Pirata One",serif;font-weight:400;font-size:min(34vw,calc(200vw / var(--len,8)),340px);line-height:.8;white-space:nowrap;transform:translateY(-14%);pointer-events:none}
@@ -203,8 +203,9 @@ h3.ctitle{margin:0;font-weight:inherit}
 .room .t.s{font-size:clamp(16px,1.7vw,21px)}
 .room .t.on{border-color:currentColor}
 .room .t:focus-visible{outline:3px solid #000;outline-offset:2px}
+.room.as-list{overflow-y:auto;touch-action:pan-y}
 .room.as-list .cloud{position:static;height:auto!important;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 16px 170px}
-.room.as-list .t{position:static;transform:none!important;font-size:22px;text-align:left}
+.room.as-list .t{position:static;transform:none!important;opacity:1!important;visibility:visible!important;font-size:22px;text-align:left}
 .room.as-list .t[aria-hidden]{display:none}
 .player{position:fixed;left:0;right:0;bottom:64px;z-index:120;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:10px;padding:10px 16px;background:inherit;font:500 15px/1.25 "Libre Franklin",system-ui,sans-serif}
 .player[hidden]{display:none}

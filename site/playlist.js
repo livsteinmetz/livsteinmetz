@@ -1,5 +1,4 @@
 // A playlist as a slowly turning funnel of song titles over a changing color. Tap one to hear its clip.
-// Each title has its own row, so titles never overlap however the funnel turns.
 const $ = (id) => document.getElementById(id);
 const room = $('room');
 const songs = JSON.parse($('songs').textContent);
@@ -27,53 +26,81 @@ for (const i of order) {
   items.push({ b, w: 0, h: 0, y: 0, angle: 0 });
 }
 
-// Rows from the top of the funnel to its tip. Each row is tall enough for its title at full size.
+// The funnel stays put on screen and the titles rise through it, looping back in at the bottom.
+// Each title keeps its own row, at least one title tall, so titles never overlap.
 const BIG = 1.18, SMALL = 0.74;
+let upper = 0, lower = 0, area = 0, step = 0, L = 0, fade = 0, offset = 0;
+const mod = (v, m) => ((v % m) + m) % m;
 function layout() {
-  const top = $('room-title').getBoundingClientRect().bottom + room.scrollTop + 20;
-  let y = top;
+  upper = $('room-title').getBoundingClientRect().bottom + 12;
+  lower = Math.max(upper + 120, document.querySelector('.room-bar').getBoundingClientRect().top - 64);
+  area = lower - upper;
+  let row = 0;
   items.forEach((it, k) => {
     it.w = it.b.offsetWidth; it.h = it.b.offsetHeight;
-    it.y = y;
     it.angle = k * 2.39996;
-    y += it.h * BIG + 4;
+    row = Math.max(row, it.h * BIG + 6);
   });
-  cloud.style.height = `${y + 170}px`;
-  draw(performance.now());
+  step = Math.max(row, area / items.length);
+  L = step * items.length;
+  fade = Math.min(row, area / 4);
+  draw();
 }
 
-// The funnel turns slowly and sways a little. Drag sideways to spin it. Pausable, and still for reduced motion.
+// The funnel turns slowly and sways a little. Drag sideways to spin it, up and down or scroll to move the titles along.
 let moving = !quiet.matches, turn = rnd() * Math.PI * 2, last = performance.now(), drag = null, dragged = false;
-function draw(now) {
-  const W = room.clientWidth, n = items.length;
+function draw() {
+  if (room.classList.contains('as-list')) return;
+  const W = room.clientWidth;
   items.forEach((it, k) => {
-    const t = n > 1 ? k / (n - 1) : 0;
+    const y = upper + mod(k * step - offset, L);
+    const t = Math.min(1, Math.max(0, (y - upper) / area));
     const a = it.angle + turn;
     const d = (Math.cos(a) + 1) / 2;
-    const sc = SMALL + (BIG - SMALL) * d;
+    const sc = Math.min(SMALL + (BIG - SMALL) * d, (W - 24) / it.w);
+    const half = (it.w * sc) / 2;
     const cx = W / 2 + W * 0.05 * Math.sin(t * 4 + turn * 0.8);
-    const reach = Math.max(0, W / 2 - 12 - (it.w * sc) / 2 - W * 0.05);
-    const x = cx + Math.sin(a) * reach * (1 - 0.6 * t) - it.w / 2;
-    it.b.style.transform = `translate(${x.toFixed(1)}px, ${it.y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
+    const reach = Math.max(0, W / 2 - 12 - half - W * 0.05);
+    const mid = Math.min(W - 12 - half, Math.max(12 + half, cx + Math.sin(a) * reach * (1 - 0.6 * t)));
+    const x = mid - it.w / 2;
+    const o = Math.min(1, Math.max(0, Math.min(y - upper, lower - y - it.h * sc) / fade));
+    it.b.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
     it.b.style.zIndex = Math.round(d * 100);
+    it.b.style.opacity = o.toFixed(2);
+    it.b.style.visibility = o > 0 ? 'visible' : 'hidden';
   });
 }
+// Bring a title into the middle of the funnel when it gets keyboard focus.
+items.forEach((it, k) => it.b.addEventListener('focus', () => {
+  if (room.classList.contains('as-list')) return;
+  offset = k * step - area / 2;
+  draw();
+}));
 room.addEventListener('pointerdown', (e) => {
-  if (e.target.closest('.player, .menu, .room-bar')) return;
-  drag = { x: e.clientX, turn };
+  if (e.target.closest('.player, .menu, .room-bar') || room.classList.contains('as-list')) return;
+  drag = { x: e.clientX, y: e.clientY, turn, offset, axis: null };
   dragged = false;
 });
 addEventListener('pointermove', (e) => {
   if (!drag) return;
-  const dx = e.clientX - drag.x;
-  if (Math.abs(dx) > 6) dragged = true;
-  if (dragged) { turn = drag.turn + (dx / innerWidth) * Math.PI; draw(performance.now()); }
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.axis && Math.hypot(dx, dy) > 6) { drag.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'; dragged = true; }
+  if (drag.axis === 'x') turn = drag.turn + (dx / innerWidth) * Math.PI;
+  if (drag.axis === 'y') offset = drag.offset - dy;
+  if (drag.axis) draw();
 });
 addEventListener('pointerup', () => { drag = null; setTimeout(() => { dragged = false; }, 0); });
 addEventListener('pointercancel', () => { drag = null; dragged = false; });
+room.addEventListener('wheel', (e) => {
+  if (room.classList.contains('as-list') || e.target.closest('.menu')) return;
+  e.preventDefault();
+  offset += e.deltaY;
+  turn += e.deltaX * 0.004;
+  draw();
+}, { passive: false });
 const tick = (now) => {
   const dt = Math.min(64, now - last); last = now;
-  if (moving && !drag && !document.hidden) { turn += dt * 0.00018; draw(now); }
+  if (moving && !drag && !document.hidden) { turn += dt * 0.00018; offset += dt * 0.018; draw(); }
   requestAnimationFrame(tick);
 };
 requestAnimationFrame(tick);
@@ -83,7 +110,7 @@ const setMotion = (on) => {
   still.setAttribute('aria-pressed', String(!on));
   still.textContent = on ? 'Pause motion' : 'Play motion';
   room.classList.toggle('paused', !on);
-  draw(performance.now());
+  draw();
 };
 still.addEventListener('click', () => setMotion(!moving));
 setMotion(moving);
