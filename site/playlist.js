@@ -27,7 +27,6 @@ for (const i of order) {
 }
 
 // The funnel stays put on screen and the titles rise through it, looping back in at the bottom.
-// Each title keeps its own row, at least one title tall, so titles never overlap.
 const BIG = 1.18, SMALL = 0.74;
 let upper = 0, lower = 0, area = 0, step = 0, L = 0, fade = 0, offset = 0;
 const mod = (v, m) => ((v % m) + m) % m;
@@ -41,7 +40,8 @@ function layout() {
     it.angle = k * 2.39996;
     row = Math.max(row, it.h * BIG + 6);
   });
-  step = Math.max(row, area / items.length);
+  // Rows a little closer than one title tall, so more songs show at once. Titles may brush past each other.
+  step = Math.max(row * 0.55, area / items.length);
   L = step * items.length;
   fade = Math.min(row, area / 4);
   draw();
@@ -51,6 +51,7 @@ function layout() {
 let moving = !quiet.matches, turn = rnd() * Math.PI * 2, last = performance.now(), drag = null, dragged = false;
 function draw() {
   if (room.classList.contains('as-list')) return;
+  if (cloud.scrollTop) cloud.scrollTop = 0;
   const W = room.clientWidth;
   items.forEach((it, k) => {
     const y = upper + mod(k * step - offset, L);
@@ -175,7 +176,9 @@ menuBtn.addEventListener('click', () => {
 });
 const listBtn = $('show-list');
 listBtn.addEventListener('click', () => {
+  room.style.setProperty('--list-top', `${$('room-title').getBoundingClientRect().bottom}px`);
   const on = room.classList.toggle('as-list');
+  cloud.scrollTop = 0;
   listBtn.setAttribute('aria-pressed', String(on));
   listBtn.textContent = on ? 'Show as a field' : 'Show as a list';
   if (!on) layout();
