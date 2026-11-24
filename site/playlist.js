@@ -180,7 +180,10 @@ listBtn.addEventListener('click', () => {
   const on = room.classList.toggle('as-list');
   cloud.scrollTop = 0;
   listBtn.setAttribute('aria-pressed', String(on));
-  listBtn.textContent = on ? 'Show as a field' : 'Show as a list';
+  listBtn.textContent = on ? 'Show as a cloud' : 'Show as a list';
+  // The list holds still, so the motion control and the color change rest with it.
+  still.hidden = on;
+  room.classList.toggle('paused', on || !moving);
   if (!on) layout();
 });
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) { closeMenu(); menuBtn.focus(); } });
