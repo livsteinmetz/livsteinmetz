@@ -92,6 +92,18 @@
           }
         ]
       }
+    ],
+    "redirects": [
+      {
+        "source": "/projects/playlist-converter",
+        "destination": "/listening",
+        "type": 301
+      },
+      {
+        "source": "/projects/listening-trends",
+        "destination": "/listening/trends",
+        "type": 301
+      }
     ]
   }
 }

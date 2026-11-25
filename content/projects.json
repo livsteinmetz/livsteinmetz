@@ -15,23 +15,5 @@
   ],
   "link": "/listening/trends",
   "linkText": "Open Listening Trends"
- },
- {
-  "slug": "playlist-converter",
-  "title": "Playlist Converter",
-  "card": [
-   "Playlist",
-   "Converter"
-  ],
-  "short": "Sharing playlists with friends on any app",
-  "date": "2026",
-  "role": "Design and development",
-  "stack": "Spotify Web API, iTunes Search API, Deezer API, Node, Firebase, GitHub Actions",
-  "body": [
-   "I make a lot of playlists, and the people I make them for don't all use Spotify. My friends are spread across Apple Music, Tidal, Deezer, and YouTube Music for all kinds of reasons, so sending a Spotify link only worked for some of them.",
-   "I started from what a friend on another app would want to do: move the whole playlist in a couple of taps, or find one song and press play. Each playlist I share gets its own page with both paths. Copy the link into TuneMyMusic or Soundiiz to bring everything over at once, or go song by song, with each track linked straight to Apple Music and Deezer and searched on Tidal and YouTube Music.",
-   "Behind it, a script matches each song, on Apple Music by title and artist and on Deezer by its ISRC code, and saves the matches. The site rebuilds from Spotify every day."
-  ],
-  "art": "angel"
  }
 ]
