@@ -87,41 +87,31 @@ h3.ctitle{margin:0;font-weight:inherit}
 .play{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}.play iframe{width:100%;height:352px;border:0}
 @media(max-width:760px){.detail{grid-template-columns:1fr}.stage{flex-basis:100%}.track{font-size:1.375rem}.shelf>a{flex-basis:74vw}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}@view-transition{navigation:none}}
-
 .lookbox{border:0;padding:0;background:#fff;max-width:min(92vw,1100px)}.lookbox::backdrop{background:#fff}.lookbox img{display:block;max-width:100%;max-height:82vh;margin:auto}.lookbox p{margin:10px 0 0;font-size:.9375rem}
-
 .still.trends-card{aspect-ratio:1;position:relative;background:#16246e}.trends-card img{width:100%;height:100%;object-fit:cover;object-position:50% 75%}
 .still .crop:not(.fill) img{transform:none;object-fit:fill;transition:none}.trends-card span{position:absolute;right:.3em;bottom:.3em;color:#f6d44f;font:400 clamp(52px,8vw,84px)/1 "Pirata One",Georgia,serif}
 .play iframe{scroll-margin-top:24px}
-
 .scroll{overflow-x:auto}.scroll svg{min-width:720px}.plate figure{margin:0}
 .legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;padding:0;margin:12px 0 0}.legend i{display:inline-block;width:12px;height:12px;margin-right:6px}
 .drop{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px!important;max-width:none!important}.drop label,.wrapped button{font:inherit;font-size:1rem;border:1px solid #000;background:#fff;color:#000;padding:10px 16px;cursor:pointer}.drop input{font-size:.875rem;max-width:100%}.wrapped button:focus-visible,.drop input:focus-visible{outline:2px solid #16246e;outline-offset:2px}
-
 .sound{font:inherit;font-size:.875rem;border:1px solid #000;background:#fff;padding:2px 10px;margin-left:8px;cursor:pointer}.sound[aria-pressed=true]{background:#000;color:#fff}
 .still.sleeve{overflow:visible;background:none}.sleeve img{position:relative;z-index:1}
 .disc{position:absolute;inset:3%;border-radius:50%;background-size:34%;background-position:center;background-repeat:no-repeat;background-color:#111;box-shadow:inset 0 0 0 1px #333;transition:transform .45s ease}
 .disc::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 3px,#2a2a2a 3px 4px);-webkit-mask:radial-gradient(circle,transparent 18%,#000 18.5%);mask:radial-gradient(circle,transparent 18%,#000 18.5%)}
-.blurb{position:absolute;inset:0;margin:0;padding:12% 10%;background:#fff;color:#000;font-size:.9375rem;line-height:1.35;overflow:hidden}
 .still.jacket{background:#fff}.jacket img{position:relative;transition:opacity .3s ease}
 .look .still img{transition:none}
 @media(hover:hover){
 .hang:hover .disc,.hang:focus-visible .disc{transform:translateX(16%)}
 .hang:hover .sleeve.playing .disc{animation:spin 3s linear infinite}
 @keyframes spin{from{transform:translateX(16%) rotate(0)}to{transform:translateX(16%) rotate(360deg)}}
-.hang:hover .jacket:has(.blurb) img,.hang:focus-visible .jacket:has(.blurb) img{opacity:0}
 .look:hover .still img{transform:scale(3)}
 }
 @media(prefers-reduced-motion:reduce){.hang:hover .disc{transform:none}}
-
 #site-content{overflow-x:clip}
-
 .tracks-list{margin:0;padding-left:1.6em;font-size:1.0625rem;line-height:1.3}.tracks-list li{padding:5px 0}.tracks-list b{font-weight:500;display:block}
 #scene-clock:not(.x) rect{transform-box:fill-box}
-
 .scene[hidden]{display:none}
 #save{margin-top:16px}
-
 .lib[hidden]{display:none}
 .deck-bars{display:flex;align-items:flex-end;gap:6px;height:min(46vh,380px)}.deck-bars button{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;border:0!important;background:none!important;padding:0!important;cursor:pointer}.deck-bars i{display:block;height:var(--h);background:#16246e;transition:background .15s}.deck-bars button[aria-pressed=true] i{background:#e64aa6}.deck-bars span{font-size:.875rem}
 .note{margin:14px 0 0;font-size:1.0625rem}.big-num{font:400 clamp(80px,12vw,180px)/.9 Anton,Impact,sans-serif;margin:0}
@@ -130,7 +120,6 @@ h3.ctitle{margin:0;font-weight:inherit}
 .gig-list{list-style:none;margin:0;padding:0;overflow:auto;max-height:calc(100svh - 150px)}.gig-list li{display:grid;grid-template-columns:5.5em 1fr;gap:0 12px;padding:9px 0;border-top:1px solid #000}.gig-list time{grid-row:span 2;font-size:.9375rem}.gig-list b{font-weight:500}.gig-list span{font-size:.9375rem}
 .wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:2px;max-height:calc(100svh - 150px);overflow:auto}.wall img{display:block;width:100%;aspect-ratio:1;object-fit:cover;transition:transform .15s}.wall img:hover{transform:scale(1.8);position:relative;z-index:1}
 .diary{display:flex;gap:6px;overflow-x:auto}.day{display:flex;flex-direction:column;gap:3px}.day time{font-size:.6875rem;writing-mode:vertical-rl}.day i{display:block;width:18px;height:18px}
-
 #progress{position:fixed;top:0;left:0;right:0;height:2px;background:#16246e;transform:scaleX(0);transform-origin:left;z-index:5}
 .wrapped-head{padding:12px var(--gutter) 0}.wrapped-head h1{font-size:clamp(28px,3vw,40px);font-weight:400;letter-spacing:-.01em;margin:0}
 .scene{--p:1;height:260svh;position:relative}
@@ -180,7 +169,6 @@ h3.ctitle{margin:0;font-weight:inherit}
 .pl{display:grid;gap:8px}.pl .send{font-size:.9375rem}
 .send h2{margin-top:2em}.send-actions{display:flex;flex-wrap:wrap;gap:10px}.send .btn{font:inherit;cursor:pointer}
 .tracks{padding-left:1.4em}.tracks li{padding:10px 0;border-bottom:1px solid #e6e6e6}.tracks .song{font-weight:600}.tracks .by{color:#555}.tracks .go{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px;font-size:.875rem}
-
 .textbtn{font:inherit;font-size:1rem;font-weight:600;background:none;border:0;padding:6px 0;color:#16246e;cursor:pointer}.textbtn:hover{text-decoration:underline;text-underline-offset:3px}.textbtn:focus-visible{outline:2px solid #c9321a;outline-offset:3px}
 .scene.static.how{padding:6vh 16px}.how-inner summary{cursor:pointer;font-size:.9375rem;color:#16246e;text-decoration:underline;text-underline-offset:3px;list-style:none;text-align:center}.how-inner summary::-webkit-details-marker{display:none}.how-inner[open] summary{margin-bottom:1em}
 .outlinebtn{font:inherit;font-size:.9375rem;font-weight:600;background:#fff;border:1px solid #16246e;color:#16246e;padding:9px 16px;cursor:pointer}.outlinebtn:hover{background:#16246e;color:#fff}.outlinebtn:focus-visible{outline:2px solid #c9321a;outline-offset:2px}
@@ -189,7 +177,6 @@ h3.ctitle{margin:0;font-weight:inherit}
 @media(prefers-reduced-motion:reduce){.scroll-cue{transition:none}}
 .trends-card .drawn{inset:0}
 .detail.project header .back{margin:0 0 .5em;font-size:.9375rem}
-
 /* Playlist pages: song titles placed in open space over a slowly changing color.
    Every background color in the cycle keeps black type above 4.5 to 1. */
 .room{position:fixed;inset:0;z-index:60;overflow:hidden;overscroll-behavior:contain;user-select:none;-webkit-user-select:none;-webkit-overflow-scrolling:touch;color:#000;background:#e6c8ef;animation:room-color 90s linear infinite;animation-delay:var(--start,0s)}
