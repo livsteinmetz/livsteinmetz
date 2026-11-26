@@ -235,3 +235,11 @@ h3.ctitle{margin:0;font-weight:inherit}
 .menu .menu-head{margin:6px 0 0;font-weight:600;font-size:17px}
 .menu .apps{list-style:none;margin:0 0 8px;padding:0 0 0 12px;display:flex;flex-direction:column;gap:2px}
 .menu .apps a{font-weight:500}
+.cover:has(.crop[data-barnes]),.still:has(.crop[data-barnes]){-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.whole{position:absolute;inset:0;z-index:5;background:#fff;opacity:0;overflow:hidden;pointer-events:none;transition:opacity .2s}
+.whole.on{opacity:1}
+.whole .pane{position:absolute;transform-origin:0 0;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.whole .pane img{position:absolute;max-width:none}
+.peek .ctitle,.peek .ctag,.peek .drawn,.peek .words,.peek .tag-strip{opacity:0;transition:opacity .2s}
+@media(prefers-reduced-motion:reduce){.whole .pane{transition:none}}
+::view-transition-group(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}

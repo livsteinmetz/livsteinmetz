@@ -233,3 +233,66 @@ if (typeof document !== 'undefined') {
     OSD({ element: v, tileSources: [info], showNavigationControl: false, gestureSettingsMouse: { scrollToZoom: false }, minZoomImageRatio: 0.9 });
   }).observe(v);
 }
+
+// Press and hold a cover to pull back from its crop to the whole painting. Let go to return.
+if (typeof document !== 'undefined') {
+  const HOLD = 350;
+  let timer = null, open = null, start = null, held = false;
+  const fitTiles = (crop, box) => {
+    const a = { id: crop.dataset.barnes, w: +crop.dataset.w, h: +crop.dataset.h };
+    const s = Math.min(box.width / a.w, box.height / a.h), fw = a.w * s, fh = a.h * s;
+    const pane = document.createElement('div');
+    pane.className = 'pane';
+    pane.style.cssText = `left:${(box.width - fw) / 2}px;top:${(box.height - fh) / 2}px;width:${fw}px;height:${fh}px`;
+    const sf = scaleFor(a.w, fw * Math.min(devicePixelRatio || 1, 2));
+    for (const t of tiles({ ...a, crop: [0, 0, 1, 1] }, sf)) {
+      const i = new Image();
+      i.alt = ''; i.decoding = 'async'; i.src = t.url;
+      i.style.cssText = `left:${t.left}%;top:${t.top}%;width:${t.width + 0.08}%;height:${t.height + 0.08}%`;
+      pane.append(i);
+    }
+    // Start exactly on the crop, so the pull back begins from what was on screen.
+    const [cx, cy, cw] = crop.dataset.crop.split(',').map(Number);
+    const k = box.width / (cw * fw);
+    pane.style.transform = `translate(${-(box.width - fw) / 2 - cx * fw * k}px,${-(box.height - fh) / 2 - cy * fh * k}px) scale(${k})`;
+    return pane;
+  };
+  const show = (frame) => {
+    const crop = frame.querySelector('.crop[data-barnes]');
+    const box = frame.getBoundingClientRect();
+    const layer = document.createElement('div');
+    layer.className = 'whole';
+    layer.setAttribute('aria-hidden', 'true');
+    const pane = fitTiles(crop, box);
+    layer.append(pane);
+    frame.append(layer);
+    frame.classList.add('peek');
+    requestAnimationFrame(() => requestAnimationFrame(() => { layer.classList.add('on'); pane.style.transform = 'none'; }));
+    open = { frame, layer };
+  };
+  const hide = () => {
+    if (!open) return;
+    const { frame, layer } = open;
+    open = null;
+    frame.classList.remove('peek');
+    layer.classList.remove('on');
+    setTimeout(() => layer.remove(), 350);
+  };
+  const frameOf = (el) => el.closest('.cover, .still');
+  document.addEventListener('pointerdown', (e) => {
+    const frame = e.target.closest && frameOf(e.target);
+    if (!frame || !frame.querySelector('.crop[data-barnes]') || e.button > 0) return;
+    start = { x: e.clientX, y: e.clientY };
+    held = false;
+    timer = setTimeout(() => { held = true; show(frame); }, HOLD);
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!start || open) return;
+    if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) { clearTimeout(timer); start = null; }
+  });
+  const release = () => { clearTimeout(timer); start = null; hide(); };
+  ['pointerup', 'pointercancel', 'blur'].forEach((t) => addEventListener(t, release));
+  // A hold is for looking, so letting go doesn't also open the link.
+  document.addEventListener('click', (e) => { if (held) { e.preventDefault(); e.stopPropagation(); held = false; } }, true);
+  document.addEventListener('contextmenu', (e) => { if (open || timer && start) e.preventDefault(); });
+}
