@@ -1,7 +1,7 @@
-// Pen marks from Olivia's word web: underlines under section titles, a ring around a phrase,
-// and lines from a project to the posts written about it. Drawn in once, the way a pen would.
+// Sketchbook marks in one soft black ink: an underline under each section title, a ring around a phrase,
+// and a line from a project to the posts written about it. Drawn in once, the way a pen would.
 const NS = 'http://www.w3.org/2000/svg';
-const PEN = { blue: '#2a3593', red: '#c4304a', green: '#1f7a4a', pencil: '#8a8a8a' };
+const INK = '#1b1b1f';
 const still = matchMedia('(prefers-reduced-motion: reduce)');
 
 // Seeded wobble, so a mark looks the same on every visit.
@@ -43,25 +43,25 @@ const drawWhenSeen = (s) => {
 function underline(el, i) {
   const host = el.parentElement, r = rng(31 + i * 7), b = within(el, host), w = b.w + 12;
   const j = () => (r() - 0.5) * 3;
-  const s = svg(host, { x: b.x - 6, y: b.y + b.h - 4, w: w + 8, h: 18 }, [
-    [smooth([[2, 6 + j()], [w * 0.35, 4 + j()], [w * 0.7, 6 + j()], [w + 2, 3 + j()]]), i % 2 ? PEN.blue : PEN.red, 2.8],
-    [smooth([[9, 13 + j()], [w * 0.4, 11 + j()], [w * 0.8, 13 + j()], [w + 4, 10 + j()]]), i % 3 === 1 ? PEN.red : PEN.green, 2.4],
+  const s = svg(host, { x: b.x - 6, y: b.y + b.h - 4, w: w + 12, h: 18 }, [
+    [smooth([[2, 7 + j()], [w * 0.3, 4 + j()], [w * 0.7, 7 + j()], [w + 6, 2 + j()]]), INK, 2.4],
   ]);
   drawWhenSeen(s);
 }
 
 function ring(el, i) {
   const host = el.parentElement, r = rng(57 + i), b = within(el, host);
-  const rx = b.w / 2 + 8, ry = b.h / 2 + 2, w = 2 * rx + 14, h = 2 * ry + 14;
+  const rx = b.w / 2 + 10, ry = b.h / 2 + 3, w = 2 * rx + 20, h = 2 * ry + 18;
+  // One loop that runs past its start, like a quick circle.
   const loop = (k, start) => {
     const pts = [];
-    for (let n = 0; n <= 26; n++) {
+    for (let n = 0; n <= 27; n++) {
       const a = start + (n * 2 * Math.PI) / 24, wob = 1 + (r() - 0.5) * 0.03;
-      pts.push([w / 2 + rx * k * wob * Math.cos(a), h / 2 + ry * k * wob * Math.sin(a)]);
+      pts.push([w / 2 + rx * k * wob * Math.cos(a), h / 2 + ry * k * wob * Math.sin(a) + n * 0.12]);
     }
     return smooth(pts);
   };
-  const s = svg(host, { x: b.x + b.w / 2 - w / 2, y: b.y + b.h / 2 - h / 2, w, h }, [[loop(1, 2.6), PEN.blue, 2.4], [loop(1.05, 2.95), PEN.red, 2]]);
+  const s = svg(host, { x: b.x + b.w / 2 - w / 2, y: b.y + b.h / 2 - h / 2, w, h }, [[loop(1, 2.6), INK, 2.2]]);
   drawWhenSeen(s);
 }
 
@@ -80,8 +80,7 @@ function connect(li) {
     if (t.x + t.w < 0 || t.x > innerWidth) return;
     const x0 = from.x + from.w * 0.6, y0 = from.y + from.h - 6, x1 = t.x + t.w * 0.4, y1 = t.y + 6;
     const mid = (y0 + y1) / 2;
-    strokes.push([smooth([[x0, y0], [x0 + (x1 - x0) * 0.15, mid], [x1 - (x1 - x0) * 0.2, mid + 8], [x1, y1]]), k % 2 ? PEN.red : PEN.green, 2.6]);
-    strokes.push([smooth([[x0 + 5, y0], [x0 + (x1 - x0) * 0.2, mid + 6], [x1 - (x1 - x0) * 0.15, mid], [x1 + 5, y1]]), PEN.blue, 1.8]);
+    strokes.push([smooth([[x0, y0], [x0 + (x1 - x0) * 0.15, mid], [x1 - (x1 - x0) * 0.2, mid + 8 * (k ? -1 : 1)], [x1, y1]]), INK, 1.8]);
   });
   if (!strokes.length) return;
   links = svg(host, box, strokes, 'links');
