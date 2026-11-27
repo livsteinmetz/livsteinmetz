@@ -1,4 +1,4 @@
-:root{--ink:#000;--yellow:#fff27a;--sky:#66c4ff;--pink:#d81f8a;--gutter:clamp(16px,3vw,32px);--sans:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif}
+:root{--ink:#000;--yellow:#fff27a;--sky:#66c4ff;--pink:#d81f8a;--gutter:clamp(16px,3vw,32px);--sans:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;--hand:"Over the Rainbow","Bradley Hand",cursive}
 *{box-sizing:border-box}
 @view-transition{navigation:auto}
 html{-webkit-text-size-adjust:100%}
