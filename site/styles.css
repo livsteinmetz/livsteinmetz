@@ -243,3 +243,12 @@ h3.ctitle{margin:0;font-weight:inherit}
 .peek .ctitle,.peek .ctag,.peek .drawn,.peek .words,.peek .tag-strip{opacity:0;transition:opacity .2s}
 @media(prefers-reduced-motion:reduce){.whole .pane{transition:none}}
 ::view-transition-group(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+.side h2:has(>.ink-u),.statement{position:relative}
+svg.ink{position:absolute;overflow:visible;pointer-events:none;z-index:3}
+svg.ink path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+svg.ink.draw path{animation:ink 1s cubic-bezier(.4,.1,.2,1) forwards}
+svg.ink.draw path:nth-child(even){animation-delay:.2s}
+svg.ink.drawn path{stroke-dashoffset:0}
+@keyframes ink{to{stroke-dashoffset:0}}
+.ink-o{padding:0 .22em}
+.ink-o{white-space:nowrap}
